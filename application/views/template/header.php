@@ -90,17 +90,6 @@
                                     <h5 class="mb-0">Messages</h5>
                                     <p class="mb-0">Just Recieved Messages</p>
                                 </div>
-                                <div class="media new">
-                                    <figure class="avatar avatar-40">
-                                        <img src="<?= base_url();?>/assets/img/user2.png" alt="Generic placeholder image">
-                                    </figure>
-                                    <div class="media-body">
-                                        <h5 class="mt-0">Alizee Johnson</h5>
-                                        <p class="mb-2">Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin.</p>
-                                        <a href="">Reply</a>
-                                        <a href="" class="ml-2">View</a>
-                                    </div>
-                                </div>
                                 <a href="#" class="media success-gradient-active new">
                                     <figure class="avatar avatar-40">
                                         <img src="<?= base_url();?>/assets/img/user3.png" alt="Generic placeholder image">
@@ -108,15 +97,6 @@
                                     <div class="media-body">
                                         <h5 class="my-0">Donald Costapor </h5>
                                         <small class="text-muted d-block mb-2">2:05 am</small>
-                                        <p>Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin.</p>
-                                    </div>
-                                </a>
-                                <a href="#" class="media success-gradient-active">
-                                    <figure class="avatar avatar-40">
-                                        <img src="<?= base_url();?>/assets/img/user2.png" alt="Generic placeholder image">
-                                    </figure>
-                                    <div class="media-body">
-                                        <h5 class="mt-0">Alizee McMohan <small class="text-muted float-right">4:05 am</small></h5>
                                         <p>Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin.</p>
                                     </div>
                                 </a>
@@ -161,47 +141,20 @@
         <div class="sidebar sidebar-left" style="background: #22B07D;">
             <ul class="nav flex-column">
                 <li class="nav-item">
-                    <a href="<?= base_url(); ?>/" class="nav-link dropdwown-toggle "> <i class="material-icons icon">insert_chart_outlined</i> <span>Dashboard</span></a>
+                    <a href="<?= base_url(); ?>/" class="nav-link dropdwown-toggle "> <i class="material-icons icon">dashboard</i> <span>Dashboard</span></a>
                 </li>
                 <p class="ml-3 mt-3 mb-2 pt-2 pb-2 border-bottom border-top ">Menu</p>
                 <li class="nav-item">
-                    <a href="javascript:void(0);" class="nav-link dropdwown-toggle"> <i class="material-icons icon">insert_chart_outlined</i>  <span>Dashboard</span><i class="material-icons icon arrow">expand_more</i></a>
+                    <a href="javascript:void(0);" class="nav-link dropdwown-toggle"> <i class="material-icons icon">folder</i> <span>Master Data</span><i class="material-icons icon arrow">expand_more</i></a>
                     <ul class="nav flex-column">
                         <li class="nav-item">
-                            <a href="index.html" class="nav-link success-gradient-active"><i class="material-icons icon"></i> <span>Production</span></a>
+                            <a href="index.html" class="nav-link success-gradient-active"><i class="material-icons icon"></i> <span>Data Siswa</span></a>
                         </li>
                         <li class="nav-item">
-                            <a href="ecommerce.html" class="nav-link success-gradient-active"><i class="material-icons icon"></i> <span>eCommerce</span> </a>
+                            <a href="ecommerce.html" class="nav-link success-gradient-active"><i class="material-icons icon"></i> <span>Data Biaya</span> </a>
                         </li>
-                    </ul>
-                </li>
-                <li class="nav-item">
-                    <a href="javascript:void(0);" class="nav-link dropdwown-toggle"> <i class="material-icons icon">insert_chart_outlined</i>  <span>App Pages</span> <i class="material-icons icon arrow">expand_more</i></a>
-                    <ul class="nav flex-column">
                         <li class="nav-item">
-                            <a href="profile.html" class="nav-link success-gradient-active"><i class="material-icons icon"></i> <span>Profile</span></a>
-                            <a href="mail.html" class="nav-link success-gradient-active"><i class="material-icons icon"></i> <span>Mail</span></a>
-                       
-                        </li>
-                    </ul>
-                </li>
-                <li class="nav-item">
-                    <a href="javascript:void(0);" class="nav-link dropdwown-toggle"> <i class="material-icons icon">insert_chart_outlined</i>  <span>eCommerce</span> <i class="material-icons icon arrow">expand_more</i></a>
-                    <ul class="nav flex-column">
-                        <li class="nav-item">
-                            <a href="product-blocks.html" class="nav-link success-gradient-active"><i class="material-icons icon"></i> <span>Products</span></a>
-                            <a href="product-details.html" class="nav-link success-gradient-active"><i class="material-icons icon"></i> <span>Product Detail</span></a>
-
-                        </li>
-                    </ul>
-                </li>
-                <li class="nav-item">
-                    <a href="javascript:void(0);" class="nav-link dropdwown-toggle"> <i class="material-icons icon">insert_chart_outlined</i>  <span>Other Pages</span> <i class="material-icons icon arrow">expand_more</i></a>
-                    <ul class="nav flex-column">
-                        <li class="nav-item">
-                            <a href="signin1.html" class="nav-link success-gradient-active"><i class="material-icons icon"></i> <span>Sign in</span></a>
-                            <a href="signin2.html" class="nav-link success-gradient-active"><i class="material-icons icon"></i> <span>Sign in 2</span></a>
-                          
+                            <a href="ecommerce.html" class="nav-link success-gradient-active"><i class="material-icons icon"></i> <span>Data Tahun Akademik</span> </a>
                         </li>
                     </ul>
                 </li>

@@ -79,185 +79,62 @@
                             </div>
                         </div>
                         <div class="card-body">
-                            <table class="table " id="dataTables-example">
+                            <table class="table hidden-overflow" id="dataTables-example">
                                 <thead>
                                     <tr>
-                                        <th>Nama Siswa</th>
-                                        <th>Tanggal Pembayaran</th>
-                                        <th>Nomor Pembayaran</th>
-                                        <th>Biaya</th>
-                                        <th>Kode Petugas</th>
-                                        <th>Status</th>
+                                        <th><center>No</center></th>
+                                        <th><center>Nama Siswa</center> </th>
+                                        <th><center>Tanggal Pembayaran</center></th>
+                                        <th><center>Nomor Pembayaran</center></th>
+                                        <th><center>Biaya</center></th>
+                                        <th><center>Kode Petugas</center></th>
+                                        <th><center>Status</center></th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr class="odd">
-                                        <td><img src="img/user1.png" alt="" class="rounded-circle avatar avatar-50 mr-2">Strobarry milk
-                                        </td>
-                                        <td>infoatmaxartkiller.in</td>
-                                        <td>+91 000 000 0000</td>
-                                        <td class="center">40</td>
-                                        <td class="center"><span class="btn btn-outline-success btn-sm">Active</span></td>
-                                        <td class="center">
-                                            <a href="" class=" btn btn-link btn-sm "><img class="border-0 vm" src="img/facebook.png" alt=""></a>
-                                            <a href="" class="btn btn-link btn-sm"><img class="border-0 vm" src="img/pinterest.png" alt=""></a>
-                                            <a href="" class="btn btn-link btn-sm"><img class="border-0 vm" src="img/twitter.png" alt=""></a>
-                                            <a href="" class="btn btn-link btn-sm"><img class="border-0 vm" src="img/linkedin.png" alt=""></a>
-                                        </td>
+                                        <td><center>1</center></td>
+                                        <td><center>Nama</center></td>
+                                        <td ><center>23-02-2024</center></td>
+                                        <td><center>infoatmaxartkiller.in</center></td>
+                                        <td><center>+91 000 000 0000</center></td>
+                                        <td><center>40</center></td>
+                                        <td><center><span class="btn btn-outline-success btn-sm">Active</span></center></td>
                                     </tr>
                                     <tr class="even ">
-                                        <td><img src="img/user2.png" alt="" class="rounded-circle avatar avatar-50 mr-2">Alone Guy
-                                        </td>
-                                        <td>infoatmaxartkiller.in</td>
-                                        <td>+91 000 000 0000</td>
-                                        <td class="center">18</td>
-                                        <td class="center"><span class="btn btn-outline-success btn-sm">Active</span></td>
-                                        <td class="center">
-                                            <a href="" class=" btn btn-link btn-sm "><img class="border-0 vm" src="img/facebook.png" alt=""></a>
-                                            <a href="" class="btn btn-link btn-sm"><img class="border-0 vm" src="img/pinterest.png" alt=""></a>
-                                            <a href="" class="btn btn-link btn-sm"><img class="border-0 vm" src="img/twitter.png" alt=""></a>
-                                            <a href="" class="btn btn-link btn-sm"><img class="border-0 vm" src="img/linkedin.png" alt=""></a>
-                                        </td>
+                                        <td><center>1</center></td>
+                                        <td><center>Nama</center></td>
+                                        <td ><center>23-02-2024</center></td>
+                                        <td><center>infoatmaxartkiller.in</center></td>
+                                        <td><center>+91 000 000 0000</center></td>
+                                        <td><center>40</center></td>
+                                        <td><center><span class="btn btn-outline-success btn-sm">Active</span></center></td>
                                     </tr>
                                     <tr class="odd">
-                                        <td><img src="img/user3.png" alt="" class="rounded-circle avatar avatar-50 mr-2">Astha Smith
-                                        </td>
-                                        <td>infoatmaxartkiller.in</td>
-                                        <td>+91 000 000 0000</td>
-                                        <td class="center">10</td>
-                                        <td class="center"><span class="btn btn-outline-success btn-sm">Active</span></td>
-                                        <td class="center">
-                                            <a href="" class=" btn btn-link btn-sm "><img class="border-0 vm" src="img/facebook.png" alt=""></a>
-                                            <a href="" class="btn btn-link btn-sm"><img class="border-0 vm" src="img/pinterest.png" alt=""></a>
-                                            <a href="" class="btn btn-link btn-sm"><img class="border-0 vm" src="img/twitter.png" alt=""></a>
-                                            <a href="" class="btn btn-link btn-sm"><img class="border-0 vm" src="img/linkedin.png" alt=""></a>
-                                        </td>
+                                        <td><center>1</center></td>
+                                        <td><center>Nama</center></td>
+                                        <td ><center>23-02-2024</center></td>
+                                        <td><center>infoatmaxartkiller.in</center></td>
+                                        <td><center>+91 000 000 0000</center></td>
+                                        <td><center>40</center></td>
+                                        <td><center><span class="btn btn-outline-success btn-sm">Active</span></center></td>
                                     </tr>
                                     <tr class="even ">
-                                        <td><img src="img/user1.png" alt="" class="rounded-circle avatar avatar-50 mr-2">Lucky Sans
-                                        </td>
-                                        <td>infoatmaxartkiller.in</td>
-                                        <td>+91 000 000 0000</td>
-                                        <td class="center">19</td>
-                                        <td class="center"><span class="btn btn-outline-success btn-sm">Active</span></td>
-                                        <td class="center">
-                                            <a href="" class=" btn btn-link btn-sm "><img class="border-0 vm" src="img/facebook.png" alt=""></a>
-                                            <a href="" class="btn btn-link btn-sm"><img class="border-0 vm" src="img/pinterest.png" alt=""></a>
-                                            <a href="" class="btn btn-link btn-sm"><img class="border-0 vm" src="img/twitter.png" alt=""></a>
-                                            <a href="" class="btn btn-link btn-sm"><img class="border-0 vm" src="img/linkedin.png" alt=""></a>
-                                        </td>
-                                    </tr>
+                                        <td><center>1</center></td>
+                                        <td><center>Nama</center></td>
+                                        <td ><center>23-02-2024</center></td>
+                                        <td><center>infoatmaxartkiller.in</center></td>
+                                        <td><center>+91 000 000 0000</center></td>
+                                        <td><center>40</center></td>
+                                        <td><center><span class="btn btn-outline-success btn-sm">Active</span></center></td>                                    </tr>
                                     <tr class="odd">
-                                        <td><img src="img/user3.png" alt="" class="rounded-circle avatar avatar-50 mr-2">John Doe
-                                        </td>
-                                        <td>infoatmaxartkiller.in</td>
-                                        <td>+91 000 000 0000</td>
-                                        <td class="center">40</td>
-                                        <td class="center"><span class="btn btn-outline-success btn-sm">Active</span></td>
-                                        <td class="center">
-                                            <a href="" class=" btn btn-link btn-sm "><img class="border-0 vm" src="img/facebook.png" alt=""></a>
-                                            <a href="" class="btn btn-link btn-sm"><img class="border-0 vm" src="img/pinterest.png" alt=""></a>
-                                            <a href="" class="btn btn-link btn-sm"><img class="border-0 vm" src="img/twitter.png" alt=""></a>
-                                            <a href="" class="btn btn-link btn-sm"><img class="border-0 vm" src="img/linkedin.png" alt=""></a>
-                                        </td>
-                                    </tr>
-                                    <tr class="even ">
-                                        <td><img src="img/user1.png" alt="" class="rounded-circle avatar avatar-50 mr-2">Alone Guy
-                                        </td>
-                                        <td>infoatmaxartkiller.in</td>
-                                        <td>+91 000 000 0000</td>
-                                        <td class="center">18</td>
-                                        <td class="center"><span class="btn btn-sm btn-outline-danger">Inactive</span></td>
-                                        <td class="center">
-                                            <a href="" class=" btn btn-link btn-sm "><img class="border-0 vm" src="img/facebook.png" alt=""></a>
-                                            <a href="" class="btn btn-link btn-sm"><img class="border-0 vm" src="img/pinterest.png" alt=""></a>
-                                            <a href="" class="btn btn-link btn-sm"><img class="border-0 vm" src="img/twitter.png" alt=""></a>
-                                            <a href="" class="btn btn-link btn-sm"><img class="border-0 vm" src="img/linkedin.png" alt=""></a>
-                                        </td>
-                                    </tr>
-                                    <tr class="odd">
-                                        <td><img src="img/user3.png" alt="" class="rounded-circle avatar avatar-50 mr-2">Astha Smith
-                                        </td>
-                                        <td>infoatmaxartkiller.in</td>
-                                        <td>+91 000 000 0000</td>
-                                        <td class="center">17</td>
-                                        <td class="center"><span class="btn btn-sm btn-outline-danger">Inactive</span></td>
-                                        <td class="center">
-                                            <a href="" class=" btn btn-link btn-sm "><img class="border-0 vm" src="img/facebook.png" alt=""></a>
-                                            <a href="" class="btn btn-link btn-sm"><img class="border-0 vm" src="img/pinterest.png" alt=""></a>
-                                            <a href="" class="btn btn-link btn-sm"><img class="border-0 vm" src="img/twitter.png" alt=""></a>
-                                            <a href="" class="btn btn-link btn-sm"><img class="border-0 vm" src="img/linkedin.png" alt=""></a>
-                                        </td>
-                                    </tr>
-                                    <tr class="even ">
-                                        <td><img src="img/user2.png" alt="" class="rounded-circle avatar avatar-50 mr-2">John Doe
-                                        </td>
-                                        <td>infoatmaxartkiller.in</td>
-                                        <td>+91 000 000 0000</td>
-                                        <td class="center">50</td>
-                                        <td class="center"><span class="btn btn-sm btn-outline-danger">Active</span></td>
-                                        <td class="center">
-                                            <a href="" class=" btn btn-link btn-sm "><img class="border-0 vm" src="img/facebook.png" alt=""></a>
-                                            <a href="" class="btn btn-link btn-sm"><img class="border-0 vm" src="img/pinterest.png" alt=""></a>
-                                            <a href="" class="btn btn-link btn-sm"><img class="border-0 vm" src="img/twitter.png" alt=""></a>
-                                            <a href="" class="btn btn-link btn-sm"><img class="border-0 vm" src="img/linkedin.png" alt=""></a>
-                                        </td>
-                                    </tr>
-                                    <tr class="odd">
-                                        <td><img src="img/user2.png" alt="" class="rounded-circle avatar avatar-50 mr-2">Alone Guy
-                                        </td>
-                                        <td>infoatmaxartkiller.in</td>
-                                        <td>+91 000 000 0000</td>
-                                        <td class="center">20</td>
-                                        <td class="center"><span class="btn btn-sm btn-outline-warning">Inactive</span></td>
-                                        <td class="center">
-                                            <a href="" class=" btn btn-link btn-sm "><img class="border-0 vm" src="img/facebook.png" alt=""></a>
-                                            <a href="" class="btn btn-link btn-sm"><img class="border-0 vm" src="img/pinterest.png" alt=""></a>
-                                            <a href="" class="btn btn-link btn-sm"><img class="border-0 vm" src="img/twitter.png" alt=""></a>
-                                            <a href="" class="btn btn-link btn-sm"><img class="border-0 vm" src="img/linkedin.png" alt=""></a>
-                                        </td>
-                                    </tr>
-                                    <tr class="even ">
-                                        <td><img src="img/user2.png" alt="" class="rounded-circle avatar avatar-50 mr-2">Astha Smith
-                                        </td>
-                                        <td>infoatmaxartkiller.in</td>
-                                        <td>+91 000 000 0000</td>
-                                        <td class="center">15</td>
-                                        <td class="center"><span class="btn btn-sm btn-outline-warning">Active</span></td>
-                                        <td class="center">
-                                            <a href="" class=" btn btn-link btn-sm "><img class="border-0 vm" src="img/facebook.png" alt=""></a>
-                                            <a href="" class="btn btn-link btn-sm"><img class="border-0 vm" src="img/pinterest.png" alt=""></a>
-                                            <a href="" class="btn btn-link btn-sm"><img class="border-0 vm" src="img/twitter.png" alt=""></a>
-                                            <a href="" class="btn btn-link btn-sm"><img class="border-0 vm" src="img/linkedin.png" alt=""></a>
-                                        </td>
-                                    </tr>
-                                    <tr class="odd">
-                                        <td><img src="img/user1.png" alt="" class="rounded-circle avatar avatar-50 mr-2">Lucky Sans
-                                        </td>
-                                        <td>infoatmaxartkiller.in</td>
-                                        <td>+91 000 000 0000</td>
-                                        <td class="center">15</td>
-                                        <td class="center"><span class="btn btn-sm btn-outline-primary">Inactive</span></td>
-                                        <td class="center">
-                                            <a href="" class=" btn btn-link btn-sm "><img class="border-0 vm" src="img/facebook.png" alt=""></a>
-                                            <a href="" class="btn btn-link btn-sm"><img class="border-0 vm" src="img/pinterest.png" alt=""></a>
-                                            <a href="" class="btn btn-link btn-sm"><img class="border-0 vm" src="img/twitter.png" alt=""></a>
-                                            <a href="" class="btn btn-link btn-sm"><img class="border-0 vm" src="img/linkedin.png" alt=""></a>
-                                        </td>
-                                    </tr>
-                                    <tr class="even ">
-                                        <td><img src="img/user1.png" alt="" class="rounded-circle avatar avatar-50 mr-2">John Doe
-                                        </td>
-                                        <td>infoatmaxartkiller.in</td>
-                                        <td>+91 000 000 0000</td>
-                                        <td class="center">50</td>
-                                        <td class="center"><span class="btn btn-sm btn-outline-primary">Active</span></td>
-                                        <td class="center">
-                                            <a href="" class=" btn btn-link btn-sm "><img class="border-0 vm" src="img/facebook.png" alt=""></a>
-                                            <a href="" class="btn btn-link btn-sm"><img class="border-0 vm" src="img/pinterest.png" alt=""></a>
-                                            <a href="" class="btn btn-link btn-sm"><img class="border-0 vm" src="img/twitter.png" alt=""></a>
-                                            <a href="" class="btn btn-link btn-sm"><img class="border-0 vm" src="img/linkedin.png" alt=""></a>
-                                        </td>
+                                        <td><center>1</center></td>
+                                        <td><center>Nama</center></td>
+                                        <td ><center>23-02-2024</center></td>
+                                        <td><center>infoatmaxartkiller.in</center></td>
+                                        <td><center>+91 000 000 0000</center></td>
+                                        <td><center>40</center></td>
+                                        <td><center><span class="btn btn-outline-success btn-sm">Active</span></center></td>
                                     </tr>
                                 </tbody>
                             </table>
