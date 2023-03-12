@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="<?= base_url();?>/assets/vendor/bootstrap-4.1.3/css/bootstrap.min.css">
 
     <!-- Material design icons CSS -->
-    <link rel="stylesheet" href="<?= base_url() ?>assets/vendor/materializeicon/material-icons.css">
+    <link rel="stylesheet" href="<?= base_url() ?>/assets/vendor/materializeicon/material-icons.css">
 
     <!-- animate CSS -->
     <link rel="stylesheet" href="<?= base_url();?>/assets/vendor/animatecss/animate.css">
@@ -30,15 +30,13 @@
 
     <!-- Bootstrap tour CSS -->
     <link rel="stylesheet" href="<?= base_url();?>/assets/vendor/bootstrap_tour/css/bootstrap-tour-standalone.css">
-
-
     <!-- jvector map CSS -->
     <link rel="stylesheet" href="<?= base_url();?>/assets/vendor/jquery-jvectormap/jquery-jvectormap-2.0.3.css">
 
     <!-- app CSS -->
     <link id="theme" rel="stylesheet" href="<?= base_url();?>/assets/css/purplesidebar.css" type="text/css">
 
-    <title>GoTRI</title>
+    <title>SPP Web</title>
 </head>
 
 <body class="fixed-header sidebar-right-close">
@@ -148,13 +146,13 @@
                     <a href="javascript:void(0);" class="nav-link dropdwown-toggle"> <i class="material-icons icon">folder</i> <span>Master Data</span><i class="material-icons icon arrow">expand_more</i></a>
                     <ul class="nav flex-column">
                         <li class="nav-item">
-                            <a href="index.html" class="nav-link success-gradient-active"><i class="material-icons icon"></i> <span>Data Siswa</span></a>
+                            <a href="index.html" class="nav-link success-gradient-active"><i class="material-icons icon">list</i> <span>Data Siswa</span></a>
                         </li>
                         <li class="nav-item">
-                            <a href="ecommerce.html" class="nav-link success-gradient-active"><i class="material-icons icon"></i> <span>Data Biaya</span> </a>
+                            <a href="ecommerce.html" class="nav-link success-gradient-active"><i class="material-icons icon">list</i> <span>Data Biaya</span> </a>
                         </li>
                         <li class="nav-item">
-                            <a href="ecommerce.html" class="nav-link success-gradient-active"><i class="material-icons icon"></i> <span>Data Tahun Akademik</span> </a>
+                            <a href="ecommerce.html" class="nav-link success-gradient-active"><i class="material-icons icon">list</i> <span>Data Tahun Akademik</span> </a>
                         </li>
                     </ul>
                 </li>

@@ -25,7 +25,7 @@ class Welcome extends CI_Controller {
 		$this->load->view('template/footer');
 	}
 
-	public function test(){
-		echo "123";
+	public function login(){
+		$this->load->view('login');
 	}
 }
