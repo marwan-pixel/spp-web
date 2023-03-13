@@ -20,29 +20,32 @@
 
 </head>
 <body class="fixed-header" style="display:flex; align-items:center;">
-    <div class="container-fluid">
-        <div class="card mx-auto" style="width:40%;">
-            <div class="card-body">
-                <form class="mt-3">
-                    <div class="form-group" style="display:flex; justify-content:center;">
-                        <img src="<?= base_url(); ?>/assets/img/logo UNBIN.jpeg" alt="" width="30%" height="30%" srcset="">
-                    </div>
-                    <div class="form-group mb-3">
-                        <h4 class="text-center font-weight-light">Aplikasi Pengelolaan SPP</h4>
-                    </div>
-                    <div class="form-group ml-3 mr-3" >
-                        <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Username">
-                        <!-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> -->
-                    </div>
-                    <div class="form-group ml-3 mr-3">
-                        <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
-                    </div>
-                    <!-- <div class="form-group form-check ml-3 mr-3">
-                        <input type="checkbox" class="form-check-input" id="exampleCheck1">
-                        <label class="form-check-label" for="exampleCheck1">Check me out</label>
-                    </div> -->
-                    <button type="submit" disabled class="btn btn-success ml-3 mr-3">Submit</button>
-                </form>
+    <div class="container" style="background:url(<?= base_url() ?>/assets/img/school.jpg)">
+        <div class="card mx-auto col-lg-5">
+            <div class="container-md">
+                <div class="card-body">
+                    <form class="mt-3 needs-validation">
+                        <div class="form-group" style="display:flex; justify-content:center;">
+                            <img src="<?= base_url(); ?>/assets/img/logo UNBIN.jpeg" alt="" width="30%" height="30%" srcset="">
+                        </div>
+                        <div class="form-group mb-3">
+                            <h4 class="text-center font-weight-light">Aplikasi Pengelolaan SPP</h4>
+                        </div>
+                        <div class="form-group ml-3 mr-3 was-validation" >
+                            <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Username">
+                            <div class="invalid-tooltip">
+                                Masukkan Username Terlebih Dahulu
+                            </div>
+                        </div>
+                        <div class="form-group ml-3 mr-3 has-validation">
+                            <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+                            <div class="invalid-feedback">
+                                Masukkan Password Terlebih Dahulu
+                            </div>
+                        </div>
+                        <button type="submit" disabled class="btn btn-primary ml-3 mr-3">Submit</button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>

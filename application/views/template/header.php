@@ -34,7 +34,7 @@
     <link rel="stylesheet" href="<?= base_url();?>/assets/vendor/jquery-jvectormap/jquery-jvectormap-2.0.3.css">
 
     <!-- app CSS -->
-    <link id="theme" rel="stylesheet" href="<?= base_url();?>/assets/css/purplesidebar.css" type="text/css">
+    <link id="theme" rel="stylesheet" href="<?= base_url();?>/assets/css/dark-greensidebar.css" type="text/css">
 
     <title>SPP Web</title>
 </head>
@@ -59,9 +59,8 @@
             <div class="container-fluid">
                 <div class="row align-items-center">
                     <div class="col-auto pl-0">
-                        <button style="width:18vw; background: #22B07D;" class="btn btn-icon" id="left-menu"><img height="40" width="40" src="<?= base_url()?>/assets/img/india.png" alt=""></button>
+                        <button style="background: #22B07D;" class="btn btn-icon" id="left-menu"><img height="40" width="40" src="<?= base_url()?>/assets/img/india.png" alt=""></button>
                         <a href="index.html" class="logo"><span class="text-hide-xs">Yayasan Islam Rahmatan Lil Alamin</span></a>
-                        
                     </div>
                     <div class="col text-center p-xs-0">
                         <!-- <ul class="time-day">
@@ -139,14 +138,14 @@
         <div class="sidebar sidebar-left" style="background: #22B07D;">
             <ul class="nav flex-column">
                 <li class="nav-item">
-                    <a href="<?= base_url(); ?>/" class="nav-link dropdwown-toggle "> <i class="material-icons icon">dashboard</i> <span>Dashboard</span></a>
+                    <a href="<?= base_url(); ?>" class="nav-link dropdwown-toggle "> <i class="material-icons icon">dashboard</i> <span>Dashboard</span></a>
                 </li>
                 <p class="ml-3 mt-3 mb-2 pt-2 pb-2 border-bottom border-top ">Menu</p>
                 <li class="nav-item">
                     <a href="javascript:void(0);" class="nav-link dropdwown-toggle"> <i class="material-icons icon">folder</i> <span>Master Data</span><i class="material-icons icon arrow">expand_more</i></a>
                     <ul class="nav flex-column">
                         <li class="nav-item">
-                            <a href="index.html" class="nav-link success-gradient-active"><i class="material-icons icon">list</i> <span>Data Siswa</span></a>
+                            <a href="<?= site_url('datasiswa'); ?>" class="nav-link success-gradient-active"><i class="material-icons icon">list</i> <span>Data Siswa</span></a>
                         </li>
                         <li class="nav-item">
                             <a href="ecommerce.html" class="nav-link success-gradient-active"><i class="material-icons icon">list</i> <span>Data Biaya</span> </a>
