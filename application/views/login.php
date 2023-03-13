@@ -20,13 +20,13 @@
 
 </head>
 <body class="fixed-header" style="display:flex; align-items:center;">
-    <div class="container" style="background:url(<?= base_url() ?>/assets/img/school.jpg)">
+    <div class="container" style="background: #22B07D">
         <div class="card mx-auto col-lg-5">
             <div class="container-md">
                 <div class="card-body">
                     <form class="mt-3 needs-validation">
                         <div class="form-group" style="display:flex; justify-content:center;">
-                            <img src="<?= base_url(); ?>/assets/img/logo UNBIN.jpeg" alt="" width="30%" height="30%" srcset="">
+                            <img src="<?= base_url(); ?>/assets/img/Yayasan Ar-Rahmah.jpeg" alt="" width="30%" height="30%" srcset="">
                         </div>
                         <div class="form-group mb-3">
                             <h4 class="text-center font-weight-light">Aplikasi Pengelolaan SPP</h4>

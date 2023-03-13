@@ -57,79 +57,82 @@
         <!-- main header -->
         <header class="main-header">
             <div class="container-fluid">
-                <div class="row align-items-center">
-                    <div class="col-auto pl-0">
-                        <button style="background: #22B07D;" class="btn btn-icon" id="left-menu"><img height="40" width="40" src="<?= base_url()?>/assets/img/india.png" alt=""></button>
-                        <a href="index.html" class="logo"><span class="text-hide-xs">Yayasan Islam Rahmatan Lil Alamin</span></a>
-                    </div>
-                    <div class="col text-center p-xs-0">
-                        <!-- <ul class="time-day">
-                            <li class="text-right">
-                                <p class="header-color-primary"><span class="header-color-secondary">November</span><small>2018</small></p>
-                                <h2>7</h2>
-                            </li>
-                            <li class="text-left">
-                                <h2>36<span class="header-color-secondary font-weight-light"><sup>o</sup>C</span></h2>
-                                <p class="header-color-primary text-hide-lg"><span class="header-color-secondary">London</span><small>11:24 am</small></p>
-                            </li>
-                        </ul> -->
+                <nav>
 
-                    </div>
-                    <div class="col-auto pr-0">
-                        <div class="dropdown d-inline-block">
-                            <a class="btn header-color-secondary btn-icon dropdown-toggle caret-none" href="#" role="button" id="dropdownmessage" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fa-solid fa-bell"></i>
-                                <span class="status-number bg-danger text-white">9+</span>
-                            </a>
-                            <div class="dropdown-menu notification-dropdown align-center arrow-top pt-0" aria-labelledby="dropdownmessage">
-                                <div class="arrow primary-gradient"></div>
-                                <div class="primary-gradient py-3 text-center">
-                                    <h5 class="mb-0">Messages</h5>
-                                    <p class="mb-0">Just Recieved Messages</p>
-                                </div>
-                                <a href="#" class="media success-gradient-active new">
-                                    <figure class="avatar avatar-40">
-                                        <img src="<?= base_url();?>/assets/img/user3.png" alt="Generic placeholder image">
-                                    </figure>
-                                    <div class="media-body">
-                                        <h5 class="my-0">Donald Costapor </h5>
-                                        <small class="text-muted d-block mb-2">2:05 am</small>
-                                        <p>Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin.</p>
-                                    </div>
-                                </a>
-                            </div>
+                    <div class="row align-items-center">
+                        <div class="col-auto pl-0">
+                            <button style="background: #22B07D; width:10vw;" class="btn btn-icon" id="left-menu"><img class="img-fluid" height="40" width="60" src="<?= base_url()?>/assets/img/Yayasan Ar-Rahmah.jpeg" alt=""></button>
+                            <a href="index.html" class="logo"><span class="text-hide-xs">Yayasan Islam Rahmatan Lil Alamin</span></a>
                         </div>
-                        
-                        <div class="dropdown d-inline-block">
-                            <a class="btn header-color-secondary dropdown-toggle username" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <figure class="userpic"><img src="<?= base_url();?>/assets/img/user1.png" alt=""></figure>
-                                <h5 class="text-hide-xs">
-                                    <small class="header-color-secondary">Welcome,</small>
-                                    <span class="header-color-primary">John McMohan</span>
-                                </h5>
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-right profile-dropdown" aria-labelledby="dropdownMenuLink">
-                         
-                                <div class="dropdown-divider m-0"></div>
-                                <a class="dropdown-item success-gradient-active" href="signin1.html">
-                                    <div class="row align-items-center">
-                                        <div class="col">
-                                            Logout
+                        <div class="col text-center p-xs-0">
+                            <!-- <ul class="time-day">
+                                <li class="text-right">
+                                    <p class="header-color-primary"><span class="header-color-secondary">November</span><small>2018</small></p>
+                                    <h2>7</h2>
+                                </li>
+                                <li class="text-left">
+                                    <h2>36<span class="header-color-secondary font-weight-light"><sup>o</sup>C</span></h2>
+                                    <p class="header-color-primary text-hide-lg"><span class="header-color-secondary">London</span><small>11:24 am</small></p>
+                                </li>
+                            </ul> -->
+    
+                        </div>
+                        <div class="col-auto pr-0">
+                            <div class="dropdown d-inline-block">
+                                <a class="btn header-color-secondary btn-icon dropdown-toggle caret-none" href="#" role="button" id="dropdownmessage" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="fa-solid fa-bell"></i>
+                                    <span class="status-number bg-danger text-white">9+</span>
+                                </a>
+                                <div class="dropdown-menu notification-dropdown align-center arrow-top pt-0" aria-labelledby="dropdownmessage">
+                                    <div class="arrow primary-gradient"></div>
+                                    <div class="primary-gradient py-3 text-center">
+                                        <h5 class="mb-0">Messages</h5>
+                                        <p class="mb-0">Just Recieved Messages</p>
+                                    </div>
+                                    <a href="#" class="media success-gradient-active new">
+                                        <figure class="avatar avatar-40">
+                                            <img src="<?= base_url();?>/assets/img/user3.png" alt="Generic placeholder image">
+                                        </figure>
+                                        <div class="media-body">
+                                            <h5 class="my-0">Donald Costapor </h5>
+                                            <small class="text-muted d-block mb-2">2:05 am</small>
+                                            <p>Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin.</p>
                                         </div>
-
-                                        <div class="col-auto">
-                                            <div class="text-danger ml-2">
-                                                <i class="fa-solid fa-right-from-bracket"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            
+                            <div class="dropdown d-inline-block">
+                                <a class="btn header-color-secondary dropdown-toggle username" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <figure class="userpic"><img src="<?= base_url();?>/assets/img/user1.png" alt=""></figure>
+                                    <h5 class="text-hide-xs">
+                                        <small class="header-color-secondary">Welcome,</small>
+                                        <span class="header-color-primary">John McMohan</span>
+                                    </h5>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-right profile-dropdown" aria-labelledby="dropdownMenuLink">
+                             
+                                    <div class="dropdown-divider m-0"></div>
+                                    <a class="dropdown-item success-gradient-active" href="<?= site_url('login'); ?>">
+                                        <div class="row align-items-center">
+                                            <div class="col">
+                                                Logout
+                                            </div>
+    
+                                            <div class="col-auto">
+                                                <div class="text-danger ml-2">
+                                                    <i class="fa-solid fa-right-from-bracket"></i>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </a>
-
+                                    </a>
+    
+                                </div>
                             </div>
+    
                         </div>
-
                     </div>
-                </div>
+                </nav>
             </div>
         </header>
         <!-- main header ends -->
@@ -148,16 +151,32 @@
                             <a href="<?= site_url('datasiswa'); ?>" class="nav-link success-gradient-active"><i class="material-icons icon">list</i> <span>Data Siswa</span></a>
                         </li>
                         <li class="nav-item">
-                            <a href="ecommerce.html" class="nav-link success-gradient-active"><i class="material-icons icon">list</i> <span>Data Biaya</span> </a>
+                            <a href="<?= site_url('dataBiaya'); ?>" class="nav-link success-gradient-active"><i class="material-icons icon">list</i> <span>Data Biaya</span> </a>
                         </li>
                         <li class="nav-item">
-                            <a href="ecommerce.html" class="nav-link success-gradient-active"><i class="material-icons icon">list</i> <span>Data Tahun Akademik</span> </a>
+                            <a href="<?= site_url('dataKelas'); ?>" class="nav-link success-gradient-active"><i class="material-icons icon">list</i> <span>Data Kelas</span> </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="<?= site_url('dataTahunAkademik'); ?>" class="nav-link success-gradient-active"><i class="material-icons icon">list</i> <span>Data Tahun Akademik</span> </a>
                         </li>
                     </ul>
+                </li>
+                <li class="nav-item">
+                    <a href="<?= site_url('datatransaksi'); ?>" class="nav-link dropdwown-toggle "> <i class="material-icons icon">folder</i> <span>Transaksi</span></a>
                 </li>
             </ul>
         </div>
         <!-- sidebar left ends -->
-
-
-
+          <!-- content page title -->
+          <div class="container-fluid bg-light-opac">
+                <div class="row">
+                    <div class="container my-3 main-container">
+                        <div class="row align-items-center">
+                            <div class="col">
+                                <h2 class="content-color-primary page-title">Data Siswa</h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <!-- content page title ends -->
