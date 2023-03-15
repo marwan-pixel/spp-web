@@ -1,13 +1,12 @@
 </div>
-<footer class="border-top">
-        <div class="row">
-            <div class="col-10 col-sm-6"><b>Gagah Amat</b> </div>
-
-        </div>
-    </footer>
+<footer class="sticky-footer bg-white border-top">
+    <div class="container my-auto">
+        <div class="copyright text-center my-auto"><span>Copyright &copy Tumpas Jaya</p> </div>
+    </div>
+</footer>
 
     <!-- modal for create form -->
-    <div class="modal fade" id="createOrder" tabindex="-1" role="dialog" aria-labelledby="createOrderTitle" aria-hidden="true">
+    <!-- <div class="modal fade" id="createOrder" tabindex="-1" role="dialog" aria-labelledby="createOrderTitle" aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header" id="createOrderTitle">
@@ -156,7 +155,7 @@
          
             </div>
         </div>
-    </div>
+    </div> -->
     <!-- modal for create form ends-->
 
 
