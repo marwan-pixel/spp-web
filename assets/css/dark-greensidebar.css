@@ -26,6 +26,7 @@
   --danger: #f63b55;
   --light: #f8f9fa;
   --dark: #343a40;
+
   --breakpoint-xs: 0;
   --breakpoint-sm: 576px;
   --breakpoint-md: 768px;
@@ -9587,11 +9588,11 @@ body.dragging * {
 .success-gradient-active.active:hover,
 .success-gradient-active:active {
   color: #ffffff !important;
-  background-image: -moz-linear-gradient(45deg, #07ba7d 0%, #0fd793 100%) !important;
-  background-image: -webkit-linear-gradient(45deg, #07ba7d 0%, #0fd793 100%) !important;
-  background-image: -ms-linear-gradient(45deg, #07ba7d 0%, #0fd793 100%) !important;
+  background-image: -moz-linear-gradient(45deg, #0fd793 0%, #0fd793 100%) !important;
+  background-image: -webkit-linear-gradient(45deg, #0fd793 0%, #0fd793 100%) !important;
+  background-image: -ms-linear-gradient(45deg, #0fd793 0%, #0fd793 100%) !important;
   border-color: transparent;
-  background-color: #07ba7d !important;
+  background-color: #0fd793 !important;
 }
 
 .success-gradient h5,

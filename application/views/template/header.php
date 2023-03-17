@@ -48,7 +48,7 @@
             <nav>
                <div class="row align-items-center">
                   <div class="col-auto pl-0">
-                     <button style="background: #22B07D; width:10vw;" class="btn btn-icon" id="left-menu"><img class="img-fluid" height="40" width="60" src="<?= base_url()?>/assets/img/Yayasan Ar-Rahmah.jpeg" alt=""></button>
+                     <button style="width:10vw;" class="btn success-gradient btn-icon" id="left-menu"><img class="img-fluid" height="40" width="60" src="<?= base_url()?>/assets/img/Yayasan Ar-Rahmah.jpeg" alt=""></button>
                      <a href="index.html" class="logo"><span class="text-hide-xs">Yayasan Islam Rahmatan Lil Alamin</span></a>
                   </div>
                   <div class="col text-center p-xs-0">
@@ -60,8 +60,8 @@
                         <span class="status-number bg-danger text-white">9+</span>
                         </a>
                         <div class="dropdown-menu notification-dropdown align-center arrow-top pt-0" aria-labelledby="dropdownmessage">
-                           <div class="arrow primary-gradient"></div>
-                           <div class="primary-gradient py-3 text-center">
+                           <div class="arrow success-gradient"></div>
+                           <div class="success-gradient py-3 text-center">
                               <h5 class="mb-0">Messages</h5>
                               <p class="mb-0">Just Recieved Messages</p>
                            </div>
@@ -82,7 +82,7 @@
                            <figure class="userpic"><img src="<?= base_url();?>/assets/img/user1.png" alt=""></figure>
                            <h5 class="text-hide-xs">
                               <small class="header-color-secondary">Welcome,</small>
-                              <span class="header-color-primary">John McMohan</span>
+                              <span class="header-color-success">John McMohan</span>
                            </h5>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right profile-dropdown" aria-labelledby="dropdownMenuLink">
@@ -143,15 +143,15 @@
             <div class="container my-3 main-container">
                <div class="row align-items-center">
                   <div class="col d-flex justify-content-between">
-                     <h2 class="content-color-primary page-title">Data Siswa</h2>
+                     <h2 class="content-color-success page-title">Data Siswa</h2>
                      <ul class="time-day">
                         <li class="text-right">
-                           <p class="header-color-primary"><span class="header-color-secondary">November</span><small>2018</small></p>
+                           <p class="header-color-success"><span class="header-color-secondary">November</span><small>2018</small></p>
                            <h2>7</h2>
                         </li>
                         <li class="text-left">
-                           <h2>12:00:00</h2>
-                           <p class="header-color-primary text-hide-lg"><span class="header-color-secondary">London</span><small>11:24 am</small></p>
+                           <h2 onload="getTimer()"></h2>
+                           <p class="header-color-success text-hide-lg"><span class="header-color-secondary">London</span><small>11:24 am</small></p>
                         </li>
                      </ul>
                   </div>

@@ -16,34 +16,36 @@
     <!-- animate CSS -->
     <link rel="stylesheet" href="<?= base_url();?>/assets/vendor/animatecss/animate.css">
     <link id="theme" rel="stylesheet" href="<?= base_url();?>/assets/css/purplesidebar.css" type="text/css">
-
-
 </head>
-<body class="fixed-header" style="display:flex; align-items:center;">
-    <div class="container" style="background: #22B07D">
+<body class="fixed-header" style="display:flex; align-items:center;background: #22B07D">
+    <div class="container">
         <div class="card mx-auto col-lg-5">
             <div class="container-md">
                 <div class="card-body">
-                    <form class="mt-3 needs-validation">
+                    <form class="mt-3 needs-validation" action="<?= site_url('/');?>">
                         <div class="form-group" style="display:flex; justify-content:center;">
-                            <img src="<?= base_url(); ?>/assets/img/Yayasan Ar-Rahmah.jpeg" alt="" width="30%" height="30%" srcset="">
+                            <img src="<?= base_url(); ?>/assets/img/Yayasan Ar-Rahmah.jpeg" alt="" width="110" height="80" srcset="">
                         </div>
                         <div class="form-group mb-3">
                             <h4 class="text-center font-weight-light">Aplikasi Pengelolaan SPP</h4>
                         </div>
                         <div class="form-group ml-3 mr-3 was-validation" >
-                            <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Username">
+                            <label for="exampleInputUsername1">Username</label>
+                            <input type="text" class="form-control" id="exampleInputUsername1" aria-describedby="emailHelp" >
                             <div class="invalid-tooltip">
                                 Masukkan Username Terlebih Dahulu
                             </div>
                         </div>
                         <div class="form-group ml-3 mr-3 has-validation">
-                            <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+                            <label for="exampleInputPassword1">Password</label>
+                            <input type="password" class="form-control" id="exampleInputPassword1">
                             <div class="invalid-feedback">
                                 Masukkan Password Terlebih Dahulu
                             </div>
                         </div>
-                        <button type="submit" disabled class="btn btn-primary ml-3 mr-3">Submit</button>
+                        <div class="form-group ml-3 mr-3">
+                            <button type="submit" class="btn btn-block btn-success">Submit</button>
+                        </div>
                     </form>
                 </div>
             </div>

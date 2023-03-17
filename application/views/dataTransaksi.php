@@ -72,12 +72,125 @@
                            </div>
                            <div class="col">
                               <div class="progress progress-sm ml-2 mr-2">
-                                 <div class="" role="progressbar" style="width: %" aria-valuenow="" aria-valuemin="0" aria-valuemax="12"></div>
+                                 <div class="" role="progressbar" style="width: 10%" aria-valuenow="" aria-valuemin="0" aria-valuemax="12"></div>
                               </div>
                            </div>
                         </div>
                      </a>
-                     <div class="collapse " id="collapseCardExamplex" style="">
+                     <div class="collapse " id="collapseCardExamplex">
+                        <div class="card-body">
+                           <div class="row">
+                            <div class="col-sm-12">
+                              <div class="card-header py-3">
+                                 <h5>
+                                    <b class="text-primary">Data Pembayaran</b>
+                                    <button class="btn btn-primary"><i class="fa fa-print"></i> Cetak Rekap SPP</button>
+                                 </h5>
+                              </div>
+                              <div class="table-responsive">
+                                <table class="table hidden-overflow " id="dataTables-example">
+                                  <thead>
+                                    <tr>
+                                        <th>
+                                          <center>No</center>
+                                        </th>
+                                        <th>
+                                          <center>Nomor Transaksi</center>
+                                        </th>
+                                        <th>
+                                          <center>Nomor Induk Siswa</center>
+                                        </th>
+                                        <th>
+                                          <center>Tanggal Pembayaran</center>
+                                        </th>
+                                        <th>
+                                          <center>Nomor Pembayaran</center>
+                                        </th>
+                                        <th>
+                                          <center>Biaya</center>
+                                        </th>
+                                        <th>
+                                          <center>Kode Petugas</center>
+                                        </th>
+                                        <th>
+                                          <center>Status</center>
+                                        </th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    <tr data-toggle="modal" data-target="#exampleModal" class="odd">
+                                        <td>
+                                          <center>1</center>
+                                        </td>
+                                        <td>
+                                          <center>Nama</center>
+                                        </td>
+                                        <td>
+                                          <center>23-02-2024</center>
+                                        </td>
+                                        <td>
+                                          <center>infoatmaxartkiller.in</center>
+                                        </td>
+                                        <td>
+                                          <center>+91 000 000 0000</center>
+                                        </td>
+                                        <td>
+                                          <center>40</center>
+                                        </td>
+                                        <td>
+                                          <center>
+                                              <span class="btn btn-outline-success btn-sm">Active</span>
+                                          </center>
+                                        </td>
+                                    </tr>
+                                    <tr class="odd">
+                                        <td>
+                                          <center>1</center>
+                                        </td>
+                                        <td>
+                                          <center>Nama</center>
+                                        </td>
+                                        <td>
+                                          <center>23-02-2024</center>
+                                        </td>
+                                        <td>
+                                          <center>infoatmaxartkiller.in</center>
+                                        </td>
+                                        <td>
+                                          <center>+91 000 000 0000</center>
+                                        </td>
+                                        <td>
+                                          <center>40</center>
+                                        </td>
+                                        <td>
+                                          <center>
+                                              <span class="btn btn-outline-success btn-sm">Active</span>
+                                          </center>
+                                        </td>
+                                    </tr>
+                                  </tbody>
+                              </table>
+                              </div>
+                            </div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="card shadow fullscreen mt-2">
+                     <a href="#collapseCardExample1" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapseCardExamplex">
+                        <h6 class="m-0 font-weight-bold text-primary">Data Pembayaran SPP Kelas /  [Tahun / ]</h6>
+                        <div class="row no-gutters align-items-center">
+                           <div class="col-auto">
+                              <div >SPP dibayar</div>
+                           </div>
+                           <div class="col">
+                              <div class="progress progress-sm ml-2 mr-2">
+                                 <div class="" role="progressbar" style="width: 10%" aria-valuenow="" aria-valuemin="0" aria-valuemax="12"></div>
+                              </div>
+                           </div>
+                        </div>
+                     </a>
+                     <div class="collapse" id="collapseCardExample1">
                         <div class="card-body">
                            <div class="row">
                             <div class="col-sm-12">
