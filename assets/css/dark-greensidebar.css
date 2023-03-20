@@ -10775,8 +10775,7 @@ body.dragging * {
 @media screen and (max-width: 1440px) {
   .wrapper {
     padding-right: 0;
-  }
-  > footer,
+  } > footer,
   footer.main-footer {
     padding-right: 15px;
   }
