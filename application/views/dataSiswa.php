@@ -33,21 +33,14 @@
                                         <option>3</option>
                                     </select>
                                 </div>
-                                <div class="form-group">
-                                    <label for="InputKelas">Tahun Akademik</label>
-                                    <select class="form-control" id="InputKelas">
-                                        <option>1</option>
-                                        <option>2</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
+                                <!-- <div class="form-group">
                                     <label for="InputNIS">No. Telp</label>
                                     <input type="tel" pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}" class="form-control" id="InputNIS" aria-describedby="InputNIS">
-                                    <!-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> -->
                                 </div>
                                 <div class="form-group">
                                     <label for="InputAlamat">Alamat</label>
-                                    <textarea class="form-control" id="InputAlamat" rows="3"></textarea>                                </div>
+                                    <textarea class="form-control" id="InputAlamat" rows="3"></textarea>                                
+                                </div> -->
                             </form>
                             </div>
                             <div class="modal-footer">
@@ -86,21 +79,15 @@
                                         <option>3</option>
                                     </select>
                                 </div>
-                                <div class="form-group">
-                                    <label for="InputKelas">Tahun Akademik</label>
-                                    <select class="form-control" id="InputKelas">
-                                        <option>1</option>
-                                        <option>2</option>
-                                    </select>
-                                </div>
+<!-- 
                                 <div class="form-group">
                                     <label for="InputNIS">No. Telp</label>
                                     <input type="tel" pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}" class="form-control" id="InputNIS" aria-describedby="InputNIS">
-                                    <!-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> -->
                                 </div>
                                 <div class="form-group">
                                     <label for="InputAlamat">Alamat</label>
-                                    <textarea class="form-control" id="InputAlamat" rows="3"></textarea>                                </div>
+                                    <textarea class="form-control" id="InputAlamat" rows="3"></textarea>                                
+                                </div> -->
                             </form>
                             </div>
                             <div class="modal-footer">
@@ -141,9 +128,7 @@
                                                         <th><center>NIS</center> </th>
                                                         <th><center>Nama Siswa</center></th>
                                                         <th><center>Kelas</center></th>
-                                                        <th><center>Tahun Akademik</center></th>
-                                                        <th><center>No. Telp</center></th>
-                                                        <th><center>Alamat</center></th>
+                                                        <th><center>Biaya</center></th>
                                                         <th><center>Aksi</center></th>
                                                     </tr>
                                                 </thead>
@@ -151,14 +136,14 @@
                                                     <tr class="odd">
                                                         <td><center>1</center></td>
                                                         <td><center>Nama</center></td>
-                                                        <td ><center>23-02-2024</center></td>
+                                                        <td><center>23-02-2024</center></td>
                                                         <td><center>infoatmaxartkiller.in</center></td>
-                                                        <td><center>+91 000 000 0000</center></td>
-                                                        <td><center>40</center></td>
-                                                        <td><center><span class="btn btn-outline-success btn-sm">Active</span></center></td>
+                                                        <td><center>infoatmaxartkiller.in</center></td>
                                                         <td>
+                                                            <center>
                                                             <button class="btn btn-warning btn-sm" data-toggle="modal" data-target="#ExampleModalUpdate">Ubah</button>
-                                                            <button class="btn btn-danger btn-sm">Hapus</button>
+                                                            <!-- <button class="btn btn-danger btn-sm">Hapus</button> -->
+                                                            </center>
                                                        </td>
                                                     </tr>
                                                     <tr class="even ">
@@ -166,12 +151,12 @@
                                                         <td><center>Nama</center></td>
                                                         <td ><center>23-02-2024</center></td>
                                                         <td><center>infoatmaxartkiller.in</center></td>
-                                                        <td><center>+91 000 000 0000</center></td>
-                                                        <td><center>40</center></td>
-                                                        <td><center><span class="btn btn-outline-success btn-sm">Active</span></center></td>
+                                                        <td><center>infoatmaxartkiller.in</center></td>
                                                         <td>
-                                                            <button class="btn btn-warning btn-sm">Ubah</button>
-                                                            <button class="btn btn-danger btn-sm">Hapus</button>
+                                                             <center>
+                                                            <button class="btn btn-warning btn-sm" data-toggle="modal" data-target="#ExampleModalUpdate">Ubah</button>
+                                                            <!-- <button class="btn btn-danger btn-sm">Hapus</button> -->
+                                                            </center>
                                                        </td>
                                                     </tr>
                                                     <tr class="odd">
@@ -179,26 +164,39 @@
                                                         <td><center>Nama</center></td>
                                                         <td ><center>23-02-2024</center></td>
                                                         <td><center>infoatmaxartkiller.in</center></td>
-                                                        <td><center>+91 000 000 0000</center></td>
-                                                        <td><center>40</center></td>
-                                                        <td><center><span class="btn btn-outline-success btn-sm">Active</span></center></td>
+                                                        <td><center>infoatmaxartkiller.in</center></td>
+                                                        <td>
+                                                             <center>
+                                                            <button class="btn btn-warning btn-sm" data-toggle="modal" data-target="#ExampleModalUpdate">Ubah</button>
+                                                            <!-- <button class="btn btn-danger btn-sm">Hapus</button> -->
+                                                            </center>
+                                                       </td>
                                                     </tr>
                                                     <tr class="even ">
                                                         <td><center>1</center></td>
                                                         <td><center>Nama</center></td>
                                                         <td ><center>23-02-2024</center></td>
                                                         <td><center>infoatmaxartkiller.in</center></td>
-                                                        <td><center>+91 000 000 0000</center></td>
-                                                        <td><center>40</center></td>
-                                                        <td><center><span class="btn btn-outline-success btn-sm">Active</span></center></td>                                    </tr>
+                                                         <td><center>infoatmaxartkiller.in</center></td>
+                                                        <td>
+                                                             <center>
+                                                            <button class="btn btn-warning btn-sm" data-toggle="modal" data-target="#ExampleModalUpdate">Ubah</button>
+                                                            <!-- <button class="btn btn-danger btn-sm">Hapus</button> -->
+                                                            </center>
+                                                       </td>
+                                                    </tr>
                                                     <tr class="odd">
                                                         <td><center>1</center></td>
                                                         <td><center>Nama</center></td>
                                                         <td ><center>23-02-2024</center></td>
                                                         <td><center>infoatmaxartkiller.in</center></td>
-                                                        <td><center>+91 000 000 0000</center></td>
-                                                        <td><center>40</center></td>
-                                                        <td><center><span class="btn btn-outline-success btn-sm">Active</span></center></td>
+                                                         <td><center>infoatmaxartkiller.in</center></td>
+                                                         <td>
+                                                             <center>
+                                                            <button class="btn btn-warning btn-sm" data-toggle="modal" data-target="#ExampleModalUpdate">Ubah</button>
+                                                            <!-- <button class="btn btn-danger btn-sm">Hapus</button> -->
+                                                            </center>
+                                                       </td>
                                                     </tr>
                                                 </tbody>
                                             </table>

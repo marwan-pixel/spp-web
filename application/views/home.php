@@ -9,7 +9,7 @@
                                         <p class="content-color-secondary mb-0">Total Pemasukan<span class="text-success float-right"></p>
                                         <h3 class="content-color-primary mb-3 mt-2">Rp2.000,00</h3>
                                 </div>
-                                <i class="material-icons icon">attach_money</i>
+                                <h5>Rp</h5>
                             </div>
                             <!-- <div class="progress progress-small">
                                 <div class="progress-bar bg-success col-6" role="progressbar" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
@@ -58,7 +58,7 @@
                                         <p class="content-color-secondary mb-0">Jumlah Kelas (Setiap Tingkat) <span class="text-success float-right"></p>
                                         <h3 class="content-color-primary mb-3 mt-2">11</h3>
                                 </div>
-                                <i class="material-icons icon">attach_money</i>
+                                <i class="material-icons icon">group</i>
                             </div>
                             <!-- <div class="progress progress-small">
                                 <div class="progress-bar bg-success col-6" role="progressbar" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>

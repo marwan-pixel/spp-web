@@ -484,19 +484,20 @@
             <div class="card-body">
                <form action="">
                   <div class="form-group row">
-                     <div class="col-sm-2 mb-3 mb-sm-0">
-                        <p class="text-primary" for="InputKelas">Tahun Akademik</p>
-                     </div>
-                     <div class="col-sm-2 mb-3 mb-sm-0">
-                        <select class="form-control" id="InputKelas">
-                           <option>2xxx/2xxx</option>
-                           <option>2xxx/2xxx</option>
-                           <option>2xxx/2xxx</option>
-                        </select>
-                     </div>
                      <div class="col-sm-2">
-                        <button class="btn btn-primary">Cetak</button>
+                        <p class="text-primary" for="InputKelas">Tanggal Pembayaran</p>
+                     </div>                     
+                        <div class="col-sm-2 ">
+                           <input type="date" name="" id="">
+                        </div>
+                        <div class="col-sm-2">
+                           <input type="date" name="" id="">
+                        </div>
                      </div>
+                  <div class="row">
+                        <div class="col-md-2">
+                           <button class="btn btn-primary">Cetak</button>
+                        </div>
                   </div>
                </form>
             </div>

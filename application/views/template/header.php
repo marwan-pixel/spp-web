@@ -5,27 +5,28 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, viewport-fit=cover">
       <!-- favicons -->
-      <link rel="apple-touch-icon" href="<?= base_url();?>/assets/img/favicon-apple.png">
-      <link rel="icon" href="<?= base_url();?>/assets/img/Yayasan Ar-Rahmah.jpeg">
+      <link rel="apple-touch-icon" href="/assets/img/favicon-apple.png">
+      <link rel="icon" href="assets/img/Yayasan Ar-Rahmah.jpeg">
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
       <!-- Bootstrap CSS -->
-      <link rel="stylesheet" href="<?= base_url();?>/assets/vendor/bootstrap-4.1.3/css/bootstrap.min.css">
+      <!-- <link rel="stylesheet" href="assets/vendor/bootstrap-4.1.3/css/bootstrap.min.css"> -->
       <!-- Material design icons CSS -->
-      <link rel="stylesheet" href="<?= base_url() ?>/assets/vendor/materializeicon/material-icons.css">
+      <link rel="stylesheet" href="assets/vendor/materializeicon/material-icons.css">
       <!-- animate CSS -->
-      <link rel="stylesheet" href="<?= base_url();?>/assets/vendor/animatecss/animate.css">
+      <link rel="stylesheet" href="assets/vendor/animatecss/animate.css">
       <!-- swiper carousel CSS -->
-      <link rel="stylesheet" href="<?= base_url();?>/assets/vendor/swiper/css/swiper.min.css">
+      <link rel="stylesheet" href="assets/vendor/swiper/css/swiper.min.css">
       <!-- daterange CSS -->
-      <link rel="stylesheet" href="<?= base_url();?>/assets/vendor/bootstrap-daterangepicker-master/daterangepicker.css">
+      <link rel="stylesheet" href="assets/vendor/bootstrap-daterangepicker-master/daterangepicker.css">
       <!-- footable CSS -->
-      <link rel="stylesheet" href="<?= base_url();?>/assets/vendor/footable-bootstrap/css/footable.bootstrap.min.css">
+      <link rel="stylesheet" href="assets/vendor/footable-bootstrap/css/footable.bootstrap.min.css">
       <!-- Bootstrap tour CSS -->
-      <link rel="stylesheet" href="<?= base_url();?>/assets/vendor/bootstrap_tour/css/bootstrap-tour-standalone.css">
+      <link rel="stylesheet" href="assets/vendor/bootstrap_tour/css/bootstrap-tour-standalone.css">
       <!-- jvector map CSS -->
-      <link rel="stylesheet" href="<?= base_url();?>/assets/vendor/jquery-jvectormap/jquery-jvectormap-2.0.3.css">
+      <link rel="stylesheet" href="assets/vendor/jquery-jvectormap/jquery-jvectormap-2.0.3.css">
       <!-- app CSS -->
-      <link id="theme" rel="stylesheet" href="<?= base_url();?>/assets/css/dark-greensidebar.css" type="text/css">
+      <link id="theme" rel="stylesheet" href="assets/css/dark-greensidebar.css" type="text/css">
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
       <title>SPP Web</title>
    </head>
    <body class="fixed-header sidebar-right-close">
@@ -48,7 +49,7 @@
             <nav>
                <div class="row align-items-center">
                   <div class="col-auto pl-0">
-                     <button style="width:10vw;" class="btn success-gradient btn-icon" id="left-menu"><img class="img-fluid" height="40" width="60" src="<?= base_url()?>/assets/img/Yayasan Ar-Rahmah.jpeg" alt=""></button>
+                     <button style="width:10vw;" class="btn success-gradient btn-icon" id="left-menu"><img class="img-fluid" height="40" width="60" src="assets/img/Yayasan Ar-Rahmah.jpeg" alt=""></button>
                      <a href="index.html" class="logo"><span class="text-hide-xs">Yayasan Islam Rahmatan Lil Alamin</span></a>
                   </div>
                   <div class="col text-center p-xs-0">
@@ -67,7 +68,7 @@
                            </div>
                            <a href="#" class="media success-gradient-active new">
                               <figure class="avatar avatar-40">
-                                 <img src="<?= base_url();?>/assets/img/user3.png" alt="Generic placeholder image">
+                                 <img src="assets/img/user3.png" alt="Generic placeholder image">
                               </figure>
                               <div class="media-body">
                                  <h5 class="my-0">Donald Costapor </h5>
@@ -79,7 +80,7 @@
                      </div>
                      <div class="dropdown d-inline-block">
                         <a class="btn header-color-secondary dropdown-toggle username" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                           <figure class="userpic"><img src="<?= base_url();?>/assets/img/user1.png" alt=""></figure>
+                           <figure class="userpic"><img src="assets/img/user1.png" alt=""></figure>
                            <h5 class="text-hide-xs">
                               <small class="header-color-secondary">Welcome,</small>
                               <span class="header-color-success">John McMohan</span>
@@ -121,13 +122,13 @@
                      <a href="<?= site_url('datasiswa'); ?>" class="nav-link success-gradient-active"><i class="material-icons icon">person</i> <span>Data Siswa</span></a>
                   </li>
                   <li class="nav-item">
-                     <a href="<?= site_url('dataBiaya'); ?>" class="nav-link success-gradient-active"><i class="material-icons icon">monetization_on</i> <span>Data Biaya</span> </a>
+                     <a href="<?= site_url('databiaya'); ?>" class="nav-link success-gradient-active"><i class="material-icons icon">monetization_on</i> <span>Data Biaya</span> </a>
                   </li>
                   <li class="nav-item">
-                     <a href="<?= site_url('dataKelas'); ?>" class="nav-link success-gradient-active"><i class="material-icons icon">class</i> <span>Data Kelas</span> </a>
+                     <a href="<?= site_url('dataKelas'); ?>" class="nav-link success-gradient-active"><i class="material-icons icon">group</i> <span>Data Kelas</span> </a>
                   </li>
                   <li class="nav-item">
-                     <a href="<?= site_url('dataTahunAkademik'); ?>" class="nav-link success-gradient-active"><i class="material-icons icon">date_range</i> <span>Data Tahun Akademik</span> </a>
+                     <a href="<?= site_url('dataadmin'); ?>" class="nav-link success-gradient-active"><i class="material-icons icon">person_pin</i> <span>Data Administrator</span> </a>
                   </li>
                </ul>
             </li>
@@ -144,16 +145,6 @@
                <div class="row align-items-center">
                   <div class="col d-flex justify-content-between">
                      <h2 class="content-color-success page-title">Data Siswa</h2>
-                     <ul class="time-day">
-                        <li class="text-right">
-                           <p class="header-color-success"><span class="header-color-secondary">November</span><small>2018</small></p>
-                           <h2>7</h2>
-                        </li>
-                        <li class="text-left">
-                           <h2 onload="getTimer()"></h2>
-                           <p class="header-color-success text-hide-lg"><span class="header-color-secondary">London</span><small>11:24 am</small></p>
-                        </li>
-                     </ul>
                   </div>
                </div>
             </div>

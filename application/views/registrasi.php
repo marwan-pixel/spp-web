@@ -22,18 +22,25 @@
         <div class="card mx-auto col-lg-5">
             <div class="container-md">
                 <div class="card-body">
-                    <form class="mt-3 needs-validation" action="<?= site_url('/');?>">
+                    <form class="mt-3 needs-validation" action="<?= site_url('login');?>">
                         <div class="form-group" style="display:flex; justify-content:center;">
                             <img src="<?= base_url(); ?>/assets/img/Yayasan Ar-Rahmah.jpeg" alt="" width="110" height="80" srcset="">
                         </div>
                         <div class="form-group mb-3">
-                            <h4 class="text-center font-weight-light">Aplikasi Pengelolaan SPP</h4>
+                            <h4 class="text-center font-weight-light">Registrasi</h4>
                         </div>
                         <div class="form-group ml-3 mr-3 was-validation" >
                             <label for="exampleInputUsername1">ID</label>
                             <input type="text" class="form-control" id="exampleInputUsername1" aria-describedby="emailHelp" >
                             <div class="invalid-tooltip">
                                 Masukkan ID Terlebih Dahulu
+                            </div>
+                        </div>
+                           <div class="form-group ml-3 mr-3 was-validation" >
+                            <label for="exampleInputUsername1">Nama</label>
+                            <input type="text" class="form-control" id="exampleInputUsername1" aria-describedby="emailHelp" >
+                            <div class="invalid-tooltip">
+                                Masukkan Nama Terlebih Dahulu
                             </div>
                         </div>
                         <div class="form-group ml-3 mr-3 has-validation">
@@ -43,14 +50,15 @@
                                 Masukkan Password Terlebih Dahulu
                             </div>
                         </div>
+                        <div class="form-group ml-3 mr-3 has-validation">
+                            <label for="exampleInputPassword1">Konfirmasi Password</label>
+                            <input type="password" class="form-control" id="exampleInputPassword1">
+                            <div class="invalid-feedback">
+                                Masukkan Password Terlebih Dahulu
+                            </div>
+                        </div>
                         <div class="form-group ml-3 mr-3">
                             <button type="submit" class="btn btn-block btn-success">Login</button>
-                        </div>
-                         <div class="form-group mb-3">
-                            <h6 class="text-center font-weight-light">Belum memiliki akun?</h6>
-                        </div>
-                        <div class="form-group ml-3 mr-3">
-                            <a href="<?= site_url('registrasi'); ?>" class="btn btn-block btn-primary">Registrasi</a>
                         </div>
                     </form>
                 </div>
