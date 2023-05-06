@@ -485,14 +485,18 @@
                <form action="">
                   <div class="form-group row">
                      <div class="col-sm-2">
-                        <p class="text-primary" for="InputKelas">Tanggal Pembayaran</p>
+                        <p class="text-primary" for="InputKelas">Cetak Berdasarkan Tanggal (Opsional)</p>
                      </div>                     
-                        <div class="col-sm-2 ">
-                           <input type="date" name="" id="">
+                     <div class="col-sm-2 mb-2">
+                        <div class="input-group">
+                           <input class="form-control" type="date" name="" id="">
                         </div>
-                        <div class="col-sm-2">
-                           <input type="date" name="" id="">
+                     </div>
+                     <div class="col-sm-2">
+                        <div class="input-group">
+                           <input class="form-control" type="date" name="" id="">
                         </div>
+                     </div>
                      </div>
                   <div class="row">
                         <div class="col-md-2">
