@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 07, 2023 at 01:29 PM
+-- Generation Time: May 08, 2023 at 01:32 AM
 -- Server version: 10.4.21-MariaDB
 -- PHP Version: 8.0.12
 
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `spp`
+-- Database: `spp_test`
 --
 
 -- --------------------------------------------------------
@@ -30,8 +30,15 @@ SET time_zone = "+00:00";
 CREATE TABLE `admin` (
   `kode_petugas` varchar(10) NOT NULL,
   `nama_petugas` varchar(28) NOT NULL,
-  `password` varchar(16) NOT NULL
+  `password` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `admin`
+--
+
+INSERT INTO `admin` (`kode_petugas`, `nama_petugas`, `password`) VALUES
+('12121', 'Jane Doe', '$2y$10$cnx6TukQpgl6WNw/HJitNeKTSBC6o3.T4ndmNC08/LKr6P2GdpoQu');
 
 -- --------------------------------------------------------
 

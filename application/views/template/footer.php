@@ -1,17 +1,16 @@
-</div>
-<footer class="sticky-footer bg-white border-top">
-    <div class="row">
-        <div class="container my-1 main-container">
-            <div class="col d-flex justify-content-center">
-                <div class="copyright my-auto"><span>Copyright &copy Tumpas Jaya</p> </div>
+        
+    </div>
+    <footer class="sticky-footer bg-white border-top">
+        <div class="row">
+            <div class="container my-1 main-container">
+                <div class="col d-flex align-items-center justify-content-center">
+                    <div class="copyright my-auto"><span>Copyright &copy Tumpas Jaya</p> </div>
+                </div>
             </div>
         </div>
-    </div>
-</footer>
+    </footer>
 
     <!-- modal for create form ends-->
-
-
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->

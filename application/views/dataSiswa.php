@@ -33,14 +33,10 @@
                                         <option>3</option>
                                     </select>
                                 </div>
-                                <!-- <div class="form-group">
-                                    <label for="InputNIS">No. Telp</label>
-                                    <input type="tel" pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}" class="form-control" id="InputNIS" aria-describedby="InputNIS">
-                                </div>
                                 <div class="form-group">
-                                    <label for="InputAlamat">Alamat</label>
-                                    <textarea class="form-control" id="InputAlamat" rows="3"></textarea>                                
-                                </div> -->
+                                    <label for="potongan">Potongan</label>
+                                    <input type="number"  class="form-control" id="potongan" aria-describedby="InputNIS">
+                                </div>
                             </form>
                             </div>
                             <div class="modal-footer">
@@ -79,7 +75,7 @@
                                         <option>3</option>
                                     </select>
                                 </div>
-<!-- 
+                                <!-- 
                                 <div class="form-group">
                                     <label for="InputNIS">No. Telp</label>
                                     <input type="tel" pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}" class="form-control" id="InputNIS" aria-describedby="InputNIS">
@@ -97,7 +93,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-12">
+                <div class="col-sm-12 ">
                     <div class="card mb-4 fullscreen">
                         <!-- <div class="card-header">
                         </div> -->
@@ -105,12 +101,12 @@
                             <div class="table-responsive">
                                 <div id="dataTable_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
                                     <div class="row">
-                                        <div class="col-sm-12 d-flex justify-content-between">
-                                            <div id="dataTable_filter" class="dataTables_filter ">
-                                                <label class="input-group">
-                                                    NIS:
-                                                    <input type="search" size="30" class="form-control form-control ml-2" placeholder="Masukkan NIS Siswa" aria-controls="dataTable">
-                                                </label>
+                                        <div class="col-sm-12 mb-2 d-flex justify-content-between">
+                                            <div id="dataTable_filter" class="dataTables_filter input-group col-sm-4">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text" id="inputGroup-sizing-default">NIS</span>
+                                                </div>
+                                                <input type="search" size="30" class="form-control form-control ml-2" placeholder="Masukkan NIS Siswa" aria-controls="dataTable">
                                             </div>
                                             <div class="media">
                                                 <a href="javascript:void(0);" class="icon-circle icon-30 content-color-secondary fullscreenbtn form-control-sm">

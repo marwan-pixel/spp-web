@@ -18,60 +18,45 @@ class Pages extends CI_Controller {
 	 * map to /index.php/welcome/<method_name>
 	 * @see https://codeigniter.com/userguide3/general/urls.html
 	 */
+	private $_userdata;
 
-	private string $page;
-
-	public function getPage(): string
+	public function __construct()
 	{
-		return $this->page;
+		parent::__construct();
+		$this->_userdata = $this->session->userdata('name');
 	}
 
-	public function setPage(string $page) {
-		$this->page = $page;
-	}
-	public function index()
+	public function render(string $view, $model)
 	{
-        $this->load->view('template/header');
-		$this->load->view('home');
+        $this->load->view('template/header', $model);
+		$this->load->view($view);
         $this->load->view('template/footer');
 	}
 
-	public function login(){
-		$this->load->view('login');
+	public function home()
+	{
+		$this->render('home', ["title" => "Dashboard", 'name' => $this->_userdata]);
 	}
 
-	public function registrasi(){
-		$this->load->view('registrasi');
-	}
 	public function datasiswa()
 	{
-        $this->load->view('template/header');
-		$this->load->view('datasiswa');
-        $this->load->view('template/footer');
+        $this->render('datasiswa', ['title' => 'Data Siswa', 'name' => $this->_userdata]);
 	}
 	public function datakelas()
 	{
-        $this->load->view('template/header');
-		$this->load->view('datakelas');
-        $this->load->view('template/footer');
+        $this->render('datakelas', ['title' => 'Data Kelas', 'name' => $this->_userdata]);
 	}
 	public function databiaya()
 	{
-        $this->load->view('template/header');
-		$this->load->view('databiaya');
-        $this->load->view('template/footer');
+        $this->render('databiaya', ['title' => 'Data Biaya', 'name' => $this->_userdata]);
 	}
 	public function dataadmin()
 	{
-        $this->load->view('template/header');
-		$this->load->view('dataadmin');
-        $this->load->view('template/footer');
+        $this->render('dataadmin', ['title' => 'Data Admin', 'name' => $this->_userdata]);
 	}
 	public function datatransaksi()
 	{
-        $this->load->view('template/header');
-		$this->load->view('datatransaksi');
-        $this->load->view('template/footer');
+        $this->render('datatransaksi', ['title' => 'Data Transaksi', 'name' => $this->_userdata]);
 	}
 }
 

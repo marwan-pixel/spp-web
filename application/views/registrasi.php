@@ -3,7 +3,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>Registrasi</title>
     <link rel="apple-touch-icon" href="<?= base_url();?>/assets/img/favicon-apple.png">
       <link rel="icon" href="assets/img/Yayasan Ar-Rahmah.jpeg">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -22,7 +22,7 @@
         <div class="card mx-auto col-lg-5">
             <div class="container-md">
                 <div class="card-body">
-                    <form class="mt-3 needs-validation" action="<?= site_url('login');?>">
+                    <form class="mt-3 needs-validation" method="post" action="<?= site_url('registrasi');?>">
                         <div class="form-group" style="display:flex; justify-content:center;">
                             <img src="<?= base_url(); ?>/assets/img/Yayasan Ar-Rahmah.jpeg" alt="" width="110" height="80" srcset="">
                         </div>
@@ -31,34 +31,32 @@
                         </div>
                         <div class="form-group ml-3 mr-3 was-validation" >
                             <label for="exampleInputUsername1">ID</label>
-                            <input type="text" class="form-control" id="exampleInputUsername1" aria-describedby="emailHelp" >
-                            <div class="invalid-tooltip">
-                                Masukkan ID Terlebih Dahulu
-                            </div>
+                            <input value="<?= set_value('id'); ?>" type="text" class="form-control" name="id" id="exampleInputUsername1" aria-describedby="emailHelp" >
+                            <?= form_error('id','<small class="text-danger pl-3">', '</small>'); ?>
                         </div>
                            <div class="form-group ml-3 mr-3 was-validation" >
                             <label for="exampleInputUsername1">Nama</label>
-                            <input type="text" class="form-control" id="exampleInputUsername1" aria-describedby="emailHelp" >
-                            <div class="invalid-tooltip">
-                                Masukkan Nama Terlebih Dahulu
-                            </div>
+                            <input value="<?= set_value('nama'); ?>" type="text" class="form-control" name="nama" id="exampleInputUsername1" aria-describedby="emailHelp" >
+                            <?= form_error('nama','<small class="text-danger pl-3">', '</small>'); ?>
                         </div>
                         <div class="form-group ml-3 mr-3 has-validation">
                             <label for="exampleInputPassword1">Password</label>
-                            <input type="password" class="form-control" id="exampleInputPassword1">
-                            <div class="invalid-feedback">
-                                Masukkan Password Terlebih Dahulu
-                            </div>
+                            <input value="<?= set_value('password'); ?>" type="password" class="form-control" name="password" id="exampleInputPassword1">
+                            <?= form_error('password','<small class="text-danger pl-3">', '</small>'); ?>
                         </div>
                         <div class="form-group ml-3 mr-3 has-validation">
                             <label for="exampleInputPassword1">Konfirmasi Password</label>
-                            <input type="password" class="form-control" id="exampleInputPassword1">
-                            <div class="invalid-feedback">
-                                Masukkan Password Terlebih Dahulu
-                            </div>
+                            <input value="<?= set_value('conf_password'); ?>" type="password" class="form-control" name="conf_password" id="exampleInputPassword1">
+                            <?= form_error('conf_password','<small class="text-danger pl-3">', '</small>'); ?>
                         </div>
                         <div class="form-group ml-3 mr-3">
-                            <button type="submit" class="btn btn-block btn-success">Login</button>
+                            <button type="submit" class="btn btn-block btn-success">Registrasi</button>
+                        </div>
+                        <div class="form-group mb-3">
+                            <h6 class="text-center font-weight-light">Sudah memiliki akun?</h6>
+                        </div>
+                        <div class="form-group ml-3 mr-3">
+                            <a href="<?= site_url('login');?>" class="btn btn-block btn-primary">Kembali ke Login</a>
                         </div>
                     </form>
                 </div>

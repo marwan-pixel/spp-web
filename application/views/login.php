@@ -17,31 +17,28 @@
     <link rel="stylesheet" href="<?= base_url();?>/assets/vendor/animatecss/animate.css">
     <link id="theme" rel="stylesheet" href="<?= base_url();?>/assets/css/purplesidebar.css" type="text/css">
 </head>
-<body class="fixed-header" style="display:flex; align-items:center;background: #22B07D">
+<body class="fixed-header d-flex align-items-center" style="background: #22B07D">
     <div class="container">
         <div class="card mx-auto col-lg-5">
             <div class="container-md">
                 <div class="card-body">
-                    <form class="mt-3 needs-validation" action="<?= site_url('/');?>">
+                    <form class="mt-3" method="post" action="<?= site_url('login');?>">
                         <div class="form-group" style="display:flex; justify-content:center;">
                             <img src="<?= base_url(); ?>/assets/img/Yayasan Ar-Rahmah.jpeg" alt="" width="110" height="80" srcset="">
                         </div>
+                        <?= $this->session->flashdata('message'); ?>
                         <div class="form-group mb-3">
                             <h4 class="text-center font-weight-light">Aplikasi Pengelolaan SPP</h4>
                         </div>
                         <div class="form-group ml-3 mr-3 was-validation" >
                             <label for="exampleInputUsername1">ID</label>
-                            <input type="text" class="form-control" id="exampleInputUsername1" aria-describedby="emailHelp" >
-                            <div class="invalid-tooltip">
-                                Masukkan ID Terlebih Dahulu
-                            </div>
+                            <input type="text" class="form-control" name="id" value="<?= set_value('id');?>" id="exampleInputUsername1" aria-describedby="emailHelp" >
+                             <?= form_error('id','<small class="text-danger pl-3">', '</small>'); ?>
                         </div>
                         <div class="form-group ml-3 mr-3 has-validation">
                             <label for="exampleInputPassword1">Password</label>
-                            <input type="password" class="form-control" id="exampleInputPassword1">
-                            <div class="invalid-feedback">
-                                Masukkan Password Terlebih Dahulu
-                            </div>
+                            <input type="password" class="form-control" name="password" value="<?= set_value('password') ?>" id="exampleInputPassword1">
+                             <?= form_error('password','<small class="text-danger pl-3">', '</small>'); ?>
                         </div>
                         <div class="form-group ml-3 mr-3">
                             <button type="submit" class="btn btn-block btn-success">Login</button>
