@@ -88,7 +88,7 @@
                                  </div>
                               </a>
                               <div class="dropdown-divider m-0"></div>
-                              <a class="dropdown-item" href="<?= base_url('Auth/logout'); ?>">
+                              <a class="dropdown-item" href="<?= base_url('User/logout'); ?>">
                                  <div class="row align-items-center">
                                     <div class="col">
                                        Logout

@@ -52,7 +52,13 @@ class Pages extends CI_Controller {
 	}
 	public function dataadmin()
 	{
-        $this->render('dataadmin', ['title' => 'Data Admin', 'name' => $this->_userdata]);
+		$dataAdmin = $this->db->select('kode_petugas,nama_petugas');
+		$dataAdmin = $this->db->get_where('admin', ['nama_petugas' => $this->_userdata])->result_array();
+		try {
+			$this->render('dataadmin', ['title' => 'Data Admin', 'name' => $this->_userdata, 'info' => $dataAdmin[0]]);
+		} catch (Exception $e){
+			$e->getMessage();
+		}
 	}
 	public function datatransaksi()
 	{

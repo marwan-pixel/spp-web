@@ -1,0 +1,37 @@
+<?php
+defined('BASEPATH') OR exit('No direct script access allowed');
+// session_start();
+
+class User extends CI_Controller {
+
+    private $data = array();
+    
+    public function __construct()
+    {
+        parent::__construct();
+        $this->load->library('form_validation');
+        $this->load->library('session');
+        $this->load->model('model');
+    }
+
+    //Ambil data yang sudah di set
+    public function getData(){
+        return $this->data;
+    }
+
+    //Set data yang akan diinputkan
+    public function setData($data){
+        $this->data = $data;
+    }
+    
+    public function login($data){
+        $process = $this->model->loginModel($data['table'],$data['selectedData'],$data['value']);
+        return $process;
+	}
+
+    public function logout() {
+        $this->session->unset_userdata('name');
+        redirect('login');
+    }
+}
+

@@ -10,16 +10,13 @@
                         </div>
                         <div class="form-group ml-3 mr-3 was-validation" >
                             <label for="exampleInputUsername1">ID</label>
-                            <input type="text" class="form-control" disabled value="" id="exampleInputUsername1" aria-describedby="emailHelp" >
+                            <input type="text" class="form-control" disabled value="<?= $info['kode_petugas'] ?>" id="exampleInputUsername1" aria-describedby="emailHelp" >
                         </div>
                             <div class="form-group ml-3 mr-3 was-validation" >
                             <label for="exampleInputUsername1">Nama Administrator</label>
-                            <input type="text" class="form-control" disabled value="" id="exampleInputUsername1" aria-describedby="emailHelp" >
+                            <input type="text" class="form-control" disabled value="<?= $info['nama_petugas'] ?>" id="exampleInputUsername1" aria-describedby="emailHelp" >
                         </div>
-                        <div class="form-group ml-3 mr-3 has-validation">
-                            <label for="exampleInputPassword1">Password</label>
-                            <input type="password" class="form-control" disabled value="" id="exampleInputPassword1">
-                        </div>
+
                     </form>
                     <div class="form-group ml-3 mr-3">
                         <button data-toggle="modal" data-target="#updateDataAdmin" class="btn btn-block btn-success">Ubah Data Admin</button>
@@ -34,10 +31,10 @@
                                     </button>
                                 </div>
                                 <div class="modal-body">
-                                <form method="post" action="<?= site_url('dataadmin');?>">
+                                <form method="post" action="<?= base_url('Admin/updateDataAdmin');?>">
                                     <div class="form-group">
                                         <label for="InputNama">Nama Administrator</label>
-                                        <input type="text" class="form-control" id="InputNama" aria-describedby="InputNama">
+                                        <input type="text" value="<?= $info['nama_petugas']; ?>" class="form-control" id="InputNama" aria-describedby="InputNama">
                                     </div>
                                     <div class="mb-2 d-flex">
                                         <p class="mr-1">Ingin mengubah password?</p><a href="#passwordCollapse" data-toggle="collapse">Klik di sini</a>
@@ -57,7 +54,7 @@
                                         </div>
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                        <a class="text-light btn btn-secondary" data-dismiss="modal">Close</a>
                                         <button type="button" class="btn btn-primary">Save changes</button>
                                     </div>
                                  </form>
