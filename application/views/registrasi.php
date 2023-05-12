@@ -29,6 +29,7 @@
                         <div class="form-group mb-3">
                             <h4 class="text-center font-weight-light">Registrasi</h4>
                         </div>
+                        <?= $this->session->flashdata('message'); ?>
                         <div class="form-group ml-3 mr-3 was-validation" >
                             <label for="exampleInputUsername1">ID</label>
                             <input value="<?= set_value('id'); ?>" type="text" class="form-control" name="id" id="exampleInputUsername1" aria-describedby="emailHelp" >

@@ -1,5 +1,9 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Headers: origin, x-requested-with, content-type");
+header("Access-Control-Allow-Methods: PUT, GET, POST, DELETE, OPTIONS");
+
 // session_start();
 
 class User extends CI_Controller {
@@ -23,9 +27,9 @@ class User extends CI_Controller {
     public function setData($data){
         $this->data = $data;
     }
-    
+
     public function login($data){
-        $process = $this->model->loginModel($data['table'],$data['selectedData'],$data['value']);
+        $process = $this->model->getDataModel($data['table'],$data['selectedData'],$data['value']);
         return $process;
 	}
 

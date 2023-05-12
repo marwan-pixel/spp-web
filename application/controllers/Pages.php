@@ -1,7 +1,8 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
+require APPPATH . 'controllers/User.php';
 
-class Pages extends CI_Controller {
+class Pages extends User {
 
 	/**
 	 * Index Page for this controller.
@@ -29,33 +30,41 @@ class Pages extends CI_Controller {
 	public function render(string $view, $model)
 	{
         $this->load->view('template/header', $model);
-		$this->load->view($view);
+		$this->load->view($view, $model);
         $this->load->view('template/footer');
 	}
 
 	public function home()
 	{
-		$this->render('home', ["title" => "Dashboard", 'name' => $this->_userdata]);
+		$this->render('home', ["title" => "Dashboard", 'name' => $this->_userdata['nama_petugas']]);
 	}
 
 	public function datasiswa()
 	{
-        $this->render('datasiswa', ['title' => 'Data Siswa', 'name' => $this->_userdata]);
+		
+        $this->render('datasiswa', ['title' => 'Data Siswa', 'name' => $this->_userdata['nama_petugas']]);
 	}
 	public function datakelas()
 	{
-        $this->render('datakelas', ['title' => 'Data Kelas', 'name' => $this->_userdata]);
+		$dataKelas = $this->model->getDataModel('kelas', ['kelas', 'instansi']);
+		$dataInstansi = $this->model->getDataModel('biaya', ['instansi']);	
+        $this->render('datakelas', ['title' => 'Data Kelas', 'name' => $this->_userdata['nama_petugas'], 'data' => $dataKelas]);
 	}
 	public function databiaya()
 	{
-        $this->render('databiaya', ['title' => 'Data Biaya', 'name' => $this->_userdata]);
+		$dataAdmin = $this->model->getDataModel('biaya', ['instansi', 'biaya']);
+		try {
+			$this->render('databiaya', ['title' => 'Data Biaya', 'name' => $this->_userdata['nama_petugas'], 'data' => $dataAdmin]);
+			
+		} catch (Exception $e){
+			$e->getMessage();
+		}
 	}
 	public function dataadmin()
 	{
-		$dataAdmin = $this->db->select('kode_petugas,nama_petugas');
-		$dataAdmin = $this->db->get_where('admin', ['nama_petugas' => $this->_userdata])->result_array();
+		$dataAdmin = $this->model->getDataModel('admin', ['nama_petugas', 'kode_petugas'], $this->_userdata);
 		try {
-			$this->render('dataadmin', ['title' => 'Data Admin', 'name' => $this->_userdata, 'info' => $dataAdmin[0]]);
+			$this->render('dataadmin', ['title' => 'Data Admin', 'name' => $this->_userdata['nama_petugas'], 'info' => $dataAdmin['kode_petugas']]);
 		} catch (Exception $e){
 			$e->getMessage();
 		}

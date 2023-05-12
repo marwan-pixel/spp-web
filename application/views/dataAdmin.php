@@ -10,11 +10,11 @@
                         </div>
                         <div class="form-group ml-3 mr-3 was-validation" >
                             <label for="exampleInputUsername1">ID</label>
-                            <input type="text" class="form-control" disabled value="<?= $info['kode_petugas'] ?>" id="exampleInputUsername1" aria-describedby="emailHelp" >
+                            <input type="text" class="form-control" disabled value="<?= $info; ?>" id="exampleInputUsername1" aria-describedby="emailHelp" >
                         </div>
                             <div class="form-group ml-3 mr-3 was-validation" >
                             <label for="exampleInputUsername1">Nama Administrator</label>
-                            <input type="text" class="form-control" disabled value="<?= $info['nama_petugas'] ?>" id="exampleInputUsername1" aria-describedby="emailHelp" >
+                            <input type="text" class="form-control" disabled value="<?= $name; ?>" id="exampleInputUsername1" aria-describedby="emailHelp" >
                         </div>
 
                     </form>
@@ -34,7 +34,7 @@
                                 <form method="post" action="<?= base_url('Admin/updateDataAdmin');?>">
                                     <div class="form-group">
                                         <label for="InputNama">Nama Administrator</label>
-                                        <input type="text" value="<?= $info['nama_petugas']; ?>" class="form-control" id="InputNama" aria-describedby="InputNama">
+                                        <input type="text" value="<?= $name; ?>" class="form-control" id="InputNama" aria-describedby="InputNama">
                                     </div>
                                     <div class="mb-2 d-flex">
                                         <p class="mr-1">Ingin mengubah password?</p><a href="#passwordCollapse" data-toggle="collapse">Klik di sini</a>

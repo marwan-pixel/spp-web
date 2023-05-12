@@ -102,7 +102,20 @@
                 ]
             });
         });
+
+        $(document).ready(function() {
+        // Untuk sunting
+        $('#exampleModalUpdate').on('show.bs.modal', function (event) {
+            var div = $(event.relatedTarget) // Tombol dimana modal di tampilkan
+            var modal          = $(this)
+
+            // Isi nilai pada field
+            modal.find('#instansi').attr("value",div.data('instansi'));
+            modal.find('#biaya').attr("value",div.data('biaya'));
+        });
+    });
     </script>
+
 </body>
 
 </html>

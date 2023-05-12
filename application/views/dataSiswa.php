@@ -17,8 +17,8 @@
                             <div class="modal-body">
                             <form>
                                 <div class="form-group">
-                                    <label for="InputNIS">NIS</label>
-                                    <input type="number" class="form-control" id="InputNIS" aria-describedby="InputNIS">
+                                    <label for="InputNIS">NIPD</label>
+                                    <input type="number" name="" class="form-control" id="InputNIS" aria-describedby="InputNIS">
                                     <!-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> -->
                                 </div>
                                 <div class="form-group">
@@ -115,7 +115,7 @@
                                                 <thead>
                                                     <tr>
                                                         <th><center>No</center></th>
-                                                        <th><center>NIS</center> </th>
+                                                        <th><center>NIPD</center> </th>
                                                         <th><center>Nama Siswa</center></th>
                                                         <th><center>Kelas</center></th>
                                                         <th><center>Password</center></th>
