@@ -105,17 +105,89 @@
 
         $(document).ready(function() {
         // Untuk sunting
-        $('#exampleModalUpdate').on('show.bs.modal', function (event) {
-            var div = $(event.relatedTarget) // Tombol dimana modal di tampilkan
-            var modal          = $(this)
+            $('#updateBiaya').on('show.bs.modal', function (event) {
+                var div = $(event.relatedTarget) // Tombol dimana modal di tampilkan
+                var modal = $(this)
 
-            // Isi nilai pada field
-            modal.find('#instansi').attr("value",div.data('instansi'));
-            modal.find('#biaya').attr("value",div.data('biaya'));
+                    // Isi nilai pada field
+                modal.find(`#instansi`).attr("value",div.data(`instansi`));
+                modal.find(`#biaya`).attr("value",div.data(`biaya`));
+            });
+        });     
+        
+        $(document).ready(function () {
+            $('#exampleModal').on('hide.bs.modal', function(event) {
+                $(this).find('.text-danger');
+            });
+
+            $('#exampleModal').on('submit', 'form' , function (event) {
+                event.preventDefault();
+
+                var form = $(this);
+                var instansi = form.find('input[name="instansi"]').val();
+                var biaya = form.find('input[name="biaya"]').val();
+
+                $.ajax({
+                    url: form.attr('action'),
+                    method: form.attr('method'),
+                    data: form.serialize(),
+                    dataType: 'json' ,
+                    success: function (response) {
+ 
+                        if(response.success) {
+                            window.location.href = response.redirect;
+                            $('#exampleModal').modal('hide');
+                        } else {                           
+                            var errors = response.errors;
+                            $.each(errors, function (field, message) {
+                                let errorElement = $('#' + field + '-error');
+                                errorElement.html(message);
+                            })
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error(error);
+                    }
+                })                
+            })
+
+            $('#exampleModalUpdate').on('hide.bs.modal', function(event) {
+                $(this).find('.text-danger');
+            });
+
+            $('#exampleModalUpdate').on('submit', 'form' , function (event) {
+                event.preventDefault();
+
+                var form = $(this);
+                var instansi = form.find('input[name="instansi"]').val();
+                var biaya = form.find('input[name="biaya"]').val();
+
+                $.ajax({
+                    url: form.attr('action'),
+                    method: form.attr('method'),
+                    data: form.serialize(),
+                    dataType: 'json' ,
+                    success: function (response) {
+ 
+                        if(response.success) {
+                            window.location.href = response.redirect;
+                            $('#exampleModalUpdate').modal('hide');
+                        } else {                           
+                            var errors = response.errors;
+                            $.each(errors, function (field, message) {
+                                let errorElement = $('#' + field + '-error');
+                                errorElement.html(message);
+                            })
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error(error);
+                    }
+                })               
+            })
+
         });
-    });
     </script>
-
 </body>
 
 </html>

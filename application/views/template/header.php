@@ -120,13 +120,13 @@
                   <a href="javascript:void(0);" class="nav-link dropdwown-toggle"> <i class="material-icons icon">folder</i> <span>Master Data</span><i class="material-icons icon arrow">expand_more</i></a>
                   <ul class="nav flex-column">
                      <li class="nav-item">
-                        <a href="<?= site_url('datasiswa'); ?>" class="nav-link success-gradient-active"><i class="material-icons icon">person</i> <span>Data Siswa</span></a>
-                     </li>
-                     <li class="nav-item">
                         <a href="<?= site_url('databiaya'); ?>" class="nav-link success-gradient-active"><i class="material-icons icon">monetization_on</i> <span>Data Biaya</span> </a>
                      </li>
                      <li class="nav-item">
                         <a href="<?= site_url('datakelas'); ?>" class="nav-link success-gradient-active"><i class="material-icons icon">group</i> <span>Data Kelas</span> </a>
+                     </li>
+                     <li class="nav-item">
+                        <a href="<?= site_url('datasiswa'); ?>" class="nav-link success-gradient-active"><i class="material-icons icon">person</i> <span>Data Siswa</span></a>
                      </li>
                      <!-- <li class="nav-item">
                         <a href="" class="nav-link success-gradient-active"><i class="material-icons icon">person_pin</i> <span>Data Administrator</span> </a>

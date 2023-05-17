@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 08, 2023 at 01:32 AM
--- Server version: 10.4.21-MariaDB
--- PHP Version: 8.0.12
+-- Waktu pembuatan: 12 Bulan Mei 2023 pada 02.34
+-- Versi server: 10.4.21-MariaDB
+-- Versi PHP: 8.0.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -24,7 +24,7 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Table structure for table `admin`
+-- Struktur dari tabel `admin`
 --
 
 CREATE TABLE `admin` (
@@ -34,51 +34,61 @@ CREATE TABLE `admin` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data for table `admin`
+-- Dumping data untuk tabel `admin`
 --
 
 INSERT INTO `admin` (`kode_petugas`, `nama_petugas`, `password`) VALUES
-('12121', 'Jane Doe', '$2y$10$cnx6TukQpgl6WNw/HJitNeKTSBC6o3.T4ndmNC08/LKr6P2GdpoQu');
+('12121', 'Jane Doe', '$2y$10$cnx6TukQpgl6WNw/HJitNeKTSBC6o3.T4ndmNC08/LKr6P2GdpoQu'),
+('12122', 'Alex', '$2y$10$BfFmuKbzhTbxf6Kuzi3Yh.1rTTTvRJW7w5XQps8MI2C3MkNSTAAqK');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `biaya`
+-- Struktur dari tabel `biaya`
 --
 
 CREATE TABLE `biaya` (
-  `instansi` varchar(6) NOT NULL,
+  `instansi` varchar(16) NOT NULL,
   `biaya` int(7) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data untuk tabel `biaya`
+--
+
+INSERT INTO `biaya` (`instansi`, `biaya`) VALUES
+('SD AR-RAHMAH', 30000),
+('TK AR-RAHMAH', 100000);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `kelas`
+-- Struktur dari tabel `kelas`
 --
 
 CREATE TABLE `kelas` (
   `kelas` varchar(6) NOT NULL,
-  `instansi` varchar(6) NOT NULL
+  `instansi` varchar(16) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `siswa`
+-- Struktur dari tabel `siswa`
 --
 
 CREATE TABLE `siswa` (
   `nis` int(10) NOT NULL,
   `nama_siswa` varchar(40) NOT NULL,
   `kelas` varchar(6) NOT NULL,
+  `password` varchar(255) NOT NULL,
   `potongan` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `transaksi`
+-- Struktur dari tabel `transaksi`
 --
 
 CREATE TABLE `transaksi` (
@@ -96,33 +106,33 @@ CREATE TABLE `transaksi` (
 --
 
 --
--- Indexes for table `admin`
+-- Indeks untuk tabel `admin`
 --
 ALTER TABLE `admin`
   ADD PRIMARY KEY (`kode_petugas`);
 
 --
--- Indexes for table `biaya`
+-- Indeks untuk tabel `biaya`
 --
 ALTER TABLE `biaya`
   ADD PRIMARY KEY (`instansi`);
 
 --
--- Indexes for table `kelas`
+-- Indeks untuk tabel `kelas`
 --
 ALTER TABLE `kelas`
   ADD PRIMARY KEY (`kelas`),
   ADD KEY `instansi` (`instansi`);
 
 --
--- Indexes for table `siswa`
+-- Indeks untuk tabel `siswa`
 --
 ALTER TABLE `siswa`
   ADD PRIMARY KEY (`nis`),
   ADD KEY `kelas` (`kelas`);
 
 --
--- Indexes for table `transaksi`
+-- Indeks untuk tabel `transaksi`
 --
 ALTER TABLE `transaksi`
   ADD PRIMARY KEY (`no_transaksi`),
@@ -130,17 +140,17 @@ ALTER TABLE `transaksi`
   ADD KEY `kode_petugas` (`kode_petugas`);
 
 --
--- Constraints for dumped tables
+-- Ketidakleluasaan untuk tabel pelimpahan (Dumped Tables)
 --
 
 --
--- Constraints for table `siswa`
+-- Ketidakleluasaan untuk tabel `siswa`
 --
 ALTER TABLE `siswa`
   ADD CONSTRAINT `siswa_ibfk_1` FOREIGN KEY (`kelas`) REFERENCES `kelas` (`kelas`);
 
 --
--- Constraints for table `transaksi`
+-- Ketidakleluasaan untuk tabel `transaksi`
 --
 ALTER TABLE `transaksi`
   ADD CONSTRAINT `transaksi_ibfk_1` FOREIGN KEY (`kode_petugas`) REFERENCES `admin` (`kode_petugas`),

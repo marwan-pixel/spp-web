@@ -1,5 +1,7 @@
+
         <!-- content page -->
         <div class="container-fluid mt-4 main-container">
+            <?= $this->session->flashdata('message'); ?>
             <div class="row">
                 <button type="button" class="btn btn-success ml-3 mb-3" data-toggle="modal" data-target="#insertSiswa">
                 Tambah Data
@@ -15,74 +17,84 @@
                                 </button>
                             </div>
                             <div class="modal-body">
-                            <form>
+                            <form method="post" action="<?=base_url('Admin/tambahDataSiswa');?>">
                                 <div class="form-group">
-                                    <label for="InputNIS">NIPD</label>
-                                    <input type="number" name="" class="form-control" id="InputNIS" aria-describedby="InputNIS">
-                                    <!-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> -->
+                                    <label for="nipd">NIPD</label>
+                                    <input value="<?= set_value('nipd');?>" type="number" name="nipd" class="form-control nipd" id="nipd" aria-describedby="InputNIS">
                                 </div>
                                 <div class="form-group">
-                                    <label for="InputNama">Nama Siswa</label>
-                                    <input type="text" class="form-control" id="InputNama" aria-describedby="InputNama">
+                                    <label for="nama">Nama Siswa</label>
+                                    <input value="<?= set_value('nama');?>" type="text" class="form-control nama" name="nama" id="nama" aria-describedby="InputNama">
                                 </div>
                                 <div class="form-group">
-                                    <label for="InputKelas">Kelas</label>
-                                    <select class="form-control" id="InputKelas">
-                                        <option>1</option>
-                                        <option>2</option>
-                                        <option>3</option>
+                                    <label for="kelas">Kelas</label>
+                                    <select value="<?= set_value('kelas');?>" class="form-control kelas" name="kelas" id="kelas">
+                                    <?php
+                                        foreach ($data['dataKelas'] as $value) {
+                                            ?>
+                                        <option value="<?= $value['kelas']; ?>" id="kelas"><?= $value['kelas']; ?></option>
+                                    <?php
+                                        }
+                                    ?>
                                     </select>
                                 </div>
                                 <div class="form-group">
-                                    <label for="potongan">Password</label>
-                                    <input type="text"  class="form-control" id="potongan" aria-describedby="InputNIS">
+                                    <label for="password">Password</label>
+                                    <input type="password" value="<?= set_value('password');?>" name="password" class="form-control" id="password" aria-describedby="InputNIS">
                                 </div>
-                                <div class="form-group">
+                                <div class="mb-2 d-flex">
+                                    <p class="mr-1">Jika ingin memberikan potongan biaya, </p><a href="#potonganCollapse" data-toggle="collapse">Klik di sini</a>
+                                </div>                                
+                                <div class="form-group collapse" id="potonganCollapse">
                                     <label for="potongan">Potongan</label>
-                                    <input type="number"  class="form-control" id="potongan" aria-describedby="InputNIS">
+                                    <input type="number" value="<?= set_value('potongan');?>" class="form-control" name="potongan" id="potongan" aria-describedby="InputNIS">
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Keluar</button>
+                                    <button type="submit" class="btn btn-primary">Simpan</button>
                                 </div>
                             </form>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                <button type="button" class="btn btn-primary">Save changes</button>
                             </div>
                         </div>
                     </div>
                 </div>
                   <!-- Modal Update -->
-                <div class="modal fade" id="updateSiswa" tabindex="-1" aria-labelledby="updateSiswaLabel" aria-hidden="true">
+                <div class="modal fade" id="exampleModalUpdate" tabindex="-1" aria-labelledby="exampleModalUpdateLabel" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h4 class="modal-title" id="updateSiswaLabel">Data Siswa</h4>
+                                <h4 class="modal-title" id="exampleModalUpdateLabel">Data Siswa</h4>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
                             <div class="modal-body">
                             <form>
-                                <div class="form-group">
-                                    <label for="InputNama">Nama Siswa</label>
-                                    <input type="text" class="form-control" id="InputNama" aria-describedby="InputNama">
+                                 <div class="form-group">
+                                    <label for="nama">Nama Siswa</label>
+                                    <input value="<?= set_value('nama');?>" type="text" class="form-control nama" name="nama" id="nama" aria-describedby="InputNama">
                                 </div>
                                 <div class="form-group">
-                                    <label for="InputKelas">Kelas</label>
-                                    <select class="form-control" id="InputKelas">
-                                        <option>1</option>
-                                        <option>2</option>
-                                        <option>3</option>
+                                    <label for="kelas">Kelas</label>
+                                    <select value="<?= set_value('kelas');?>" class="form-control kelas" name="kelas" id="kelas">
+                                    <?php
+                                        foreach ($data['dataKelas'] as $value) {
+                                            ?>
+                                        <option value="<?= $value['kelas']; ?>"><?= $value['kelas']; ?></option>
+                                    <?php
+                                        }
+                                    ?>
                                     </select>
                                 </div>
-                                <div class="form-group">
+                                 <div class="form-group">
                                     <label for="potongan">Potongan</label>
-                                    <input type="number"  class="form-control" id="potongan" aria-describedby="InputNIS">
+                                    <input type="number" value="<?= set_value('potongan');?>" class="form-control" name="potongan" id="potongan" aria-describedby="InputNIS">
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-primary">Save changes</button>
                                 </div>
                             </form>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                <button type="button" class="btn btn-primary">Save changes</button>
                             </div>
                         </div>
                     </div>
@@ -124,34 +136,40 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
+                                                    <?php
+                                                    if(count($data['dataSiswa']) == 0){                                                        
+                                                    ?>
+                                                    <tr>
+                                                        <th colspan="7"><center><h5>Data belum tersedia</h5></center></th>
+                                                    </tr>
+                                                    <?php    
+                                                    } else {
+                                                        $no = 1;
+                                                        foreach ($data['dataSiswa'] as $value) {
+                                                    ?>
                                                     <tr class="odd">
-                                                        <td><center>1</center></td>
-                                                        <td><center>Nama</center></td>
-                                                        <td><center>23-02-2024</center></td>
-                                                        <td><center>23-02-2024</center></td>
-                                                        <td><center>infoatmaxartkiller.in</center></td>
-                                                        <td><center>infoatmaxartkiller.in</center></td>
+                                                        <td><center><?= $no++ ;?></center></td>
+                                                        <td><center><?= $value['nipd'] ;?></center></td>
+                                                        <td><center><?= $value['nama_siswa'] ;?></center></td>
+                                                        <td><center><?= $value['kelas'] ;?></center></td>
+                                                        <td><center>****</center></td>
+                                                        <td><center><?= $value['potongan'] ;?></center></td>
                                                         <td>
                                                             <center>
-                                                            <button class="btn btn-warning btn-sm" data-toggle="modal" data-target="#updateSiswa">Ubah</button>
-                                                            <!-- <button class="btn btn-danger btn-sm">Hapus</button> -->
+                                                            <a href="javascript:;" 
+                                                            data-nama = "<?= $value['nama_siswa'] ;?>"
+                                                            data-kelas = "<?= $value['kelas'] ;?>"
+                                                            data-potongan = "<?= $value['potongan'] ;?>"
+                                                            class="btn btn-warning btn-sm"  data-toggle="modal" data-target="#exampleModalUpdate"
+                                                            onclick="updateDataModal(['nama', 'kelas', 'potongan'])">Ubah</a>
+                                                            <!-- <button class="btn btn-danger btn-sm">Hapus</button> -->                                                           
                                                             </center>
                                                        </td>
                                                     </tr>
-                                                    <tr class="even ">
-                                                        <td><center>1</center></td>
-                                                        <td><center>Nama</center></td>
-                                                        <td><center>23-02-2024</center></td>
-                                                        <td><center>23-02-2024</center></td>
-                                                        <td><center>infoatmaxartkiller.in</center></td>
-                                                        <td><center>infoatmaxartkiller.in</center></td>
-                                                        <td>
-                                                             <center>
-                                                            <button class="btn btn-warning btn-sm" data-toggle="modal" data-target="#updateSiswa">Ubah</button>
-                                                            <!-- <button class="btn btn-danger btn-sm">Hapus</button> -->
-                                                            </center>
-                                                       </td>
-                                                    </tr>
+                                                    <?php
+                                                        } 
+                                                    } 
+                                                    ?>
                                                 </tbody>
                                             </table>
                                         </div>

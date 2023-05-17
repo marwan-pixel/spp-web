@@ -41,14 +41,17 @@ class Pages extends User {
 
 	public function datasiswa()
 	{
-		
-        $this->render('datasiswa', ['title' => 'Data Siswa', 'name' => $this->_userdata['nama_petugas']]);
+		$dataSiswa = $this->model->getDataModel('siswa', ['nipd', 'nama_siswa', 'kelas', 'password', 'potongan']);
+		$dataKelas = $this->model->getDataModel('kelas', ['kelas']);	
+        $this->render('datasiswa', ['title' => 'Data Siswa', 'name' => $this->_userdata['nama_petugas'], 
+		'data' => array('dataSiswa' => $dataSiswa, 'dataKelas' => $dataKelas)]);
 	}
 	public function datakelas()
 	{
 		$dataKelas = $this->model->getDataModel('kelas', ['kelas', 'instansi']);
 		$dataInstansi = $this->model->getDataModel('biaya', ['instansi']);	
-        $this->render('datakelas', ['title' => 'Data Kelas', 'name' => $this->_userdata['nama_petugas'], 'data' => $dataKelas]);
+        $this->render('datakelas', ['title' => 'Data Kelas', 'name' => $this->_userdata['nama_petugas'], 
+		'data' => array('dataKelas' => $dataKelas, 'dataInstansi' => $dataInstansi)]);
 	}
 	public function databiaya()
 	{

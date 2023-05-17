@@ -1,8 +1,13 @@
-
+<?php
+    // foreach ($data as $value) {
+    //     echo count($data['dataKelas']);
+    // }
+    // die();
+?>
         <!-- content page -->
         <div class="container-fluid mt-4 main-container">
+            <?= $this->session->flashdata('message'); ?>
             <div class="row">
-                <?= $this->session->flashdata('message'); ?>
                 <button type="button" class="btn btn-success ml-3 mb-3" data-toggle="modal" data-target="#exampleModal">
                 Tambah Data
                 </button>
@@ -21,15 +26,15 @@
                             <form method="post" action="<?= base_url('Admin/tambahDataKelas'); ?>">
                                 <div class="form-group">
                                     <label for="InputKelas">Kelas</label>
-                                    <input type="text" name="kelas" class="form-control" id="InputNama" aria-describedby="InputNama">
+                                    <input type="text" name="kelas" class="form-control" id="kelas" aria-describedby="InputNama">
                                 </div>
                                 <div class="form-group">
                                     <label for="InputKelas">Instansi</label>
-                                    <select name="instansi" class="form-control" id="InputKelas">
+                                    <select name="instansi" class="form-control" id="instansi">
                                         <?php 
-                                            foreach ($data as $value) {
+                                            foreach ($data['dataInstansi'] as $value) {
                                         ?>
-                                        <option><?= $value['dataInstansi']['instansi'] ;?></option>
+                                        <option><?= $value['instansi'] ;?></option>
                                         <?php        
                                             }
                                         ?>
@@ -58,21 +63,26 @@
                             <div class="modal-body">
                             <form>
                                 <div class="form-group">
-                                    <label for="InputKelas">Kelas</label>
-                                    <input type="text" class="form-control" id="InputNama" aria-describedby="InputNama">
+                                    <label for="kelas">Kelas</label>
+                                    <input type="text" class="form-control" name="kelas" id="kelas" aria-describedby="InputNama">
                                 </div>
                                 <div class="form-group">
-                                    <label for="InputKelas">Instansi</label>
-                                    <select class="form-control" id="InputKelas">
-                                        <option>1</option>
-                                        <option>2</option>
+                                    <label for="instansi">Instansi</label>
+                                    <select class="form-control" name="instansi" id="instansi">
+                                        <?php 
+                                            foreach ($data['dataInstansi'] as $value) {
+                                        ?>
+                                        <option value="<?= $value['instansi'] ;?>"><?= $value['instansi'] ;?></option>
+                                        <?php        
+                                            }
+                                        ?>
                                     </select>
                                 </div>
                             </form>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                <button type="button" class="btn btn-primary">Save changes</button>
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Keluar</button>
+                                <button type="button" class="btn btn-primary">Simpan</button>
                             </div>
                         </div>
                     </div>
@@ -104,21 +114,33 @@
                                                 </thead>
                                                 <tbody>
                                                     <?php
-                                                    $no = 1;
-                                                    foreach ($data as $value) {                                                        
-                                                    ?>
-                                                    <tr class="odd">
-                                                        <td><center><?= $no;?></center></td>
-                                                        <td><center><?= $value['dataKelas']['kelas'];?></center></td>
-                                                        <td><center><?= $value['dataKelas']['instansi'];?></center></td>
-                                                        <td>
-                                                            <center>
-                                                            <button class="btn btn-warning btn-sm" data-toggle="modal" data-target="#exampleModalUpdate">Ubah</button>
-                                                            <button class="btn btn-danger btn-sm">Hapus</button>
-                                                            </center>
-                                                       </td>    
-                                                    </tr>
-                                                    <?php }?>
+                                                    if(count($data['dataKelas'])  == 0){
+                                                            ?>
+                                                            <tr class="odd">
+                                                                <td colspan="4"><center><h5>Data belum tersedia!</h5></center></td>
+                                                            </tr>
+                                                            <?php
+                                                        } else {                                                   
+                                                            $no = 1;
+                                                            foreach ($data['dataKelas'] as $value) { 
+                                                                    ?>
+                                                                <tr class="odd">
+                                                                    <td><center><?= $no++;?></center></td>
+                                                                    <td><center><?= $value['kelas']; ?></center></td>
+                                                                    <td><center><?= $value['instansi']; ?></center></td>
+                                                                    <td>
+                                                                        <center>
+                                                                        <a href="javascript:;" 
+                                                                            data-kelas="<?= $value['kelas']; ?>"
+                                                                            data-instansi="<?= $value['instansi']; ?>"
+                                                                            class="btn btn-warning btn-sm" data-toggle="modal" onclick="updateDataModal(['kelas', 'instansi'])"
+                                                                            data-target="#exampleModalUpdate">Ubah</a>
+                                                                        </center>
+                                                                   </td>    
+                                                                </tr>
+                                                            <?php                                                       
+                                                            }
+                                                        }?>
                                                 </tbody>
                                             </table>
                                         </div>

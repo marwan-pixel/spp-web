@@ -19,21 +19,21 @@
                                 </button>
                             </div>
                             <div class="modal-body">
-                                <form method="post" action="<?= base_url('Admin/tambahDataBiaya'); ?>">
-                                    <?= $this->session->flashdata('message'); ?>                               
+                                <form method="post" action="<?= site_url('Admin/tambahDataBiaya'); ?>">                               
                                     <div class="form-group">
                                         <label for="instansi">Instansi</label>
-                                        <input type="text" name="instansi" value="<?= set_value('instansi');?>" class="form-control" id="InputNIS" aria-describedby="InputNIS">
-                                        <?= form_error('instansi','<small class="text-danger pl-3">', '</small>'); ?>
+                                        <input type="text" name="instansi" class="form-control" id="InputNIS" aria-describedby="InputNIS">
+                                        <small class="text-danger" id="instansi-error"></small>                                                                                    
                                     </div>
                                     <div class="form-group">
                                         <label for="InputNama">Biaya</label>
-                                        <input type="number" name="biaya" value="<?= set_value('biaya');?>" class="form-control" id="InputNama" aria-describedby="InputNama">
-                                        <?= form_error('biaya','<small class="text-danger pl-3">', '</small>'); ?>                                    
+                                        <input type="number" name="biaya" class="form-control" id="InputNama" aria-describedby="InputNama">
+                                        <small class="text-danger" id="biaya-error"></small>                                                                     
                                     </div>
+                              
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                        <button type="submit" class="btn btn-primary">Save changes</button>
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal" >Keluar</button>
+                                        <button type="submit" class="btn btn-primary">Simpan</button>
                                     </div>
                                 </form>
                             </div>
@@ -41,29 +41,26 @@
                     </div>
                 </div>
                 <!-- Modal Update -->
-                <div class="modal fade" id="exampleModalUpdate" tabindex="-1" aria-labelledby="exampleModalLabelUpdate" aria-hidden="true">
+                <div class="modal fade" id="updateBiaya" tabindex="-1" aria-labelledby="updateBiayaLabel" aria-hidden="true">
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h4 class="modal-title" id="exampleModalLabel">Data Biaya</h4>
+                                <h4 class="modal-title" id="updateBiayaLabel">Data Biaya</h4>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
                             <div class="modal-body">
-                                <form>
-                                    <div class="form-group">
-                                        <label for="InputNIS">Instansi</label>
-                                        <input type="text" class="form-control" id="instansi" aria-describedby="instansi">
-                                        <!-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> -->
-                                    </div>
+                                <form method="post" action="<?= base_url('Admin/ubahDataBiaya')?>">
+                                    <input hidden type="text" name="instansi"  class="form-control" id="instansi" aria-describedby="instansi">
                                     <div class="form-group">
                                         <label for="biaya">Biaya</label>
-                                        <input type="number" class="form-control" id="biaya" aria-describedby="biaya">
+                                        <input type="number" name="biaya" class="form-control" id="biaya" aria-describedby="biaya">
+                                        <small class="text-danger" id="biaya-error"></small> 
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                        <button type="submit" class="btn btn-primary">Save changes</button>
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Keluar</button>
+                                        <button type="submit" class="btn btn-primary">Ubah</button>
                                     </div>
                                 </form>
                             </div>
@@ -111,9 +108,8 @@
                                                             <a href="javascript:;" 
                                                                 data-instansi="<?= $value['instansi']; ?>"
                                                                 data-biaya="<?= $value['biaya']; ?>"
-                                                                class="btn btn-warning btn-sm" data-toggle="modal" 
-                                                                data-target="#exampleModalUpdate">Ubah</a>
-                                                            <!-- <button class="btn btn-danger btn-sm">Hapus</button> -->
+                                                                class="btn btn-warning btn-sm updateData" data-toggle="modal"
+                                                                data-target="#updateBiaya">Ubah</a>
                                                             </center>
                                                        </td>    
                                                     </tr>

@@ -16,36 +16,15 @@ class Model extends CI_Model {
         return $process;
     }
 
-    public function insertDataModel($table, $selectedData ,$dataInput){
+    public function insertDataModel($table, $dataInput){
         try {
-            //Mengecek apakah di field yang jadi primary key terdapat duplikasi
-            $checkSameId = $this->db->select($selectedData);
-            $checkSameId = $this->db->get_where($table, [$selectedData => $dataInput[$selectedData]])->row_array();
-            if(!is_null($checkSameId)) {
-                if($checkSameId[$selectedData] == $dataInput[$selectedData]) {
-                    return [
-                        'status' => false,
-                        'message' => "{$selectedData} sudah tersedia!"    
-                    ];
-                } else {
-                    $this->db->insert($table, $dataInput);
-                    if ($this->db->affected_rows() > 0) {
-                    return [
-                        'status' => true,
-                        'message' => 'Data berhasil ditambahkan'    
-                    ];
-                    }
-                }
-            } else {
-                $this->db->insert($table, $dataInput);
+             $this->db->insert($table, $dataInput);
                 if ($this->db->affected_rows() > 0) {
                 return [
                     'status' => true,
                     'message' => 'Data berhasil ditambahkan'    
                 ];
                 }
-            }
-
         } catch (Exception $e) {
             return [
                         'status' => true,
@@ -54,7 +33,27 @@ class Model extends CI_Model {
         }
     }
 
-    public function updateDataModel($table, $data){
-
-    }
+    public function updateDataModel($table, $data, $where){
+        try {
+            $this->db->set($data);
+            $this->db->where($where[0], $where[1]);
+            $this->db->update($table, $data);               
+            if($this->db->affected_rows() > 0) {
+                 return [
+                    'status' => true,
+                    'message' => 'Data berhasil diubah'    
+                ];
+            } else {
+                return [
+                    'status' => false,
+                    'message' => 'Data gagal diubah'    
+                ];
+            }
+        } catch (Exception $e) {
+            return [
+                        'status' => false,
+                        'message' => $e->getMessage()    
+                    ];  
+        }
+    } 
 }
