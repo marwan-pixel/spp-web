@@ -1,4 +1,5 @@
-        <!-- content page -->
+
+  <!-- content page -->
         <div class="container mt-4 main-container">
             <div class="row">
                 <div class="col-12 col-md-6 ">

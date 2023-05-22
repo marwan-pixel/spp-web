@@ -34,7 +34,7 @@ class User extends CI_Controller {
 	}
 
     public function logout() {
-        $this->session->unset_userdata('name');
+        $this->session->unset_userdata('id');
         redirect('login');
     }
 }

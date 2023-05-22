@@ -46,7 +46,7 @@ class Model extends CI_Model {
             } else {
                 return [
                     'status' => false,
-                    'message' => 'Data gagal diubah'    
+                    'message' => $this->db->error(),    
                 ];
             }
         } catch (Exception $e) {

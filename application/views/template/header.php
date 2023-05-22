@@ -30,7 +30,11 @@
       <title>SPP Web</title>
    </head>
    <body class="fixed-header sidebar-right-close">
-
+   <?php
+    if(!$this->session->userdata('id')) {
+        redirect('login');
+    }
+   ?>
          <!-- main header -->
          <header class="main-header">
             <div class="container-fluid">
@@ -38,7 +42,7 @@
                   <div class="row align-items-center">
                      <div class="col-auto pl-0">
                         <button style="width:10vw;" class="btn success-gradient btn-icon" id="left-menu"><img class="img-fluid" height="40" width="60" src="assets/img/Yayasan Ar-Rahmah.jpeg" alt=""></button>
-                        <a href="index.html" class="logo"><span class="text-hide-xs">Yayasan Islam Rahmatan Lil Alamin</span></a>
+                        <a href="<?= base_url('/');?>" class="logo"><span class="text-hide-xs">Yayasan Islam Rahmatan Lil Alamin</span></a>
                      </div>
                      <div class="col text-center p-xs-0">
                      </div>
@@ -119,9 +123,9 @@
                <li class="nav-item">
                   <a href="javascript:void(0);" class="nav-link dropdwown-toggle"> <i class="material-icons icon">folder</i> <span>Master Data</span><i class="material-icons icon arrow">expand_more</i></a>
                   <ul class="nav flex-column">
-                     <li class="nav-item">
-                        <a href="<?= site_url('databiaya'); ?>" class="nav-link success-gradient-active"><i class="material-icons icon">monetization_on</i> <span>Data Biaya</span> </a>
-                     </li>
+                     <!-- <li class="nav-item">
+                        <a href="<?= site_url('datainstansi'); ?>" class="nav-link success-gradient-active"><i class="material-icons icon">monetization_on</i> <span>Data Biaya</span> </a>
+                     </li> -->
                      <li class="nav-item">
                         <a href="<?= site_url('datakelas'); ?>" class="nav-link success-gradient-active"><i class="material-icons icon">group</i> <span>Data Kelas</span> </a>
                      </li>

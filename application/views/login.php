@@ -17,6 +17,11 @@
     <link rel="stylesheet" href="<?= base_url();?>/assets/vendor/animatecss/animate.css">
     <link id="theme" rel="stylesheet" href="<?= base_url();?>/assets/css/purplesidebar.css" type="text/css">
 </head>
+<?php
+if($this->session->userdata('id')) {
+    redirect('/');
+}
+?>
 <body class="fixed-header d-flex align-items-center" style="background: #22B07D">
     <div class="container">
         <div class="card mx-auto col-lg-5">

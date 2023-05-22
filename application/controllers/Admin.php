@@ -47,7 +47,7 @@ class Admin extends User {
                 redirect('login');
             } else {
                 if(password_verify($data['value']['password'], $process['password'])){
-                    $this->session->set_userdata('name', array('nama_petugas' => $process['nama_petugas']));
+                    $this->session->set_userdata('id', array('kode_petugas' => $process['kode_petugas']));
                     redirect('/');
                 } else {
                     $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">
@@ -57,7 +57,7 @@ class Admin extends User {
                 }
             }
         } else {
-            $this->load->view('login');
+            redirect('login');
         }
     }
 
@@ -128,123 +128,123 @@ class Admin extends User {
                 redirect('registrasi');
             }
         } else {
-            $this->load->view('registrasi');
+            redirect('registrasi');
         }
     }
 
-    public function tambahDataBiaya(){
-        $response = [];
-        $this->setData(
-            array(
-                'table' => 'biaya',
-                'value' => 
-                array(
-                    'instansi' => htmlspecialchars($this->input->post('instansi')),
-                    'biaya' => htmlspecialchars($this->input->post('biaya'))
-                ),
-                'config' =>
-                array(
-                     array(
-                            'field' => 'instansi',
-                            'label' => 'Instansi',
-                            'rules' => 'required|trim|is_unique[biaya.instansi]',
-                            'errors' =>
-                            [
-                                'required' => 'Instansi wajib diisi!',
-                                'is_unique' => 'Instansi sudah tersedia!'
-                            ]
-                        ),
-                    array(
-                            'field' => 'biaya',
-                            'label' => 'Biaya',
-                            'rules' => 'required|trim',
-                            'errors' =>
-                            [
-                                'required' => 'Biaya wajib diisi!'
-                            ]
-                        ),
-                )
-            )
-        );
-        $data = $this->getData();
-        $this->form_validation->set_rules($data['config']);
-        if($this->form_validation->run() == true) {
-            $process = $this->model->insertDataModel('biaya', $data['value']);
-            if($process['status'] == true){
-                $response = array(
-                    'success' => true,
-                    'redirect' => site_url('databiaya'),
-                );
-                $this->session->set_flashdata("message", "<div class='alert alert-success' role='alert'>
-                                        {$process['message']}
-                                        </div>");
-            } else {
-                $this->session->set_flashdata("message", "<div class='alert alert-danger' role='alert'>
-                                        {$process['message']}
-                                        </div>");
-            }
-        } else {
-            $response = array(
-                'success' => false,
-                'errors' => array('instansi' => form_error('instansi'), 'biaya' => form_error('biaya')),
-            );
-        }
-        header('Content-Type: application/json');
-        echo json_encode($response);
-        exit();
-    }
+    // public function tambahDataBiaya(){
+    //     $response = [];
+    //     $this->setData(
+    //         array(
+    //             'table' => 'biaya',
+    //             'value' => 
+    //             array(
+    //                 'instansi' => htmlspecialchars($this->input->post('instansi')),
+    //                 'biaya' => htmlspecialchars($this->input->post('biaya'))
+    //             ),
+    //             'config' =>
+    //             array(
+    //                  array(
+    //                         'field' => 'instansi',
+    //                         'label' => 'Instansi',
+    //                         'rules' => 'required|trim|is_unique[biaya.instansi]',
+    //                         'errors' =>
+    //                         [
+    //                             'required' => 'Instansi wajib diisi!',
+    //                             'is_unique' => 'Instansi sudah tersedia!'
+    //                         ]
+    //                     ),
+    //                 array(
+    //                         'field' => 'biaya',
+    //                         'label' => 'Biaya',
+    //                         'rules' => 'required|trim',
+    //                         'errors' =>
+    //                         [
+    //                             'required' => 'Biaya wajib diisi!'
+    //                         ]
+    //                     ),
+    //             )
+    //         )
+    //     );
+    //     $data = $this->getData();
+    //     $this->form_validation->set_rules($data['config']);
+    //     if($this->form_validation->run() == true) {
+    //         $process = $this->model->insertDataModel('biaya', $data['value']);
+    //         if($process['status'] == true){
+    //             $response = array(
+    //                 'success' => true,
+    //                 'redirect' => site_url('databiaya'),
+    //             );
+    //             $this->session->set_flashdata("message", "<div class='alert alert-success' role='alert'>
+    //                                     {$process['message']}
+    //                                     </div>");
+    //         } else {
+    //             $this->session->set_flashdata("message", "<div class='alert alert-danger' role='alert'>
+    //                                     {$process['message']}
+    //                                     </div>");
+    //         }
+    //     } else {
+    //         $response = array(
+    //             'success' => false,
+    //             'errors' => array('instansi' => form_error('instansi'), 'biaya' => form_error('biaya')),
+    //         );
+    //     }
+    //     header('Content-Type: application/json');
+    //     echo json_encode($response);
+    //     exit();
+    // }
 
-    public function ubahDataBiaya(){
-         $this->setData(
-            array(
-                'table' => 'biaya',
-                'where' =>  array('instansi', $this->input->post('instansi')),
-                'value' => 
-                array(
-                    'biaya' => htmlspecialchars($this->input->post('biaya'))
-                ),
-                'config' =>
-                array(
-                    array(
-                            'field' => 'biaya',
-                            'label' => 'Biaya',
-                            'rules' => 'required|trim',
-                            'errors' =>
-                            [
-                                'required' => 'Biaya wajib diisi!'
-                            ]
-                        ),
-                )
-            )
-        );
-        $data = $this->getData();
-        $response = [];
-        $this->form_validation->set_rules($data['config']);
-        if($this->form_validation->run() == true) {
-            $process = $this->model->updateDataModel($data['table'],$data['value'], $data['where']);
-           if($process['status'] == true){
-                $response = array(
-                    'success' => true,
-                    'redirect' => site_url('databiaya'),
-                );
-                $this->session->set_flashdata("message", "<div class='alert alert-success' role='alert'>
-                                        {$process['message']}
-                                        </div>");
-            } else {
-                $this->session->set_flashdata("message", "<div class='alert alert-danger' role='alert'>
-                                        {$process['message']}
-                                        </div>");
-            }
-        } else {
-            $response = array(
-                'success' => false,
-                'errors' => array('biaya' => form_error('biaya')),
-            );
-        }
-        header('Content-Type: application/json');
-        echo json_encode($response);
-        exit();
-    }
+    // public function ubahDataBiaya(){
+    //      $this->setData(
+    //         array(
+    //             'table' => 'biaya',
+    //             'where' =>  array('instansi', $this->input->post('instansi')),
+    //             'value' => 
+    //             array(
+    //                 'biaya' => htmlspecialchars($this->input->post('biaya'))
+    //             ),
+    //             'config' =>
+    //             array(
+    //                 array(
+    //                         'field' => 'biaya',
+    //                         'label' => 'Biaya',
+    //                         'rules' => 'required|trim',
+    //                         'errors' =>
+    //                         [
+    //                             'required' => 'Biaya wajib diisi!'
+    //                         ]
+    //                     ),
+    //             )
+    //         )
+    //     );
+    //     $data = $this->getData();
+    //     $response = [];
+    //     $this->form_validation->set_rules($data['config']);
+    //     if($this->form_validation->run() == true) {
+    //         $process = $this->model->updateDataModel($data['table'],$data['value'], $data['where']);
+    //        if($process['status'] == true){
+    //             $response = array(
+    //                 'success' => true,
+    //                 'redirect' => site_url('databiaya'),
+    //             );
+    //             $this->session->set_flashdata("message", "<div class='alert alert-success' role='alert'>
+    //                                     {$process['message']}
+    //                                     </div>");
+    //         } else {
+    //             $this->session->set_flashdata("message", "<div class='alert alert-danger' role='alert'>
+    //                                     {$process['message']}
+    //                                     </div>");
+    //         }
+    //     } else {
+    //         $response = array(
+    //             'success' => false,
+    //             'errors' => array('biaya' => form_error('biaya')),
+    //         );
+    //     }
+    //     header('Content-Type: application/json');
+    //     echo json_encode($response);
+    //     exit();
+    // }
 
     public function tambahDataKelas(){
          $this->setData(
@@ -285,6 +285,10 @@ class Admin extends User {
             $process = $this->model->insertDataModel($data['table'], $data['value']);
 
             if($process['status'] == true){
+                $response = array(
+                    'success' => true,
+                    'redirect' => site_url('datakelas'),
+                );
                 $this->session->set_flashdata("message", "<div class='alert alert-success' role='alert'>
                                         {$process['message']}
                                         </div>");
@@ -294,8 +298,66 @@ class Admin extends User {
                                         </div>");
             }
         } else {
+            $response = array(
+                'success' => false,
+                'errors' => array('kelas' => form_error('kelas'), 'instansi' => form_error('instansi')),
+            );
         }
-        redirect('datakelas');
+        header('Content-Type: application/json');
+        echo json_encode($response);
+        exit();
+    }
+
+    public function ubahDataKelas(){
+         $this->setData(
+            array(
+                'table' => 'kelas',
+                'where' =>  array('kelas', $this->input->post('kelas')),
+                'value' => 
+                array(
+                    'instansi' => htmlspecialchars($this->input->post('instansi'))
+                ),
+                'config' =>
+                array(
+                    array(
+                            'field' => 'instansi',
+                            'label' => 'Instansi',
+                            'rules' => 'required|trim',
+                            'errors' =>
+                            [
+                                'required' => 'Instansi wajib diisi!'
+                            ]
+                        ),
+                )
+            )
+        );
+        $data = $this->getData();
+        $response = [];
+        $this->form_validation->set_rules($data['config']);
+        if($this->form_validation->run() == true) {
+            $process = $this->model->updateDataModel($data['table'],$data['value'], $data['where']);
+           if($process['status'] == true){
+                $response = array(
+                    'success' => true,
+                    'redirect' => site_url('datakelas'),
+                );
+                $this->session->set_flashdata("message", "<div class='alert alert-success' role='alert'>
+                                        {$process['message']}
+                                        </div>");
+            } else {
+                $this->session->set_flashdata("message", "<div class='alert alert-danger' role='alert'>
+                                        {$process['message']}
+                                        </div>");
+            }
+        } else {
+            $response = array(
+                'success' => false,
+                'errors' => array('instansi' => form_error('instansi')),
+            );
+        }
+        header('Content-Type: application/json');
+        echo json_encode($response);
+        exit();
     }
 
     public function tambahDataSiswa(){
@@ -308,7 +370,8 @@ class Admin extends User {
                     'nama_siswa' => htmlspecialchars($this->input->post('nama')),
                     'kelas' => htmlspecialchars($this->input->post('kelas')),
                     'password' => password_hash($this->input->post('password'), PASSWORD_BCRYPT),
-                    'potongan' => htmlspecialchars($this->input->post('potongan')),
+                    'biaya' => htmlspecialchars($this->input->post('biaya')),
+                    'ket_biaya' => htmlspecialchars($this->input->post('ket_biaya')),
                 ),
                 'config' =>
                 array(
@@ -349,22 +412,40 @@ class Admin extends User {
                             'required' => 'Password wajib diisi!'
                         ]
                     ),
+                    array(
+                        'field' => 'biaya',
+                        'label' => 'Biaya',
+                        'rules' => 'required|trim',
+                        'errors' =>
+                        [
+                            'required' => 'Biaya wajib diisi!'
+                        ]
+                    ),
+                    array(
+                        'field' => 'ket_biaya',
+                        'label' => 'Ket biaya',
+                        'rules' => 'required|trim',
+                        'errors' =>
+                        [
+                            'required' => 'Keterangan biaya wajib diisi!'
+                        ]
+                    ),
                 ),
             )
         );
         $data = $this->getData();
         $this->form_validation->set_rules($data['config']);
         if($this->form_validation->run() == true) {
-            if($data['value']['potongan'] == 0){
-                $data['value']['potongan'] = 0;
-            }
             $process = $this->model->insertDataModel($data['table'], $data['value']);
 
             if($process['status'] == true){
+                $response = array(
+                    'success' => true,
+                    'redirect' => site_url('datasiswa'),
+                );
                 $this->session->set_flashdata("message", "<div class='alert alert-success' role='alert'>
                                         {$process['message']}
                                         </div>");
-                redirect('datasiswa');
             } else {
                 $this->session->set_flashdata("message", "<div class='alert alert-danger' role='alert'>
                                         {$process['message']}
@@ -372,9 +453,160 @@ class Admin extends User {
                 redirect('datasiswa');
             }
         } else {
-             $errors = validation_errors();
-             echo json_encode(['error' => $errors]);
+            $response = array(
+                'success' => false,
+                'errors' => array(
+                    'nipd' => form_error('nipd'), 
+                    'nama' => form_error('nama'), 
+                    'kelas' => form_error('kelas'), 
+                    'password' => form_error('password'),
+                    'biaya' => form_error('biaya'),
+                    'ket_biaya' => form_error('ket_biaya')));
         }
+        header('Content-Type: application/json');
+        echo json_encode($response);
+        exit();
     }
+
+    public function ubahDataSiswa(){
+        $this->setData(
+           array(
+               'table' => 'siswa',
+               'where' =>  array('nipd', $this->input->post('nipd')),
+               'value' => 
+               array(
+                   'nama_siswa' => htmlspecialchars($this->input->post('nama')),
+                   'kelas' => htmlspecialchars($this->input->post('kelas')),
+                   'biaya' => htmlspecialchars($this->input->post('biaya')),
+                   'ket_biaya' => htmlspecialchars($this->input->post('ket_biaya')),
+
+               ),
+               'config' =>
+               array(
+                    array(
+                           'field' => 'nama',
+                           'label' => 'Nama',
+                           'rules' => 'required|trim',
+                           'errors' =>
+                           [
+                               'required' => 'Nama wajib diisi!'
+                           ]
+                       ),
+                    array(
+                            'field' => 'biaya',
+                            'label' => 'Biaya',
+                            'rules' => 'required|trim',
+                            'errors' =>
+                            [
+                                'required' => 'Biaya wajib diisi!'
+                            ]
+                        ),
+                    array(
+                            'field' => 'ket_biaya',
+                            'label' => 'Ket Biaya',
+                            'rules' => 'required|trim',
+                            'errors' =>
+                            [
+                                'required' => 'Keterangan biaya wajib diisi!'
+                            ]
+                        ),
+               )
+           )
+       );
+       $data = $this->getData();
+       $response = [];
+       $this->form_validation->set_rules($data['config']);
+       if($this->form_validation->run() == true) {
+            $process = $this->model->updateDataModel($data['table'],$data['value'], $data['where']);
+            if($process['status'] == true){
+                $response = array(
+                    'success' => true,
+                    'redirect' => site_url('datasiswa'),
+                );
+                $this->session->set_flashdata("message", "<div class='alert alert-success' role='alert'>
+                                        {$process['message']}
+                                        </div>");
+            } else {
+                    $response = array(
+                        'success' => false,
+                        'errors' => $process['message'],
+                    );
+                $this->session->set_flashdata("message", "<div class='alert alert-danger' role='alert'>
+                                        {$process['message']}
+                                        </div>");
+            }
+       } else {
+           $response = array(
+               'success' => false,
+               'errors' => array('nama' => form_error('nama'), 'biaya' => form_error('biaya'), 'ket_biaya' => form_error('ket_biaya')),
+           );
+       }
+       header('Content-Type: application/json');
+       echo json_encode($response);
+       exit();
+   }
+
+   public function ubahDataAdmin(){
+        $this->setData(
+        array(
+            'table' => 'admin',
+            'where' =>  array('kode_petugas', $this->input->post('kode_petugas')),
+            'value' => 
+            array(
+                'nama_petugas' => htmlspecialchars($this->input->post('nama')),
+                ),
+            'config' =>
+            array(
+                    array(
+                        'field' => 'nama',
+                        'label' => 'Nama',
+                        'rules' => 'required|trim',
+                        'errors' =>
+                        [
+                            'required' => 'Nama wajib diisi!'
+                        ]
+                    ),
+                )
+            )
+        );
+        $data = $this->getData();
+        if(!empty($this->input->post('password'))){
+                $data['value']['password'] = password_hash($this->input->post('password'), PASSWORD_BCRYPT);
+                $this->form_validation->set_rules('password','Password','required|trim|min_length[8]', array('required' => 'Password wajib diisi!',
+                'min_length' => 'Password minimal terdiri dari 8 karakter!'));
+                $this->form_validation->set_rules('confPassword','ConfPassword','required|trim|matches[password]', array( 'required' => 'Konfirmasi Password wajib diisi!',
+                'matches' => 'Password tidak sama!'));
+        }
+        
+        $this->form_validation->set_rules($data['config']);
+        if($this->form_validation->run() == true) {
+                $process = $this->model->updateDataModel($data['table'],$data['value'], $data['where']);
+                if($process['status'] == true){
+                    $response = array(
+                        'success' => true,
+                        'redirect' => site_url('dataadmin'),
+                    );
+                    $this->session->set_flashdata("message", "<div class='alert alert-success' role='alert'>
+                                            {$process['message']}
+                                            </div>");
+                } else {
+                        $response = array(
+                            'success' => false,
+                            'errors' => $process['message'],
+                        );
+                    $this->session->set_flashdata("message", "<div class='alert alert-danger' role='alert'>
+                                            {$process['message']}
+                                            </div>");
+                }
+        } else {
+            $response = array(
+                'success' => false,
+                'errors' => array('nama' => form_error('nama'), 'password' => form_error('password'), 'confPassword' => form_error('confPassword')),
+            );
+   }
+   header('Content-Type: application/json');
+   echo json_encode($response);
+   exit();
+}
 }
 ?>

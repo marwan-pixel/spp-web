@@ -1,9 +1,4 @@
-<?php
-    // foreach ($data as $value) {
-    //     echo count($data['dataKelas']);
-    // }
-    // die();
-?>
+
         <!-- content page -->
         <div class="container-fluid mt-4 main-container">
             <?= $this->session->flashdata('message'); ?>
@@ -27,10 +22,11 @@
                                 <div class="form-group">
                                     <label for="InputKelas">Kelas</label>
                                     <input type="text" name="kelas" class="form-control" id="kelas" aria-describedby="InputNama">
+                                    <small id="kelas-error" class="text-danger"></small>
                                 </div>
                                 <div class="form-group">
                                     <label for="InputKelas">Instansi</label>
-                                    <select name="instansi" class="form-control" id="instansi">
+                                    <!-- <select name="instansi" class="form-control" id="instansi">
                                         <?php 
                                             foreach ($data['dataInstansi'] as $value) {
                                         ?>
@@ -38,7 +34,9 @@
                                         <?php        
                                             }
                                         ?>
-                                    </select>
+                                    </select> -->
+                                    <input type="text" name="instansi" class="form-control" id="instansi" aria-describedby="InputNama">
+                                    <small id="instansi-error" class="text-danger"></small>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -51,38 +49,31 @@
                 </div>
 
                 <!-- Modal Update -->
-                <div class="modal fade" id="exampleModalUpdate" tabindex="-1" aria-labelledby="exampleModalLabelUpdate" aria-hidden="true">
+                <div class="modal fade" id="exampleModalUpdate" tabindex="-1" aria-labelledby="exampleModalUpdateLabel" aria-hidden="true">
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h4 class="modal-title" id="exampleModalLabel">Data Kelas</h4>
+                                <h4 class="modal-title" id="exampleModalUpdateLabel">Data Kelas</h4>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
                             <div class="modal-body">
-                            <form>
-                                <div class="form-group">
+                            <form method="post" action="<?= site_url('Admin/ubahDataKelas') ;?>">
+                                <div hidden class="form-group">
                                     <label for="kelas">Kelas</label>
                                     <input type="text" class="form-control" name="kelas" id="kelas" aria-describedby="InputNama">
                                 </div>
                                 <div class="form-group">
                                     <label for="instansi">Instansi</label>
-                                    <select class="form-control" name="instansi" id="instansi">
-                                        <?php 
-                                            foreach ($data['dataInstansi'] as $value) {
-                                        ?>
-                                        <option value="<?= $value['instansi'] ;?>"><?= $value['instansi'] ;?></option>
-                                        <?php        
-                                            }
-                                        ?>
-                                    </select>
+                                    <input type="text" class="form-control" name="instansi" id="instansi" aria-describedby="InputNama">
+                                    <small id="instansi-errorUpdate" class="text-danger"></small>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Keluar</button>
+                                    <button type="submit" class="btn btn-primary">Simpan</button>
                                 </div>
                             </form>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Keluar</button>
-                                <button type="button" class="btn btn-primary">Simpan</button>
                             </div>
                         </div>
                     </div>
@@ -133,7 +124,7 @@
                                                                         <a href="javascript:;" 
                                                                             data-kelas="<?= $value['kelas']; ?>"
                                                                             data-instansi="<?= $value['instansi']; ?>"
-                                                                            class="btn btn-warning btn-sm" data-toggle="modal" onclick="updateDataModal(['kelas', 'instansi'])"
+                                                                            class="btn btn-warning btn-sm" data-toggle="modal"
                                                                             data-target="#exampleModalUpdate">Ubah</a>
                                                                         </center>
                                                                    </td>    
@@ -155,3 +146,91 @@
             </div>
         </div>
         <!-- content page ends -->
+        <script src="assets/js/jquery-3.2.1.min.js"></script>
+        <script>
+            
+            $(document).ready(function() {
+                //Modal Config Input Data Kelas
+                $('#exampleModal').on('hide.bs.modal', function(event) {
+                    $(this).find('.text-danger');
+                });
+    
+                $('#exampleModal').on('submit', 'form' , function (event) {
+                    event.preventDefault();
+    
+                    var form = $(this);
+                    var kelas = form.find('input[name="kelas"]').val();
+                    var instansi = form.find('input[name="instansi"]').val();
+    
+                    $.ajax({
+                        url: form.attr('action'),
+                        method: form.attr('method'),
+                        data: form.serialize(),
+                        dataType: 'json' ,
+                        success: function (response) {
+     
+                            if(response.success) {
+                                window.location.href = response.redirect;
+                                $('#exampleModal').modal('hide');
+                            } else {             
+                                var errors = response.errors;
+                                $.each(errors, function (field, message) {
+                                    let errorElement = $('#' + field + '-error');
+                                    errorElement.html(message);
+                                })
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            console.error(error);
+                        }
+                    })                
+                })
+
+                //Modal Config Get Selected Data Kelas
+                // Untuk sunting
+                $('#exampleModalUpdate').on('show.bs.modal', function (event) {
+                    var div = $(event.relatedTarget) // Tombol dimana modal di tampilkan
+                    var modal = $(this)
+
+                        // Isi nilai pada field
+                    modal.find(`#kelas`).attr("value",div.data(`kelas`));
+                    modal.find(`#instansi`).attr("value",div.data(`instansi`));
+                });
+
+                //Modal Config Update Data Kelas
+                $('#exampleModalUpdate').on('hide.bs.modal', function(event) {
+                    $(this).find('.text-danger');
+                });
+    
+                $('#exampleModalUpdate').on('submit', 'form' , function (event) {
+                    event.preventDefault();
+    
+                    var form = $(this);
+                    var kelas = form.find('input[name="kelas"]').val();
+                    var instansi = form.find('input[name="instansi"]').val();
+    
+                    $.ajax({
+                        url: form.attr('action'),
+                        method: form.attr('method'),
+                        data: form.serialize(),
+                        dataType: 'json' ,
+                        success: function (response) {
+                            if(response.success) {
+                                window.location.href = response.redirect;
+                                $('#exampleModalUpdate').modal('hide');
+                            } else {                           
+                                var errors = response.errors;
+                                $.each(errors, function (field, message) {
+                                    let errorElement = $('#' + field + '-errorUpdate');
+                                    console.log(field);
+                                    errorElement.html(message);
+                                })
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            console.error(error);
+                        }
+                    })               
+                })
+            })   
+        </script>
