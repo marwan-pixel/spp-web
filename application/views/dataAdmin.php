@@ -45,12 +45,12 @@
                                     <div class="collapse" id="passwordCollapse">
                                          <div class="form-group">
                                             <label for="password">Password Baru</label>
-                                            <input type="text" class="form-control" id="password" name="password" aria-describedby="password">
+                                            <input type="password" class="form-control" id="password" name="password" aria-describedby="password">
                                             <small class="text-danger" id="password-errorUpdate"></small>
                                         </div>
                                          <div class="form-group">
                                             <label for="confPassword">Konfirmasi Password Baru</label>
-                                            <input type="text" class="form-control" name="confPassword" id="confPassword" aria-describedby="confPassword">
+                                            <input type="password" class="form-control" name="confPassword" id="confPassword" aria-describedby="confPassword">
                                             <small class="text-danger" id="confPassword-errorUpdate"></small>
                                         </div>
                                     </div>

@@ -1,19 +1,18 @@
 <?php 
 class Model extends CI_Model {
 
-    public function getDataModel($table, $data, $param = null, $join = null) {
+    public function getDataModel($table, $data, $param = null, $limit = null ,$start = null) {
         $process = $this->db->select(implode(",",$data));
         if($param == null) {
-            $process = $this->db->get($table)->result_array();
+            $process = $this->db->get($table, $limit, $start)->result_array();
         } else {
-            if($table == 'admin' || $table == 'biaya') {
-                $process = $this->db->get_where($table, [$data[0] => $param[$data[0]]])->row_array();
-            } else {
-                $process = $this->db->from($table)->join($join['table'], $join['field'])->get()->row_array();
-            }
-            
+            $process = $this->db->get_where($table, [$data[0] => $param[$data[0]]])->row_array();
         }
         return $process;
+    }
+
+    public function countAllData($table){
+        return $this->db->get($table)->num_rows();
     }
 
     public function insertDataModel($table, $dataInput){

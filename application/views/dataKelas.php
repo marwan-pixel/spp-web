@@ -18,7 +18,7 @@
                                 </button>
                             </div>
                             <div class="modal-body">
-                            <form method="post" action="<?= base_url('Admin/tambahDataKelas'); ?>">
+                            <form method="post" action="<?=  base_url('admin/tambahDataKelas'); ?>">
                                 <div class="form-group">
                                     <label for="InputKelas">Kelas</label>
                                     <input type="text" name="kelas" class="form-control" id="kelas" aria-describedby="InputNama">
@@ -26,15 +26,6 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="InputKelas">Instansi</label>
-                                    <!-- <select name="instansi" class="form-control" id="instansi">
-                                        <?php 
-                                            foreach ($data['dataInstansi'] as $value) {
-                                        ?>
-                                        <option><?= $value['instansi'] ;?></option>
-                                        <?php        
-                                            }
-                                        ?>
-                                    </select> -->
                                     <input type="text" name="instansi" class="form-control" id="instansi" aria-describedby="InputNama">
                                     <small id="instansi-error" class="text-danger"></small>
                                 </div>
@@ -105,18 +96,16 @@
                                                 </thead>
                                                 <tbody>
                                                     <?php
-                                                    if(count($data['dataKelas'])  == 0){
-                                                            ?>
+                                                    if(count($data['dataKelas']) == 0){?>
                                                             <tr class="odd">
                                                                 <td colspan="4"><center><h5>Data belum tersedia!</h5></center></td>
                                                             </tr>
                                                             <?php
                                                         } else {                                                   
-                                                            $no = 1;
                                                             foreach ($data['dataKelas'] as $value) { 
-                                                                    ?>
+                                                                ?>
                                                                 <tr class="odd">
-                                                                    <td><center><?= $no++;?></center></td>
+                                                                    <th><center><?= ++$start;?></center></th>
                                                                     <td><center><?= $value['kelas']; ?></center></td>
                                                                     <td><center><?= $value['instansi']; ?></center></td>
                                                                     <td>
@@ -138,7 +127,7 @@
                                     </div>
                                 </div>
                             </div>
-
+                            <?= $this->pagination->create_links();?>                            
                             <!-- /.table-responsive -->
                         </div>
                     </div>
@@ -146,7 +135,7 @@
             </div>
         </div>
         <!-- content page ends -->
-        <script src="assets/js/jquery-3.2.1.min.js"></script>
+        <script src="<?= base_url();?>/assets/js/jquery-3.2.1.min.js"></script>
         <script>
             
             $(document).ready(function() {

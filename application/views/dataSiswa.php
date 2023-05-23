@@ -162,16 +162,15 @@
                                                     </tr>
                                                     <?php    
                                                     } else {
-                                                        $no = 1;
                                                         foreach ($data['dataSiswa'] as $value) {
                                                     ?>
                                                     <tr class="odd">
-                                                        <td><center><?= $no++ ;?></center></td>
+                                                        <th><center><?= ++$start;?></center></th>
                                                         <td><center><?= $value['nipd'] ;?></center></td>
                                                         <td><center><?= $value['nama_siswa'] ;?></center></td>
                                                         <td><center><?= $value['kelas'] ;?></center></td>
                                                         <td><center>****</center></td>
-                                                        <td><center><?= $value['biaya'] ;?></center></td>
+                                                        <td><center>Rp<?= number_format($value['biaya'],2,',','.');?></center></td>
                                                         <td><center><?= $value['ket_biaya'] ;?></center></td>
                                                         <td>
                                                             <center>
@@ -196,8 +195,10 @@
                                         </div>
                                     </div>
                                 </div>
+                                <?= $this->pagination->create_links();?>
                             </div>
                             <!-- /.table-responsive -->
+
                         </div>
                     </div>
                 </div>
@@ -205,7 +206,7 @@
         </div>
         <!-- content page ends -->
 
-        <script src="assets/js/jquery-3.2.1.min.js"></script>
+        <script src="<?= base_url();?>/assets/js/jquery-3.2.1.min.js"></script>
         <script>
             
             $(document).ready(function() {

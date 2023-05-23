@@ -36,12 +36,12 @@
                   <div class="card shadow fullscreen mt-2">
                      <div class="card-body">
                         <div class="card-title">
-                           <h5 class="text-primary">Biodata Siswa</h5>
+                           <h5 class="text-primary">Informasi Siswa</h5>
                         </div>
                         <table class="table hidden-overflow" id="dataTables-example">
                            <tbody>
                               <tr data-toggle="modal" data-target="#exampleModal" class="odd">
-                                 <td> NIS </td>
+                                 <td> NIPD </td>
                                  <td> ------ </td>
                               </tr>
                               <tr>
@@ -50,14 +50,6 @@
                               </tr>
                               <tr>
                                  <td> Kelas </td>
-                                 <td> ------ </td>
-                              </tr>
-                              <tr>
-                                 <td> Tahun Akademik </td>
-                                 <td> ------ </td>
-                              </tr>
-                              <tr>
-                                 <td> Alamat </td>
                                  <td> ------ </td>
                               </tr>
                            </tbody>
@@ -324,151 +316,38 @@
                                        <center>Nomor Transaksi</center>
                                     </th>
                                     <th>
-                                       <center>Nomor Induk Siswa</center>
+                                       <center>NIPD</center>
                                     </th>
                                     <th>
                                        <center>Tanggal Pembayaran</center>
                                     </th>
                                     <th>
-                                       <center>Nomor Pembayaran</center>
+                                       <center>Nominal</center>
                                     </th>
                                     <th>
                                        <center>Biaya</center>
                                     </th>
                                     <th>
-                                       <center>Kode Petugas</center>
+                                       <center>Status</center>
                                     </th>
                                     <th>
-                                       <center>Status</center>
+                                       <center>Keterangan</center>
                                     </th>
                                  </tr>
                               </thead>
                               <tbody>
-                                 <tr class="odd">
-                                    <td>
-                                       <center>1</center>
-                                    </td>
-                                    <td>
-                                       <center>Nama</center>
-                                    </td>
-                                    <td>
-                                       <center>23-02-2024</center>
-                                    </td>
-                                    <td>
-                                       <center>infoatmaxartkiller.in</center>
-                                    </td>
-                                    <td>
-                                       <center>+91 000 000 0000</center>
-                                    </td>
-                                    <td>
-                                       <center>40</center>
-                                    </td>
-                                    <td>
-                                       <center>
-                                          <span class="btn btn-outline-success btn-sm">Active</span>
-                                       </center>
-                                    </td>
-                                 </tr>
-                                 <tr class="even ">
-                                    <td>
-                                       <center>1</center>
-                                    </td>
-                                    <td>
-                                       <center>Nama</center>
-                                    </td>
-                                    <td>
-                                       <center>23-02-2024</center>
-                                    </td>
-                                    <td>
-                                       <center>infoatmaxartkiller.in</center>
-                                    </td>
-                                    <td>
-                                       <center>+91 000 000 0000</center>
-                                    </td>
-                                    <td>
-                                       <center>40</center>
-                                    </td>
-                                    <td>
-                                       <center>
-                                          <span class="btn btn-outline-success btn-sm">Active</span>
-                                       </center>
-                                    </td>
-                                 </tr>
-                                 <tr class="odd">
-                                    <td>
-                                       <center>1</center>
-                                    </td>
-                                    <td>
-                                       <center>Nama</center>
-                                    </td>
-                                    <td>
-                                       <center>23-02-2024</center>
-                                    </td>
-                                    <td>
-                                       <center>infoatmaxartkiller.in</center>
-                                    </td>
-                                    <td>
-                                       <center>+91 000 000 0000</center>
-                                    </td>
-                                    <td>
-                                       <center>40</center>
-                                    </td>
-                                    <td>
-                                       <center>
-                                          <span class="btn btn-outline-success btn-sm">Active</span>
-                                       </center>
-                                    </td>
-                                 </tr>
-                                 <tr class="even ">
-                                    <td>
-                                       <center>1</center>
-                                    </td>
-                                    <td>
-                                       <center>Nama</center>
-                                    </td>
-                                    <td>
-                                       <center>23-02-2024</center>
-                                    </td>
-                                    <td>
-                                       <center>infoatmaxartkiller.in</center>
-                                    </td>
-                                    <td>
-                                       <center>+91 000 000 0000</center>
-                                    </td>
-                                    <td>
-                                       <center>40</center>
-                                    </td>
-                                    <td>
-                                       <center>
-                                          <span class="btn btn-outline-success btn-sm">Active</span>
-                                       </center>
-                                    </td>
-                                 </tr>
-                                 <tr class="odd">
-                                    <td>
-                                       <center>1</center>
-                                    </td>
-                                    <td>
-                                       <center>Nama</center>
-                                    </td>
-                                    <td>
-                                       <center>23-02-2024</center>
-                                    </td>
-                                    <td>
-                                       <center>infoatmaxartkiller.in</center>
-                                    </td>
-                                    <td>
-                                       <center>+91 000 000 0000</center>
-                                    </td>
-                                    <td>
-                                       <center>40</center>
-                                    </td>
-                                    <td>
-                                       <center>
-                                          <span class="btn btn-outline-success btn-sm">Active</span>
-                                       </center>
-                                    </td>
-                                 </tr>
+                              <?php
+                              if(count($data) == 0){
+                                 ?>
+                              <tr><td colspan="8"><center><h5>Data belum tersedia</h5></center></td></tr>
+                              <?php
+                              } else {
+                                  foreach ($data as $value) {
+                                 ?>
+                                 <?php
+                                 }
+                              }
+                             ?>
                               </tbody>
                            </table>
                            <!-- /.table-responsive -->

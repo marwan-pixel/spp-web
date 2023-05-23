@@ -3,7 +3,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 require APPPATH . 'controllers/User.php';
 
 class Admin extends User {
-
     //Overriding parent method
     public function login($data = null) {
         $this->setData(
@@ -57,7 +56,7 @@ class Admin extends User {
                 }
             }
         } else {
-            redirect('login');
+            $this->load->view('login');
         }
     }
 
@@ -128,7 +127,7 @@ class Admin extends User {
                 redirect('registrasi');
             }
         } else {
-            redirect('registrasi');
+            $this->load->view('registrasi');
         }
     }
 
@@ -287,7 +286,7 @@ class Admin extends User {
             if($process['status'] == true){
                 $response = array(
                     'success' => true,
-                    'redirect' => site_url('datakelas'),
+                    'redirect' => base_url('pages/datakelas'),
                 );
                 $this->session->set_flashdata("message", "<div class='alert alert-success' role='alert'>
                                         {$process['message']}
@@ -339,7 +338,7 @@ class Admin extends User {
            if($process['status'] == true){
                 $response = array(
                     'success' => true,
-                    'redirect' => site_url('datakelas'),
+                    'redirect' => base_url('pages/datakelas'),
                 );
                 $this->session->set_flashdata("message", "<div class='alert alert-success' role='alert'>
                                         {$process['message']}
@@ -441,7 +440,7 @@ class Admin extends User {
             if($process['status'] == true){
                 $response = array(
                     'success' => true,
-                    'redirect' => site_url('datasiswa'),
+                    'redirect' => base_url('pages/datasiswa'),
                 );
                 $this->session->set_flashdata("message", "<div class='alert alert-success' role='alert'>
                                         {$process['message']}
@@ -464,8 +463,8 @@ class Admin extends User {
                     'ket_biaya' => form_error('ket_biaya')));
         }
         header('Content-Type: application/json');
-        echo json_encode($response);
-        exit();
+        json_encode($response);
+        // exit();
     }
 
     public function ubahDataSiswa(){

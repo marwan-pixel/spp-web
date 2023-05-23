@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="<?= base_url();?>/assets/vendor/bootstrap-4.1.3/css/bootstrap.min.css">
 
     <!-- Material design icons CSS -->
-    <link rel="stylesheet" href="<?= base_url() ?>assets/vendor/materializeicon/material-icons.css">
+    <link rel="stylesheet" href="<?= base_url();?>assets/vendor/materializeicon/material-icons.css">
 
     <!-- animate CSS -->
     <link rel="stylesheet" href="<?= base_url();?>/assets/vendor/animatecss/animate.css">
