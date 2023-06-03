@@ -26,22 +26,22 @@
                                     <p class=" mb-0">Jumlah Siswa<span class="text-success float-right"></p>
                                     <div class="row">
                                         <div class="col-sm">
-                                            <h3 class="content-color-primary mt-2 mb-3">316</h3> 
+                                            <h3 class="content-color-primary mt-2 mb-3"><?= $data['datasiswa']['all']; ?></h3> 
                                         </div>
                                         <div class="col-sm d-flex flex-column align-items-center">
-                                            <h4 class="content-color-primary mt-2">31</h4> 
+                                            <h4 class="content-color-primary mt-2"><?= $data['datasiswa']['tk']; ?></h4> 
                                             <h6 class="text-muted">TK</h6>
                                         </div>
                                         <div class="col-sm d-flex flex-column align-items-center">
-                                            <h4 class="content-color-primary mt-2">31</h4> 
+                                            <h4 class="content-color-primary mt-2"><?= $data['datasiswa']['sd']; ?></h4> 
                                             <h6 class="text-muted">SD</h6>
                                         </div>
                                         <div class="col-sm d-flex flex-column align-items-center">
-                                            <h4 class="content-color-primary mt-2">31</h4> 
+                                            <h4 class="content-color-primary mt-2"><?= $data['datasiswa']['smp']; ?></h4> 
                                             <h6 class="text-muted">SMP</h6>
                                         </div>
                                         <div class="col-sm d-flex flex-column align-items-center">
-                                            <h4 class="content-color-primary mt-2">31</h4> 
+                                            <h4 class="content-color-primary mt-2"><?= $data['datasiswa']['ponpes']; ?></h4> 
                                             <h6 class="text-muted">Ponpes</h6>
                                         </div>
                                     </div>
@@ -95,22 +95,22 @@
                                     <p class="content-color-secondary mb-0">Jumlah Kelas (Setiap Tingkat) <span class="text-success float-right"></p>
                                     <div class="row">
                                         <div class="col-sm">
-                                            <h3 class="content-color-primary mb-3 mt-2">18</h3> 
+                                            <h3 class="content-color-primary mb-3 mt-2"><?= $data['datakelas']['all']; ?></h3> 
                                         </div>
                                         <div class="col-sm d-flex flex-column align-items-center">
-                                            <h4 class="content-color-primary mt-2">2</h4> 
+                                            <h4 class="content-color-primary mt-2"><?= $data['datakelas']['tk']; ?></h4> 
                                             <h6 class="text-muted">TK</h6>
                                         </div>
                                         <div class="col-sm d-flex flex-column align-items-center">
-                                            <h4 class="content-color-primary mt-2">6</h4> 
+                                            <h4 class="content-color-primary mt-2"><?= $data['datakelas']['sd']; ?></h4> 
                                             <h6 class="text-muted">SD</h6>
                                         </div>
                                         <div class="col-sm d-flex flex-column align-items-center">
-                                            <h4 class="content-color-primary mt-2">9</h4> 
+                                            <h4 class="content-color-primary mt-2"><?= $data['datakelas']['smp']; ?></h4> 
                                             <h6 class="text-muted">SMP</h6>
                                         </div>
                                         <div class="col-sm d-flex flex-column align-items-center">
-                                            <h4 class="content-color-primary mt-2">1</h4> 
+                                            <h4 class="content-color-primary mt-2"><?= $data['datakelas']['ponpes']; ?></h4> 
                                             <h6 class="text-muted">Ponpes</h6>
                                         </div>
                                     </div>

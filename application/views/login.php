@@ -18,7 +18,7 @@
     <link id="theme" rel="stylesheet" href="<?= base_url();?>/assets/css/purplesidebar.css" type="text/css">
 </head>
 <?php
-if($this->session->userdata('id')) {
+if($this->session->userdata('kode_petugas')) {
     redirect('/');
 }
 ?>

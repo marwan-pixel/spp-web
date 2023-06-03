@@ -11,11 +11,11 @@
                         </div>
                         <div class="form-group ml-3 mr-3" >
                             <label for="exampleInputUsername1">ID</label>
-                            <input type="text" class="form-control" disabled value="<?= $name; ?>" id="exampleInputUsername1" aria-describedby="emailHelp" >
+                            <input type="text" class="form-control" disabled value="<?= $kode; ?>" id="exampleInputUsername1" aria-describedby="emailHelp" >
                         </div>
                             <div class="form-group ml-3 mr-3" >
                             <label for="exampleInputUsername1">Nama Administrator</label>
-                            <input type="text" class="form-control" disabled value="<?= $info; ?>" id="exampleInputUsername1" aria-describedby="emailHelp" >
+                            <input type="text" class="form-control" disabled value="<?= $name; ?>" id="exampleInputUsername1" aria-describedby="emailHelp" >
                         </div>
 
                     </form>
@@ -33,10 +33,10 @@
                                 </div>
                                 <div class="modal-body">
                                 <form method="post" action="<?= base_url('Admin/ubahDataAdmin');?>">
-                                    <input hidden type="text" class="form-control" name="kode_petugas" value="<?= $name; ?>" id="exampleInputUsername1" aria-describedby="emailHelp" >
+                                    <input hidden type="text" class="form-control" name="kode_petugas" value="<?= $kode; ?>" id="exampleInputUsername1" aria-describedby="emailHelp" >
                                     <div class="form-group">
                                         <label for="nama">Nama Administrator</label>
-                                        <input type="text" value="<?= $info; ?>" class="form-control" name="nama" id="nama" aria-describedby="nama">
+                                        <input type="text" value="<?= $name; ?>" class="form-control" name="nama" id="nama" aria-describedby="nama">
                                         <small class="text-danger" id="nama-errorUpdate"></small>
                                     </div>
                                     <div class="mb-2 d-flex">
@@ -54,6 +54,7 @@
                                             <small class="text-danger" id="confPassword-errorUpdate"></small>
                                         </div>
                                     </div>
+                                    <small class="text-danger" id="update-errorUpdate"></small>
                                     <div class="modal-footer">
                                         <a class="text-light btn btn-secondary" data-dismiss="modal">Close</a>
                                         <button type="submit" class="btn btn-primary">Simpan</button>

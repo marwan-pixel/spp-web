@@ -2,10 +2,10 @@
     </div>
     <footer class="sticky-footer bg-white border-top">
         <div class="row">
-            <div class="container my-1 main-container">
-                <div class="col d-flex align-items-center justify-content-center">
-                    <div class="copyright my-auto"><span>Copyright &copy Tumpas Jaya</p> </div>
-                </div>
+            <div class="container my-3 main-container">
+                    <div class="copyright text-center my-auto">
+                        <span>Copyright &copy Tumpas Jaya</span> 
+                    </div>
             </div>
         </div>
     </footer>

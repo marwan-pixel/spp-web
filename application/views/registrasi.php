@@ -17,7 +17,11 @@
     <link rel="stylesheet" href="<?= base_url();?>/assets/vendor/animatecss/animate.css">
     <link id="theme" rel="stylesheet" href="<?= base_url();?>/assets/css/purplesidebar.css" type="text/css">
 </head>
-
+<?php 
+if($this->session->userdata('kode_petugas')) {
+    redirect('/');
+}
+?>
 <body class="fixed-header" style="display:flex; align-items:center;background: #22B07D">
     <div class="container">
         <div class="card mx-auto col-lg-5">

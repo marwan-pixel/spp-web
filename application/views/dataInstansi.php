@@ -19,29 +19,12 @@
                                 </button>
                             </div>
                             <div class="modal-body">
-                                <form method="post" action="<?= site_url('Admin/tambahDataBiaya'); ?>">                               
+                                <form method="post" action="<?= site_url('Admin/tambahDataInstansi'); ?>">                               
                                     <div class="form-group">
-                                        <label for="jenis_pembayaran">Jenis Biaya</label>
-                                        <input type="text" name="jenis_pembayaran" class="form-control" id="jenis_pembayaran" aria-describedby="jenis_pembayaran">
-                                        <small class="text-danger" id="jenis_pembayaran-error"></small>                                                                                    
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="biaya">Biaya</label>
-                                        <input type="number" name="biaya" class="form-control" id="biaya" aria-describedby="biaya">
-                                        <small class="text-danger" id="biaya-error"></small>                                                                     
-                                    </div>
-                                    <div class="form-group">
-                                    <label for="InputKelas">Instansi</label>
-                                        <select class="form-control" name="instansi" id="instansi">
-                                        <?php 
-                                        foreach ($data['dataInstansi'] as $value) {
-                                            ?>
-                                             <option value="<?=$value['instansi'];?>"><?=$value['instansi'];?></option>
-                                            <?php
-                                        }
-                                        ?>
-                                        </select>
-                                    </div>   
+                                        <label for="instansi">Instansi</label>
+                                        <input type="text" name="instansi" class="form-control" id="instansi" aria-describedby="instansi">
+                                        <small class="text-danger" id="instansi-error"></small>                                                                                    
+                                    </div>                            
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-dismiss="modal" >Keluar</button>
                                         <button type="submit" class="btn btn-primary">Simpan</button>
@@ -52,41 +35,23 @@
                     </div>
                 </div>
                 <!-- Modal Update -->
-                <div class="modal fade" id="updateBiaya" tabindex="-1" aria-labelledby="updateBiayaLabel" aria-hidden="true">
+                <div class="modal fade" id="updateInstansi" tabindex="-1" aria-labelledby="updateInstansiLabel" aria-hidden="true">
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h4 class="modal-title" id="updateBiayaLabel">Data Biaya</h4>
+                                <h4 class="modal-title" id="updateInstansiLabel">Data Instansi</h4>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
                             <div class="modal-body">
-                                <form method="post" action="<?= base_url('Admin/ubahDataBiaya')?>">
-                                    <input hidden type="text" name="id_jenis_pembayaran"  class="form-control" id="id_jenis_pembayaran" aria-describedby="id_jenis_pembayaran">
+                                <form method="post" action="<?= base_url('Admin/ubahDataInstansi')?>">
+                                    <input hidden type="text" name="instansi"  class="form-control" id="instansi" aria-describedby="instansi">
                                     <div class="form-group">
-                                        <label for="jenis_pembayaran">Jenis Biaya</label>
-                                        <input type="text" name="jenis_pembayaran" class="form-control" id="jenis_pembayaran" aria-describedby="jenis_pembayaran">
-                                        <small class="text-danger" id="jenis_pembayaran-errorUpdate"></small> 
+                                        <label for="instansinew">Instansi</label>
+                                        <input type="text" name="instansinew" class="form-control" id="instansinew" aria-describedby="instansinew">
+                                        <small class="text-danger" id="instansinew-errorUpdate"></small> 
                                     </div>
-                                    <div class="form-group">
-                                        <label for="biaya">Biaya</label>
-                                        <input type="number" name="biaya" class="form-control" id="biaya" aria-describedby="biaya">
-                                        <small class="text-danger" id="biaya-errorUpdate"></small> 
-                                    </div>  
-                                    <div class="form-group">
-                                    <label for="InputKelas">Instansi</label>
-                                        <select class="form-control instansi" name="instansi" id="instansi">
-                                        <?php 
-                                        foreach ($data['dataInstansi'] as $value) {
-                                            ?>
-                                             <option value="<?=$value['instansi'];?>"><?=$value['instansi'];?></option>
-                                            <?php
-                                        }
-                                        ?>
-                                        </select>
-                                        <small class="text-danger" id="instansi-errorUpdate"></small> 
-                                    </div>                                  
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Keluar</button>
                                         <button type="submit" class="btn btn-primary">Ubah</button>
@@ -118,31 +83,25 @@
                                                 <thead>
                                                     <tr>
                                                         <th><center>No</center></th>
-                                                        <th><center>Jenis Biaya</center> </th>
-                                                        <th><center>Biaya</center></th>
-                                                        <th><center>Instansi</center></th>                                                        
+                                                        <th><center>Instansi</center> </th>
                                                         <th><center>Aksi</center></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
                                                     <?php
                                                     $no = 1; 
-                                                    foreach ($data['dataBiaya'] as $value) {
+                                                    foreach ($data['dataInstansi'] as $value) {
                                                     ?>
                                                     <tr class="odd">
                                                         <td><center><?= $no++; ?></center></td>
-                                                        <td><center><?= $value['jenis_pembayaran']; ?></center></td>
-                                                        <td><center><?= "Rp" . number_format($value['biaya'],2,',','.'); ?></center></td>
                                                         <td><center><?= $value['instansi']; ?></center></td>
                                                         <td>
                                                             <center>
                                                             <a href="javascript:;" 
-                                                                data-id_jenis_pembayaran="<?= $value['id_jenis_pembayaran']; ?>"                                                            
-                                                                data-jenis_pembayaran="<?= $value['jenis_pembayaran']; ?>"
-                                                                data-biaya="<?= $value['biaya']; ?>"
-                                                                data-instansi="<?= $value['instansi']; ?>"                                                                
+                                                                data-instansi="<?= $value['instansi']; ?>"
+                                                                data-instansinew="<?= $value['instansi']; ?>"
                                                                 class="btn btn-warning btn-sm updateData" data-toggle="modal"
-                                                                data-target="#updateBiaya">Ubah</a>
+                                                                data-target="#updateInstansi">Ubah</a>
                                                             </center>
                                                        </td>    
                                                     </tr>
@@ -155,16 +114,14 @@
                                 </div>
                             </div>
                             <!-- /.table-responsive -->
-                             <?= $this->pagination->create_links();?>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
         <!-- content page ends -->
-      <script src="<?= base_url();?>/assets/js/jquery-3.2.1.min.js"></script>
-        <script>
-            
+        <script src="<?= base_url();?>/assets/js/jquery-3.2.1.min.js"></script>
+        <script>  
             $(document).ready(function() {
                 //Modal Config Input Data Kelas
                 $('#exampleModal').on('hide.bs.modal', function(event) {
@@ -175,8 +132,7 @@
                     event.preventDefault();
     
                     var form = $(this);
-                    var jenis_pembayaran = form.find('input[name="jenis_pembayaran"]').val();                  
-                    var biaya = form.find('input[name="biaya"]').val();
+                    var instansi = form.find('input[name="instansi"]').val();
     
                     $.ajax({
                         url: form.attr('action'),
@@ -204,33 +160,28 @@
 
                 //Modal Config Get Selected Data Kelas
                 // Untuk sunting
-                $('#updateBiaya').on('show.bs.modal', function (event) {
+                $('#updateInstansi').on('show.bs.modal', function (event) {
                     var div = $(event.relatedTarget) // Tombol dimana modal di tampilkan
                     var modal = $(this)
 
                         // Isi nilai pada field
-                    modal.find(`#id_jenis_pembayaran`).attr("value",div.data(`id_jenis_pembayaran`));
-                    modal.find(`#jenis_pembayaran`).attr("value",div.data(`jenis_pembayaran`));
-                    modal.find('#biaya').attr("value",div.data(`biaya`));
-                    modal.find('#instansi').val(div.data(`instansi`));
+                    modal.find(`#instansi`).attr("value",div.data(`instansi`));
+                    modal.find(`#instansinew`).attr("value",div.data(`instansinew`));
                 });
 
                 //Modal Config Update Data Kelas
-                $('#updateBiaya').on('hide.bs.modal', function(event) {
+                $('#updateInstansi').on('hide.bs.modal', function(event) {
                     $(this).find('.text-danger');
                 });
     
-                $('#updateBiaya').on('submit', 'form' , function (event) {
+                $('#updateInstansi').on('submit', 'form' , function (event) {
                     event.preventDefault();
     
                     var form = $(this);
-                    var nipd = form.find('input[name="nipd"]').val();
-                    var nama = form.find('input[name="nama"]').val();
-                    var kelas = form.find('input[name="kelas"]').val();
-                    var biaya = form.find('input[name="biaya"]').val();
-                    var ket_biaya = form.find('input[name="ket_biaya"]').val();
-
-    
+                    var instansi = form.find('input[name="instansi"]').val();
+                    var instansinew = form.find('input[name="instansinew"]').val();
+                    
+                    
                     $.ajax({
                         url: form.attr('action'),
                         method: form.attr('method'),
@@ -239,10 +190,9 @@
                         success: function (response) {
                             if(response.success) {
                                 window.location.href = response.redirect;
-                                $('#updateBiaya').modal('hide');
+                                $('#updateInstansi').modal('hide');
                             } else {                           
                                 var errors = response.errors;
-                                console.log(errors);
                                 $.each(errors, function (field, message) {
                                     let errorElement = $('#' + field + '-errorUpdate');
                                     errorElement.html(message);
@@ -256,3 +206,4 @@
                 })
             })   
         </script>
+      

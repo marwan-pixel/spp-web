@@ -26,7 +26,8 @@ class Pages extends User {
 		parent::__construct();
 		$this->load->library('pagination');
 
-		$this->_userdata = $this->session->userdata('id');
+		$this->db->select('nama_petugas');
+		$this->_userdata =  $this->db->get_where('admin', ['kode_petugas' => $this->session->userdata('kode_petugas')])->row_array();
 	}
 
 	public function render(string $view, $model)
@@ -38,46 +39,53 @@ class Pages extends User {
 
 	public function home()
 	{
-		$this->render('home', ["title" => "Dashboard", 'name' => $this->_userdata['kode_petugas']]);
+		$this->setData(
+			array(
+				'datasiswa' => array( 
+					'all' => $this->model->countAllData('siswa'),
+					'tk' => $this->model->countAllData('siswa', 'kelas', 'tk'),
+					'sd' => $this->db->select('kelas')->from('siswa')->where("kelas REGEXP '[0-6]'")->get()->num_rows(),
+					'smp' => $this->db->select('kelas')->from('siswa')->where("kelas REGEXP '[7-9][A-B]'")->get()->num_rows(),
+					'ponpes' => $this->model->countAllData('siswa', 'kelas', 'c')
+				),
+				'datakelas' => array(
+					'all' => $this->model->countAllData('kelas'),
+					'tk' => $this->model->countAllData('kelas', 'instansi', 'tk'),
+					'sd' => $this->model->countAllData('kelas', 'instansi', 'sd'),
+					'smp' => $this->model->countAllData('kelas', 'instansi', 'smp'),
+					'ponpes' => $this->model->countAllData('kelas', 'instansi', 'ponpes')	
+				)
+			)
+		);
+		$this->render('home', ["title" => "Dashboard", 'name' => $this->_userdata['nama_petugas'], 'data' => $this->getData()]);
 	}
 
 	public function datasiswa()
 	{
+		if(($this->input->post('keyword'))){
+			$keyword = array('nama_siswa', $this->input->post('keyword'));
+			$this->db->like($keyword[0], $keyword[1]);
+			$this->session->set_userdata('keyword', $keyword[1]);
+		} else {
+			$keyword = $this->session->userdata('keyword');
+		}
+		
 		$this->setData(
 			array(
 				'base_url' => 'http://localhost:8080/spp-web/pages/datasiswa/',
-				'total_rows' => $this->model->countAllData('siswa'),
+				'total_rows' => $this->db->from('siswa')->count_all_results(),
 				'per_page' => 10,
-				'full_tag_open' => '<nav> <ul class="pagination">',
-				'full_tag_close' => '</ul></nav>',
-				'first_link' => 'First',
-				'first_tag_open' => '<li class="page-item">',
-				'first_tag_close' => '</li>',
-				'last_link' => 'Last',
-				'last_tag_open' => '<li class="page-item">',
-				'last_tag_close' => '</li>',
-				'next_link' => '&raquo',
-				'next_tag_open' => '<li class="page-item">',
-				'next_tag_close' => '</li>',
-				'prev_link' => '&laquo',
-				'prev_tag_open' => '<li class="page-item">',
-				'prev_tag_close' => '</li>',
-				'cur_tag_open' => '<li class="page-item active"><a class="page-link" href="#">',
-				'cur_tag_close' => '</a></li>',
-				'num_tag_open' => '<li class="page-item">',
-				'num_tag_close' => '</li>',
-				'attributes' => array('class' => 'page-link')
 			)
 		);
-
 		$start = $this->uri->segment(3);
-		
+
 		$this->pagination->initialize($this->getData());
-		$dataSiswa = $this->model->getDataModel('siswa', ['nipd', 'nama_siswa', 'kelas', 'biaya', 'ket_biaya'], null, $this->getData()['per_page'], $start);
-		$dataKelas = $this->model->getDataModel('kelas', ['kelas']);	
-        $this->render('datasiswa', ['title' => 'Data Siswa', 'name' => $this->_userdata['kode_petugas'], 
+		$dataSiswa = $this->model->getDataModel('siswa', ['nipd', 'nama_siswa', 'kelas', 'potongan'], null, $this->getData()['per_page'], $start, $keyword);
+		$dataKelas = $this->model->getDataModel('kelas', ['kelas']);
+        $this->render('datasiswa', ['title' => 'Data Siswa', 'name' => $this->_userdata['nama_petugas'], 
 		'data' => array('dataSiswa' => $dataSiswa, 'dataKelas' => $dataKelas), 'start' => $start]);
 	}
+
 	public function datakelas()
 	{
 		$this->setData(
@@ -85,54 +93,89 @@ class Pages extends User {
 				'base_url' => 'http://localhost:8080/spp-web/pages/datakelas/',
 				'total_rows' => $this->model->countAllData('kelas'),
 				'per_page' => 10,
-				'full_tag_open' => '<nav> <ul class="pagination">',
-				'full_tag_close' => '</ul></nav>',
-				'first_link' => 'First',
-				'first_tag_open' => '<li class="page-item">',
-				'first_tag_close' => '</li>',
-				'last_link' => 'Last',
-				'last_tag_open' => '<li class="page-item">',
-				'last_tag_close' => '</li>',
-				'next_link' => '&raquo',
-				'next_tag_open' => '<li class="page-item">',
-				'next_tag_close' => '</li>',
-				'prev_link' => '&laquo',
-				'prev_tag_open' => '<li class="page-item">',
-				'prev_tag_close' => '</li>',
-				'cur_tag_open' => '<li class="page-item active"><a class="page-link" href="#">',
-				'cur_tag_close' => '</a></li>',
-				'num_tag_open' => '<li class="page-item">',
-				'num_tag_close' => '</li>',
-				'attributes' => array('class' => 'page-link')
+				
 			)
 		);
 
 		$start = $this->uri->segment(3);
 		$this->pagination->initialize($this->getData());
 
+		$dataInstansi = $this->model->getDataModel('instansi', ['instansi']);
 		$dataKelas = $this->model->getDataModel('kelas', ['kelas', 'instansi'], null, $this->getData()['per_page'], $start);
-        $this->render('datakelas', ['title' => 'Data Kelas', 'name' => $this->_userdata['kode_petugas'], 
-		'data' => array('dataKelas' => $dataKelas),'start' => $start]);
+        $this->render('datakelas', ['title' => 'Data Kelas', 'name' => $this->_userdata['nama_petugas'], 
+		'data' => array('dataKelas' => $dataKelas, 'dataInstansi' => $dataInstansi),'start' => $start]);
 	}
+
 	public function databiaya()
 	{
-		$dataAdmin = $this->model->getDataModel('biaya', ['instansi', 'biaya']);
+		$this->setData(
+			array(
+				'base_url' => 'http://localhost:8080/spp-web/pages/databiaya/',
+				'total_rows' => $this->model->countAllData('jenis_pembayaran'),
+				'per_page' => 10,
+				
+			)
+		);
+		
+		$start = $this->uri->segment(3);
+		$this->pagination->initialize($this->getData());
+		$dataInstansi = $this->model->getDataModel('instansi', ['instansi']);
+		$dataBiaya = $this->model->getDataModel('jenis_pembayaran', ['id_jenis_pembayaran','jenis_pembayaran', 'biaya', 'instansi'], null, $this->getData()['per_page'], $start);
 		try {
-			$this->render('databiaya', ['title' => 'Data Biaya', 'name' => $this->_userdata['kode_petugas'], 'data' => $dataAdmin]);
+			$this->render('databiaya', ['title' => 'Data Biaya', 'name' => $this->_userdata['nama_petugas'], 'data' => array('dataBiaya' => $dataBiaya, 'dataInstansi' => $dataInstansi)]);
 			
 		} catch (Exception $e){
 			$e->getMessage();
 		}
 	}
-	public function dataadmin()
+
+	public function datainstansi()
 	{
-		$dataAdmin = $this->model->getDataModel('admin', ['kode_petugas', 'nama_petugas'], $this->_userdata);
+		$this->setData(
+			array(
+				'base_url' => 'http://localhost:8080/spp-web/pages/datainstansi/',
+				'total_rows' => $this->model->countAllData('instansi'),
+				'per_page' => 10,
+				
+			)
+		);
+
+		$start = $this->uri->segment(3);
+		$this->pagination->initialize($this->getData());
+		$dataInstansi = $this->model->getDataModel('instansi', ['instansi'], null, $this->getData()['per_page'], $start);
 		try {
-			$this->render('dataadmin', ['title' => 'Data Admin', 'name' => $this->_userdata['kode_petugas'], 'info' => $dataAdmin['nama_petugas']]);
+			$this->render('datainstansi', ['title' => 'Data Biaya', 'name' => $this->_userdata['nama_petugas'], 'data' => array('dataInstansi' => $dataInstansi)]);
+			
 		} catch (Exception $e){
 			$e->getMessage();
 		}
 	}
+
+	public function dataadmin()
+	{
+		$dataAdmin = $this->model->getDataModel('admin', ['kode_petugas', 'nama_petugas'], ['kode_petugas' => $this->session->userdata('kode_petugas')]);
+		try {
+			$this->render('dataadmin', ['title' => 'Data Admin', 'name' => $this->_userdata['nama_petugas'], 'kode' => $dataAdmin['kode_petugas']]);
+		} catch (Exception $e){
+			$e->getMessage();
+		}
+	}
+	public function datalaporan()
+	{
+		$this->setData(
+			array(
+				'base_url' => 'http://localhost:8080/spp-web/pages/datatransaksi/',
+				'total_rows' => $this->model->countAllData('transactions'),
+				'per_page' => 10,
+			)
+		);
+		
+		$start = $this->uri->segment(3);
+		$this->pagination->initialize($this->getData());
+		$dataTransaksi = $this->model->getDataModel('transactions', ['*'], null, $this->getData()['per_page'], $start);
+        $this->render('datatransaksi', ['title' => 'Data Transaksi', 'name' => $this->_userdata['nama_petugas'], 'data' => $dataTransaksi, 'start' => $start]);
+	}
+
 	public function datatransaksi()
 	{
 		$this->setData(
@@ -140,32 +183,30 @@ class Pages extends User {
 				'base_url' => 'http://localhost:8080/spp-web/pages/datatransaksi/',
 				'total_rows' => $this->model->countAllData('transactions'),
 				'per_page' => 10,
-				'full_tag_open' => '<nav> <ul class="pagination">',
-				'full_tag_close' => '</ul></nav>',
-				'first_link' => 'First',
-				'first_tag_open' => '<li class="page-item">',
-				'first_tag_close' => '</li>',
-				'last_link' => 'Last',
-				'last_tag_open' => '<li class="page-item">',
-				'last_tag_close' => '</li>',
-				'next_link' => '&raquo',
-				'next_tag_open' => '<li class="page-item">',
-				'next_tag_close' => '</li>',
-				'prev_link' => '&laquo',
-				'prev_tag_open' => '<li class="page-item">',
-				'prev_tag_close' => '</li>',
-				'cur_tag_open' => '<li class="page-item active"><a class="page-link" href="#">',
-				'cur_tag_close' => '</a></li>',
-				'num_tag_open' => '<li class="page-item">',
-				'num_tag_close' => '</li>',
-				'attributes' => array('class' => 'page-link')
 			)
 		);
-		
+		$searchInput = $this->input->post('keyword');
+		$dataSiswa = null;
+		// Check if search input is empty
+		if (empty($searchInput)) {
+			// Clear the search message from session or storage
+			$this->session->unset_userdata('search_message');
+		} else {
+
+			$keyword = $searchInput;
+			$dataSiswa = $this->model->getDataJoinModel('siswa', 'kelas' ,"*", ["kelas", "nipd"], $keyword);
+			// echo var_dump($dataSiswa);
+			// die();
+			if(is_null($dataSiswa)){
+				$this->session->set_userdata('search_message', 'Data tidak ditemukan!');
+			}
+		}
 		$start = $this->uri->segment(3);
 		$this->pagination->initialize($this->getData());
 		$dataTransaksi = $this->model->getDataModel('transactions', ['*'], null, $this->getData()['per_page'], $start);
-        $this->render('datatransaksi', ['title' => 'Data Transaksi', 'name' => $this->_userdata['kode_petugas'], 'data' => $dataTransaksi, 'start' => $start]);
+        $this->render('datatransaksi', ['title' => 'Data Transaksi', 'name' => $this->_userdata['nama_petugas'], 
+			'data' => array('dataTransaksi' => $dataTransaksi, 'dataSiswa' => $dataSiswa), 'start' => $start]);
+	
 	}
 }
 

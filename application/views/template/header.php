@@ -31,7 +31,7 @@
    </head>
    <body class="fixed-header sidebar-right-close">
    <?php
-    if(!$this->session->userdata('id')) {
+    if(!$this->session->userdata('kode_petugas')) {
         redirect('login');
     }
    ?>
@@ -123,22 +123,27 @@
                <li class="nav-item">
                   <a href="javascript:void(0);" class="nav-link dropdwown-toggle"> <i class="material-icons icon">folder</i> <span>Master Data</span><i class="material-icons icon arrow">expand_more</i></a>
                   <ul class="nav flex-column">
-                     <!-- <li class="nav-item">
-                        <a href="<?= base_url('pages'); ?>" class="nav-link success-gradient-active"><i class="material-icons icon">monetization_on</i> <span>Data Biaya</span> </a>
-                     </li> -->
+                     <li class="nav-item">
+                        <a href="<?= base_url(''); ?>pages/datainstansi" class="nav-link success-gradient-active"><i class="material-icons icon">monetization_on</i> <span>Data Instansi</span> </a>
+                     </li>
                      <li class="nav-item">
                         <a href="<?= base_url(''); ?>pages/datakelas" class="nav-link success-gradient-active"><i class="material-icons icon">group</i> <span>Data Kelas</span> </a>
                      </li>
                      <li class="nav-item">
                         <a href="<?= base_url(''); ?>pages/datasiswa" class="nav-link success-gradient-active"><i class="material-icons icon">person</i> <span>Data Siswa</span></a>
                      </li>
-                     <!-- <li class="nav-item">
-                        <a href="" class="nav-link success-gradient-active"><i class="material-icons icon">person_pin</i> <span>Data Administrator</span> </a>
-                     </li> -->
                   </ul>
                </li>
                <li class="nav-item">
-                  <a href="<?= base_url('pages/datatransaksi'); ?>" class="nav-link dropdwown-toggle "> <i class="material-icons icon">folder</i> <span>Transaksi</span></a>
+                  <a href="javascript:void(0);" class="nav-link dropdwown-toggle"> <i class="material-icons icon">folder</i> <span>Transaksi</span><i class="material-icons icon arrow">expand_more</i></a>                  
+                  <ul class="nav flex-column">
+                     <li class="nav-item">
+                        <a href="<?= base_url('pages/databiaya'); ?>" class="nav-link success-gradient-active"><i class="material-icons icon">attach_money</i> <span>Data Biaya</span></a>
+                     </li>
+                     <li class="nav-item">
+                        <a href="<?= base_url('pages/datatransaksi'); ?>" class="nav-link success-gradient-active"><i class="material-icons icon">monetization_on</i> <span>Data Transaksi</span> </a>
+                     </li>                     
+                  </ul>
                </li>
             </ul>
          </div>

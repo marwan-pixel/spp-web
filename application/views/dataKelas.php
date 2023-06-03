@@ -26,8 +26,15 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="InputKelas">Instansi</label>
-                                    <input type="text" name="instansi" class="form-control" id="instansi" aria-describedby="InputNama">
-                                    <small id="instansi-error" class="text-danger"></small>
+                                    <select class="form-control" name="instansi" id="instansi">
+                                        <?php 
+                                        foreach ($data['dataInstansi'] as $value) {
+                                            ?>
+                                             <option value="<?=$value['instansi'];?>"><?=$value['instansi'];?></option>
+                                            <?php
+                                        }
+                                        ?>
+                                    </select>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -51,13 +58,23 @@
                             </div>
                             <div class="modal-body">
                             <form method="post" action="<?= site_url('Admin/ubahDataKelas') ;?>">
-                                <div hidden class="form-group">
-                                    <label for="kelas">Kelas</label>
-                                    <input type="text" class="form-control" name="kelas" id="kelas" aria-describedby="InputNama">
+                                <input hidden type="text" class="form-control" name="kelas" id="kelas" >
+                                <div class="form-group">
+                                    <label for="kelasnew">Kelas</label>
+                                    <input type="text" class="form-control kelasnew" name="kelasnew" id="kelasnew">
+                                    <small id="kelasnew-errorUpdate" class="text-danger"></small>
                                 </div>
                                 <div class="form-group">
                                     <label for="instansi">Instansi</label>
-                                    <input type="text" class="form-control" name="instansi" id="instansi" aria-describedby="InputNama">
+                                    <select class="form-control instansi" name="instansi" id="instansi">
+                                        <?php 
+                                        foreach ($data['dataInstansi'] as $value) {
+                                            ?>
+                                             <option value="<?=$value['instansi'];?>"><?=$value['instansi'];?></option>
+                                            <?php
+                                        }
+                                        ?>
+                                    </select>                                    
                                     <small id="instansi-errorUpdate" class="text-danger"></small>
                                 </div>
                                 <div class="modal-footer">
@@ -112,6 +129,7 @@
                                                                         <center>
                                                                         <a href="javascript:;" 
                                                                             data-kelas="<?= $value['kelas']; ?>"
+                                                                            data-kelasnew="<?= $value['kelas']; ?>"
                                                                             data-instansi="<?= $value['instansi']; ?>"
                                                                             class="btn btn-warning btn-sm" data-toggle="modal"
                                                                             data-target="#exampleModalUpdate">Ubah</a>
@@ -183,7 +201,8 @@
 
                         // Isi nilai pada field
                     modal.find(`#kelas`).attr("value",div.data(`kelas`));
-                    modal.find(`#instansi`).attr("value",div.data(`instansi`));
+                    modal.find(`#kelasnew`).attr("value",div.data(`kelasnew`));
+                    modal.find(`#instansi`).val(div.data(`instansi`));
                 });
 
                 //Modal Config Update Data Kelas
@@ -196,6 +215,7 @@
     
                     var form = $(this);
                     var kelas = form.find('input[name="kelas"]').val();
+                    var kelasnew = form.find('input[name="kelasnew"]').val();
                     var instansi = form.find('input[name="instansi"]').val();
     
                     $.ajax({

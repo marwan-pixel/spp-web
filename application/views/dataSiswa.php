@@ -17,7 +17,7 @@
                                 </button>
                             </div>
                             <div class="modal-body">
-                            <form method="post" action="<?=base_url('Admin/tambahDataSiswa');?>">
+                            <form method="post" action="<?=base_url('admin/tambahDataSiswa');?>">
                                 <div class="form-group">
                                     <label for="nipd">NIPD</label>
                                     <input value="<?= set_value('nipd');?>" type="number" name="nipd" class="form-control nipd" id="nipd" aria-describedby="InputNIS">
@@ -44,18 +44,12 @@
                                     <label for="password">Password</label>
                                     <input type="password" value="<?= set_value('password');?>" name="password" class="form-control" id="password" aria-describedby="InputNIS">
                                     <small class="text-danger" id="password-error"></small>
-                                </div>                               
-                                <div class="form-group" id="biaya">
-                                    <label for="biaya">Biaya</label>
-                                    <input type="number" value="<?= set_value('biaya');?>" class="form-control" name="biaya" id="biaya" aria-describedby="InputNIS">
-                                    <small class="text-danger" id="biaya-error"></small>
-
                                 </div>
-                                <div class="form-group" id="ket_biaya">
-                                    <label for="ket_biaya">Keterangan Biaya</label>
-                                    <textarea value="<?= set_value('ket_biaya');?>" class="form-control" name="ket_biaya" id="ket_biaya" aria-describedby="textareaNIS"></textarea>
-                                    <small class="text-danger" id="ket_biaya-error"></small>
-                                </div>
+                                <div class="form-group">
+                                    <label for="potongan">Potongan</label>
+                                    <input type="number" value="<?= set_value('potongan');?>" name="potongan" class="form-control" id="potongan" aria-describedby="InputNIS">
+                                    <small class="text-danger" id="potongan-error"></small>
+                                </div>                                                          
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Keluar</button>
                                     <button type="submit" class="btn btn-primary">Simpan</button>
@@ -96,16 +90,13 @@
                                         }
                                     ?>
                                     </select>
+                                    <small class="text-danger" id="kelas-errorUpdate"></small>
                                 </div>
+
                                  <div class="form-group">
-                                    <label for="biaya">Biaya</label>
-                                    <input type="number" class="form-control" name="biaya" id="biaya" aria-describedby="InputNIS">
-                                    <small class="text-danger" id="biaya-errorUpdate"></small>
-                                </div>
-                                <div class="form-group" id="ket_biaya">
-                                    <label for="ket_biaya">Keterangan Biaya</label>
-                                    <textarea class="form-control" name="ket_biaya" id="ket_biaya" aria-describedby="textareaNIS"></textarea>
-                                    <small class="text-danger" id="ket_biaya-errorUpdate"></small>
+                                    <label for="potongan">Potongan</label>
+                                    <input type="number" class="form-control" name="potongan" id="potongan" aria-describedby="InputNIS">
+                                    <small class="text-danger" id="potongan-errorUpdate"></small>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -118,18 +109,18 @@
                 </div>
                 <div class="col-sm-12 ">
                     <div class="card mb-4 fullscreen">
-                        <!-- <div class="card-header">
-                        </div> -->
                         <div class="card-body">
                             <div class="table-responsive">
                                 <div id="dataTable_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
                                     <div class="row">
                                         <div class="col-sm-12 mb-2 d-flex justify-content-between">
                                             <div id="dataTable_filter" class="dataTables_filter input-group col-sm-4">
-                                                <div class="input-group-prepend">
-                                                    <span class="input-group-text" id="inputGroup-sizing-default">NIS</span>
-                                                </div>
-                                                <input type="search" size="30" class="form-control form-control ml-2" placeholder="Masukkan NIS Siswa" aria-controls="dataTable">
+                                                <form action="<?= base_url('pages/datasiswa');?>" method="post" class="form-inline">
+                                                    <div class="form-group mb-2 ">
+                                                        <input type="number" size="30" class="form-control mr-2" id="cari" name="keyword" placeholder="Cari Nama Siswa" aria-controls="dataTable">
+                                                    </div>
+                                                    <button type="submit" class="btn btn-primary mb-2">Cari</button>
+                                                </form>
                                             </div>
                                             <div class="media">
                                                 <a href="javascript:void(0);" class="icon-circle icon-30 content-color-secondary fullscreenbtn form-control-sm">
@@ -148,8 +139,8 @@
                                                         <th><center>Nama Siswa</center></th>
                                                         <th><center>Kelas</center></th>
                                                         <th><center>Password</center></th>
-                                                        <th><center>Biaya</center></th>
-                                                        <th><center>Keterangan Biaya</center></th>
+                                                        <!-- <th><center>Instansi</center></th> -->
+                                                        <th><center>Potongan</center></th>
                                                         <th><center>Aksi</center></th>
                                                     </tr>
                                                 </thead>
@@ -170,16 +161,14 @@
                                                         <td><center><?= $value['nama_siswa'] ;?></center></td>
                                                         <td><center><?= $value['kelas'] ;?></center></td>
                                                         <td><center>****</center></td>
-                                                        <td><center>Rp<?= number_format($value['biaya'],2,',','.');?></center></td>
-                                                        <td><center><?= $value['ket_biaya'] ;?></center></td>
+                                                        <td><center><?= $value['potongan'] ;?></center></td>
                                                         <td>
                                                             <center>
                                                             <a href="javascript:;" 
                                                             data-nipd = "<?= $value['nipd'] ;?>"
                                                             data-nama = "<?= $value['nama_siswa'] ;?>"
                                                             data-kelas = "<?= $value['kelas'] ;?>"
-                                                            data-biaya = "<?= $value['biaya'] ;?>"
-                                                            data-ket_biaya = "<?= $value['ket_biaya'] ;?>"
+                                                            data-potongan = "<?= $value['potongan'] ;?>"
                                                             class="btn btn-warning btn-sm"  data-toggle="modal" data-target="#exampleModalUpdate"
                                                             >Ubah</a>
                                                             <!-- <button class="btn btn-danger btn-sm">Hapus</button> -->                                                           
@@ -222,9 +211,9 @@
                     var nipd = form.find('input[name="nipd"]').val();                  
                     var nama = form.find('input[name="nama"]').val();
                     var kelas = form.find('input[name="kelas"]').val();
+                    // var instansi = form.find('input[name="instansi"]').val();
                     var password = form.find('input[name="password"]').val();
-                    var biaya = form.find('input[name="biaya"]').val();
-                    var ket_biaya = form.find('input[name="ket_biaya"]').val();
+                    var potongan = form.find('input[name="potongan"]').val();
     
                     $.ajax({
                         url: form.attr('action'),
@@ -246,6 +235,8 @@
                         },
                         error: function (xhr, status, error) {
                             console.error(error);
+                            console.error(status);
+                            
                         }
                     })                
                 })
@@ -260,8 +251,8 @@
                     modal.find(`#nipd`).attr("value",div.data(`nipd`));
                     modal.find(`#nama`).attr("value",div.data(`nama`));                  
                     modal.find(`#kelas`).val(div.data(`kelas`));
-                    modal.find('#biaya').attr("value",div.data(`biaya`));
-                    modal.find(`#ket_biaya`).val(div.data(`ket_biaya`));
+                    // modal.find(`#instansi`).val(div.data(`instansi`));
+                    modal.find('#potongan').attr("value",div.data(`potongan`));
                 });
 
                 //Modal Config Update Data Kelas
@@ -276,8 +267,8 @@
                     var nipd = form.find('input[name="nipd"]').val();
                     var nama = form.find('input[name="nama"]').val();
                     var kelas = form.find('input[name="kelas"]').val();
-                    var biaya = form.find('input[name="biaya"]').val();
-                    var ket_biaya = form.find('input[name="ket_biaya"]').val();
+                    var potongan = form.find('input[name="potongan"]').val();
+                    // var ket_biaya = form.find('input[name="ket_biaya"]').val();
 
     
                     $.ajax({
@@ -291,7 +282,6 @@
                                 $('#exampleModalUpdate').modal('hide');
                             } else {                           
                                 var errors = response.errors;
-                                console.log(errors);
                                 $.each(errors, function (field, message) {
                                     let errorElement = $('#' + field + '-errorUpdate');
                                     errorElement.html(message);
