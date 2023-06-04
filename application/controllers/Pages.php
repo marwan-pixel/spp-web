@@ -74,6 +74,7 @@ class Pages extends User {
 			array(
 				'base_url' => 'http://localhost:8080/spp-web/pages/datasiswa/',
 				'total_rows' => $this->db->from('siswa')->count_all_results(),
+
 				'per_page' => 10,
 			)
 		);
@@ -83,6 +84,7 @@ class Pages extends User {
 		$dataSiswa = $this->model->getDataModel('siswa', ['nipd', 'nama_siswa', 'kelas', 'potongan'], null, $this->getData()['per_page'], $start, $keyword);
 		$dataKelas = $this->model->getDataModel('kelas', ['kelas']);
         $this->render('datasiswa', ['title' => 'Data Siswa', 'name' => $this->_userdata['nama_petugas'], 
+
 		'data' => array('dataSiswa' => $dataSiswa, 'dataKelas' => $dataKelas), 'start' => $start]);
 	}
 
@@ -90,7 +92,7 @@ class Pages extends User {
 	{
 		$this->setData(
 			array(
-				'base_url' => 'http://localhost:8080/spp-web/pages/datakelas/',
+				'base_url' => 'https://arrahman.site/spp-web/pages/datakelas/',
 				'total_rows' => $this->model->countAllData('kelas'),
 				'per_page' => 10,
 				
@@ -104,6 +106,7 @@ class Pages extends User {
 		$dataKelas = $this->model->getDataModel('kelas', ['kelas', 'instansi'], null, $this->getData()['per_page'], $start);
         $this->render('datakelas', ['title' => 'Data Kelas', 'name' => $this->_userdata['nama_petugas'], 
 		'data' => array('dataKelas' => $dataKelas, 'dataInstansi' => $dataInstansi),'start' => $start]);
+
 	}
 
 	public function databiaya()
@@ -156,24 +159,10 @@ class Pages extends User {
 		$dataAdmin = $this->model->getDataModel('admin', ['kode_petugas', 'nama_petugas'], ['kode_petugas' => $this->session->userdata('kode_petugas')]);
 		try {
 			$this->render('dataadmin', ['title' => 'Data Admin', 'name' => $this->_userdata['nama_petugas'], 'kode' => $dataAdmin['kode_petugas']]);
+
 		} catch (Exception $e){
 			$e->getMessage();
 		}
-	}
-	public function datalaporan()
-	{
-		$this->setData(
-			array(
-				'base_url' => 'http://localhost:8080/spp-web/pages/datatransaksi/',
-				'total_rows' => $this->model->countAllData('transactions'),
-				'per_page' => 10,
-			)
-		);
-		
-		$start = $this->uri->segment(3);
-		$this->pagination->initialize($this->getData());
-		$dataTransaksi = $this->model->getDataModel('transactions', ['*'], null, $this->getData()['per_page'], $start);
-        $this->render('datatransaksi', ['title' => 'Data Transaksi', 'name' => $this->_userdata['nama_petugas'], 'data' => $dataTransaksi, 'start' => $start]);
 	}
 
 	public function datatransaksi()
@@ -206,7 +195,6 @@ class Pages extends User {
 		$dataTransaksi = $this->model->getDataModel('transactions', ['*'], null, $this->getData()['per_page'], $start);
         $this->render('datatransaksi', ['title' => 'Data Transaksi', 'name' => $this->_userdata['nama_petugas'], 
 			'data' => array('dataTransaksi' => $dataTransaksi, 'dataSiswa' => $dataSiswa), 'start' => $start]);
-	
+
 	}
 }
-

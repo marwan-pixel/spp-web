@@ -501,7 +501,7 @@ class Admin extends User {
                 'table' => 'siswa',
                 'value' => 
                 array(
-                    'nipd' => htmlspecialchars($this->input->post('nipd')),
+                    'nis' => htmlspecialchars($this->input->post('nis')),
                     'nama_siswa' => htmlspecialchars($this->input->post('nama')),
                     'kelas' => htmlspecialchars($this->input->post('kelas')),
                     'password' => password_hash($this->input->post('password'), PASSWORD_BCRYPT),
@@ -510,12 +510,12 @@ class Admin extends User {
                 'config' =>
                 array(
                     array(
-                        'field' => 'nipd',
-                        'label' => 'NIPD',
-                        'rules' => 'required|trim|is_unique[siswa.nipd]',
+                        'field' => 'nis',
+                        'label' => 'nis',
+                        'rules' => 'required|trim|is_unique[siswa.nis]',
                         'errors' =>
                         [
-                            'required' => 'NIPD wajib diisi!',
+                            'required' => 'nis wajib diisi!',
                             'is_unique' => 'ID sudah tersedia!'
                         ]
                     ),
@@ -571,6 +571,7 @@ class Admin extends User {
         } else {
             $response['errors'] = array('nipd' => form_error('nipd'), 'nama' => form_error('nama'), 'kelas' => form_error('kelas'), 'password' => form_error('password'),
             );
+
         }
         header('Content-Type: application/json');
         echo json_encode($response);
@@ -581,7 +582,7 @@ class Admin extends User {
         $this->setData(
            array(
                'table' => 'siswa',
-               'where' =>  array('nipd', $this->input->post('nipd')),
+               'where' =>  array('nis', $this->input->post('nis')),
                'value' => 
                array(
                    'nama_siswa' => htmlspecialchars($this->input->post('nama')),
