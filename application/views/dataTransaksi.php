@@ -114,9 +114,35 @@
                                     <tr><td colspan="8"><center><h5>Data belum tersedia</h5></center></td></tr>
                                     <?php
                                     } else {
+                                       $no = 1;
                                        foreach ($data['dataTransaksi'] as $value) {
                                        ?>
+                                       <th>
+                                          <?= $no++; ?>
+                                       </th>
+                                       <th>
+                                          <?= $value['no_transaksi']; ?>
+                                       </th>
+                                       <th>
+                                           <?= $value['nipd']; ?>
+                                       </th>
+                                       <th>
+                                           <?= $value['nominal']; ?>
+                                       </th>
+                                       <th>
+                                           <?= $value['status']; ?>
+                                       </th>
+                                       <th>
+                                           <?= $value['bukti']; ?>
+                                       </th>
+                                       <th>
+                                           <?= $value['keterangan']; ?>
+                                       </th>
+                                       <th>
+                                           <?= $value['created_at']; ?>
+                                       </th>
                                        <?php
+                                       
                                        }
                                     }
                                     ?>
