@@ -48,7 +48,7 @@
                                        <td><?= $data['dataSiswa']['instansi'] ;?></td>
                                     </tr>
                                    <tr>
-                                       <td>potongan</td>
+                                       <td>Potongan</td>
                                        <td><?= $data['dataSiswa']['potongan'] ;?></td>
                                     </tr>                                    
                                  </tbody>
@@ -78,23 +78,17 @@
                            </div>                        
                            <div class="row mt-3">
                               <div class="col-sm-12 ">
-                                 <table class="table hidden-overflow " id="dataTables-example">
+                                 <table class="table hidden-overflow " id="table">
                                     <thead>
                                        <tr>
                                           <th>
                                              <center>No</center>
                                           </th>
                                           <th>
-                                             <center>Nomor Transaksi</center>
-                                          </th>
-                                          <th>
                                              <center>NIPD</center>
                                           </th>
                                           <th>
                                              <center>Nominal</center>
-                                          </th>
-                                          <th>
-                                             <center>Status</center>
                                           </th>
                                           <th>
                                              <center>Bukti</center>
@@ -105,23 +99,19 @@
                                           <th>
                                              <center>Tanggal bayar</center>
                                           </th>
+                                          <th>
+                                             <center>Status</center>
+                                          </th>
                                        </tr>
                                     </thead>
                                     <tbody>
                                     <?php
-                                    if(count($data['dataTransaksi']) == 0){
-                                       ?>
-                                    <tr><td colspan="8"><center><h5>Data belum tersedia</h5></center></td></tr>
-                                    <?php
-                                    } else {
+                                    if(count($data['dataTransaksi']) != 0){
                                        $no = 1;
                                        foreach ($data['dataTransaksi'] as $value) {
                                        ?>
                                        <th>
-                                          <?= $no++; ?>
-                                       </th>
-                                       <th>
-                                          <?= $value['no_transaksi']; ?>
+                                       <?= $no++; ?>
                                        </th>
                                        <th>
                                            <?= $value['nipd']; ?>
@@ -130,19 +120,19 @@
                                            <?= $value['nominal']; ?>
                                        </th>
                                        <th>
+                                          <?= $value['bukti']; ?>
+                                       </th>
+                                       <th>
+                                          <?= $value['keterangan']; ?>
+                                       </th>
+                                       <th>
+                                          <?= $value['created_at']; ?>
+                                       </th>
+                                       <th>
                                            <?= $value['status']; ?>
                                        </th>
-                                       <th>
-                                           <?= $value['bukti']; ?>
-                                       </th>
-                                       <th>
-                                           <?= $value['keterangan']; ?>
-                                       </th>
-                                       <th>
-                                           <?= $value['created_at']; ?>
-                                       </th>
-                                       <?php
-                                       
+                                       <h5>Data belum tersedia</h5>
+                                    <?php
                                        }
                                     }
                                     ?>

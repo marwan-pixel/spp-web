@@ -184,8 +184,6 @@ class Pages extends User {
 
 			$keyword = $searchInput;
 			$dataSiswa = $this->model->getDataJoinModel('siswa', 'kelas' ,"*", ["kelas", "nipd"], $keyword);
-			// echo var_dump($dataSiswa);
-			// die();
 			if(is_null($dataSiswa)){
 				$this->session->set_userdata('search_message', 'Data tidak ditemukan!');
 			}

@@ -11,7 +11,6 @@
     </footer>
 
     <!-- modal for create form ends-->
-
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="<?= base_url();?>/assets/js/jquery-3.2.1.min.js"></script>
@@ -59,50 +58,27 @@
     <script src="<?= base_url();?>/assets/js/dashboard.js"></script>
 
     <!-- page specific script -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/v/dt/jszip-2.5.0/dt-1.13.4/b-2.3.6/b-html5-2.3.6/datatables.min.js"></script>
     <script>
-        "use script";
-        $(window).on('load', function() {
-            var tour = new Tour({
-                steps: [{
-                    element: "#left-menu",
-                    title: "Main Menu",
-                    content: "Access the demo pages from sidebar",
-                    smartPlacement: true,
-                    storage:false
-                }, {
-                    element: "button[data-target='#createOrder']",
-                    title: "Creative Form",
-                    content: "See beautifully designed form in modal",
-                    smartPlacement: true,
-                    placement: "left",
-                    storage:false
-
-                }, {
-                    element: ".close-sidebar",
-                    title: "Customizaton Menu",
-                    content: "Customize your Layout style",
-                    smartPlacement: true,
-                    placement: "left",
-                    storage:false
-
-                }]
-
-            });
-
-            // Initialize the tour
-            tour.init();
-
-            // Start the tour
-            tour.start();
-        });
-        
-        $(document).ready(function() {
-            $('#dataTables-example').DataTable({
-                "order": [
-                    [3, "desc"]
-                ]
-            });
-        });
+        $('#table').DataTable({
+            dom: 'Bfrtip',
+            buttons: [ {
+                extend: 'excel',
+                text: 'Excel',
+                exportOptions: {
+                    modifier: {
+                        page: 'current'
+                    }
+                }
+            },
+            {
+                extend: 'pdf',
+                text: 'PDF',
+                pageSize: 'A4'
+            }]
+        })
     </script>
 </body>
 

@@ -8,6 +8,8 @@
       <link rel="apple-touch-icon" href="<?= base_url();?>/assets/img/favicon-apple.png">
       <link rel="icon" href="<?= base_url();?>/assets/img/Yayasan Ar-Rahmah.jpeg">
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+      <!-- <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.css" /> -->
+      <link href="https://cdn.datatables.net/v/dt/jszip-2.5.0/dt-1.13.4/b-2.3.6/b-html5-2.3.6/datatables.min.css" rel="stylesheet"/>
       <!-- Bootstrap CSS -->
       <!-- <link rel="stylesheet" href="assets/vendor/bootstrap-4.1.3/css/bootstrap.min.css"> -->
       <!-- Material design icons CSS -->
@@ -60,7 +62,7 @@
                               </div>
                               <a href="#" class="media success-gradient-active new">
                                  <figure class="avatar avatar-40">
-                                    <img src="assets/img/user3.png" alt="Generic placeholder image">
+                                    <img src="<?=base_url();?>assets/img/user3.png" alt="Generic placeholder image">
                                  </figure>
                                  <div class="media-body">
                                     <h5 class="my-0">Donald Costapor </h5>
