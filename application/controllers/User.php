@@ -32,7 +32,7 @@ class User extends CI_Controller {
 	}
 
     public function logout() {
-        $this->session->unset_userdata('id');
+        $this->session->unset_userdata('kode_petugas');
         redirect('login');
     }
 }

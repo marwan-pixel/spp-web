@@ -176,6 +176,9 @@ class Pages extends User {
 		);
 		$searchInput = $this->input->post('keyword');
 		$dataSiswa = null;
+		$dataTransaksi = null;
+		$start = $this->uri->segment(3);
+		$this->pagination->initialize($this->getData());
 		// Check if search input is empty
 		if (empty($searchInput)) {
 			// Clear the search message from session or storage
@@ -184,15 +187,15 @@ class Pages extends User {
 
 			$keyword = $searchInput;
 			$dataSiswa = $this->model->getDataJoinModel('siswa', 'kelas' ,"*", ["kelas", "nipd"], $keyword);
+			$dataTransaksi = $this->model->getDataModel('transactions', 
+			['nipd', 'nominal', 'status', 'image', 'keterangan', 'created_at'], ['nipd' => $keyword], $this->getData()['per_page'], $start);
 			if(is_null($dataSiswa)){
 				$this->session->set_userdata('search_message', 'Data tidak ditemukan!');
 			}
 		}
-		$start = $this->uri->segment(3);
-		$this->pagination->initialize($this->getData());
-		$dataTransaksi = $this->model->getDataModel('transactions', ['*'], null, $this->getData()['per_page'], $start);
+	
         $this->render('datatransaksi', ['title' => 'Data Transaksi', 'name' => $this->_userdata['nama_petugas'], 
 			'data' => array('dataTransaksi' => $dataTransaksi, 'dataSiswa' => $dataSiswa), 'start' => $start]);
-
 	}
+
 }

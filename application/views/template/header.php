@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="en">
    <head>
@@ -8,10 +9,9 @@
       <link rel="apple-touch-icon" href="<?= base_url();?>/assets/img/favicon-apple.png">
       <link rel="icon" href="<?= base_url();?>/assets/img/Yayasan Ar-Rahmah.jpeg">
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-      <!-- <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.css" /> -->
-      <link href="https://cdn.datatables.net/v/dt/jszip-2.5.0/dt-1.13.4/b-2.3.6/b-html5-2.3.6/datatables.min.css" rel="stylesheet"/>
       <!-- Bootstrap CSS -->
-      <!-- <link rel="stylesheet" href="assets/vendor/bootstrap-4.1.3/css/bootstrap.min.css"> -->
+      <link rel="stylesheet" href="<?= base_url();?>/assets/vendor/bootstrap-4.1.3/js/bootstrap.min.js">
+      <link href="https://cdn.datatables.net/v/dt/jszip-2.5.0/dt-1.13.4/b-2.3.6/b-html5-2.3.6/datatables.min.css" rel="stylesheet"/>
       <!-- Material design icons CSS -->
       <link rel="stylesheet" href="<?= base_url();?>/assets/vendor/materializeicon/material-icons.css">
       <!-- animate CSS -->
@@ -155,8 +155,8 @@
             <div class="container-fluid bg-light-opac">
                <div class="row">
                   <div class="container-fluid my-3 main-container">
-                     <div class="row align-items-center">
-                        <div class="col d-flex justify-content-between">
+                     <div class="row">
+                        <div class="col">
                            <h2 class="content-color-success page-title"><?= $title;?></h2>
                         </div>
                      </div>

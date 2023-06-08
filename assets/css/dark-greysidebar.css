@@ -13778,6 +13778,7 @@ a.media:hover {
   left: 15px;
 }
 
+
 @media screen and (max-width: 992px) {
   .rtl .navbar-brand {
     direction: ltr;

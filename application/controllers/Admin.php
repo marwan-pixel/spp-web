@@ -22,7 +22,6 @@ class Admin extends User {
                 'selectedData' => array('kode_petugas', 'nama_petugas', 'password'),
                 'value' =>  array(
                             'kode_petugas' => htmlspecialchars($this->input->post('id')),
-                            'password' => $this->input->post('password')
                             ),
                 'config' => array(
                                 array(
@@ -56,7 +55,7 @@ class Admin extends User {
                                         </div>');
                 redirect('login');
             } else {
-                if(password_verify($data['value']['password'], $process['password'])){
+                if(password_verify($this->input->post('password'), $process['password'])){
                     $this->session->set_userdata('kode_petugas', $process['kode_petugas']);
                     redirect('/');
                 } else {
@@ -203,7 +202,7 @@ class Admin extends User {
          $this->setData(
             array(
                 'table' => 'jenis_pembayaran',
-                'where' =>  array('id_jenis_pembayaran', $this->input->post('id_jenis_pembayaran')),
+                'where' =>  array('id_jenis_pembayaran' => $this->input->post('id_jenis_pembayaran')),
                 'value' => 
                 array(
                     'jenis_pembayaran' => htmlspecialchars($this->input->post('jenis_pembayaran')),
@@ -335,7 +334,7 @@ class Admin extends User {
          $this->setData(
             array(
                 'table' => 'kelas',
-                'where' =>  array('kelas', $this->input->post('kelas')),
+                'where' =>  array('kelas' => $this->input->post('kelas')),
                 'value' => 
                 array(
                     'kelas' => htmlspecialchars($this->input->post('kelasnew')),
@@ -433,7 +432,7 @@ class Admin extends User {
                                         </div>");
             }
             $response['success'] = true;
-            $response['redirect'] = base_url('pages/datakelas');
+            $response['redirect'] = base_url('pages/datainstansi');
         } else {
             $response['errors'] = array( 'instansi' => form_error('instansi'));
         }
@@ -446,7 +445,7 @@ class Admin extends User {
         $this->setData(
             array(
                 'table' => 'instansi',
-                'where' =>  array('instansi', $this->input->post('instansi')),
+                'where' =>  array('instansi' => $this->input->post('instansi')),
                 'value' => 
                 array(
                     'instansi' => htmlspecialchars($this->input->post('instansinew'))
@@ -501,7 +500,7 @@ class Admin extends User {
                 'table' => 'siswa',
                 'value' => 
                 array(
-                    'nis' => htmlspecialchars($this->input->post('nis')),
+                    'nipd' => htmlspecialchars($this->input->post('nipd')),
                     'nama_siswa' => htmlspecialchars($this->input->post('nama')),
                     'kelas' => htmlspecialchars($this->input->post('kelas')),
                     'password' => password_hash($this->input->post('password'), PASSWORD_BCRYPT),
@@ -510,12 +509,12 @@ class Admin extends User {
                 'config' =>
                 array(
                     array(
-                        'field' => 'nis',
-                        'label' => 'nis',
-                        'rules' => 'required|trim|is_unique[siswa.nis]',
+                        'field' => 'nipd',
+                        'label' => 'nipd',
+                        'rules' => 'required|trim|is_unique[siswa.nipd]',
                         'errors' =>
                         [
-                            'required' => 'nis wajib diisi!',
+                            'required' => 'nipd wajib diisi!',
                             'is_unique' => 'ID sudah tersedia!'
                         ]
                     ),
@@ -582,7 +581,7 @@ class Admin extends User {
         $this->setData(
            array(
                'table' => 'siswa',
-               'where' =>  array('nis', $this->input->post('nis')),
+               'where' =>  array('nipd' => $this->input->post('nipd')),
                'value' => 
                array(
                    'nama_siswa' => htmlspecialchars($this->input->post('nama')),
@@ -648,7 +647,7 @@ class Admin extends User {
         $this->setData(
             array(
                 'table' => 'admin',
-                'where' =>  array('kode_petugas', $this->input->post('kode_petugas')),
+                'where' =>  array('kode_petugas' => $this->input->post('kode_petugas')),
                 'value' => 
                 array(
                     'nama_petugas' => htmlspecialchars($this->input->post('nama')),
@@ -701,9 +700,44 @@ class Admin extends User {
             } else {
                 $response['errors'] = array('nama' => form_error('nama'), 'password' => form_error('password'), 'confPassword' => form_error('confPassword'));
         }
-    header('Content-Type: application/json');
-    echo json_encode($response);
-    exit();
+        header('Content-Type: application/json');
+        echo json_encode($response);
+        exit();
+    }
+
+    public function cetakDataTransaksi(){
+        $this->setData(
+            array(
+                'table' => 'transactions',
+                'param' => array(
+                    'nipd' => $this->input->post('nipd'),
+                    'since' => $this->input->post('sincewhen'),
+                    'to' => $this->input->post('tillwhen')
+                ),
+            )
+        );
+        $data = $this->getData();
+        $response = $this->response;
+        if((empty($data['param']['since']) && !empty($data['param']['to'])) || (!empty($data['param']['since']) && empty($data['param']['to']))){
+            $response['errors'] = array('errormessage' => 'Tanggal harus diisi kedua - duanya!');
+        } else {
+            $process = $this->model->printDataModel($data['table'],['nipd', 'nominal', 'status', 'keterangan', 'created_at'], $data['param']);
+            // echo var_dump($process);
+            // die();
+            if(count($process) == 0){
+                $response['errors'] = array('errormessage' => 'Data transaksi kosong!');
+            } else {
+                $response['success'] = true;
+                $response['redirect'] = site_url('cetak?'. http_build_query($process));
+            }
+        }
+        header('Content-Type: application/json');
+        echo json_encode($response);
+        exit();
+    }
+
+    public function cetak(){
+        $this->load->view('cetak');
     }
 }
 ?>

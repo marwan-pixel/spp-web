@@ -19,9 +19,9 @@
                             <div class="modal-body">
                             <form method="post" action="<?=base_url('admin/tambahDataSiswa');?>">
                                 <div class="form-group">
-                                    <label for="nis">nis</label>
-                                    <input value="<?= set_value('nis');?>" type="number" name="nis" class="form-control nis" id="nis" aria-describedby="InputNIS">
-                                    <small class="text-danger" id="nis-error"></small>
+                                    <label for="nipd">NIPD</label>
+                                    <input value="<?= set_value('nipd');?>" type="number" name="nipd" class="form-control nipd" id="nipd" aria-describedby="InputNIS">
+                                    <small class="text-danger" id="nipd-error"></small>
                                 </div>
                                 <div class="form-group">
                                     <label for="nama">Nama Siswa</label>
@@ -72,7 +72,7 @@
                             <div class="modal-body">
                             <form method="post" action="<?= base_url('Admin/ubahDataSiswa');?>">
                                 <div hidden class="form-group">
-                                    <input type="text" class="form-control nis" name="nis" id="nis" aria-describedby="InputNama">
+                                    <input type="text" class="form-control nipd" name="nipd" id="nipd" aria-describedby="InputNama">
                                 </div>
                                  <div class="form-group">
                                     <label for="nama">Nama Siswa</label>
@@ -135,7 +135,7 @@
                                                 <thead>
                                                     <tr>
                                                         <th><center>No</center></th>
-                                                        <th><center>nis</center> </th>
+                                                        <th><center>NIPD</center> </th>
                                                         <th><center>Nama Siswa</center></th>
                                                         <th><center>Kelas</center></th>
                                                         <th><center>Password</center></th>
@@ -157,7 +157,7 @@
                                                     ?>
                                                     <tr class="odd">
                                                         <th><center><?= ++$start;?></center></th>
-                                                        <td><center><?= $value['nis'] ;?></center></td>
+                                                        <td><center><?= $value['nipd'] ;?></center></td>
                                                         <td><center><?= $value['nama_siswa'] ;?></center></td>
                                                         <td><center><?= $value['kelas'] ;?></center></td>
                                                         <td><center>****</center></td>
@@ -165,7 +165,7 @@
                                                         <td>
                                                             <center>
                                                             <a href="javascript:;" 
-                                                            data-nis = "<?= $value['nis'] ;?>"
+                                                            data-nipd = "<?= $value['nipd'] ;?>"
                                                             data-nama = "<?= $value['nama_siswa'] ;?>"
                                                             data-kelas = "<?= $value['kelas'] ;?>"
                                                             data-potongan = "<?= $value['potongan'] ;?>"
@@ -208,7 +208,7 @@
                     event.preventDefault();
     
                     var form = $(this);
-                    var nis = form.find('input[name="nis"]').val();                  
+                    var nipd = form.find('input[name="nipd"]').val();                  
                     var nama = form.find('input[name="nama"]').val();
                     var kelas = form.find('input[name="kelas"]').val();
                     // var instansi = form.find('input[name="instansi"]').val();
@@ -248,7 +248,7 @@
                     var modal = $(this)
 
                         // Isi nilai pada field
-                    modal.find(`#nis`).attr("value",div.data(`nis`));
+                    modal.find(`#nipd`).attr("value",div.data(`nipd`));
                     modal.find(`#nama`).attr("value",div.data(`nama`));                  
                     modal.find(`#kelas`).val(div.data(`kelas`));
                     // modal.find(`#instansi`).val(div.data(`instansi`));
@@ -264,7 +264,7 @@
                     event.preventDefault();
     
                     var form = $(this);
-                    var nis = form.find('input[name="nis"]').val();
+                    var nipd = form.find('input[name="nipd"]').val();
                     var nama = form.find('input[name="nama"]').val();
                     var kelas = form.find('input[name="kelas"]').val();
                     var potongan = form.find('input[name="potongan"]').val();

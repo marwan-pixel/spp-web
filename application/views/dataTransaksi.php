@@ -1,4 +1,5 @@
 <div class="container-fluid main-conteiner">
+   
    <div class="row">
       <div class="col-sm-12">
          <div class="card mt-4 fullscreen ">
@@ -110,30 +111,40 @@
                                        $no = 1;
                                        foreach ($data['dataTransaksi'] as $value) {
                                        ?>
-                                       <th>
-                                       <?= $no++; ?>
-                                       </th>
-                                       <th>
-                                           <?= $value['nipd']; ?>
-                                       </th>
-                                       <th>
-                                           <?= $value['nominal']; ?>
-                                       </th>
-                                       <th>
-                                          <?= $value['bukti']; ?>
-                                       </th>
-                                       <th>
-                                          <?= $value['keterangan']; ?>
-                                       </th>
-                                       <th>
-                                          <?= $value['created_at']; ?>
-                                       </th>
-                                       <th>
-                                           <?= $value['status']; ?>
-                                       </th>
-                                       <h5>Data belum tersedia</h5>
+                                       <tr>
+                                          <th>
+                                             <center><?= $no++; ?></center>
+                                          </th>
+                                          <th>
+                                             <center><?= $value['nipd']; ?></center>
+                                          </th>
+                                          <th>
+                                             <center><?= $value['nominal']; ?></center>
+                                          </th>
+                                          <th>
+                                             <center><?= $value['image']; ?></center>
+                                          </th>
+                                          <th>
+                                             <center><?= $value['keterangan']; ?></center>
+                                          </th>
+                                          <th>
+                                             <center><?= $value['created_at']; ?></center>
+                                          </th>
+                                          <th>
+                                             <center><?= $value['status']; ?></center>
+                                          </th>
+                                       </tr>
+                                       
                                     <?php
                                        }
+                                    } else {
+                                       ?>
+                                       <tr>
+                                          <th colspan="7">
+                                             <center><h5>Data Belum Tersedia</h5></center>
+                                          </th>
+                                       </tr>
+                                       <?php
                                     }
                                     ?>
                                     </tbody>
@@ -166,21 +177,23 @@
          <div class="card shadow mb-3 mt-3 fullscreen">
             <div class="card-header py-3">
                <h5>Cetak Rekap Seluruh Data Pembayaran</h5>
+               <div role="alert" id="errormessage"></div>
             </div>
-            <div class="card-body">
-               <form action="">
+            <div class="card-body" id="form">
+               <form action="<?= base_url('admin/cetakDataTransaksi'); ?>" method="post">
                   <div class="form-group row">
+                     <input hidden name="nipd" value="<?= $data['dataSiswa']['nipd'] ?? '' ;?>" type="text">
                      <div class="col-sm-2">
                         <p class="text-primary" for="InputKelas">Cetak Berdasarkan Tanggal (Opsional)</p>
                      </div>                     
                      <div class="col-sm-2 mb-2">
                         <div class="input-group">
-                           <input class="form-control" type="date" name="" id="">
+                           <input class="form-control" type="date" name="sincewhen" id="sincewhen">
                         </div>
                      </div>
                      <div class="col-sm-2">
                         <div class="input-group">
-                           <input class="form-control" type="date" name="" id="">
+                           <input class="form-control" type="date" name="tillwhen" id="tillwhen">
                         </div>
                      </div>
                   </div>
@@ -194,4 +207,41 @@
          </div>      
       </div>
    </div>
+        <script src="<?= base_url();?>/assets/js/jquery-3.2.1.min.js"></script>
+        <script>
+            
+            $(document).ready(function() {
+               $('#form').on('submit', 'form' , function (event) {
+                  event.preventDefault();
+    
+                  var form = $(this);
+                  var nipd = form.find('input[name="nipd"]').val();                  
+                  var from = form.find('input[name="since"]').val();
+                  var to = form.find('input[name="when"]').val();
+    
+                  $.ajax({
+                     url: form.attr('action'),
+                     method: form.attr('method'),
+                     data: form.serialize(),
+                     dataType: 'json' ,
+                     success: function (response) {
+                        if(response.success) {
+                           window.location.href = response.redirect;
+                           $('#errormessage').hide();
+                        } else {             
+                           var errors = response.errors;
+                           $.each(errors, function (field, message) {
+                              let errorElement = $('#' + field);
+                              errorElement.html(message).attr("class", "alert alert-danger");
+                           })
+                        }
+                     },
+                     error: function (xhr, status, error) {
+                         console.error(error);
+                         console.error(status);             
+                     }
+                  })                
+               })
+            })   
+        </script>
 </div>

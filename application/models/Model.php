@@ -9,7 +9,27 @@ class Model extends CI_Model {
         if($param == null) {
             $process = $this->db->get($table, $limit, $start)->result_array();
         } else {
-            $process = $this->db->get_where($table, [$data[0] => $param[$data[0]]])->row_array();
+            if($table == 'transactions'){
+                $process = $this->db->get_where($table, $param)->result_array();
+            } else {
+                $process = $this->db->get_where($table, $param)->row_array();
+            }
+        }
+        return $process;
+    }
+
+    public function printDataModel($table, $data, $param){
+        $process = $this->db->select(implode(",",$data));
+        if(!empty($param['nipd'])){
+            $this->db->where('nipd', $param['nipd']);
+        }
+        if(empty($param['since']) && empty($param['to'])) {
+           $process = $this->db->get($table)->result_array();
+        } else {
+            $this->db->from($table);
+            $this->db->where('created_at >=', $param['since']);
+            $this->db->where('created_at <=', $param['to']);
+            $process = $this->db->get()->result_array();
         }
         return $process;
     }
@@ -49,7 +69,7 @@ class Model extends CI_Model {
     public function updateDataModel($table, $data, $where){
         try {
             $this->db->set($data);
-            $this->db->where($where[0], $where[1]);
+            $this->db->where($where);
             $this->db->update($table, $data);          
             if($this->db->affected_rows() > 0) {
                  return [
