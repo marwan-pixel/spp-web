@@ -1,3 +1,16 @@
+<?php
+require 'vendor/autoload.php';
+
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+
+$spreadsheet = new Spreadsheet();
+$activeWorksheet = $spreadsheet->getActiveSheet();
+$activeWorksheet->setCellValue('A1', 'Hello World !');
+
+$writer = new Xlsx($spreadsheet);
+$writer->save('hello world.xlsx');
+?>
 <p align="center" style="font-weight:bold;font-size:16pt">DATA TRANSAKSI SPP SEKOLAH AR RAHMAH</p>
 <table border="1" align="center">
     <thead>
@@ -12,8 +25,6 @@
     </thead>
     <tbody>
         <?php
-            header("Content-type: application/vnd-ms-excel");
-            header("Content-Disposition: attachment; filename=laporan-excel.xls"); 
             $getData = $this->input->get();
             $no = 1;
             foreach ($getData as $value) {

@@ -54,6 +54,10 @@ class Pages extends User {
 					'sd' => $this->model->countAllData('kelas', 'instansi', 'sd'),
 					'smp' => $this->model->countAllData('kelas', 'instansi', 'smp'),
 					'ponpes' => $this->model->countAllData('kelas', 'instansi', 'ponpes')	
+				),
+				'total' => $this->db->select_sum('nominal')->from('transactions')->where('status', "Diterima")->get()->row_array(),
+				'datatransaksi' => array(
+					'all' => $this->db->select('nipd')->from('transactions')->where('MONTH(created_at) = MONTH(CURDATE())')->get()->num_rows(),
 				)
 			)
 		);

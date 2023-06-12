@@ -1,6 +1,11 @@
 <?php 
 defined('BASEPATH') OR exit('No direct script access allowed');
 require APPPATH . 'controllers/User.php';
+require FCPATH . 'vendor/autoload.php';
+require FCPATH . 'vendor/fpdf185/fpdf.php';
+
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\IOFactory;
 
 class Admin extends User {
     private $response;
@@ -718,26 +723,115 @@ class Admin extends User {
         );
         $data = $this->getData();
         $response = $this->response;
-        if((empty($data['param']['since']) && !empty($data['param']['to'])) || (!empty($data['param']['since']) && empty($data['param']['to']))){
+        if((empty($data['param']['since']) && !empty($data['param']['to'])) || (!empty($data['param']['since']) 
+        && empty($data['param']['to']))){
             $response['errors'] = array('errormessage' => 'Tanggal harus diisi kedua - duanya!');
         } else {
-            $process = $this->model->printDataModel($data['table'],['nipd', 'nominal', 'status', 'keterangan', 'created_at'], $data['param']);
-            // echo var_dump($process);
-            // die();
+            $process = $this->model->printDataModel($data['table'],['siswa.nama_siswa', 'kelas.kelas', 
+            'kelas.instansi' ,'nominal', 'status', 'keterangan', 'created_at'], $data['param']);
             if(count($process) == 0){
-                $response['errors'] = array('errormessage' => 'Data transaksi kosong!');
+                $response['errors'] = array('errormessage' => 'Data transaksi tidak ada!');
             } else {
+                if($this->input->post('function') == 'cetak'){
+                    if($this->input->post('excel') == 'excel'){
+                        $this->cetakExcel($process);
+                    } elseif($this->input->post('pdf') == 'pdf') {
+                        $this->cetakPDF($process);
+                    }
+                }
                 $response['success'] = true;
-                $response['redirect'] = site_url('cetak?'. http_build_query($process));
             }
         }
-        header('Content-Type: application/json');
-        echo json_encode($response);
-        exit();
+        // header('Content-Type: application/json');
+        // echo json_encode($response);
+        // exit();
     }
 
-    public function cetak(){
-        $this->load->view('cetak');
+    public function cetakExcel($data){
+        $spreadsheet = new Spreadsheet();
+        $activeWorksheet = $spreadsheet->getActiveSheet();
+
+        $activeWorksheet->setCellValue('A1', 'No');
+        $activeWorksheet->setCellValue('B1', 'Nama');
+        $activeWorksheet->setCellValue('C1', 'Kelas');
+        $activeWorksheet->setCellValue('D1', 'Instansi');
+        $activeWorksheet->setCellValue('E1', 'Nominal');
+        $activeWorksheet->setCellValue('F1', 'Keterangan');
+        $activeWorksheet->setCellValue('G1', 'Tanggal Bayar');
+        $activeWorksheet->setCellValue('H1', 'Status');
+        $activeWorksheet->getColumnDimension('A')->setWidth(5);
+        $activeWorksheet->getColumnDimension('B')->setWidth(14);
+        $activeWorksheet->getColumnDimension('C')->setWidth(8);
+        $activeWorksheet->getColumnDimension('D')->setWidth(15);
+        $activeWorksheet->getColumnDimension('E')->setWidth(10);
+        $activeWorksheet->getColumnDimension('F')->setWidth(25);
+        $activeWorksheet->getColumnDimension('G')->setWidth(20);
+        $activeWorksheet->getColumnDimension('H')->setWidth(5);
+        $no = 1;
+        $sn = 2;
+        foreach ($data as $value) {
+            # code...
+            $activeWorksheet->setCellValue('A'.$sn, $no++);
+            $activeWorksheet->setCellValue('B'.$sn, $value['nama_siswa']);
+            $activeWorksheet->setCellValue('C'.$sn, $value['kelas']);
+            $activeWorksheet->setCellValue('D'.$sn, $value['instansi']);
+            $activeWorksheet->setCellValue('E'.$sn, $value['nominal']);
+            $activeWorksheet->setCellValue('F'.$sn, $value['keterangan']);
+            $activeWorksheet->setCellValue('G'.$sn, $value['created_at']);
+            $activeWorksheet->setCellValue('H'.$sn, $value['status']);
+            $activeWorksheet->getStyle('C'.$sn)->getAlignment()->
+            setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
+            $activeWorksheet->getStyle('E'.$sn)->getAlignment()->
+            setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
+            $sn++;
+        }
+        $writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
+        $writer->save(FCPATH . "excel/laporan-transaksi-spp.xlsx");
+        // Set the headers
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment; filename=laporan-transaksi-spp.xlsx');
+        header("Content-Transfer-Encoding:binary");
+        header('Content-Length: ' . filesize("excel/laporan-transaksi-spp.xlsx")); // Set the file size
+
+        ob_clean();
+        flush();
+        // Output the file content
+        readfile("excel/laporan-transaksi-spp.xlsx");
+    }
+
+    public function cetakPDF($data) {
+        $pdf = new FPDF('L','mm','A4');
+        $pdf->AddPage();
+        $pdf->Image('assets/img/Yayasan Ar-Rahmah.jpeg', 12, 6, 30);
+        $pdf->SetFont('Arial', 'B', 16);
+        $pdf->Cell(120);
+        $pdf->Cell(190, 7, 'Data Transaksi SPP', 0, 1);
+        $pdf->Ln(15); // Berpindah baris
+        
+        $pdf->SetFont('Arial', '', '12');
+        $pdf->Cell(10, 10, "No", 1);
+        $pdf->Cell(40, 10, "Nama Siswa", 1);
+        $pdf->Cell(25, 10, "Kelas", 1);
+        $pdf->Cell(40, 10, "Instansi", 1);
+        $pdf->Cell(27, 10, "Nominal", 1);
+        $pdf->Cell(60, 10, "Keterangan", 1);
+        $pdf->Cell(42, 10, "Tanggal Bayar", 1);
+        $pdf->Cell(20, 10, "Status", 1);
+
+        $no = 1;
+        foreach ($data as $row) {
+            $pdf->Ln();
+            $pdf->SetFont('Arial', '', 11);
+            $pdf->Cell(10, 10, $no++, 1);
+            $pdf->Cell(40, 10, $row['nama_siswa'], 1);
+            $pdf->Cell(25, 10, $row['kelas'], 1);
+            $pdf->Cell(40, 10, $row['instansi'], 1);
+            $pdf->Cell(27, 10, $row['nominal'], 1);
+            $pdf->Cell(60, 10, $row['keterangan'], 1);
+            $pdf->Cell(42, 10, $row['created_at'], 1);
+            $pdf->Cell(20, 10, $row['status'], 1);
+        }
+        $pdf->Output();
     }
 }
 ?>

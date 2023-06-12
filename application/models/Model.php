@@ -19,14 +19,15 @@ class Model extends CI_Model {
     }
 
     public function printDataModel($table, $data, $param){
-        $process = $this->db->select(implode(",",$data));
+        $this->db->select(implode(",",$data))->from($table)->
+        join("siswa", "siswa.nipd = $table.nipd")->
+        join("kelas", "kelas.kelas = siswa.kelas");
         if(!empty($param['nipd'])){
-            $this->db->where('nipd', $param['nipd']);
+            $this->db->where('transactions.nipd', $param['nipd']);
         }
         if(empty($param['since']) && empty($param['to'])) {
-           $process = $this->db->get($table)->result_array();
+            $process = $this->db->get()->result_array();
         } else {
-            $this->db->from($table);
             $this->db->where('created_at >=', $param['since']);
             $this->db->where('created_at <=', $param['to']);
             $process = $this->db->get()->result_array();

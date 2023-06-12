@@ -23,8 +23,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | a PHP script and you can easily do that on your own.
 |
 */
-$config['base_url'] = 'http://localhost:8080/spp-web/';
-
+if ($_SERVER['SERVER_PORT'] == 8080) {
+    $config['base_url'] = 'http://localhost:8080/spp-web/';
+} else {
+    $config['base_url'] = 'http://localhost/spp-web/';
+}
 /*
 |--------------------------------------------------------------------------
 | Index File

@@ -14,6 +14,7 @@ class User extends CI_Controller {
         $this->load->library('form_validation');
         $this->load->library('session');
         $this->load->model('model');
+        $this->load->helper('download');
     }
 
     //Ambil data yang sudah di set

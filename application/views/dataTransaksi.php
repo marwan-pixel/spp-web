@@ -182,24 +182,28 @@
             <div class="card-body" id="form">
                <form action="<?= base_url('admin/cetakDataTransaksi'); ?>" method="post">
                   <div class="form-group row">
+                     <input hidden name="function" value="cetak" type="text">
                      <input hidden name="nipd" value="<?= $data['dataSiswa']['nipd'] ?? '' ;?>" type="text">
                      <div class="col-sm-2">
                         <p class="text-primary" for="InputKelas">Cetak Berdasarkan Tanggal (Opsional)</p>
                      </div>                     
                      <div class="col-sm-2 mb-2">
                         <div class="input-group">
-                           <input class="form-control" type="date" name="sincewhen" id="sincewhen">
+                           <input class="form-control" type="date" name="since" id="since">
                         </div>
                      </div>
                      <div class="col-sm-2">
                         <div class="input-group">
-                           <input class="form-control" type="date" name="tillwhen" id="tillwhen">
+                           <input class="form-control" type="date" name="till" id="till">
                         </div>
                      </div>
                   </div>
                   <div class="row">
                      <div class="col-md-2">
-                        <button class="btn btn-primary">Cetak</button>
+                        <button type="submit" name="excel" value="excel" class="btn btn-success">Cetak (Excel)</button>
+                     </div>
+                     <div class="col-md-2">
+                        <button type="submit" name="pdf" value="pdf" class="btn btn-danger">Cetak (PDF)</button>
                      </div>
                   </div>
                </form>
@@ -207,7 +211,7 @@
          </div>      
       </div>
    </div>
-        <script src="<?= base_url();?>/assets/js/jquery-3.2.1.min.js"></script>
+        <!-- <script src="<?= base_url();?>/assets/js/jquery-3.2.1.min.js"></script>
         <script>
             
             $(document).ready(function() {
@@ -217,7 +221,8 @@
                   var form = $(this);
                   var nipd = form.find('input[name="nipd"]').val();                  
                   var from = form.find('input[name="since"]').val();
-                  var to = form.find('input[name="when"]').val();
+                  var to = form.find('input[name="till"]').val();
+                  var cetak = form.find('input[name="function"]').val();
     
                   $.ajax({
                      url: form.attr('action'),
@@ -226,9 +231,9 @@
                      dataType: 'json' ,
                      success: function (response) {
                         if(response.success) {
-                           window.location.href = response.redirect;
                            $('#errormessage').hide();
-                        } else {             
+                        } else {
+                           console.log(errors)      
                            var errors = response.errors;
                            $.each(errors, function (field, message) {
                               let errorElement = $('#' + field);
@@ -243,5 +248,5 @@
                   })                
                })
             })   
-        </script>
+        </script> -->
 </div>
