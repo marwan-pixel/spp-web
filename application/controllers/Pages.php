@@ -24,7 +24,7 @@ class Pages extends User {
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->library('pagination');
+		
 
 		$this->db->select('nama_petugas');
 		$this->_userdata =  $this->db->get_where('admin', ['kode_petugas' => $this->session->userdata('kode_petugas')])->row_array();
@@ -71,7 +71,7 @@ class Pages extends User {
 			$this->db->like($keyword[0], $keyword[1]);
 			$this->session->set_userdata('keyword', $keyword[1]);
 		} else {
-			$keyword = $this->session->userdata('keyword');
+			$keyword = $this->session->unset_userdata('keyword');
 		}
 		
 		$this->setData(
@@ -158,11 +158,33 @@ class Pages extends User {
 		}
 	}
 
-	public function dataadmin()
+	public function halamanAdmin()
 	{
+		
 		$dataAdmin = $this->model->getDataModel('admin', ['kode_petugas', 'nama_petugas'], ['kode_petugas' => $this->session->userdata('kode_petugas')]);
 		try {
-			$this->render('dataadmin', ['title' => 'Data Admin', 'name' => $this->_userdata['nama_petugas'], 'kode' => $dataAdmin['kode_petugas']]);
+			$this->render('halamanadmin', ['title' => 'Halaman Admin', 'name' => $this->_userdata['nama_petugas'], 'kode' => $dataAdmin['kode_petugas']]);
+
+		} catch (Exception $e){
+			$e->getMessage();
+		}
+	}
+
+	public function dataAdmin()
+	{
+		$this->setData(
+			array(
+				'base_url' => 'http://localhost:8080/spp-web/pages/datadmin/',
+				'total_rows' => $this->model->countAllData('admin'),
+				'per_page' => 10,
+				
+			)
+		);
+		$start = $this->uri->segment(3);
+		$this->pagination->initialize($this->getData());
+		$dataAdmin = $this->model->getDataModel('admin', ['kode_petugas', 'nama_petugas'], null, $this->getData()['per_page'], $start);
+		try {
+			$this->render('dataadmin', ['title' => 'Data Admin', 'name' => $this->_userdata['nama_petugas'], 'data' => $dataAdmin, 'start' => $start]);
 
 		} catch (Exception $e){
 			$e->getMessage();
@@ -175,31 +197,10 @@ class Pages extends User {
 			array(
 				'base_url' => 'http://localhost:8080/spp-web/pages/datatransaksi/',
 				'total_rows' => $this->model->countAllData('transactions'),
-				'per_page' => 10,
 			)
 		);
-		$searchInput = $this->input->post('keyword');
-		$dataSiswa = null;
-		$dataTransaksi = null;
-		$start = $this->uri->segment(3);
-		$this->pagination->initialize($this->getData());
-		// Check if search input is empty
-		if (empty($searchInput)) {
-			// Clear the search message from session or storage
-			$this->session->unset_userdata('search_message');
-		} else {
-
-			$keyword = $searchInput;
-			$dataSiswa = $this->model->getDataJoinModel('siswa', 'kelas' ,"*", ["kelas", "nipd"], $keyword);
-			$dataTransaksi = $this->model->getDataModel('transactions', 
-			['nipd', 'nominal', 'status', 'image', 'keterangan', 'created_at'], ['nipd' => $keyword], $this->getData()['per_page'], $start);
-			if(is_null($dataSiswa)){
-				$this->session->set_userdata('search_message', 'Data tidak ditemukan!');
-			}
-		}
 	
-        $this->render('datatransaksi', ['title' => 'Data Transaksi', 'name' => $this->_userdata['nama_petugas'], 
-			'data' => array('dataTransaksi' => $dataTransaksi, 'dataSiswa' => $dataSiswa), 'start' => $start]);
+        $this->render('datatransaksi', ['title' => 'Data Transaksi', 'name' => $this->_userdata['nama_petugas']]);
 	}
 
 }

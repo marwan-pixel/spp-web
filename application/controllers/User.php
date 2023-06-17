@@ -15,6 +15,7 @@ class User extends CI_Controller {
         $this->load->library('session');
         $this->load->model('model');
         $this->load->helper('download');
+        $this->load->library('pagination');
     }
 
     //Ambil data yang sudah di set

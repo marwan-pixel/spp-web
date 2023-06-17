@@ -48,12 +48,12 @@ if($this->session->userdata('kode_petugas')) {
                         <div class="form-group ml-3 mr-3">
                             <button type="submit" class="btn btn-block btn-success">Login</button>
                         </div>
-                         <div class="form-group mb-3">
+                         <!-- <div class="form-group mb-3">
                             <h6 class="text-center font-weight-light">Belum memiliki akun?</h6>
                         </div>
                         <div class="form-group ml-3 mr-3">
                             <a href="<?= site_url('registrasi'); ?>" class="btn btn-block btn-primary">Registrasi</a>
-                        </div>
+                        </div> -->
                     </form>
                 </div>
             </div>

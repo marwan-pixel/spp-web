@@ -56,6 +56,7 @@ $route['datasiswa'] = 'Pages/datasiswa';
 $route['datakelas'] = 'Pages/datakelas';
 $route['databiaya'] = 'Pages/databiaya';
 $route['dataadmin'] = 'Pages/dataadmin';
+$route['halamanadmin'] = 'Pages/halamanadmin';
 $route['datatransaksi'] = 'Pages/datatransaksi';
 $route['cetak'] = 'Admin/cetak';
 $route['404_override'] = '';

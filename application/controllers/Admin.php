@@ -58,7 +58,7 @@ class Admin extends User {
                 $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">
                                         Akun ini tidak terdaftar
                                         </div>');
-                redirect('login');
+                $this->load->view('login');
             } else {
                 if(password_verify($this->input->post('password'), $process['password'])){
                     $this->session->set_userdata('kode_petugas', $process['kode_petugas']);
@@ -75,24 +75,24 @@ class Admin extends User {
         }
     }
 
-    public function registrasi(){
+    public function tambahDataAdmin(){
         $this->setData(
             array(
                 'table' => 'admin',
                 'config' => array(
                                 array(
-                                    'field' => 'id',
-                                    'label' => 'ID',
+                                    'field' => 'kode_petugas',
+                                    'label' => 'Kode Petugas',
                                     'rules' => 'required|trim|min_length[5]|is_unique[admin.kode_petugas]',
                                     'errors' => 
                                     [
-                                        'required' => 'ID wajib diisi!',
-                                        'is_unique' => 'ID sudah tersedia!'
+                                        'required' => 'Kode petugas wajib diisi!',
+                                        'is_unique' => 'Kode petugas sudah tersedia!'
                                     ]
                                 ),
                                 array(
-                                    'field' => 'nama',
-                                    'label' => 'Nama',
+                                    'field' => 'nama_petugas',
+                                    'label' => 'Nama Petugas',
                                     'rules' => 'required|trim',
                                     'errors' => 
                                     [
@@ -105,27 +105,30 @@ class Admin extends User {
                                     'rules' => 'required|trim|min_length[5]',
                                     'errors' =>
                                     [
-                                        'required' => 'Password wajib diisi!'
+                                        'required' => 'Password wajib diisi!',
+                                        'min_length' => 'Password minimal terdiri dari lima karakter'
                                     ]
                                 ),
                                 array(
-                                    'field' => 'conf_password',
+                                    'field' => 'confPassword',
                                     'label' => 'Confirm Password',
                                     'rules' => 'required|trim|matches[password]',
                                     'errors' =>
                                     [
+                                        'required' => 'Konfirmasi password wajib diisi',
                                         'matches' => 'Password tidak sama!'
                                     ]
                                 )
                             ),
                 'value' => array(
-                            'kode_petugas' => htmlspecialchars($this->input->post('id')),
-                            'nama_petugas' => htmlspecialchars($this->input->post('nama')),
+                            'kode_petugas' => htmlspecialchars($this->input->post('kode_petugas')),
+                            'nama_petugas' => htmlspecialchars($this->input->post('nama_petugas')),
                             'password' => password_hash($this->input->post('password'), PASSWORD_BCRYPT),
                             )
                 )
             );
         $data = $this->getData();
+        $response = $this->response;
         $this->form_validation->set_rules($data['config']);
         if($this->form_validation->run() == true) {
             $process = $this->model->insertDataModel($data['table'], $data['value']);
@@ -133,17 +136,20 @@ class Admin extends User {
                 $this->session->set_flashdata("message", "<div class='alert alert-success' role='alert'>
                                         {$process['message']}
                                         </div>");
-                redirect('login');
             } else {
-                $process['message'] = "Registrasi berhasil! Silakan login";
                 $this->session->set_flashdata("message", "<div class='alert alert-danger' role='alert'>
                                         {$process['message']}
                                         </div>");
-                redirect('registrasi');
             }
+            $response['redirect'] = site_url('dataadmin');
+            $response['success'] = true;
         } else {
-            $this->load->view('registrasi');
+            $response['errors'] =  array('kode_petugas' => form_error('kode_petugas'), 'nama_petugas' => form_error('nama_petugas'), 
+            'password' => form_error('password'), 'confPassword' => form_error('confPassword'));
         }
+        header('Content-Type: application/json');
+        echo json_encode($response);
+        exit();
     }
 
     public function tambahDataBiaya(){
@@ -700,14 +706,29 @@ class Admin extends User {
                                                 </div>");
                     }
                     $response['success'] = true;
-                    $response['redirect'] = site_url('dataadmin');
+                    $response['redirect'] = site_url('halamanadmin');
                 }
             } else {
                 $response['errors'] = array('nama' => form_error('nama'), 'password' => form_error('password'), 'confPassword' => form_error('confPassword'));
-        }
+            }
         header('Content-Type: application/json');
         echo json_encode($response);
         exit();
+    }
+
+    public function tambahDataTransaksi() {
+        $this->setData(
+            array(
+                'table' => 'transactions',
+                'value' => array(
+                    'nipd' => $this->input->post('nipd'),
+                    'nominal' => $this->input->post('nominal'),
+                    'status' => $this->input->post('status'),
+                    'keterangan' => $this->input->post('keterangan'),
+                    'created_at' => $this->input->post('')
+                )
+            )
+        );
     }
 
     public function cetakDataTransaksi(){
@@ -716,35 +737,29 @@ class Admin extends User {
                 'table' => 'transactions',
                 'param' => array(
                     'nipd' => $this->input->post('nipd'),
-                    'since' => $this->input->post('sincewhen'),
-                    'to' => $this->input->post('tillwhen')
+                    'since' => $this->input->post('since'),
+                    'to' => $this->input->post('till')
                 ),
             )
         );
         $data = $this->getData();
-        $response = $this->response;
-        if((empty($data['param']['since']) && !empty($data['param']['to'])) || (!empty($data['param']['since']) 
-        && empty($data['param']['to']))){
-            $response['errors'] = array('errormessage' => 'Tanggal harus diisi kedua - duanya!');
+        $process = $this->model->printDataModel($data['table'],['siswa.nama_siswa', 'kelas.kelas', 
+        'kelas.instansi' ,'nominal', 'status', 'keterangan', 'created_at'], $data['param']);
+        if(count($process) == 0){
+            $this->session->set_flashdata('message', 
+            '<div class="alert alert-danger" role="alert">
+                Data Transaksi Kosong!
+            </div>');
+            redirect('datatransaksi');
         } else {
-            $process = $this->model->printDataModel($data['table'],['siswa.nama_siswa', 'kelas.kelas', 
-            'kelas.instansi' ,'nominal', 'status', 'keterangan', 'created_at'], $data['param']);
-            if(count($process) == 0){
-                $response['errors'] = array('errormessage' => 'Data transaksi tidak ada!');
-            } else {
-                if($this->input->post('function') == 'cetak'){
-                    if($this->input->post('excel') == 'excel'){
-                        $this->cetakExcel($process);
-                    } elseif($this->input->post('pdf') == 'pdf') {
-                        $this->cetakPDF($process);
-                    }
+            if($this->input->post('function') == 'cetak'){
+                if($this->input->post('excel') == 'excel'){
+                    $this->cetakExcel($process);
+                } elseif($this->input->post('pdf') == 'pdf') {
+                    $this->cetakPDF($process);
                 }
-                $response['success'] = true;
             }
         }
-        // header('Content-Type: application/json');
-        // echo json_encode($response);
-        // exit();
     }
 
     public function cetakExcel($data){
@@ -832,6 +847,48 @@ class Admin extends User {
             $pdf->Cell(20, 10, $row['status'], 1);
         }
         $pdf->Output();
+    }
+
+    function cariDataTransaksi($param = null) {
+        $searchInput = $this->input->post('keyword');
+		$dataSiswa = null;
+		$dataTransaksi = null;
+		$start = $this->uri->segment(3);
+		$this->pagination->initialize($this->getData());
+		// Check if search input is empty
+		if (empty($searchInput)) {
+			// Clear the search message from session or storage
+			$this->session->unset_userdata('search_message');
+		} else {
+			$keyword = $searchInput;
+			$dataSiswa = $this->model->getDataJoinModel('siswa', 'kelas' ,['nama_siswa', 'siswa.kelas', 'potongan', 'kelas.instansi', 'nipd'], ["kelas", "nipd"], $keyword);
+			$dataTransaksi = $this->model->getDataModel('transactions', 
+			['nipd', 'nominal', 'status', 'image', 'keterangan', 'created_at'], ['nipd' => $keyword], ['per_page' => 10], $start);
+			if(is_null($dataSiswa)){
+				$this->session->set_userdata('search_message', 'Data tidak ditemukan!');
+                redirect('datatransaksi');
+			} else {
+				redirect('datatransaksi' . '?' . http_build_query(array('dataSiswa' => $dataSiswa, 'dataTransaksi' => $dataTransaksi, 'start' => $start)));
+			}
+		}
+    }
+    function validasiPembayaran() {
+        $this->setData(
+            array(
+                'table' => 'transactions',
+                'where' => array('created_at' => $this->input->get('param2')),
+                'value' => array('status' => $this->input->get('param1') == 'Ditunggu' ? "Diterima" : "Ditunggu")
+            )
+        );
+        $data = $this->getData();
+        $process = $this->model->updateDataModel($data['table'], $data['value'] ,$data['where']);
+        if($process['status'] == true) {
+            $start = $this->uri->segment(3);
+            $dataSiswa = $this->model->getDataJoinModel('siswa', 'kelas' ,['nama_siswa', 'siswa.kelas', 'potongan', 'kelas.instansi', 'nipd'], ["kelas", "nipd"], $this->input->get('nipd'));
+			$dataTransaksi = $this->model->getDataModel('transactions', 
+			['nipd', 'nominal', 'status', 'image', 'keterangan', 'created_at'], ['nipd' => $this->input->get('nipd')], ['per_page' => 10], $start);
+            redirect('datatransaksi' . '?' . http_build_query(array('dataSiswa' => $dataSiswa, 'dataTransaksi' => $dataTransaksi, 'start' => $start)));
+        } 
     }
 }
 ?>

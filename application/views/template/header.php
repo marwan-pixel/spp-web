@@ -49,7 +49,7 @@
                      <div class="col text-center p-xs-0">
                      </div>
                      <div class="col-auto pr-0">
-                        <div class="dropdown d-inline-block">
+                        <!-- <div class="dropdown d-inline-block">
                            <a class="btn header-color-secondary btn-icon dropdown-toggle caret-none" href="#" role="button" id="dropdownmessage" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                            <i class="fa-solid fa-bell"></i>
                            <span class="status-number bg-danger text-white">9+</span>
@@ -71,7 +71,7 @@
                                  </div>
                               </a>
                            </div>
-                        </div>
+                        </div> -->
                         <div class="dropdown d-inline-block">
                            <a class="btn header-color-secondary dropdown-toggle username" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                               <figure class="userpic"><img src="<?=base_url();?>/assets/img/user1.png" alt=""></figure>
@@ -81,7 +81,7 @@
                               </h5>
                            </a>
                            <div class="dropdown-menu dropdown-menu-right profile-dropdown" aria-labelledby="dropdownMenuLink">
-                              <a href="<?= site_url('dataadmin'); ?>" class="dropdown-item">
+                              <a href="<?= base_url(''); ?>pages/halamanadmin" class="dropdown-item">
                                  <div class="row align-items-center">
                                     <div class="col">
                                        Informasi
@@ -133,6 +133,9 @@
                      </li>
                      <li class="nav-item">
                         <a href="<?= base_url(''); ?>pages/datasiswa" class="nav-link success-gradient-active"><i class="material-icons icon">person</i> <span>Data Siswa</span></a>
+                     </li>
+                     <li class="nav-item">
+                        <a href="<?= base_url(''); ?>pages/dataadmin" class="nav-link success-gradient-active"><i class="material-icons icon">person</i> <span>Data Admin</span></a>
                      </li>
                   </ul>
                </li>

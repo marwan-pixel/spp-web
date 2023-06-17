@@ -117,7 +117,7 @@
                                             <div id="dataTable_filter" class="dataTables_filter input-group col-sm-4">
                                                 <form action="<?= base_url('pages/datasiswa');?>" method="post" class="form-inline">
                                                     <div class="form-group mb-2 ">
-                                                        <input type="number" size="30" class="form-control mr-2" id="cari" name="keyword" placeholder="Cari Nama Siswa" aria-controls="dataTable">
+                                                        <input type="text" size="20" class="form-control mr-2" id="cari" name="keyword" placeholder="Cari Nama Siswa" aria-controls="dataTable">
                                                     </div>
                                                     <button type="submit" class="btn btn-primary mb-2">Cari</button>
                                                 </form>
@@ -138,7 +138,6 @@
                                                         <th><center>NIPD</center> </th>
                                                         <th><center>Nama Siswa</center></th>
                                                         <th><center>Kelas</center></th>
-                                                        <th><center>Password</center></th>
                                                         <!-- <th><center>Instansi</center></th> -->
                                                         <th><center>Potongan</center></th>
                                                         <th><center>Aksi</center></th>
@@ -160,7 +159,6 @@
                                                         <td><center><?= $value['nipd'] ;?></center></td>
                                                         <td><center><?= $value['nama_siswa'] ;?></center></td>
                                                         <td><center><?= $value['kelas'] ;?></center></td>
-                                                        <td><center>****</center></td>
                                                         <td><center><?= $value['potongan'] ;?></center></td>
                                                         <td>
                                                             <center>
@@ -251,7 +249,6 @@
                     modal.find(`#nipd`).attr("value",div.data(`nipd`));
                     modal.find(`#nama`).attr("value",div.data(`nama`));                  
                     modal.find(`#kelas`).val(div.data(`kelas`));
-                    // modal.find(`#instansi`).val(div.data(`instansi`));
                     modal.find('#potongan').attr("value",div.data(`potongan`));
                 });
 
@@ -268,9 +265,7 @@
                     var nama = form.find('input[name="nama"]').val();
                     var kelas = form.find('input[name="kelas"]').val();
                     var potongan = form.find('input[name="potongan"]').val();
-                    // var ket_biaya = form.find('input[name="ket_biaya"]').val();
 
-    
                     $.ajax({
                         url: form.attr('action'),
                         method: form.attr('method'),
