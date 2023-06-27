@@ -61,15 +61,20 @@ class Pages extends User {
 				)
 			)
 		);
-		$this->render('home', ["title" => "Dashboard", 'name' => $this->_userdata['nama_petugas'], 'data' => $this->getData()]);
+		try {
+			$this->render('home', ["title" => "Dashboard", 'name' => $this->_userdata['nama_petugas'], 'data' => $this->getData()]);
+		} catch (Exception $e) {
+			$e->getMessage();
+		}
+		
 	}
 
 	public function datasiswa()
 	{
 		if(($this->input->post('keyword'))){
-			$keyword = array('nama_siswa', $this->input->post('keyword'));
-			$this->db->like($keyword[0], $keyword[1]);
-			$this->session->set_userdata('keyword', $keyword[1]);
+			$keyword = array('nama_siswa' => $this->input->post('keyword'));
+			$this->db->like($keyword);
+			$this->session->set_userdata('keyword', $keyword['nama_siswa']);
 		} else {
 			$keyword = $this->session->unset_userdata('keyword');
 		}
@@ -79,24 +84,33 @@ class Pages extends User {
 				'base_url' => 'http://localhost:8080/spp-web/pages/datasiswa/',
 				'total_rows' => $this->db->from('siswa')->count_all_results(),
 
-				'per_page' => 10,
+				'per_page' => 20,
 			)
 		);
 		$start = $this->uri->segment(3);
 
 		$this->pagination->initialize($this->getData());
-		$dataSiswa = $this->model->getDataModel('siswa', ['nipd', 'nama_siswa', 'kelas', 'potongan'], null, $this->getData()['per_page'], $start, $keyword);
+		$dataSiswa = $this->db->select(['nipd', 'nama_siswa', 'kelas', 'potongan' ,'siswa.thn_akademik', 'siswa.status'])
+		->from('siswa')->join('tahun_akademik', "tahun_akademik.thn_akademik = siswa.thn_akademik")
+		->get(null,$this->getData()['per_page'], $start)
+		->result_array();
 		$dataKelas = $this->model->getDataModel('kelas', ['kelas']);
-        $this->render('datasiswa', ['title' => 'Data Siswa', 'name' => $this->_userdata['nama_petugas'], 
-
-		'data' => array('dataSiswa' => $dataSiswa, 'dataKelas' => $dataKelas), 'start' => $start]);
+		$dataTahunAkademik = $this->model->getDataModel('tahun_akademik', ['thn_akademik']);
+		try {
+			$this->render('datasiswa', ['title' => 'Data Siswa', 'name' => $this->_userdata['nama_petugas'], 
+			'data' => array('dataSiswa' => $dataSiswa, 'dataKelas' => $dataKelas, 'dataTahunAkademik' => $dataTahunAkademik), 'start' => $start]);
+		} catch (Exception $e) {
+			$e->getMessage();
+		}
+        
+		
 	}
 
 	public function datakelas()
 	{
 		$this->setData(
 			array(
-				'base_url' => 'https://arrahman.site/spp-web/pages/datakelas/',
+				'base_url' => 'http://localhost:8080/spp-web/pages/datakelas/',
 				'total_rows' => $this->model->countAllData('kelas'),
 				'per_page' => 10,
 				
@@ -106,11 +120,14 @@ class Pages extends User {
 		$start = $this->uri->segment(3);
 		$this->pagination->initialize($this->getData());
 
-		$dataInstansi = $this->model->getDataModel('instansi', ['instansi']);
+		$dataInstansi = $this->model->getDataModel('instansi', ['jenis_instansi']);
 		$dataKelas = $this->model->getDataModel('kelas', ['kelas', 'instansi'], null, $this->getData()['per_page'], $start);
-        $this->render('datakelas', ['title' => 'Data Kelas', 'name' => $this->_userdata['nama_petugas'], 
-		'data' => array('dataKelas' => $dataKelas, 'dataInstansi' => $dataInstansi),'start' => $start]);
-
+		try {
+			$this->render('datakelas', ['title' => 'Data Kelas', 'name' => $this->_userdata['nama_petugas'], 
+			'data' => array('dataKelas' => $dataKelas, 'dataInstansi' => $dataInstansi),'start' => $start]);		
+		} catch (Exception $e){
+			$e->getMessage();
+		}
 	}
 
 	public function databiaya()
@@ -126,11 +143,10 @@ class Pages extends User {
 		
 		$start = $this->uri->segment(3);
 		$this->pagination->initialize($this->getData());
-		$dataInstansi = $this->model->getDataModel('instansi', ['instansi']);
+		$dataInstansi = $this->model->getDataModel('instansi', ['jenis_instansi']);
 		$dataBiaya = $this->model->getDataModel('jenis_pembayaran', ['id_jenis_pembayaran','jenis_pembayaran', 'biaya', 'instansi'], null, $this->getData()['per_page'], $start);
 		try {
 			$this->render('databiaya', ['title' => 'Data Biaya', 'name' => $this->_userdata['nama_petugas'], 'data' => array('dataBiaya' => $dataBiaya, 'dataInstansi' => $dataInstansi)]);
-			
 		} catch (Exception $e){
 			$e->getMessage();
 		}
@@ -149,7 +165,7 @@ class Pages extends User {
 
 		$start = $this->uri->segment(3);
 		$this->pagination->initialize($this->getData());
-		$dataInstansi = $this->model->getDataModel('instansi', ['instansi'], null, $this->getData()['per_page'], $start);
+		$dataInstansi = $this->model->getDataModel('instansi', ['jenis_instansi'], null, $this->getData()['per_page'], $start);
 		try {
 			$this->render('datainstansi', ['title' => 'Data Biaya', 'name' => $this->_userdata['nama_petugas'], 'data' => array('dataInstansi' => $dataInstansi)]);
 			
@@ -160,7 +176,6 @@ class Pages extends User {
 
 	public function halamanAdmin()
 	{
-		
 		$dataAdmin = $this->model->getDataModel('admin', ['kode_petugas', 'nama_petugas'], ['kode_petugas' => $this->session->userdata('kode_petugas')]);
 		try {
 			$this->render('halamanadmin', ['title' => 'Halaman Admin', 'name' => $this->_userdata['nama_petugas'], 'kode' => $dataAdmin['kode_petugas']]);
@@ -199,8 +214,30 @@ class Pages extends User {
 				'total_rows' => $this->model->countAllData('transactions'),
 			)
 		);
-	
-        $this->render('datatransaksi', ['title' => 'Data Transaksi', 'name' => $this->_userdata['nama_petugas']]);
+		try {
+			$this->render('datatransaksi', ['title' => 'Data Transaksi', 'name' => $this->_userdata['nama_petugas']]);
+		} catch (Exception $e){
+			$e->getMessage();
+		}
 	}
 
+	public function dataTahunAkademik() {
+		$this->setData(
+			array(
+				'base_url' => 'http://localhost:8080/spp-web/pages/datatahunakademik/',
+				'total_rows' => $this->model->countAllData('tahun_akademik'),
+				'per_page' => 10,
+				
+			)
+		);
+		$start = $this->uri->segment(3);
+		$this->pagination->initialize($this->getData());
+		$dataTahunAkademik = $this->model->getDataModel('tahun_akademik', ['thn_akademik', 'status'], null, $this->getData()['per_page'], $start);
+		try {
+			$this->render('datatahunakademik', ['title' => 'Data Tahun Akademik', 'name' => $this->_userdata['nama_petugas'], 'data' => $dataTahunAkademik, 'start' => $start]);
+
+		} catch (Exception $e){
+			$e->getMessage();
+		}
+	}
 }

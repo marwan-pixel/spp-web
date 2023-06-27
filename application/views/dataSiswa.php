@@ -6,6 +6,38 @@
                 <button type="button" class="btn btn-success ml-3 mb-3" data-toggle="modal" data-target="#exampleModal">
                 Tambah Data
                 </button>
+                <button type="button" class="btn btn-success ml-3 mb-3" data-toggle="modal" data-target="#exampleModalExcel">
+                Tambah Data (Impor Dari Excel)
+                </button>
+
+                <div class="modal fade" id="exampleModalExcel" tabindex="-1" aria-labelledby="exampleModalExcelLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title" id="exampleModalExcelLabel">Data Siswa</h4>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                            <h5><b> Petunjuk Singkat</b></h5>
+                            <p>Penginputan data Siswa bisa dilakukan dengan mengcopy data dari file Ms. Excel. Format file excel harus sesuai kebutuhan aplikasi. Silahkan download formatnya</p>
+                            <form method="post" id="sample_form" enctype="multipart/form-data" action="<?=base_url('admin/tambahDataSiswaExcel');?>">
+                                <div class="form-group">
+                                    <label for="file">File Input</label>
+                                    <input type="file" class="form-control" requi name="fileExcel" id="fileExcel" aria-describedby="fileExcel">
+                                    <small class="text-danger" id="fileExcel-error"></small>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Keluar</button>
+                                    <button type="submit" class="btn btn-primary">Simpan</button>
+                                </div>
+                            </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Modal Insert -->
                 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
@@ -39,6 +71,29 @@
                                         }
                                     ?>
                                     </select>
+                                    <small class="text-danger" id="kelas-error"></small>
+                                </div>
+                                <div class="form-group">
+                                    <label for="thn_akademik">Tahun Akademik</label>
+                                    
+                                    <select value="<?= set_value('thn_akademik');?>" class="form-control thn_akademik" name="thn_akademik" id="thn_akademik">
+                                    <?php
+                                        foreach ($data['dataTahunAkademik'] as $value) {
+                                            ?>
+                                        <option value="<?= $value['thn_akademik']; ?>" id="thn_akademik"><?= $value['thn_akademik']; ?></option>
+                                    <?php
+                                        }
+                                    ?>
+                                    </select>
+                                    <small class="text-danger" id="thn_akademik-error"></small>
+                                </div>
+                                <div class="form-group">
+                                    <label for="status">Keterangan:</label>
+                                    <input type="radio" value="1" name="status" id="status_aktif">
+                                    <label for="status_aktif">Aktif</label>
+                                    <input type="radio" value="0" name="status" id="status_tidak-aktif">
+                                    <label for="status_tidak-aktif">Tidak Aktif</label>
+                                    <small class="text-danger" id="status-error"></small>
                                 </div>
                                 <div class="form-group">
                                     <label for="password">Password</label>
@@ -49,7 +104,7 @@
                                     <label for="potongan">Potongan</label>
                                     <input type="number" value="<?= set_value('potongan');?>" name="potongan" class="form-control" id="potongan" aria-describedby="InputNIS">
                                     <small class="text-danger" id="potongan-error"></small>
-                                </div>                                                          
+                                </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Keluar</button>
                                     <button type="submit" class="btn btn-primary">Simpan</button>
@@ -92,7 +147,28 @@
                                     </select>
                                     <small class="text-danger" id="kelas-errorUpdate"></small>
                                 </div>
-
+                                <div class="form-group">
+                                    <label for="thn_akademik">Tahun Akademik</label>
+                                    
+                                    <select class="form-control thn_akademik" name="thn_akademik" id="thn_akademik">
+                                    <?php
+                                        foreach ($data['dataTahunAkademik'] as $value) {
+                                            ?>
+                                        <option value="<?= $value['thn_akademik']; ?>"><?= $value['thn_akademik']; ?></option>
+                                    <?php
+                                        }
+                                    ?>
+                                    </select>
+                                    <small class="text-danger" id="thn_akademik-error"></small>
+                                </div>
+                                <div class="form-group">
+                                    <label for="status">Keterangan:</label>
+                                    <input type="radio" value="1" name="status" id="status_aktif">
+                                    <label for="status_aktif">Aktif</label>
+                                    <input type="radio" value="0" name="status" id="status_tidak-aktif">
+                                    <label for="status_tidak-aktif">Tidak Aktif</label>
+                                    <small class="text-danger" id="status-error"></small>
+                                </div>
                                  <div class="form-group">
                                     <label for="potongan">Potongan</label>
                                     <input type="number" class="form-control" name="potongan" id="potongan" aria-describedby="InputNIS">
@@ -138,8 +214,8 @@
                                                         <th><center>NIPD</center> </th>
                                                         <th><center>Nama Siswa</center></th>
                                                         <th><center>Kelas</center></th>
-                                                        <!-- <th><center>Instansi</center></th> -->
-                                                        <th><center>Potongan</center></th>
+                                                        <th><center>Tahun Akademik</center></th>
+                                                        <th><center>Status</center></th>
                                                         <th><center>Aksi</center></th>
                                                     </tr>
                                                 </thead>
@@ -148,7 +224,7 @@
                                                     if(count($data['dataSiswa']) == 0){                                                        
                                                     ?>
                                                     <tr>
-                                                        <th colspan="9"><center><h5>Data belum tersedia</h5></center></th>
+                                                        <th colspan="7"><center><h5>Data belum tersedia</h5></center></th>
                                                     </tr>
                                                     <?php    
                                                     } else {
@@ -159,13 +235,16 @@
                                                         <td><center><?= $value['nipd'] ;?></center></td>
                                                         <td><center><?= $value['nama_siswa'] ;?></center></td>
                                                         <td><center><?= $value['kelas'] ;?></center></td>
-                                                        <td><center><?= $value['potongan'] ;?></center></td>
+                                                        <td><center><?= $value['thn_akademik'] ;?></center></td>
+                                                        <td><center><?= $value['status'] == 1 ? "Aktif" : "Tidak Aktif" ;?></center></td>
                                                         <td>
                                                             <center>
                                                             <a href="javascript:;" 
                                                             data-nipd = "<?= $value['nipd'] ;?>"
                                                             data-nama = "<?= $value['nama_siswa'] ;?>"
                                                             data-kelas = "<?= $value['kelas'] ;?>"
+                                                            data-thn_akademik = "<?= $value['thn_akademik'] ;?>"
+                                                            data-status = "<?= $value['status'] ;?>"
                                                             data-potongan = "<?= $value['potongan'] ;?>"
                                                             class="btn btn-warning btn-sm"  data-toggle="modal" data-target="#exampleModalUpdate"
                                                             >Ubah</a>
@@ -209,22 +288,23 @@
                     var nipd = form.find('input[name="nipd"]').val();                  
                     var nama = form.find('input[name="nama"]').val();
                     var kelas = form.find('input[name="kelas"]').val();
-                    // var instansi = form.find('input[name="instansi"]').val();
+                    var thn_akademik = form.find('input[name="thn_akademik"]').val();
                     var password = form.find('input[name="password"]').val();
                     var potongan = form.find('input[name="potongan"]').val();
-    
+                    var status = form.find('input[name="status:checked"]').val();
                     $.ajax({
                         url: form.attr('action'),
                         method: form.attr('method'),
                         data: form.serialize(),
-                        dataType: 'json' ,
+                        dataType: 'json',
                         success: function (response) {
-     
+                            console.log(response);
                             if(response.success) {
                                 window.location.href = response.redirect;
                                 $('#exampleModal').modal('hide');
-                            } else {             
+                            } else {
                                 var errors = response.errors;
+                                console.log(errors);
                                 $.each(errors, function (field, message) {
                                     let errorElement = $('#' + field + '-error');
                                     errorElement.html(message);
@@ -239,6 +319,44 @@
                     })                
                 })
 
+                $('#exampleModalExcel').on('hide.bs.modal', function(event) {
+                    $(this).find('.text-danger');
+                });
+    
+                $('#exampleModalExcel').on('submit', 'form' , function (event) {
+                    event.preventDefault();
+                    var form = $(this);
+                    var fileInput = form.find('input[name="fileExcel"]')[0].files[0];
+                    var formData = new FormData();
+                    var progressBar = $('.progress-bar');
+                    formData.append('fileExcel', fileInput);
+                    $.ajax({
+                        url: form.attr('action'),
+                        type: 'POST',
+                        data: formData,
+                        contentType: false,
+                        processData: false,
+
+                        success: function (response) {
+                            console.log(response);
+                            if(response.success) {
+                                window.location.href = response.redirect;
+                                $('#exampleModalExcel').modal('hide');
+                            } else {
+                                var errors = response.errors;
+                                $.each(errors, function (field, message) {
+                                    let errorElement = $('#' + field + '-error');
+                                    errorElement.html(message);
+                                })
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            console.error(error);
+                            console.error(status);
+                            
+                        }
+                    })                
+                })
                 //Modal Config Get Selected Data Kelas
                 // Untuk sunting
                 $('#exampleModalUpdate').on('show.bs.modal', function (event) {
@@ -249,7 +367,9 @@
                     modal.find(`#nipd`).attr("value",div.data(`nipd`));
                     modal.find(`#nama`).attr("value",div.data(`nama`));                  
                     modal.find(`#kelas`).val(div.data(`kelas`));
+                    modal.find(`#thn_akademik`).val(div.data(`thn_akademik`));
                     modal.find('#potongan').attr("value",div.data(`potongan`));
+                    modal.find(`input[name="status"][value="${div.data('status')}"]`).prop('checked', true);
                 });
 
                 //Modal Config Update Data Kelas
@@ -264,8 +384,9 @@
                     var nipd = form.find('input[name="nipd"]').val();
                     var nama = form.find('input[name="nama"]').val();
                     var kelas = form.find('input[name="kelas"]').val();
+                    var thn_akademik = form.find('input[name="thn_akademik"]').val();
                     var potongan = form.find('input[name="potongan"]').val();
-
+                    var status = form.find('input[name="status"]:checked').val();
                     $.ajax({
                         url: form.attr('action'),
                         method: form.attr('method'),

@@ -1,6 +1,4 @@
-        
-
-        <!-- content page -->
+<!-- content page -->
         <div class="container-fluid mt-4 main-container">
             <?= $this->session->flashdata('message'); ?>
             <div class="row">
@@ -36,7 +34,7 @@
                                         <?php 
                                         foreach ($data['dataInstansi'] as $value) {
                                             ?>
-                                             <option value="<?=$value['instansi'];?>"><?=$value['instansi'];?></option>
+                                             <option value="<?=$value['jenis_instansi'];?>"><?=$value['jenis_instansi'];?></option>
                                             <?php
                                         }
                                         ?>
@@ -80,7 +78,7 @@
                                         <?php 
                                         foreach ($data['dataInstansi'] as $value) {
                                             ?>
-                                             <option value="<?=$value['instansi'];?>"><?=$value['instansi'];?></option>
+                                             <option value="<?=$value['jenis_instansi'];?>"><?=$value['jenis_instansi'];?></option>
                                             <?php
                                         }
                                         ?>
@@ -126,28 +124,34 @@
                                                 </thead>
                                                 <tbody>
                                                     <?php
-                                                    $no = 1; 
-                                                    foreach ($data['dataBiaya'] as $value) {
-                                                    ?>
-                                                    <tr class="odd">
-                                                        <td><center><?= $no++; ?></center></td>
-                                                        <td><center><?= $value['jenis_pembayaran']; ?></center></td>
-                                                        <td><center><?= "Rp" . number_format($value['biaya'],2,',','.'); ?></center></td>
-                                                        <td><center><?= $value['instansi']; ?></center></td>
-                                                        <td>
-                                                            <center>
-                                                            <a href="javascript:;" 
-                                                                data-id_jenis_pembayaran="<?= $value['id_jenis_pembayaran']; ?>"                                                            
-                                                                data-jenis_pembayaran="<?= $value['jenis_pembayaran']; ?>"
-                                                                data-biaya="<?= $value['biaya']; ?>"
-                                                                data-instansi="<?= $value['instansi']; ?>"                                                                
-                                                                class="btn btn-warning btn-sm updateData" data-toggle="modal"
-                                                                data-target="#updateBiaya">Ubah</a>
-                                                            </center>
-                                                       </td>    
-                                                    </tr>
-                                                  </tr>
-                                                  <?php }  ?>
+                                                    if(count($data['dataBiaya']) === 0){
+                                                        ?>
+
+                                                        <?php
+                                                    } else {
+                                                        $no = 1; 
+                                                        foreach ($data['dataBiaya'] as $value) {
+                                                        ?>
+                                                        <tr class="odd">
+                                                            <td><center><?= $no++; ?></center></td>
+                                                            <td><center><?= $value['jenis_pembayaran']; ?></center></td>
+                                                            <td><center><?= "Rp" . number_format($value['biaya'],2,',','.'); ?></center></td>
+                                                            <td><center><?= $value['instansi']; ?></center></td>
+                                                            <td>
+                                                                <center>
+                                                                <a href="javascript:;" 
+                                                                    data-id_jenis_pembayaran="<?= $value['id_jenis_pembayaran']; ?>"                                                            
+                                                                    data-jenis_pembayaran="<?= $value['jenis_pembayaran']; ?>"
+                                                                    data-biaya="<?= $value['biaya']; ?>"
+                                                                    data-instansi="<?= $value['instansi']; ?>"                                                                
+                                                                    class="btn btn-warning btn-sm updateData" data-toggle="modal"
+                                                                    data-target="#updateBiaya">Ubah</a>
+                                                                </center>
+                                                            </td>    
+                                                        </tr>
+                                                        <?php
+                                                    }
+                                                }  ?>
                                                 </tbody>
                                             </table>
                                         </div>

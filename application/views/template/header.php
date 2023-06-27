@@ -14,12 +14,6 @@
       <link href="https://cdn.datatables.net/v/dt/jszip-2.5.0/dt-1.13.4/b-2.3.6/b-html5-2.3.6/datatables.min.css" rel="stylesheet"/>
       <!-- Material design icons CSS -->
       <link rel="stylesheet" href="<?= base_url();?>/assets/vendor/materializeicon/material-icons.css">
-      <!-- animate CSS -->
-      <link rel="stylesheet" href="<?= base_url();?>/assets/vendor/animatecss/animate.css">
-      <!-- swiper carousel CSS -->
-      <link rel="stylesheet" href="<?= base_url();?>/assets/vendor/swiper/css/swiper.min.css">
-      <!-- daterange CSS -->
-      <link rel="stylesheet" href="<?= base_url();?>/assets/vendor/bootstrap-daterangepicker-master/daterangepicker.css">
       <!-- footable CSS -->
       <link rel="stylesheet" href="<?= base_url();?>/assets/vendor/footable-bootstrap/css/footable.bootstrap.min.css">
       <!-- Bootstrap tour CSS -->
@@ -130,6 +124,9 @@
                      </li>
                      <li class="nav-item">
                         <a href="<?= base_url(''); ?>pages/datakelas" class="nav-link success-gradient-active"><i class="material-icons icon">group</i> <span>Data Kelas</span> </a>
+                     </li>
+                     <li class="nav-item">
+                        <a href="<?= base_url(''); ?>pages/datatahunakademik" class="nav-link success-gradient-active"><i class="material-icons icon">group</i> <span>Data Tahun Akademik</span> </a>
                      </li>
                      <li class="nav-item">
                         <a href="<?= base_url(''); ?>pages/datasiswa" class="nav-link success-gradient-active"><i class="material-icons icon">person</i> <span>Data Siswa</span></a>

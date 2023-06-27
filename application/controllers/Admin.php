@@ -13,6 +13,7 @@ class Admin extends User {
     public function __construct()
     {
         parent::__construct();
+
         $this->response = array(
             'success' => false,
             'errors' => null,
@@ -67,7 +68,7 @@ class Admin extends User {
                     $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">
                                         Password tidak sesuai
                                         </div>');
-                    redirect('login');
+                    $this->load->view('login');
                 }
             }
         } else {
@@ -76,80 +77,82 @@ class Admin extends User {
     }
 
     public function tambahDataAdmin(){
-        $this->setData(
-            array(
-                'table' => 'admin',
-                'config' => array(
-                                array(
-                                    'field' => 'kode_petugas',
-                                    'label' => 'Kode Petugas',
-                                    'rules' => 'required|trim|min_length[5]|is_unique[admin.kode_petugas]',
-                                    'errors' => 
-                                    [
-                                        'required' => 'Kode petugas wajib diisi!',
-                                        'is_unique' => 'Kode petugas sudah tersedia!'
-                                    ]
+        if($this->session->userdata('kode_petugas')) {
+            $this->setData(
+                array(
+                    'table' => 'admin',
+                    'config' => array(
+                                    array(
+                                        'field' => 'kode_petugas',
+                                        'label' => 'Kode Petugas',
+                                        'rules' => 'required|trim|min_length[5]|is_unique[admin.kode_petugas]',
+                                        'errors' => 
+                                        [
+                                            'required' => 'Kode petugas wajib diisi!',
+                                            'is_unique' => 'Kode petugas sudah tersedia!'
+                                        ]
+                                    ),
+                                    array(
+                                        'field' => 'nama_petugas',
+                                        'label' => 'Nama Petugas',
+                                        'rules' => 'required|trim',
+                                        'errors' => 
+                                        [
+                                            'required' => 'Nama wajib diisi!'
+                                        ]
+                                    ),
+                                    array(
+                                        'field' => 'password',
+                                        'label' => 'Password',
+                                        'rules' => 'required|trim|min_length[5]',
+                                        'errors' =>
+                                        [
+                                            'required' => 'Password wajib diisi!',
+                                            'min_length' => 'Password minimal terdiri dari lima karakter'
+                                        ]
+                                    ),
+                                    array(
+                                        'field' => 'confPassword',
+                                        'label' => 'Confirm Password',
+                                        'rules' => 'required|trim|matches[password]',
+                                        'errors' =>
+                                        [
+                                            'required' => 'Konfirmasi password wajib diisi',
+                                            'matches' => 'Password tidak sama!'
+                                        ]
+                                    )
                                 ),
-                                array(
-                                    'field' => 'nama_petugas',
-                                    'label' => 'Nama Petugas',
-                                    'rules' => 'required|trim',
-                                    'errors' => 
-                                    [
-                                        'required' => 'Nama wajib diisi!'
-                                    ]
-                                ),
-                                array(
-                                    'field' => 'password',
-                                    'label' => 'Password',
-                                    'rules' => 'required|trim|min_length[5]',
-                                    'errors' =>
-                                    [
-                                        'required' => 'Password wajib diisi!',
-                                        'min_length' => 'Password minimal terdiri dari lima karakter'
-                                    ]
-                                ),
-                                array(
-                                    'field' => 'confPassword',
-                                    'label' => 'Confirm Password',
-                                    'rules' => 'required|trim|matches[password]',
-                                    'errors' =>
-                                    [
-                                        'required' => 'Konfirmasi password wajib diisi',
-                                        'matches' => 'Password tidak sama!'
-                                    ]
+                    'value' => array(
+                                'kode_petugas' => htmlspecialchars($this->input->post('kode_petugas')),
+                                'nama_petugas' => htmlspecialchars($this->input->post('nama_petugas')),
+                                'password' => password_hash($this->input->post('password'), PASSWORD_BCRYPT),
                                 )
-                            ),
-                'value' => array(
-                            'kode_petugas' => htmlspecialchars($this->input->post('kode_petugas')),
-                            'nama_petugas' => htmlspecialchars($this->input->post('nama_petugas')),
-                            'password' => password_hash($this->input->post('password'), PASSWORD_BCRYPT),
-                            )
-                )
+                    )
             );
-        $data = $this->getData();
-        $response = $this->response;
-        $this->form_validation->set_rules($data['config']);
-        if($this->form_validation->run() == true) {
-            $process = $this->model->insertDataModel($data['table'], $data['value']);
-            if($process['status'] == true){
-                $this->session->set_flashdata("message", "<div class='alert alert-success' role='alert'>
-                                        {$process['message']}
-                                        </div>");
+            $data = $this->getData();
+            $response = $this->response;
+            $this->form_validation->set_rules($data['config']);
+            if($this->form_validation->run() == true) {
+                $process = $this->model->insertDataModel($data['table'], $data['value']);
+                if($process['status'] == true){
+                    $this->session->set_flashdata("message", "<div class='alert alert-success' role='alert'>
+                                            {$process['message']}
+                                            </div>");
+                } else {
+                    $this->session->set_flashdata("message", "<div class='alert alert-danger' role='alert'>
+                                            {$process['message']}
+                                            </div>");
+                }
+                $response['redirect'] = site_url('dataadmin');
+                $response['success'] = true;
             } else {
-                $this->session->set_flashdata("message", "<div class='alert alert-danger' role='alert'>
-                                        {$process['message']}
-                                        </div>");
+                $response['errors'] =  array('kode_petugas' => form_error('kode_petugas'), 'nama_petugas' => form_error('nama_petugas'), 
+                'password' => form_error('password'), 'confPassword' => form_error('confPassword'));
             }
-            $response['redirect'] = site_url('dataadmin');
-            $response['success'] = true;
-        } else {
-            $response['errors'] =  array('kode_petugas' => form_error('kode_petugas'), 'nama_petugas' => form_error('nama_petugas'), 
-            'password' => form_error('password'), 'confPassword' => form_error('confPassword'));
+            header('Content-Type: application/json');
+            echo json_encode($response);
+            exit();
         }
-        header('Content-Type: application/json');
-        echo json_encode($response);
-        exit();
     }
 
     public function tambahDataBiaya(){
@@ -506,6 +509,7 @@ class Admin extends User {
     }
 
     public function tambahDataSiswa(){
+        $response = $this->response;
         $this->setData(
             array(
                 'table' => 'siswa',
@@ -514,8 +518,10 @@ class Admin extends User {
                     'nipd' => htmlspecialchars($this->input->post('nipd')),
                     'nama_siswa' => htmlspecialchars($this->input->post('nama')),
                     'kelas' => htmlspecialchars($this->input->post('kelas')),
+                    'thn_akademik' => htmlspecialchars($this->input->post('thn_akademik')),
                     'password' => password_hash($this->input->post('password'), PASSWORD_BCRYPT),
                     'potongan' => htmlspecialchars($this->input->post('potongan')),
+                    'status' => htmlspecialchars($this->input->post('status')),
                 ),
                 'config' =>
                 array(
@@ -539,6 +545,15 @@ class Admin extends User {
                         ]
                     ),
                     array(
+                        'field' => 'thn_akademik',
+                        'label' => 'Tahun Akademik',
+                        'rules' => 'required|trim',
+                        'errors' =>
+                        [
+                            'required' => 'Tahun Akademik wajib diisi!'
+                        ]
+                    ),
+                    array(
                         'field' => 'nama',
                         'label' => 'Nama',
                         'rules' => 'required|trim',
@@ -556,14 +571,23 @@ class Admin extends User {
                             'required' => 'Password wajib diisi!'
                         ]
                     ),
+                    array(
+                        'field' => 'status',
+                        'label' => 'Status',
+                        'rules' => 'required|trim',
+                        'errors' =>
+                        [
+                            'required' => 'Status wajib diisi!'
+                        ]
+                    ),
                 ),
             )
         );
-        $response = $this->response;
         $data = $this->getData();
         if(is_null($data['value']['potongan'])){
             $data['value']['potongan'] = 0;
         }
+
         $this->form_validation->set_rules($data['config']);
         if($this->form_validation->run() == true) {
             $process = $this->model->insertDataModel($data['table'], $data['value']);
@@ -578,12 +602,73 @@ class Admin extends User {
             }
             $response['success'] = true;
             $response['redirect'] = base_url('pages/datasiswa');
-        } else {
-            $response['errors'] = array('nipd' => form_error('nipd'), 'nama' => form_error('nama'), 'kelas' => form_error('kelas'), 'password' => form_error('password'),
-            );
 
+        } else {
+            $response['errors'] = array('nipd' => form_error('nipd'), 'nama' => form_error('nama'), 'thn_akademik' => form_error('thn_akademik'), 
+            'kelas' => form_error('kelas'), 'password' => form_error('password'), 'status' => form_error('status')
+            );
         }
         header('Content-Type: application/json');
+        echo json_encode($response);
+        exit();
+    }
+
+    public function tambahDataSiswaExcel(){
+        $data = $process = array();
+        header('Content-Type: application/json');
+        $response = $this->response;
+        if(isset($_FILES['fileExcel']['name'])){
+            $file_extension = pathinfo($_FILES['fileExcel']['name'], PATHINFO_EXTENSION);
+            if($file_extension == 'csv' || $file_extension == 'xls' || $file_extension == 'xlsx') {
+                $path = $_FILES['fileExcel']['tmp_name'];
+                
+                $spreadsheet = IOFactory::load($path);
+                // $sheetCount = $spreadsheet->getSheetCount();
+                foreach ($spreadsheet->getWorksheetIterator() as $worksheet) {
+                    
+                    $highestRow = $worksheet->getHighestRow();
+                    for ($row = 2; $row <= $highestRow; $row++) {
+                        $nipd = $worksheet->getCell('A' . $row)->getValue();
+                        $nama_siswa = $worksheet->getCell('B' . $row)->getValue();
+                        $kelas = $worksheet->getCell('C' . $row)->getValue();
+                        $thn_akademik = $worksheet->getCell('D' . $row)->getValue();
+                        $password = $worksheet->getCell('E' . $row)->getValue();
+                        $potongan = $worksheet->getCell('F' . $row)->getValue();
+                        $data['value'] = array(
+                            'nipd' => strval($nipd),
+                            'nama_siswa' => $nama_siswa,
+                            'kelas' => $kelas,
+                            'thn_akademik' => $thn_akademik,
+                            'password' => password_hash($password, PASSWORD_BCRYPT),
+                            'potongan' => strval($potongan),
+                            'status' => 1
+                        );
+                        $existingData = $this->model->getDataModel('siswa', ['nipd'], ['nipd' => $nipd]);
+                        if(!is_null($existingData)){
+                            if($existingData['nipd'] == $data['value']['nipd'] || count(array_unique($data['value'])) !== count($data['value'])) {
+                                $response['errors'] = array('fileExcel' => "Terdapat Duplikasi Pada NIPD Baik di Excel Ataupun di Database!");
+                            }
+                        } else {
+                            $process = $this->model->insertDataModel('siswa', $data['value']);
+                            if($process['status'] == true){
+                                $this->session->set_flashdata("message", "<div class='alert alert-success' role='alert'>
+                                                        {$process['message']}
+                                                        </div>");
+                            } else {
+                                $this->session->set_flashdata("message", "<div class='alert alert-danger' role='alert'>
+                                                        {$process['message']}
+                                                        </div>");                                
+                            }
+                            $response['success'] = true;
+                            $response['redirect'] = base_url('pages/datasiswa');
+                        }
+                        
+                    }
+                }
+            } else {
+                $response['errors'] = array('fileExcel' => "Hanya menerima file dengan format .csv, .xls, dan .xlsx!");
+            }
+        } 
         echo json_encode($response);
         exit();
     }
@@ -597,7 +682,9 @@ class Admin extends User {
                array(
                    'nama_siswa' => htmlspecialchars($this->input->post('nama')),
                    'kelas' => htmlspecialchars($this->input->post('kelas')),
-                   'potongan' => htmlspecialchars($this->input->post('potongan'))
+                   'potongan' => htmlspecialchars($this->input->post('potongan')),
+                   'thn_akademik' => htmlspecialchars($this->input->post('thn_akademik')),
+                   'status' => htmlspecialchars($this->input->post('status')),
                ),
                'config' =>
                array(
@@ -619,6 +706,15 @@ class Admin extends User {
                                 'required' => 'kelas wajib diisi!'
                             ]
                     ),
+                    array(
+                            'field' => 'thn_akademik',
+                            'label' => 'Tahun Akademik',
+                            'rules' => 'required|trim',
+                            'errors' =>
+                            [
+                                'required' => 'Tahun akademik wajib diisi!'
+                            ]
+                    ),
                )
            )
         );
@@ -629,7 +725,7 @@ class Admin extends User {
         }
         $this->form_validation->set_rules($data['config']);
         if($this->form_validation->run() == true) {
-            $existingData = $this->model->getDataModel($data['table'], ['nama_siswa', 'kelas', 'potongan'], $data['value']);
+            $existingData = $this->model->getDataModel($data['table'], ['nama_siswa', 'kelas', 'thn_akademik' ,'potongan'], $data['value']);
             if($existingData == $data['value']){
                 $response['errors'] = array('potongan' => "Data harus berbeda saat ingin diubah!");       
             } else {
@@ -651,9 +747,129 @@ class Admin extends User {
         }
         header('Content-Type: application/json');
         echo json_encode($response);
+        // exit();
+    }
+
+        public function tambahDataTahunAkademik(){
+        $response = $this->response;
+        $this->setData(
+            array(
+                'table' => 'tahun_akademik',
+                'value' => 
+                array(
+                    'thn_akademik' => htmlspecialchars($this->input->post('thn_akademik')),
+                    'status' => (int)htmlspecialchars($this->input->post('status')),
+                ),
+                'config' =>
+                array(
+                    array(
+                        'field' => 'thn_akademik',
+                        'label' => 'Tahun Akademik',
+                        'rules' => 'is_unique[tahun_akademik.thn_akademik]',
+                        'errors' =>
+                        [
+                            'is_unique' => 'Tahun Akademik sudah tersedia!'
+                        ]
+                    ),
+                    array(
+                        'field' => 'status',
+                        'label' => 'Status',
+                        'rules' => 'required|trim',
+                        'errors' =>
+                        [
+                            'required' => 'Status wajib diisi!'
+                        ]
+                    ),
+                ),
+            )
+        );
+        $data = $this->getData();
+
+        $this->form_validation->set_rules($data['config']);
+        if($this->form_validation->run() == true) {
+            $process = $this->model->insertDataModel($data['table'], $data['value']);
+
+            if($process['status'] == true){
+                $this->session->set_flashdata("message", "<div class='alert alert-success' role='alert'>
+                                        {$process['message']}
+                                        </div>");
+            } else {
+                $this->session->set_flashdata("message", "<div class='alert alert-danger' role='alert'>
+                                        {$process['message']}
+                                        </div>");                                
+            }
+            $response['success'] = true;
+            $response['redirect'] = base_url('pages/datatahunakademik');
+
+        } else {
+            $response['errors'] = array('thn_akademik' => form_error('thn_akademik'), 'status' => form_error('status')
+            );
+        }
+        header('Content-Type: application/json');
+        echo json_encode($response);
         exit();
     }
 
+    public function ubahDataTahunAkademik(){
+        $response = $this->response;
+        $this->setData(
+            array(
+                'table' => 'tahun_akademik',
+                'where' => array('thn_akademik' => htmlspecialchars($this->input->post('thn_akademik')),),
+                'value' => 
+                array(
+                    'thn_akademik' => htmlspecialchars($this->input->post('thn_akademik')),
+                    'status' => (int)htmlspecialchars($this->input->post('status')),
+                ),
+                'config' =>
+                array(
+                    array(
+                        'field' => 'thn_akademik',
+                        'label' => 'Tahun Akademik',
+                        'rules' => 'required',
+                        'errors' =>
+                        [
+                            'required' => 'Tahun Akademik wajib diisi!'
+                        ]
+                    ),
+                    array(
+                        'field' => 'status',
+                        'label' => 'Status',
+                        'rules' => 'required|trim',
+                        'errors' =>
+                        [
+                            'required' => 'Status wajib diisi!'
+                        ]
+                    ),
+                ),
+            )
+        );
+        $data = $this->getData();
+
+        $this->form_validation->set_rules($data['config']);
+        if($this->form_validation->run() == true) {
+            $process = $this->model->updateDataModel($data['table'], $data['value'], $data['where']);
+
+            if($process['status'] == true){
+                $this->session->set_flashdata("message", "<div class='alert alert-success' role='alert'>
+                                        {$process['message']}
+                                        </div>");
+            } else {
+                $this->session->set_flashdata("message", "<div class='alert alert-danger' role='alert'>
+                                        {$process['message']}
+                                        </div>");                                
+            }
+            $response['success'] = true;
+            $response['redirect'] = base_url('pages/datatahunakademik');
+
+        } else {
+            $response['errors'] = array('thn_akademik' => form_error('thn_akademik'), 'status' => form_error('status')
+            );
+        }
+        header('Content-Type: application/json');
+        echo json_encode($response);
+        exit();
+    }
     public function ubahDataAdmin(){
         $this->setData(
             array(
@@ -762,6 +978,7 @@ class Admin extends User {
         }
     }
 
+
     public function cetakExcel($data){
         $spreadsheet = new Spreadsheet();
         $activeWorksheet = $spreadsheet->getActiveSheet();
@@ -849,46 +1066,78 @@ class Admin extends User {
         $pdf->Output();
     }
 
-    function cariDataTransaksi($param = null) {
-        $searchInput = $this->input->post('keyword');
-		$dataSiswa = null;
-		$dataTransaksi = null;
-		$start = $this->uri->segment(3);
-		$this->pagination->initialize($this->getData());
-		// Check if search input is empty
-		if (empty($searchInput)) {
-			// Clear the search message from session or storage
-			$this->session->unset_userdata('search_message');
-		} else {
-			$keyword = $searchInput;
-			$dataSiswa = $this->model->getDataJoinModel('siswa', 'kelas' ,['nama_siswa', 'siswa.kelas', 'potongan', 'kelas.instansi', 'nipd'], ["kelas", "nipd"], $keyword);
-			$dataTransaksi = $this->model->getDataModel('transactions', 
-			['nipd', 'nominal', 'status', 'image', 'keterangan', 'created_at'], ['nipd' => $keyword], ['per_page' => 10], $start);
-			if(is_null($dataSiswa)){
-				$this->session->set_userdata('search_message', 'Data tidak ditemukan!');
-                redirect('datatransaksi');
-			} else {
-				redirect('datatransaksi' . '?' . http_build_query(array('dataSiswa' => $dataSiswa, 'dataTransaksi' => $dataTransaksi, 'start' => $start)));
-			}
-		}
+    function cariDataTransaksi() {
+        if($this->session->userdata('kode_petugas')) {
+            $response = [];
+            $keyword = $this->input->get('query');
+            //Ambil Data Siswa
+            $dataSiswa = $this->model->getDataJoinModel('siswa', 'kelas' ,['nama_siswa', 'siswa.kelas', 'potongan', 'instansi', 'nipd', 'thn_akademik', 'status'], 
+            ["kelas", "nipd"], ['siswa.nama_siswa' => $keyword, 'nipd' => $keyword]);
+            
+            $start = $this->uri->segment(3);
+            if(is_null($dataSiswa)) {
+                $response['errors'] = "Data tidak ditemukan!";
+            } else {
+
+                //Ambil Riwayat Data Transaksi Berdasarkan NIPD
+                $dataTransaksi = $this->model->getDataModel('transactions', 
+                ['nipd', 'nominal', 'status', 'image', 'keterangan', 'created_at'], ['nipd' => $dataSiswa['nipd']], ['per_page' => 10], $start);
+
+                //Ambil Jumlah Nominal dari tabel jenis_pembayaran Berdasarkan instansi
+                $dataNominal = $this->model->getDataModel('jenis_pembayaran', ['sum(biaya)'], ['instansi' => $dataSiswa['instansi']]);
+
+                //Ambil Jumlah Uang Masuk Berdasarkan NIPD
+                $dataNominalMasuk = $this->db->select(['sum(nominal)'])
+                    ->from('transactions')->join('siswa', "transactions.nipd = siswa.nipd")->join('tahun_akademik', "tahun_akademik.thn_akademik = siswa.thn_akademik")
+                    ->where(['transactions.status' => 'diterima', 'siswa.nipd' => $dataSiswa['nipd'], 'siswa.status' => 1, 'tahun_akademik.status' => 1,])
+                    ->get()
+                    ->result_array();
+                $response['dataNominal'] = $dataNominal['sum(biaya)'];
+                if(is_null($dataNominalMasuk[0]['sum(nominal)'])){
+                    $response['dataNominalMasuk'] = 0;
+                } else {
+                    $response['dataNominalMasuk'] = $dataNominalMasuk[0]['sum(nominal)'];
+                }
+                if(is_null($dataTransaksi) || empty($dataTransaksi)){
+                    $response['errors'] = "Data Transaksi Belum Tersedia!";
+                } else {
+                    $response['dataTransaksi'] = $dataTransaksi;
+                }
+                if($dataSiswa['status'] == 1){
+                    $dataSiswa['status'] = "Aktif";
+                } else {
+                    $dataSiswa['status'] = "Tidak Aktif";
+                }
+                $response['dataSiswa'] = array('nipd' => $dataSiswa['nipd'], 'nama_siswa' => $dataSiswa['nama_siswa'], 'kelas' => $dataSiswa['kelas'], 
+                'instansi' => $dataSiswa['instansi'], 'potongan' => $dataSiswa['potongan'], 'thn_akademik' => $dataSiswa['thn_akademik'], 'status' => $dataSiswa['status']);
+            }
+            header('Content-Type: application/json');
+            echo json_encode($response);
+            
+        } else {
+            exit();
+        }
+		// $this->pagination->initialize($this->getData());
     }
     function validasiPembayaran() {
+        $response = [];
         $this->setData(
             array(
                 'table' => 'transactions',
-                'where' => array('created_at' => $this->input->get('param2')),
-                'value' => array('status' => $this->input->get('param1') == 'Ditunggu' ? "Diterima" : "Ditunggu")
+                'where' => array('created_at' => $this->input->post('created_at')),
+                'value' => array('status' => $this->input->post('status') == 'Ditunggu' ? "Diterima" : "Ditunggu",
+                                'updated_at' => date('Y-m-d H:i:s'))
             )
         );
         $data = $this->getData();
         $process = $this->model->updateDataModel($data['table'], $data['value'] ,$data['where']);
         if($process['status'] == true) {
-            $start = $this->uri->segment(3);
-            $dataSiswa = $this->model->getDataJoinModel('siswa', 'kelas' ,['nama_siswa', 'siswa.kelas', 'potongan', 'kelas.instansi', 'nipd'], ["kelas", "nipd"], $this->input->get('nipd'));
-			$dataTransaksi = $this->model->getDataModel('transactions', 
-			['nipd', 'nominal', 'status', 'image', 'keterangan', 'created_at'], ['nipd' => $this->input->get('nipd')], ['per_page' => 10], $start);
-            redirect('datatransaksi' . '?' . http_build_query(array('dataSiswa' => $dataSiswa, 'dataTransaksi' => $dataTransaksi, 'start' => $start)));
-        } 
+            // $start = $this->uri->segment(3);
+            $response['success'] = true;
+            $response['value'] = array($data['value']['status'], $data['where']['created_at']);
+        }
+        header('Content-Type: application/json');
+        echo json_encode($response);
     }
 }
 ?>

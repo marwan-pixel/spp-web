@@ -14,7 +14,6 @@
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="<?= base_url();?>/assets/js/jquery-3.2.1.min.js"></script>
-
     <script src="<?= base_url();?>/assets/js/popper.min.js"></script>
     <script src="<?= base_url();?>/assets/vendor/bootstrap-4.1.3/js/bootstrap.min.js"></script>
 
@@ -27,19 +26,8 @@
     <!-- Circular progress gauge jquery file -->
     <script src="<?= base_url();?>/assets/vendor/circle-progress/circle-progress.min.js"></script>
 
-    <!-- Swiper carousel jquery file -->
-    <script src="<?= base_url();?>/assets/vendor/swiper/js/swiper.min.js"></script>
-
-    <!-- Chart js jquery file -->
-    <script src="<?= base_url();?>/assets/vendor/chartjs/Chart.bundle.min.js"></script>
-    <script src="<?= base_url();?>/assets/vendor/chartjs/utils.js"></script>
-
     <!-- Footable jquery file -->
     <script src="<?= base_url();?>/assets/vendor/footable-bootstrap/js/footable.min.js"></script>
-
-    <!-- datepicker jquery file -->
-    <script src="<?= base_url();?>/assets/vendor/bootstrap-daterangepicker-master/moment.js"></script>
-    <script src="<?= base_url();?>/assets/vendor/bootstrap-daterangepicker-master/daterangepicker.js"></script>
 
     <!-- jVector map jquery file -->
     <script src="<?= base_url();?>/assets/vendor/jquery-jvectormap/jquery-jvectormap.js"></script>
@@ -55,12 +43,8 @@
     <script src="<?= base_url();?>/assets/js/main.js"></script>
 
     <!-- page specific script -->
-    <script src="<?= base_url();?>/assets/js/dashboard.js"></script>
 
     <!-- page specific script -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
-    <script src="https://cdn.datatables.net/v/dt/jszip-2.5.0/dt-1.13.4/b-2.3.6/b-html5-2.3.6/datatables.min.js"></script>
     <!-- <script>
         $(document).ready(function() {
             let table = $('#table').DataTable({

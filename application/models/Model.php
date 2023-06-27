@@ -4,7 +4,7 @@ class Model extends CI_Model {
     public function getDataModel($table, $data, $param = null, $limit = null ,$start = null, $keyword = null) {
         $process = $this->db->select(implode(",",$data));
         if($keyword) {
-            $process = $this->db->like($keyword[0], $keyword[1]);
+            $process = $this->db->like($keyword);
         }
         if($param == null) {
             $process = $this->db->get($table, $limit, $start)->result_array();
@@ -35,14 +35,18 @@ class Model extends CI_Model {
         return $process;
     }
 
-    public function getDataJoinModel($table1, $table2, $data ,$column, $where = null){
+    public function getDataJoinModel($table1, $table2, $data ,$column, $keyword = null){
         $this->db->select($data)->from($table1)->join($table2, "$table2.$column[0] = $table1.$column[0]");
-        if(!is_null($where)){
-            $this->db->where("$table1.$column[1]", $where);
+        if(!is_null($keyword)){
+            $this->db->group_start();
+            $this->db->like($keyword);
+            $this->db->or_like($keyword);
+            $this->db->group_end();
         }
         $process = $this->db->get()->row_array();
         return $process;
     }
+
     public function countAllData($table, $where = null ,$param = null){
         if(!is_null($param)){
             $this->db->like($where, $param);
@@ -53,17 +57,22 @@ class Model extends CI_Model {
     public function insertDataModel($table, $dataInput){
         try {
              $this->db->insert($table, $dataInput);
+             if($table == 'tahun_akademik' && $dataInput['status'] == 1) {
+                $this->db->update('tahun_akademik', array('status' => 0));
+                $this->db->where('thn_akademik', $dataInput['thn_akademik']);
+                $this->db->update('tahun_akademik', array('status' => 1));
+             }
                 if ($this->db->affected_rows() > 0) {
                 return [
                     'status' => true,
-                    'message' => 'Data berhasil ditambahkan'    
+                    'message' => 'Data berhasil ditambahkan'
                 ];
                 }
         } catch (Exception $e) {
             return [
-                        'status' => true,
-                        'message' => $e->getMessage()    
-                    ];  
+                    'status' => true,
+                    'message' => $e->getMessage()    
+            ];  
         }
     }
 
@@ -71,7 +80,14 @@ class Model extends CI_Model {
         try {
             $this->db->set($data);
             $this->db->where($where);
-            $this->db->update($table, $data);          
+            $this->db->update($table, $data);
+            if($table == 'tahun_akademik') {
+                if($data['status'] == 1){
+                    $this->db->update('tahun_akademik', array('status' => 0));
+                    $this->db->where('thn_akademik', $data['thn_akademik']);
+                    $this->db->update('tahun_akademik', array('status' => 1));
+                }        
+            }
             if($this->db->affected_rows() > 0) {
                  return [
                     'status' => true,

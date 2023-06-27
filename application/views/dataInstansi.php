@@ -94,12 +94,12 @@
                                                     ?>
                                                     <tr class="odd">
                                                         <td><center><?= $no++; ?></center></td>
-                                                        <td><center><?= $value['instansi']; ?></center></td>
+                                                        <td><center><?= $value['jenis_instansi']; ?></center></td>
                                                         <td>
                                                             <center>
                                                             <a href="javascript:;" 
-                                                                data-instansi="<?= $value['instansi']; ?>"
-                                                                data-instansinew="<?= $value['instansi']; ?>"
+                                                                data-instansi="<?= $value['jenis_instansi']; ?>"
+                                                                data-instansinew="<?= $value['jenis_instansi']; ?>"
                                                                 class="btn btn-warning btn-sm updateData" data-toggle="modal"
                                                                 data-target="#updateInstansi">Ubah</a>
                                                             </center>
