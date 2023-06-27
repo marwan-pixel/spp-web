@@ -11,7 +11,6 @@
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
       <!-- Bootstrap CSS -->
       <link rel="stylesheet" href="<?= base_url();?>/assets/vendor/bootstrap-4.1.3/js/bootstrap.min.js">
-      <link href="https://cdn.datatables.net/v/dt/jszip-2.5.0/dt-1.13.4/b-2.3.6/b-html5-2.3.6/datatables.min.css" rel="stylesheet"/>
       <!-- Material design icons CSS -->
       <link rel="stylesheet" href="<?= base_url();?>/assets/vendor/materializeicon/material-icons.css">
       <!-- footable CSS -->

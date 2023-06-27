@@ -960,7 +960,7 @@ class Admin extends User {
         );
         $data = $this->getData();
         $process = $this->model->printDataModel($data['table'],['siswa.nama_siswa', 'kelas.kelas', 
-        'kelas.instansi' ,'nominal', 'status', 'keterangan', 'created_at'], $data['param']);
+        'kelas.instansi' ,'nominal', 'transactions.status', 'keterangan', 'created_at'], $data['param']);
         if(count($process) == 0){
             $this->session->set_flashdata('message', 
             '<div class="alert alert-danger" role="alert">
@@ -1042,26 +1042,68 @@ class Admin extends User {
         
         $pdf->SetFont('Arial', '', '12');
         $pdf->Cell(10, 10, "No", 1);
-        $pdf->Cell(40, 10, "Nama Siswa", 1);
-        $pdf->Cell(25, 10, "Kelas", 1);
+        $pdf->Cell(50, 10, "Nama Siswa", 1);
+        $pdf->Cell(15, 10, "Kelas", 1);
         $pdf->Cell(40, 10, "Instansi", 1);
         $pdf->Cell(27, 10, "Nominal", 1);
-        $pdf->Cell(60, 10, "Keterangan", 1);
+        $pdf->Cell(50, 10, "Keterangan", 1);
         $pdf->Cell(42, 10, "Tanggal Bayar", 1);
         $pdf->Cell(20, 10, "Status", 1);
 
         $no = 1;
+        
         foreach ($data as $row) {
+            $cellWidth = 50;
+            $cellHeight = 10;
+            if($pdf->GetStringWidth($row['nama_siswa']) < $cellWidth){
+                $line = 1;
+            } else {
+                $textArray = array();
+                $textLength = strlen($row['nama_siswa']);
+                $errMargin = 10;
+                $startChar = 0;
+                $maxChar = 0;
+                
+                $tmpString = "";
+                while($startChar < $textLength) {
+                    while(($pdf->GetStringWidth($tmpString) < ($cellWidth - $errMargin)
+                    && ($startChar + $maxChar) < $textLength) ){
+                        $maxChar++;
+                        $tmpString = substr($row['nama_siswa'], $startChar, $maxChar);
+                    }
+                    $startChar = $startChar + $maxChar;
+                    array_push($textArray, $tmpString);
+                    $maxChar = 0;
+                    $tmpString = '';
+                }
+                $line = count($textArray);
+            }
+
             $pdf->Ln();
             $pdf->SetFont('Arial', '', 11);
-            $pdf->Cell(10, 10, $no++, 1);
-            $pdf->Cell(40, 10, $row['nama_siswa'], 1);
-            $pdf->Cell(25, 10, $row['kelas'], 1);
-            $pdf->Cell(40, 10, $row['instansi'], 1);
-            $pdf->Cell(27, 10, $row['nominal'], 1);
-            $pdf->Cell(60, 10, $row['keterangan'], 1);
-            $pdf->Cell(42, 10, $row['created_at'], 1);
-            $pdf->Cell(20, 10, $row['status'], 1);
+            $pdf->Cell(10, $line * $cellHeight, $no++, 1);
+            
+            $xPos = $pdf->GetX();
+            $yPos = $pdf->GetY();
+            
+            $pdf->MultiCell($cellWidth, $cellHeight, $row['nama_siswa'], 1);
+            $pdf->SetXY($xPos + $cellWidth, $yPos);
+
+            $pdf->Cell(15,  $line * $cellHeight, $row['kelas'], 1);
+            $pdf->Cell(40,  $line * $cellHeight, $row['instansi'], 1);
+            $pdf->Cell(27,  $line * $cellHeight, $row['nominal'], 1);
+            if($pdf->GetStringWidth($row['keterangan']) < $cellWidth){
+                $pdf->Cell(50,  $line * $cellHeight, $row['keterangan'], 1);
+            } else {
+                $xPos = $pdf->GetX();
+                $yPos = $pdf->GetY();
+                
+                $pdf->MultiCell($cellWidth, $cellHeight, $row['keterangan'], 1);
+                $pdf->SetXY($xPos + $cellWidth, $yPos);
+            }
+
+            $pdf->Cell(42, $line * $cellHeight, $row['created_at'], 1);
+            $pdf->Cell(20, $line * $cellHeight, $row['status'], 1);
         }
         $pdf->Output();
     }

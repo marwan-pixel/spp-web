@@ -206,7 +206,7 @@ class Pages extends User {
 		}
 	}
 
-	public function datatransaksi()
+	public function datatransaksi(): void
 	{
 		$this->setData(
 			array(
@@ -221,7 +221,7 @@ class Pages extends User {
 		}
 	}
 
-	public function dataTahunAkademik() {
+	public function dataTahunAkademik(): void {
 		$this->setData(
 			array(
 				'base_url' => 'http://localhost:8080/spp-web/pages/datatahunakademik/',
