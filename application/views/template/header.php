@@ -34,7 +34,7 @@
          <!-- main header -->
          <header class="main-header">
             <div class="container-fluid">
-               <nav>
+               <nav >
                   <div class="row align-items-center">
                      <div class="col-auto pl-0">
                         <button style="width:10vw;" class="btn success-gradient btn-icon" id="left-menu"><img class="img-fluid" height="40" width="60" src="<?= base_url();?>/assets/img/Yayasan Ar-Rahmah.jpeg" alt=""></button>
@@ -66,8 +66,8 @@
                               </a>
                            </div>
                         </div> -->
-                        <div class="dropdown d-inline-block">
-                           <a class="btn header-color-secondary dropdown-toggle username" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <div class="dropdown">
+                           <a class="btn header-color-secondary dropdown-toggle username" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                               <figure class="userpic"><img src="<?=base_url();?>/assets/img/user1.png" alt=""></figure>
                               <h5 class="text-hide-xs">
                                  <small class="header-color-secondary">Welcome,</small>

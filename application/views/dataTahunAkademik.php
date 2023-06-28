@@ -3,18 +3,18 @@
             <?= $this->session->flashdata('message'); ?>
             <div class="row">
                 <div class="col-sm-12">
-                    <button type="button" class="btn btn-success ml-3 mb-3" data-toggle="modal" data-target="#exampleModal">
+                    <button type="button" class="btn btn-success ml-3 mb-3" data-bs-toggle="modal" data-bs-target="#exampleModal">
                     Tambah Data
                     </button>
                 </div>
 
                 <!-- Modal Insert-->
-                <div class="modal fade" id="exampleModal" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
                                 <h4 class="modal-title" id="exampleModalLabel">Data Tahun Akademik</h4>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
@@ -39,7 +39,7 @@
                                         <small class="text-danger" id="status-error"></small>
                                     </div>   
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal" >Keluar</button>
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" >Keluar</button>
                                         <button type="submit" class="btn btn-primary">Simpan</button>
                                     </div>
                                 </form>
@@ -48,12 +48,12 @@
                     </div>
                 </div>
                 <!-- Modal Update -->
-                <div class="modal fade" id="updateTahun" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="updateTahunLabel" aria-hidden="true">
+                <div class="modal fade" id="updateTahun" tabindex="-1" aria-labelledby="updateTahunLabel" aria-hidden="true">
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
                                 <h4 class="modal-title" id="updateTahunLabel">Data Biaya</h4>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
@@ -78,7 +78,7 @@
                                         <small class="text-danger" id="status-error"></small>
                                     </div>  
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal" >Keluar</button>
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" >Keluar</button>
                                         <button type="submit" class="btn btn-primary">Simpan</button>
                                     </div>
                                 </form>
@@ -134,8 +134,8 @@
                                                                 <a href="javascript:;" 
                                                                     data-thn_akademik="<?= $value['thn_akademik']; ?>"                                                            
                                                                     data-status="<?= $value['status']; ?>"
-                                                                    class="btn btn-warning btn-sm updateData" data-toggle="modal"
-                                                                    data-target="#updateTahun">Ubah</a>
+                                                                    class="btn btn-warning btn-sm updateData" data-bs-toggle="modal"
+                                                                    data-bs-target="#updateTahun">Ubah</a>
                                                                 </center>
                                                             </td>
                                                        </tr>

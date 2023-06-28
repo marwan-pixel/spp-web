@@ -20,14 +20,14 @@
 
                     </form>
                     <div class="form-group ml-3 mr-3">
-                        <button data-toggle="modal" data-target="#updateDataAdmin" class="btn btn-block btn-success">Ubah Data Admin</button>
+                        <button data-bs-toggle="modal" data-bs-target="#updateDataAdmin" class="btn btn-block btn-success">Ubah Data Admin</button>
                     </div>
                     <div class="modal fade" id="updateDataAdmin" tabindex="-1" aria-labelledby="updateDataAdminLabel" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h4 class="modal-title" id="exampleModalLabel">     </h4>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <h4 class="modal-title" id="exampleModalLabel">Informasi Administrator</h4>
+                                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>                        
                                     </button>
                                 </div>
@@ -40,7 +40,7 @@
                                         <small class="text-danger" id="nama-errorUpdate"></small>
                                     </div>
                                     <div class="mb-2 d-flex">
-                                        <p class="mr-1">Ingin mengubah password?</p><a href="#passwordCollapse" data-toggle="collapse">Klik di sini</a>
+                                        <p class="mr-1">Ingin mengubah password?</p><a href="#passwordCollapse" data-bs-toggle="collapse">Klik di sini</a>
                                     </div>
                                     <div class="collapse" id="passwordCollapse">
                                          <div class="form-group">
@@ -56,7 +56,7 @@
                                     </div>
                                     <small class="text-danger" id="update-errorUpdate"></small>
                                     <div class="modal-footer">
-                                        <a class="text-light btn btn-secondary" data-dismiss="modal">Close</a>
+                                        <a class="text-light btn btn-secondary" data-bs-dismiss="modal">Close</a>
                                         <button type="submit" class="btn btn-primary">Simpan</button>
                                     </div>
                                  </form>

@@ -3,7 +3,7 @@
             <?= $this->session->flashdata('message'); ?>
             <div class="row">
                 <div class="col-sm-12">
-                    <button type="button" class="btn btn-success ml-3 mb-3" data-toggle="modal" data-target="#exampleModal">
+                    <button type="button" class="btn btn-success ml-3 mb-3" data-bs-toggle="modal" data-bs-target="#exampleModal">
                     Tambah Data
                     </button>
                 </div>
@@ -14,7 +14,7 @@
                         <div class="modal-content">
                             <div class="modal-header">
                                 <h4 class="modal-title" id="exampleModalLabel">Data Kelas</h4>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
@@ -36,13 +36,13 @@
                                     <small id="password-error" class="text-danger"></small>
                                 </div>
                                 <div class="form-group">
-                                    <label for="InputConfPassword">Password</label>
+                                    <label for="InputConfPassword">Konfirmasi Password</label>
                                     <input type="password" name="confPassword" class="form-control" id="confPassword" aria-describedby="InputConfPassword">
                                     <small id="confPassword-error" class="text-danger"></small>
                                 </div>
 
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                                     <button type="submit" class="btn btn-primary">Tambah Data</button>
                                 </div>
                             </form>

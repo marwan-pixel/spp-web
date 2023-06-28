@@ -911,7 +911,7 @@ class Admin extends User {
                 'min_length' => 'Password minimal terdiri dari 8 karakter!'));
                 $this->form_validation->set_rules('confPassword','ConfPassword','required|trim|matches[password]', array( 'required' => 'Konfirmasi Password wajib diisi!',
                 'matches' => 'Password tidak sama!'));
-                $this->model->getDataModel($data['table'], ['nama_admin', 'password'], $data['value']);
+                $this->model->getDataModel($data['table'], ['nama_petugas', 'password'], $data['value']);
             }
             
             $this->form_validation->set_rules($data['config']);

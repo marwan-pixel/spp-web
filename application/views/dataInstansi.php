@@ -5,7 +5,7 @@
             <?= $this->session->flashdata('message'); ?>
             <div class="row">
                 <div class="col-sm-12">
-                    <button type="button" class="btn btn-success ml-3 mb-3" data-toggle="modal" data-target="#exampleModal">
+                    <button type="button" class="btn btn-success ml-3 mb-3" data-bs-toggle="modal" data-bs-target="#exampleModal">
                     Tambah Data
                     </button>
                 </div>
@@ -16,7 +16,7 @@
                         <div class="modal-content">
                             <div class="modal-header">
                                 <h4 class="modal-title" id="exampleModalLabel">Data Biaya</h4>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
@@ -42,7 +42,7 @@
                         <div class="modal-content">
                             <div class="modal-header">
                                 <h4 class="modal-title" id="updateInstansiLabel">Data Instansi</h4>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
@@ -55,7 +55,7 @@
                                         <small class="text-danger" id="instansinew-errorUpdate"></small> 
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Keluar</button>
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Keluar</button>
                                         <button type="submit" class="btn btn-primary">Ubah</button>
                                     </div>
                                 </form>
@@ -102,8 +102,8 @@
                                                             <a href="javascript:;" 
                                                                 data-instansi="<?= $value['jenis_instansi']; ?>"
                                                                 data-instansinew="<?= $value['jenis_instansi']; ?>"
-                                                                class="btn btn-warning btn-sm updateData" data-toggle="modal"
-                                                                data-target="#updateInstansi">Ubah</a>
+                                                                class="btn btn-warning btn-sm updateData" data-bs-toggle="modal"
+                                                                data-bs-target="#updateInstansi">Ubah</a>
                                                             </center>
                                                        </td>    
                                                     </tr>

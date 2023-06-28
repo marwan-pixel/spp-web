@@ -4,7 +4,7 @@
             <?= $this->session->flashdata('message'); ?>
             <div class="row">
                 <div class="col-sm-12">
-                    <button type="button" class="btn btn-success ml-3 mb-3" data-toggle="modal" data-target="#exampleModal">
+                    <button type="button" class="btn btn-success ml-3 mb-3" data-bs-toggle="modal" data-bs-target="#exampleModal">
                     Tambah Data
                     </button>
                 </div>
@@ -15,7 +15,7 @@
                         <div class="modal-content">
                             <div class="modal-header">
                                 <h4 class="modal-title" id="exampleModalLabel">Data Kelas</h4>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
@@ -28,18 +28,18 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="InputKelas">Instansi</label>
-                                    <select class="form-control" name="instansi" id="instansi">
+                                    <select class="form-select" name="instansi" id="instansi">
                                         <?php 
                                         foreach ($data['dataInstansi'] as $value) {
                                             ?>
-                                             <option value="<?=$value['instansi'];?>"><?=$value['instansi'];?></option>
+                                             <option value="<?=$value['jenis_instansi'];?>"><?=$value['jenis_instansi'];?></option>
                                             <?php
                                         }
                                         ?>
                                     </select>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                                     <button type="submit" class="btn btn-primary">Tambah Data</button>
                                 </div>
                             </form>
@@ -54,7 +54,7 @@
                         <div class="modal-content">
                             <div class="modal-header">
                                 <h4 class="modal-title" id="exampleModalUpdateLabel">Data Kelas</h4>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
@@ -68,11 +68,11 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="instansi">Instansi</label>
-                                    <select class="form-control instansi" name="instansi" id="instansi">
+                                    <select class="form-select instansi" name="instansi" id="instansi">
                                         <?php 
                                         foreach ($data['dataInstansi'] as $value) {
                                             ?>
-                                             <option value="<?=$value['instansi'];?>"><?=$value['instansi'];?></option>
+                                             <option value="<?=$value['jenis_instansi'];?>"><?=$value['jenis_instansi'];?></option>
                                             <?php
                                         }
                                         ?>
@@ -80,7 +80,7 @@
                                     <small id="instansi-errorUpdate" class="text-danger"></small>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Keluar</button>
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Keluar</button>
                                     <button type="submit" class="btn btn-primary">Simpan</button>
                                 </div>
                             </form>
@@ -133,8 +133,8 @@
                                                                             data-kelas="<?= $value['kelas']; ?>"
                                                                             data-kelasnew="<?= $value['kelas']; ?>"
                                                                             data-instansi="<?= $value['instansi']; ?>"
-                                                                            class="btn btn-warning btn-sm" data-toggle="modal"
-                                                                            data-target="#exampleModalUpdate">Ubah</a>
+                                                                            class="btn btn-warning btn-sm" data-bs-toggle="modal"
+                                                                            data-bs-target="#exampleModalUpdate">Ubah</a>
                                                                         </center>
                                                                    </td>    
                                                                 </tr>
