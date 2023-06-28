@@ -10,7 +10,7 @@
                 Tambah Data (Impor Dari Excel)
                 </button>
 
-                <div class="modal fade" id="exampleModalExcel" tabindex="-1" aria-labelledby="exampleModalExcelLabel" aria-hidden="true">
+                <div class="modal fade" id="exampleModalExcel" data-backdrop="static" data-keyboard="false" role="dialog" tabindex="-1" aria-labelledby="exampleModalExcelLabel" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
                         <div class="modal-content">
                             <div class="modal-header">
@@ -20,8 +20,15 @@
                                 </button>
                             </div>
                             <div class="modal-body">
-                            <h5><b> Petunjuk Singkat</b></h5>
-                            <p>Penginputan data Siswa bisa dilakukan dengan mengcopy data dari file Ms. Excel. Format file excel harus sesuai kebutuhan aplikasi. Silahkan download formatnya</p>
+                                <div>
+                                    <h5><b> Petunjuk Singkat</b></h5>
+                                    <div class="">
+                                        <p>Penginputan data Siswa bisa dilakukan dengan mengcopy data dari file Ms. Excel. Format file excel harus sesuai kebutuhan aplikasi. 
+                                            Silakan Klik pada tombol di sebelah kanan untuk melihat cara menggunakannya 
+                                            <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#LargeModal">Contoh Excel</a>
+                                        </p>
+                                    </div>
+                                </div>
                             <form method="post" id="sample_form" enctype="multipart/form-data" action="<?=base_url('admin/tambahDataSiswaExcel');?>">
                                 <div class="form-group">
                                     <label for="file">File Input</label>
@@ -38,6 +45,64 @@
                     </div>
                 </div>
 
+                <div class="modal fade bd-example-modal-lg" id="LargeModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLongTitle">Contoh Mengupload Data Siswa Menggunakan Excel</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="img d-flex justify-content-center mb-2">
+                                    <img src="<?= base_url();?>/assets/img/ContohExcel1.png" alt="">
+                                </div>
+                                <div class="img d-flex justify-content-center mb-2">
+                                    <img src="<?= base_url();?>/assets/img/Sheet1.png" alt="">
+                                </div>
+                                <div class="explained">
+                                    <p>Buat kolom tabel dengan jumlah kolom sesuai dengan yang ada di gambar, dimulai dari judul - judul:</p>
+                                    <li><b>NIPD</b></li> 
+                                    <li><b>Nama</b></li> 
+                                    <li><b>Kelas</b></li> 
+                                    <li><b>Tahun Akademik</b></li> 
+                                    <li><b>Password</b></li>
+                                    <li><b>Potongan</b></li>
+                                    <br>
+                                    <p>
+                                        Untuk kolom judul, penulisan judul tidak harus sesuai dengan yang ada di gambar. Ukuran font, diberi <i>bold</i> atau tidak,
+                                        penulisan secara <i>CAPSLOCK</i> atau tidak itu tergantung sesuai dengan keinginan. Untuk setiap kolom di bawah judul
+                                        wajib diisi seperti yang ada di gambar, kecuali pada kolom potongan itu opsional boleh diisi atau dibiarkan saja kosong.
+                                    </p>
+                                    <p>
+                                        Format penulisan potongan sama seperti layaknya uang rupiah (10 pada tabel di atas = Rp10). Untuk kolom <b>password</b>, 
+                                        nilainya diketik sama seperti NIPD untuk digunakan pada aplikasi <i>mobile</i> (orang tua siswa).
+                                    </p>
+                                    <p>
+                                        Selama pembuatan tabel data siswa, proses pembuatan bisa dilakukan dengan <i>sheet</i> yang berbeda. Seperti pada contoh 
+                                        di bawah ini:
+                                    </p>
+                                </div>
+                                 <div class="img d-flex justify-content-center mb-2">
+                                    <img src="<?= base_url();?>/assets/img/ContohExcel2.png" alt="">
+                                </div>
+                                <div class="img d-flex justify-content-center mb-2">
+                                    <img src="<?= base_url();?>/assets/img/Sheet2.png" alt="">
+                                </div>
+                                <div class="explained">
+                                    <p>Format pembuatan tabel masih sama seperti pada <i>sheet</i> yang pertama. Jumlah <i>sheet</i> bisa ditambah sesuai keinginan.
+                                        Hal ini untuk memudahkan dalam memisahkan data siswa berdasarkan kelas.    
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Modal Insert -->
                 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
@@ -49,67 +114,67 @@
                                 </button>
                             </div>
                             <div class="modal-body">
-                            <form method="post" action="<?=base_url('admin/tambahDataSiswa');?>">
-                                <div class="form-group">
-                                    <label for="nipd">NIPD</label>
-                                    <input value="<?= set_value('nipd');?>" type="number" name="nipd" class="form-control nipd" id="nipd" aria-describedby="InputNIS">
-                                    <small class="text-danger" id="nipd-error"></small>
-                                </div>
-                                <div class="form-group">
-                                    <label for="nama">Nama Siswa</label>
-                                    <input value="<?= set_value('nama');?>" type="text" class="form-control nama" name="nama" id="nama" aria-describedby="InputNama">
-                                    <small class="text-danger" id="nama-error"></small>
-                                </div>
-                                <div class="form-group">
-                                    <label for="kelas">Kelas</label>
-                                    <select value="<?= set_value('kelas');?>" class="form-control kelas" name="kelas" id="kelas">
-                                    <?php
-                                        foreach ($data['dataKelas'] as $value) {
-                                            ?>
-                                        <option value="<?= $value['kelas']; ?>" id="kelas"><?= $value['kelas']; ?></option>
-                                    <?php
-                                        }
-                                    ?>
-                                    </select>
-                                    <small class="text-danger" id="kelas-error"></small>
-                                </div>
-                                <div class="form-group">
-                                    <label for="thn_akademik">Tahun Akademik</label>
-                                    
-                                    <select value="<?= set_value('thn_akademik');?>" class="form-control thn_akademik" name="thn_akademik" id="thn_akademik">
-                                    <?php
-                                        foreach ($data['dataTahunAkademik'] as $value) {
-                                            ?>
-                                        <option value="<?= $value['thn_akademik']; ?>" id="thn_akademik"><?= $value['thn_akademik']; ?></option>
-                                    <?php
-                                        }
-                                    ?>
-                                    </select>
-                                    <small class="text-danger" id="thn_akademik-error"></small>
-                                </div>
-                                <div class="form-group">
-                                    <label for="status">Keterangan:</label>
-                                    <input type="radio" value="1" name="status" id="status_aktif">
-                                    <label for="status_aktif">Aktif</label>
-                                    <input type="radio" value="0" name="status" id="status_tidak-aktif">
-                                    <label for="status_tidak-aktif">Tidak Aktif</label>
-                                    <small class="text-danger" id="status-error"></small>
-                                </div>
-                                <div class="form-group">
-                                    <label for="password">Password</label>
-                                    <input type="password" value="<?= set_value('password');?>" name="password" class="form-control" id="password" aria-describedby="InputNIS">
-                                    <small class="text-danger" id="password-error"></small>
-                                </div>
-                                <div class="form-group">
-                                    <label for="potongan">Potongan</label>
-                                    <input type="number" value="<?= set_value('potongan');?>" name="potongan" class="form-control" id="potongan" aria-describedby="InputNIS">
-                                    <small class="text-danger" id="potongan-error"></small>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Keluar</button>
-                                    <button type="submit" class="btn btn-primary">Simpan</button>
-                                </div>
-                            </form>
+                                <form method="post" action="<?=base_url('admin/tambahDataSiswa');?>">
+                                    <div class="form-group">
+                                        <label for="nipd">NIPD</label>
+                                        <input value="<?= set_value('nipd');?>" type="number" name="nipd" class="form-control nipd" id="nipd" aria-describedby="InputNIS">
+                                        <small class="text-danger" id="nipd-error"></small>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="nama">Nama Siswa</label>
+                                        <input value="<?= set_value('nama');?>" type="text" class="form-control nama" name="nama" id="nama" aria-describedby="InputNama">
+                                        <small class="text-danger" id="nama-error"></small>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="kelas">Kelas</label>
+                                        <select value="<?= set_value('kelas');?>" class="form-control kelas" name="kelas" id="kelas">
+                                        <?php
+                                            foreach ($data['dataKelas'] as $value) {
+                                                ?>
+                                            <option value="<?= $value['kelas']; ?>" id="kelas"><?= $value['kelas']; ?></option>
+                                        <?php
+                                            }
+                                        ?>
+                                        </select>
+                                        <small class="text-danger" id="kelas-error"></small>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="thn_akademik">Tahun Akademik</label>
+                                        
+                                        <select value="<?= set_value('thn_akademik');?>" class="form-control thn_akademik" name="thn_akademik" id="thn_akademik">
+                                        <?php
+                                            foreach ($data['dataTahunAkademik'] as $value) {
+                                                ?>
+                                            <option value="<?= $value['thn_akademik']; ?>" id="thn_akademik"><?= $value['thn_akademik']; ?></option>
+                                        <?php
+                                            }
+                                        ?>
+                                        </select>
+                                        <small class="text-danger" id="thn_akademik-error"></small>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="status">Keterangan:</label>
+                                        <input type="radio" value="1" name="status" id="status_aktif">
+                                        <label for="status_aktif">Aktif</label>
+                                        <input type="radio" value="0" name="status" id="status_tidak-aktif">
+                                        <label for="status_tidak-aktif">Tidak Aktif</label>
+                                        <small class="text-danger" id="status-error"></small>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="password">Password</label>
+                                        <input type="password" value="<?= set_value('password');?>" name="password" class="form-control" id="password" aria-describedby="InputNIS">
+                                        <small class="text-danger" id="password-error"></small>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="potongan">Potongan</label>
+                                        <input type="number" value="<?= set_value('potongan');?>" name="potongan" class="form-control" id="potongan" aria-describedby="InputNIS">
+                                        <small class="text-danger" id="potongan-error"></small>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Keluar</button>
+                                        <button type="submit" class="btn btn-primary">Simpan</button>
+                                    </div>
+                                </form>
                             </div>
                         </div>
                     </div>

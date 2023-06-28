@@ -16,7 +16,7 @@
                </div>
             </div>
 
-            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <!-- <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                <div class="modal-dialog">
                   <div class="modal-content">
                      <div class="modal-header">
@@ -58,7 +58,7 @@
                      </div>
                   </div>
                </div>
-            </div>
+            </div> -->
          </div>
          <div hidden id="biodata" class="col-sm-12">
             <div class="card mt-4 shadow fullscreen">
@@ -142,9 +142,9 @@
                                        <h4 align="right" id="totalnominal" class="text-primary"></h4>
                                     </div>
                                  </div>
-                                 <button type="button" class="btn btn-success mb-3 mt-3" data-toggle="modal" data-target="#exampleModal">
+                                 <!-- <button type="button" class="btn btn-success mb-3 mt-3" data-toggle="modal" data-target="#exampleModal">
                                        Tambah Data (Jika Membayar dengan Cash)
-                                 </button>
+                                 </button> -->
                                  <table class="table hidden-overflow " id="table">
                                     <thead>
                                        <tr>
@@ -248,7 +248,6 @@
                               $('.add-transaction').find('#nominaltransaction').attr("value", response.dataNominal);
                               $('.nominal-container').find('#totalnominal').html(IDR.format(response.dataNominal * 12));
                               $('.nominal-container').find('#nominalmasuk').html(IDR.format(response.dataNominalMasuk));
-
                               $.each(response.dataSiswa, function(index, item) {
                                  $('#dataTables-example').show();
                                  $('#message').empty();

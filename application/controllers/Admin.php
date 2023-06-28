@@ -634,6 +634,9 @@ class Admin extends User {
                         $thn_akademik = $worksheet->getCell('D' . $row)->getValue();
                         $password = $worksheet->getCell('E' . $row)->getValue();
                         $potongan = $worksheet->getCell('F' . $row)->getValue();
+                        if($potongan == null) {
+                            $potongan = 0;
+                        }
                         $data['value'] = array(
                             'nipd' => strval($nipd),
                             'nama_siswa' => $nama_siswa,
@@ -643,10 +646,13 @@ class Admin extends User {
                             'potongan' => strval($potongan),
                             'status' => 1
                         );
+                        
                         $existingData = $this->model->getDataModel('siswa', ['nipd'], ['nipd' => $nipd]);
                         if(!is_null($existingData)){
-                            if($existingData['nipd'] == $data['value']['nipd'] || count(array_unique($data['value'])) !== count($data['value'])) {
-                                $response['errors'] = array('fileExcel' => "Terdapat Duplikasi Pada NIPD Baik di Excel Ataupun di Database!");
+                            if($existingData['nipd'] == $data['value']['nipd']) {
+                                $response['errors'] = array('fileExcel' => "Terdapat Duplikasi Pada NIPD di Database!");
+                            } else if (count(array_unique($data['value'])) !== count($data['value'])) {
+                                $response['errors'] = array('fileExcel' => "Terdapat Duplikasi Pada NIPD di Excel!");
                             }
                         } else {
                             $process = $this->model->insertDataModel('siswa', $data['value']);
@@ -1110,6 +1116,14 @@ class Admin extends User {
 
     function cariDataTransaksi() {
         if($this->session->userdata('kode_petugas')) {
+            $this->setData(
+			array(
+				'base_url' => 'http://localhost:8080/spp-web/pages/datatransaksi/',
+				'total_rows' => $this->model->countAllData('tahun_akademik'),
+				'per_page' => 10,
+				
+			)
+		);
             $response = [];
             $keyword = $this->input->get('query');
             //Ambil Data Siswa
@@ -1122,8 +1136,9 @@ class Admin extends User {
             } else {
 
                 //Ambil Riwayat Data Transaksi Berdasarkan NIPD
+                $this->pagination->initialize($this->getData());
                 $dataTransaksi = $this->model->getDataModel('transactions', 
-                ['nipd', 'nominal', 'status', 'image', 'keterangan', 'created_at'], ['nipd' => $dataSiswa['nipd']], ['per_page' => 10], $start);
+                ['nipd', 'nominal', 'status', 'image', 'keterangan', 'created_at'], ['nipd' => $dataSiswa['nipd']], ['per_page' => 10], $this->getData()['per_page'], $start);
 
                 //Ambil Jumlah Nominal dari tabel jenis_pembayaran Berdasarkan instansi
                 $dataNominal = $this->model->getDataModel('jenis_pembayaran', ['sum(biaya)'], ['instansi' => $dataSiswa['instansi']]);
@@ -1159,7 +1174,7 @@ class Admin extends User {
         } else {
             exit();
         }
-		// $this->pagination->initialize($this->getData());
+		
     }
     function validasiPembayaran() {
         $response = [];
