@@ -4,9 +4,11 @@
         <div class="container-fluid mt-4 main-container">
             <?= $this->session->flashdata('message'); ?>
             <div class="row">
-                <button type="button" class="btn btn-success ml-3 mb-3" data-toggle="modal" data-target="#exampleModal">
-                Tambah Data
-                </button>
+                <div class="col-sm-12">
+                    <button type="button" class="btn btn-success ml-3 mb-3" data-toggle="modal" data-target="#exampleModal">
+                    Tambah Data
+                    </button>
+                </div>
 
                 <!-- Modal Insert-->
                 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">

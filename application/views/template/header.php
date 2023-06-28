@@ -10,7 +10,8 @@
       <link rel="icon" href="<?= base_url();?>/assets/img/Yayasan Ar-Rahmah.jpeg">
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
       <!-- Bootstrap CSS -->
-      <link rel="stylesheet" href="<?= base_url();?>/assets/vendor/bootstrap-4.1.3/js/bootstrap.min.js">
+      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+      <!-- <link rel="stylesheet" href="<?= base_url();?>/assets/vendor/bootstrap-4.1.3/js/bootstrap.min.js"> -->
       <!-- Material design icons CSS -->
       <link rel="stylesheet" href="<?= base_url();?>/assets/vendor/materializeicon/material-icons.css">
       <!-- footable CSS -->

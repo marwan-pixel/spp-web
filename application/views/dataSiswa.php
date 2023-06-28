@@ -3,19 +3,22 @@
         <div class="container-fluid mt-4 main-container">
             <?= $this->session->flashdata('message'); ?>
             <div class="row">
-                <button type="button" class="btn btn-success ml-3 mb-3" data-toggle="modal" data-target="#exampleModal">
-                Tambah Data
-                </button>
-                <button type="button" class="btn btn-success ml-3 mb-3" data-toggle="modal" data-target="#exampleModalExcel">
-                Tambah Data (Impor Dari Excel)
-                </button>
+                <div class="col-sm-12">
+                    <button type="button" class="btn btn-success ml-3 mb-3" data-bs-toggle="modal" data-bs-target="#insertData">
+                    Tambah Data
+                    </button>
+                    <button type="button" class="btn btn-success ml-3 mb-3" data-bs-toggle="modal" data-bs-target="#ExcelModal">
+                    Tambah Data (Impor Dari Excel)
+                    </button>
+                </div>
 
-                <div class="modal fade" id="exampleModalExcel" data-backdrop="static" data-keyboard="false" role="dialog" tabindex="-1" aria-labelledby="exampleModalExcelLabel" aria-hidden="true">
+                <!-- Modal Untuk Insert Data Dari Excel -->
+                <div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="ExcelModal" data-backdrop="static" data-keyboard="false" role="dialog" tabindex="-1" aria-labelledby="ExcelModalLabel" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h4 class="modal-title" id="exampleModalExcelLabel">Data Siswa</h4>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <h4 class="modal-title" id="ExcelModalLabel">Data Siswa</h4>
+                                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
@@ -25,32 +28,37 @@
                                     <div class="">
                                         <p>Penginputan data Siswa bisa dilakukan dengan mengcopy data dari file Ms. Excel. Format file excel harus sesuai kebutuhan aplikasi. 
                                             Silakan Klik pada tombol di sebelah kanan untuk melihat cara menggunakannya 
-                                            <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#LargeModal">Contoh Excel</a>
+                                            <a href="#" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#Information">Contoh Excel</a>
                                         </p>
                                     </div>
                                 </div>
-                            <form method="post" id="sample_form" enctype="multipart/form-data" action="<?=base_url('admin/tambahDataSiswaExcel');?>">
-                                <div class="form-group">
-                                    <label for="file">File Input</label>
-                                    <input type="file" class="form-control" requi name="fileExcel" id="fileExcel" aria-describedby="fileExcel">
-                                    <small class="text-danger" id="fileExcel-error"></small>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Keluar</button>
-                                    <button type="submit" class="btn btn-primary">Simpan</button>
-                                </div>
-                            </form>
+
+                                <form method="post" id="sample_form" enctype="multipart/form-data" action="<?=base_url('admin/tambahDataSiswaExcel');?>">
+                                    <div class="form-group">
+                                        <label for="file">File Input</label>
+                                        <input type="file" class="form-control" requi name="fileExcel" id="fileExcel" aria-describedby="fileExcel">
+                                        <small class="text-danger" id="fileExcel-error"></small>
+                                    
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="exitfromExcel btn btn-secondary" data-bs-dismiss="modal">Keluar</button>
+                                        <button type="submit" class="excelSubmit btn btn-primary d-flex justify-content-center">
+                                        Simpan
+                                        </button>
+                                    </div>
+                                </form>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="modal fade bd-example-modal-lg" id="LargeModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-                    <div class="modal-dialog modal-lg">
+                <!-- Modal Informasi Cara Mengupload Data Melalui Excel -->
+                <div class="modal fade bd-example-modal-lg" id="Information" tabindex="-1" role="dialog" aria-labelledby="myInformationLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-lg modal-dialog-scrollable">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title" id="exampleModalLongTitle">Contoh Mengupload Data Siswa Menggunakan Excel</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <h5 class="modal-title" id="insertDataLongTitle">Contoh Mengupload Data Siswa Menggunakan Excel</h5>
+                                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
@@ -97,19 +105,19 @@
                                 </div>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#ExcelModal">Close</button>
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Modal Insert -->
-                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal fade" id="insertData" tabindex="-1" aria-labelledby="insertDataLabel" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h4 class="modal-title" id="exampleModalLabel">Data Siswa</h4>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <h4 class="modal-title" id="insertDataLabel">Data Siswa</h4>
+                                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
@@ -127,29 +135,30 @@
                                     </div>
                                     <div class="form-group">
                                         <label for="kelas">Kelas</label>
-                                        <select value="<?= set_value('kelas');?>" class="form-control kelas" name="kelas" id="kelas">
+                                        <input class="form-control" value="<?= set_value('kelas');?>" name="kelas" list="kelasList" id="kelas" placeholder="Kelas">
+                                        <datalist id="kelasList" >
                                         <?php
                                             foreach ($data['dataKelas'] as $value) {
                                                 ?>
-                                            <option value="<?= $value['kelas']; ?>" id="kelas"><?= $value['kelas']; ?></option>
+                                            <option value="<?= $value['kelas']; ?>" id="kelas"></option>
                                         <?php
                                             }
                                         ?>
-                                        </select>
+                                        </datalist>
                                         <small class="text-danger" id="kelas-error"></small>
                                     </div>
                                     <div class="form-group">
                                         <label for="thn_akademik">Tahun Akademik</label>
-                                        
-                                        <select value="<?= set_value('thn_akademik');?>" class="form-control thn_akademik" name="thn_akademik" id="thn_akademik">
+                                        <input class="form-control" value="<?= set_value('thn_akademik');?>" name="thn_akademik" list="thn_akademikList" id="thn_akademik" placeholder="Tahun Akademik">
+                                        <datalist id="thn_akademikList">
                                         <?php
                                             foreach ($data['dataTahunAkademik'] as $value) {
                                                 ?>
-                                            <option value="<?= $value['thn_akademik']; ?>" id="thn_akademik"><?= $value['thn_akademik']; ?></option>
+                                            <option value="<?= $value['thn_akademik']; ?>" id="thn_akademik"></option>
                                         <?php
                                             }
                                         ?>
-                                        </select>
+                                        </datalist>
                                         <small class="text-danger" id="thn_akademik-error"></small>
                                     </div>
                                     <div class="form-group">
@@ -171,7 +180,7 @@
                                         <small class="text-danger" id="potongan-error"></small>
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Keluar</button>
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Keluar</button>
                                         <button type="submit" class="btn btn-primary">Simpan</button>
                                     </div>
                                 </form>
@@ -179,13 +188,14 @@
                         </div>
                     </div>
                 </div>
-                  <!-- Modal Update -->
-                <div class="modal fade" id="exampleModalUpdate" tabindex="-1" aria-labelledby="exampleModalUpdateLabel" aria-hidden="true">
+
+                  <!-- Modal Untuk Update Data -->
+                <div class="modal fade" id="UpdateData" tabindex="-1" aria-labelledby="UpdateDataLabel" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h4 class="modal-title" id="exampleModalUpdateLabel">Data Siswa</h4>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <h4 class="modal-title" id="UpdateDataLabel">Data Siswa</h4>
+                                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
@@ -197,34 +207,35 @@
                                  <div class="form-group">
                                     <label for="nama">Nama Siswa</label>
                                     <input type="text" class="form-control nama" name="nama" id="nama" aria-describedby="InputNama">
-                                    <small class="text-danger" id="nama-errorUpdate"></small>
+                                    <small class="text-danger" id="nama_siswa-errorUpdateData"></small>
                                 </div>
                                 <div class="form-group">
                                     <label for="kelas">Kelas</label>
-                                    <select class="form-control kelas" name="kelas" id="kelas">
+                                    <input class="form-control" value="<?= set_value('kelas');?>" name="kelas" list="kelasList" id="kelas" placeholder="Kelas">
+                                    <datalist id="kelasList">
                                     <?php
                                         foreach ($data['dataKelas'] as $value) {
                                             ?>
-                                        <option value="<?= $value['kelas']; ?>"><?= $value['kelas']; ?></option>
+                                        <option value="<?= $value['kelas']; ?>"></option>
                                     <?php
                                         }
                                     ?>
-                                    </select>
-                                    <small class="text-danger" id="kelas-errorUpdate"></small>
+                                    </datalist>
+                                    <small class="text-danger" id="kelas-errorUpdateData"></small>
                                 </div>
                                 <div class="form-group">
                                     <label for="thn_akademik">Tahun Akademik</label>
-                                    
-                                    <select class="form-control thn_akademik" name="thn_akademik" id="thn_akademik">
+                                    <input class="form-control" value="<?= set_value('thn_akademik');?>" name="thn_akademik" list="thn_akademikList" id="thn_akademik" placeholder="Tahun Akademik">
+                                    <datalist id="thn_akademikList">
                                     <?php
                                         foreach ($data['dataTahunAkademik'] as $value) {
                                             ?>
-                                        <option value="<?= $value['thn_akademik']; ?>"><?= $value['thn_akademik']; ?></option>
+                                        <option value="<?= $value['thn_akademik']; ?>"></option>
                                     <?php
                                         }
                                     ?>
-                                    </select>
-                                    <small class="text-danger" id="thn_akademik-error"></small>
+                                    </datalist>
+                                    <small class="text-danger" id="thn_akademik-errorUpdateData"></small>
                                 </div>
                                 <div class="form-group">
                                     <label for="status">Keterangan:</label>
@@ -232,15 +243,15 @@
                                     <label for="status_aktif">Aktif</label>
                                     <input type="radio" value="0" name="status" id="status_tidak-aktif">
                                     <label for="status_tidak-aktif">Tidak Aktif</label>
-                                    <small class="text-danger" id="status-error"></small>
+                                    <small class="text-danger" id="status-errorUpdateData"></small>
                                 </div>
                                  <div class="form-group">
                                     <label for="potongan">Potongan</label>
                                     <input type="number" class="form-control" name="potongan" id="potongan" aria-describedby="InputNIS">
-                                    <small class="text-danger" id="potongan-errorUpdate"></small>
+                                    <small class="text-danger" id="potongan-errorUpdateData"></small>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                                     <button type="submit" class="btn btn-primary">Ubah</button>
                                 </div>
                             </form>
@@ -248,6 +259,8 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Tabel Data Siswa -->
                 <div class="col-sm-12 ">
                     <div class="card mb-4 fullscreen">
                         <div class="card-body">
@@ -311,7 +324,7 @@
                                                             data-thn_akademik = "<?= $value['thn_akademik'] ;?>"
                                                             data-status = "<?= $value['status'] ;?>"
                                                             data-potongan = "<?= $value['potongan'] ;?>"
-                                                            class="btn btn-warning btn-sm"  data-toggle="modal" data-target="#exampleModalUpdate"
+                                                            class="btn btn-warning btn-sm"  data-bs-toggle="modal" data-bs-target="#UpdateData"
                                                             >Ubah</a>
                                                             <!-- <button class="btn btn-danger btn-sm">Hapus</button> -->                                                           
                                                             </center>
@@ -342,11 +355,11 @@
             
             $(document).ready(function() {
                 //Modal Config Input Data Kelas
-                $('#exampleModal').on('hide.bs.modal', function(event) {
+                $('#insertData').on('hide.bs.modal', function(event) {
                     $(this).find('.text-danger');
                 });
     
-                $('#exampleModal').on('submit', 'form' , function (event) {
+                $('#insertData').on('submit', 'form' , function (event) {
                     event.preventDefault();
     
                     var form = $(this);
@@ -366,7 +379,7 @@
                             console.log(response);
                             if(response.success) {
                                 window.location.href = response.redirect;
-                                $('#exampleModal').modal('hide');
+                                $('#insertData').modal('hide');
                             } else {
                                 var errors = response.errors;
                                 console.log(errors);
@@ -384,12 +397,21 @@
                     })                
                 })
 
-                $('#exampleModalExcel').on('hide.bs.modal', function(event) {
+                $('#ExcelModal').on('hide.bs.modal', function(event) {
                     $(this).find('.text-danger');
                 });
     
-                $('#exampleModalExcel').on('submit', 'form' , function (event) {
+                $('#ExcelModal').on('submit', 'form' , function (event) {
                     event.preventDefault();
+                    $('.spinner-border').removeAttr('hidden');
+                    $('.excelSubmit').attr('disabled', true);
+                    $('.excelSubmit').html(`
+                        <div class="spinner-border text-light" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    `);
+                    $('.exitfromExcel').attr('disabled', true);
+                    $('.close').attr('disabled', true);
                     var form = $(this);
                     var fileInput = form.find('input[name="fileExcel"]')[0].files[0];
                     var formData = new FormData();
@@ -403,10 +425,15 @@
                         processData: false,
 
                         success: function (response) {
+                            $('.excelSubmit').html('Submit');
+                            $('.exitfromExcel').removeAttr('disabled');
+                            $('.excelSubmit').removeAttr('disabled');
+                            $('.close').removeAttr('disabled');
+                            $('.spinner-border').attr('hidden', true);
                             console.log(response);
                             if(response.success) {
                                 window.location.href = response.redirect;
-                                $('#exampleModalExcel').modal('hide');
+                                $('#ExcelModal').modal('hide');
                             } else {
                                 var errors = response.errors;
                                 $.each(errors, function (field, message) {
@@ -424,7 +451,7 @@
                 })
                 //Modal Config Get Selected Data Kelas
                 // Untuk sunting
-                $('#exampleModalUpdate').on('show.bs.modal', function (event) {
+                $('#UpdateData').on('show.bs.modal', function (event) {
                     var div = $(event.relatedTarget) // Tombol dimana modal di tampilkan
                     var modal = $(this)
 
@@ -437,12 +464,12 @@
                     modal.find(`input[name="status"][value="${div.data('status')}"]`).prop('checked', true);
                 });
 
-                //Modal Config Update Data Kelas
-                $('#exampleModalUpdate').on('hide.bs.modal', function(event) {
+                //ModUpdateData Data Kelas
+                $('#UpdateData').on('hide.bs.modal', function(event) {
                     $(this).find('.text-danger');
                 });
     
-                $('#exampleModalUpdate').on('submit', 'form' , function (event) {
+                $('#UpdateData').on('submit', 'form' , function (event) {
                     event.preventDefault();
     
                     var form = $(this);
@@ -460,11 +487,11 @@
                         success: function (response) {
                             if(response.success) {
                                 window.location.href = response.redirect;
-                                $('#exampleModalUpdate').modal('hide');
+                                $('#UpdateData').modal('hide');
                             } else {                           
                                 var errors = response.errors;
                                 $.each(errors, function (field, message) {
-                                    let errorElement = $('#' + field + '-errorUpdate');
+                                    let errorElement = $('#' + field + '-errorUpdateData');
                                     errorElement.html(message);
                                 })
                             }

@@ -634,39 +634,41 @@ class Admin extends User {
                         $thn_akademik = $worksheet->getCell('D' . $row)->getValue();
                         $password = $worksheet->getCell('E' . $row)->getValue();
                         $potongan = $worksheet->getCell('F' . $row)->getValue();
-                        if($potongan == null) {
-                            $potongan = 0;
-                        }
-                        $data['value'] = array(
-                            'nipd' => strval($nipd),
-                            'nama_siswa' => $nama_siswa,
-                            'kelas' => $kelas,
-                            'thn_akademik' => $thn_akademik,
-                            'password' => password_hash($password, PASSWORD_BCRYPT),
-                            'potongan' => strval($potongan),
-                            'status' => 1
-                        );
-                        
-                        $existingData = $this->model->getDataModel('siswa', ['nipd'], ['nipd' => $nipd]);
-                        if(!is_null($existingData)){
-                            if($existingData['nipd'] == $data['value']['nipd']) {
-                                $response['errors'] = array('fileExcel' => "Terdapat Duplikasi Pada NIPD di Database!");
-                            } else if (count(array_unique($data['value'])) !== count($data['value'])) {
-                                $response['errors'] = array('fileExcel' => "Terdapat Duplikasi Pada NIPD di Excel!");
-                            }
+                        if($nipd == null || $nama_siswa == null || $kelas == null || $thn_akademik == null || $password == null) {
+                            $response['errors'] = array('fileExcel' => "Terdapat nilai yang kosong pada kolom di Excel!");
                         } else {
-                            $process = $this->model->insertDataModel('siswa', $data['value']);
-                            if($process['status'] == true){
-                                $this->session->set_flashdata("message", "<div class='alert alert-success' role='alert'>
-                                                        {$process['message']}
-                                                        </div>");
+                            $potongan == null ? 0 : $potongan;
+                            $data['value'] = array(
+                                'nipd' => strval($nipd),
+                                'nama_siswa' => $nama_siswa,
+                                'kelas' => $kelas,
+                                'thn_akademik' => $thn_akademik,
+                                'password' => password_hash($password, PASSWORD_BCRYPT),
+                                'potongan' => strval($potongan),
+                                'status' => 1
+                            );
+                            
+                            $existingData = $this->model->getDataModel('siswa', ['nipd'], ['nipd' => $nipd]);
+                            if(!is_null($existingData)){
+                                if(count(array_unique($data['value'])) !== count($data['value'])) {
+                                    $response['errors'] = array('fileExcel' => "Terdapat Duplikasi Pada NIPD di Excel!");
+                                } else if ($existingData['nipd'] == $data['value']['nipd']) {
+                                    $response['errors'] = array('fileExcel' => "Terdapat Duplikasi Pada NIPD di Database!");
+                                }
                             } else {
-                                $this->session->set_flashdata("message", "<div class='alert alert-danger' role='alert'>
-                                                        {$process['message']}
-                                                        </div>");                                
+                                $process = $this->model->insertDataModel('siswa', $data['value']);
+                                if($process['status'] == true){
+                                    $this->session->set_flashdata("message", "<div class='alert alert-success' role='alert'>
+                                                            {$process['message']}
+                                                            </div>");
+                                } else {
+                                    $this->session->set_flashdata("message", "<div class='alert alert-danger' role='alert'>
+                                                            {$process['message']}
+                                                            </div>");                                
+                                }
+                                $response['success'] = true;
+                                $response['redirect'] = base_url('pages/datasiswa');
                             }
-                            $response['success'] = true;
-                            $response['redirect'] = base_url('pages/datasiswa');
                         }
                         
                     }
