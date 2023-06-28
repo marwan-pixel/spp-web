@@ -131,7 +131,7 @@
                               </div>
                            </div>                        
                            <div class="row mt-3">
-                              <div class="col-sm-12 ">
+                              <div class="col-sm-12 hidden-overflow">
                                  <div class="nominal-container d-flex justify-content-between">
                                     <div>
                                        <h5 align="left">Nominal Masuk</h5>
@@ -209,12 +209,11 @@
                      </div>
                   </div>
                   <div class="row">
-                     <div class="col-md-2">
+                     <div class="col-sm-12">
                         <button type="submit" name="excel" value="excel" class="btn btn-success">Cetak (Excel)</button>
-                     </div>
-                     <div class="col-md-2">
                         <button type="submit" name="pdf" value="pdf" class="btn btn-danger">Cetak (PDF)</button>
                      </div>
+
                   </div>
                </form>
             </div>
