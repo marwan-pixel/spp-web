@@ -68,7 +68,7 @@
                         </div> -->
                         <div class="dropdown">
                            <a class="btn header-color-secondary dropdown-toggle username" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                              <figure class="userpic"><img src="<?=base_url();?>/assets/img/user1.png" alt=""></figure>
+                              <figure class="userpic"><img src="<?=base_url();?>/assets/img/user.png" alt=""></figure>
                               <h5 class="text-hide-xs">
                                  <small class="header-color-secondary">Welcome,</small>
                                  <span class="header-color-success"><?= $name; ?></span>
