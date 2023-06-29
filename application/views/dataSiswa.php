@@ -36,7 +36,7 @@
                                 <form method="post" id="sample_form" enctype="multipart/form-data" action="<?=base_url('admin/tambahDataSiswaExcel');?>">
                                     <div class="form-group">
                                         <label for="file">File Input</label>
-                                        <input type="file" class="form-control" requi name="fileExcel" id="fileExcel" aria-describedby="fileExcel">
+                                        <input type="file" class="form-control" required name="fileExcel" id="fileExcel" aria-describedby="fileExcel">
                                         <small class="text-danger" id="fileExcel-error"></small>
                                     
                                     </div>
@@ -399,8 +399,8 @@
 
                 $('#ExcelModal').on('hide.bs.modal', function(event) {
                     $(this).find('.text-danger');
-                });
-    
+                }); 
+
                 $('#ExcelModal').on('submit', 'form' , function (event) {
                     event.preventDefault();
                     $('.spinner-border').removeAttr('hidden');

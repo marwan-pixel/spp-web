@@ -3,7 +3,7 @@
     <footer class="sticky-footer bg-white border-top">
         <div class="row">
             <div class="container my-3 main-container">
-                    <div class="copyright text-center my-auto">
+                    <div class="copyright text-center">
                         <span>Copyright &copy Tumpas Jaya</span> 
                     </div>
             </div>
