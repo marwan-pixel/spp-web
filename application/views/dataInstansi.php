@@ -1,7 +1,7 @@
         
 
         <!-- content page -->
-        <div class="container-fluid mt-4 main-container">
+        <div class="container-fluid mt-4 main-container content">
             <?= $this->session->flashdata('message'); ?>
             <div class="row">
                 <div class="col-sm-12">

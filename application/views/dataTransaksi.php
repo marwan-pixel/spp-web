@@ -1,4 +1,4 @@
-<div class="container-fluid main-conteiner">
+<div class="container-fluid main-conteiner content">
    <div class="row">
          <div class="col-sm-12">
             <div class="card mt-4 fullscreen ">

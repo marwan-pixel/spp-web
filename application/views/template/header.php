@@ -1,4 +1,3 @@
-
 <!doctype html>
 <html lang="en">
    <head>
@@ -7,19 +6,18 @@
       <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, viewport-fit=cover">
       <!-- favicons -->
       <link rel="apple-touch-icon" href="<?= base_url();?>/assets/img/favicon-apple.png">
-      <link rel="icon" href="<?= base_url();?>/assets/img/Yayasan Ar-Rahmah.jpeg">
+      <link rel="icon" href="<?= base_url();?>assets/img/Yayasan Ar-Rahmah.jpeg">
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
       <!-- Bootstrap CSS -->
       <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
       <!-- <link rel="stylesheet" href="<?= base_url();?>/assets/vendor/bootstrap-4.1.3/js/bootstrap.min.js"> -->
       <!-- Material design icons CSS -->
-      <link rel="stylesheet" href="<?= base_url();?>/assets/vendor/materializeicon/material-icons.css">
+      <link rel="stylesheet" href="<?= base_url();?>assets/vendor/materializeicon/material-icons.css">
       <!-- footable CSS -->
-      <link rel="stylesheet" href="<?= base_url();?>/assets/vendor/footable-bootstrap/css/footable.bootstrap.min.css">
-      <!-- Bootstrap tour CSS -->
-      <link rel="stylesheet" href="<?= base_url();?>/assets/vendor/bootstrap_tour/css/bootstrap-tour-standalone.css">
+      <link rel="stylesheet" href="<?= base_url();?>assets/vendor/footable-bootstrap/css/footable.bootstrap.min.css">
       <!-- jvector map CSS -->
-      <link rel="stylesheet" href="<?= base_url();?>/assets/vendor/jquery-jvectormap/jquery-jvectormap-2.0.3.css">
+      <link rel="stylesheet" href="<?= base_url();?>assets/vendor/jquery-jvectormap/jquery-jvectormap-2.0.3.css">
+      <link href="https://cdn.jsdelivr.net/npm/intro.js@7.0.1/minified/introjs.min.css" rel="stylesheet">
       <!-- app CSS -->
       <link id="theme" rel="stylesheet" href="<?= base_url();?>/assets/css/dark-greensidebar.css" type="text/css">
       <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
@@ -40,33 +38,17 @@
                         <button style="width:10vw;" class="btn success-gradient btn-icon" id="left-menu"><img class="img-fluid" height="40" width="60" src="<?= base_url();?>/assets/img/Yayasan Ar-Rahmah.jpeg" alt=""></button>
                         <a href="<?= base_url('/');?>" class="logo"><span class="text-hide-xs">Yayasan Islam Rahmatan Lil Alamin</span></a>
                      </div>
-                     <div class="col text-center p-xs-0">
+                     <div class="col p-xs-0">
+                        <div class="dropdown guide">
+                           <button class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" type="button">Pengenalan Aplikasi</button>
+                           <ul class="dropdown-menu">
+                              <li><a class="dropdown-item about" href="#">Tentang Aplikasi</a></li>
+                              <li><a class="dropdown-item using" href="#">Cara Menggunakan Aplikasi</a></li>
+                           </ul>
+                        </div>
                      </div>
-                     <div class="col-auto pr-0">
-                        <!-- <div class="dropdown d-inline-block">
-                           <a class="btn header-color-secondary btn-icon dropdown-toggle caret-none" href="#" role="button" id="dropdownmessage" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                           <i class="fa-solid fa-bell"></i>
-                           <span class="status-number bg-danger text-white">9+</span>
-                           </a>
-                           <div class="dropdown-menu notification-dropdown align-center arrow-top pt-0" aria-labelledby="dropdownmessage">
-                              <div class="arrow success-gradient"></div>
-                              <div class="success-gradient py-3 text-center">
-                                 <h5 class="mb-0">Messages</h5>
-                                 <p class="mb-0">Just Recieved Messages</p>
-                              </div>
-                              <a href="#" class="media success-gradient-active new">
-                                 <figure class="avatar avatar-40">
-                                    <img src="<?=base_url();?>assets/img/user3.png" alt="Generic placeholder image">
-                                 </figure>
-                                 <div class="media-body">
-                                    <h5 class="my-0">Donald Costapor </h5>
-                                    <small class="text-muted d-block mb-2">2:05 am</small>
-                                    <p>Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin.</p>
-                                 </div>
-                              </a>
-                           </div>
-                        </div> -->
-                        <div class="dropdown">
+                     <div class="col-auto pr-0">             
+                        <div class="dropdown info">
                            <a class="btn header-color-secondary dropdown-toggle username" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                               <figure class="userpic"><img src="<?=base_url();?>/assets/img/user.png" alt=""></figure>
                               <h5 class="text-hide-xs">
@@ -116,33 +98,33 @@
                   <a href="<?= base_url(); ?>" class="nav-link dropdwown-toggle "> <i class="material-icons icon">dashboard</i> <span>Dashboard</span></a>
                </li>
                <p class="ml-3 mt-3 mb-2 pt-2 pb-2 border-bottom border-top ">Menu</p>
-               <li class="nav-item">
-                  <a href="javascript:void(0);" class="nav-link dropdwown-toggle"> <i class="material-icons icon">folder</i> <span>Master Data</span><i class="material-icons icon arrow">expand_more</i></a>
-                  <ul class="nav flex-column">
-                     <li class="nav-item">
+               <li class="nav-item master-data">
+                  <a href="javascript:void(0);" class="nav-link master-data-nav dropdwown-toggle"> <i class="material-icons icon">folder</i> <span>Master Data</span><i class="material-icons icon arrow">expand_more</i></a>
+                  <ul class="nav flex-column master-data-ul">
+                     <li class="nav-item instansi">
                         <a href="<?= base_url(''); ?>pages/datainstansi" class="nav-link success-gradient-active"><i class="material-icons icon">inbox</i> <span>Data Instansi</span> </a>
                      </li>
-                     <li class="nav-item">
+                     <li class="nav-item kelas">
                         <a href="<?= base_url(''); ?>pages/datakelas" class="nav-link success-gradient-active"><i class="material-icons icon">group</i> <span>Data Kelas</span> </a>
                      </li>
-                     <li class="nav-item">
+                     <li class="nav-item tahunakademik">
                         <a href="<?= base_url(''); ?>pages/datatahunakademik" class="nav-link success-gradient-active"><i class="material-icons icon">date_range</i> <span>Data Tahun Akademik</span> </a>
                      </li>
-                     <li class="nav-item">
+                     <li class="nav-item siswa">
                         <a href="<?= base_url(''); ?>pages/datasiswa" class="nav-link success-gradient-active"><i class="material-icons icon">person</i> <span>Data Siswa</span></a>
                      </li>
-                     <li class="nav-item">
+                     <li class="nav-item admin">
                         <a href="<?= base_url(''); ?>pages/dataadmin" class="nav-link success-gradient-active"><i class="material-icons icon">person_outline</i> <span>Data Admin</span></a>
                      </li>
                   </ul>
                </li>
-               <li class="nav-item">
-                  <a href="javascript:void(0);" class="nav-link dropdwown-toggle"> <i class="material-icons icon">folder</i> <span>Transaksi</span><i class="material-icons icon arrow">expand_more</i></a>                  
-                  <ul class="nav flex-column">
-                     <li class="nav-item">
+               <li class="nav-item transaksi">
+                  <a href="javascript:void(0);" class="nav-link dropdwown-toggle transaksi-nav"> <i class="material-icons icon">folder</i> <span>Transaksi</span><i class="material-icons icon arrow">expand_more</i></a>                  
+                  <ul class="nav flex-column transaksi-ul">
+                     <li class="nav-item biaya">
                         <a href="<?= base_url('pages/databiaya'); ?>" class="nav-link success-gradient-active"><i class="material-icons icon">attach_money</i> <span>Data Biaya</span></a>
                      </li>
-                     <li class="nav-item">
+                     <li class="nav-item transaksi">
                         <a href="<?= base_url('pages/datatransaksi'); ?>" class="nav-link success-gradient-active"><i class="material-icons icon">credit_card</i> <span>Data Transaksi</span> </a>
                      </li>                     
                   </ul>

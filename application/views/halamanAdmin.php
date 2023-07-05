@@ -1,5 +1,5 @@
 
-<main style="height:80vh " class="d-flex align-items-center">
+<main style="height:80vh " class="d-flex align-items-center content">
     <div class="container ">
         <div class="card mx-auto col-lg-5">
             <div class="container-md">
