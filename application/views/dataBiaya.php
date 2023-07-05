@@ -3,8 +3,11 @@
             <?= $this->session->flashdata('message'); ?>
             <div class="row">
                 <div class="col-sm-12">
-                    <button type="button" class="btn btn-success ml-3 mb-3" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    <button type="button" class="btn btn-success ml-3 mb-3 biaya-add" data-bs-toggle="modal" data-bs-target="#exampleModal">
                     Tambah Data
+                    </button>
+                    <button class="btn btn-secondary mb-3">
+                        <i class="material-icons icon biaya-btn">help_outline</i>
                     </button>
                 </div>
 
@@ -120,8 +123,8 @@
                                                         <th><center>No</center></th>
                                                         <th><center>Jenis Biaya</center> </th>
                                                         <th><center>Biaya</center></th>
-                                                        <th><center>Instansi</center></th>                                                        
-                                                        <th><center>Aksi</center></th>
+                                                        <th class="biaya-instansi"><center>Instansi</center></th>                                                        
+                                                        <th class="biaya-update"><center>Aksi</center></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>

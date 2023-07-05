@@ -3,8 +3,11 @@
             <?= $this->session->flashdata('message'); ?>
             <div class="row">
                 <div class="col-sm-12">
-                    <button type="button" class="btn btn-success ml-3 mb-3" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    <button type="button" class="btn btn-success ml-3 mb-3 thn-akademik-add" data-bs-toggle="modal" data-bs-target="#exampleModal">
                     Tambah Data
+                    </button>
+                    <button class="btn btn-secondary mb-3 ">
+                        <i class="material-icons icon thn-akademik-btn">help_outline</i>
                     </button>
                 </div>
 
@@ -109,8 +112,8 @@
                                                     <tr>
                                                         <th><center>No</center></th>
                                                         <th><center>Tahun Akademik</center> </th>
-                                                        <th><center>Status</center></th>
-                                                        <th><center>Aksi</center></th>
+                                                        <th class="thn-akademik-status"><center>Status</center></th>
+                                                        <th class="thn-akademik-update"><center>Aksi</center></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -149,7 +152,9 @@
                                 </div>
                             </div>
                             <!-- /.table-responsive -->
-                             <?= $this->pagination->create_links();?>
+                            <div class="thn-akademik-pagination mt-3">
+                                <?= $this->pagination->create_links();?>
+                            </div>
                         </div>
                     </div>
                 </div>

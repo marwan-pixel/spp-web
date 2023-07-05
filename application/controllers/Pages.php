@@ -167,7 +167,7 @@ class Pages extends User {
 		$this->pagination->initialize($this->getData());
 		$dataInstansi = $this->model->getDataModel('instansi', ['jenis_instansi'], null, $this->getData()['per_page'], $start);
 		try {
-			$this->render('datainstansi', ['title' => 'Data Biaya', 'name' => $this->_userdata['nama_petugas'], 'data' => array('dataInstansi' => $dataInstansi)]);
+			$this->render('datainstansi', ['title' => 'Data Instansi', 'name' => $this->_userdata['nama_petugas'], 'data' => array('dataInstansi' => $dataInstansi)]);
 			
 		} catch (Exception $e){
 			$e->getMessage();

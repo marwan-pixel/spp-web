@@ -1,7 +1,10 @@
 <div class="container-fluid main-conteiner content">
    <div class="row">
          <div class="col-sm-12">
-            <div class="card mt-4 fullscreen ">
+            <button class="btn btn-secondary mt-3">
+               <i class="material-icons icon transaksi-btn">help_outline</i>
+            </button>
+            <div class="card mt-3 fullscreen cari-siswa">
                <div class="card-body">
                   <form class="form-inline">
                      <div class="form-group mb-2">
@@ -319,45 +322,45 @@
                });
 
                 //Modal Config Input Data Kelas
-                $('#exampleModal').on('hide.bs.modal', function(event) {
-                    $(this).find('.text-danger');
-                });
+               //  $('#exampleModal').on('hide.bs.modal', function(event) {
+               //      $(this).find('.text-danger');
+               //  });
     
-                $('#exampleModal').on('submit', 'form' , function (event) {
-                    event.preventDefault();
+               //  $('#exampleModal').on('submit', 'form' , function (event) {
+               //      event.preventDefault();
     
-                    let form = $(this);
-                    let nipd = form.find('input[name="nipd"]').val();                  
-                    let nominal = form.find('input[name="nominal"]').val();
-                    let status = form.find('input[name="status"]').val();
-                    let keterangan = form.find('input[name="keterangan"]').val();
-                    let created_at = form.find('input[name="created_at"]').val();
+               //      let form = $(this);
+               //      let nipd = form.find('input[name="nipd"]').val();                  
+               //      let nominal = form.find('input[name="nominal"]').val();
+               //      let status = form.find('input[name="status"]').val();
+               //      let keterangan = form.find('input[name="keterangan"]').val();
+               //      let created_at = form.find('input[name="created_at"]').val();
     
-                    $.ajax({
-                        url: form.attr('action'),
-                        method: form.attr('method'),
-                        data: form.serialize(),
-                        dataType: 'json' ,
-                        success: function (response) {
+               //      $.ajax({
+               //          url: form.attr('action'),
+               //          method: form.attr('method'),
+               //          data: form.serialize(),
+               //          dataType: 'json' ,
+               //          success: function (response) {
      
-                            if(response.success) {
-                                window.location.href = response.redirect;
-                                $('#exampleModal').modal('hide');
-                            } else {             
-                                var errors = response.errors;
-                                $.each(errors, function (field, message) {
-                                    let errorElement = $('#' + field + '-error');
-                                    errorElement.html(message);
-                                })
-                            }
-                        },
-                        error: function (xhr, status, error) {
-                            console.error(error);
-                            console.error(status);
+               //              if(response.success) {
+               //                  window.location.href = response.redirect;
+               //                  $('#exampleModal').modal('hide');
+               //              } else {             
+               //                  var errors = response.errors;
+               //                  $.each(errors, function (field, message) {
+               //                      let errorElement = $('#' + field + '-error');
+               //                      errorElement.html(message);
+               //                  })
+               //              }
+               //          },
+               //          error: function (xhr, status, error) {
+               //              console.error(error);
+               //              console.error(status);
                             
-                        }
-                    })                
-                })
+               //          }
+               //      })                
+               //  })
             })   
              
         </script>

@@ -42,8 +42,8 @@
                         <div class="dropdown guide">
                            <button class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" type="button">Pengenalan Aplikasi</button>
                            <ul class="dropdown-menu">
-                              <li><a class="dropdown-item about" href="#">Tentang Aplikasi</a></li>
-                              <li><a class="dropdown-item using" href="#">Cara Menggunakan Aplikasi</a></li>
+                              <li><a class="dropdown-item about">Tentang Aplikasi</a></li>
+                              <li><a class="dropdown-item using">Cara Menggunakan Aplikasi</a></li>
                            </ul>
                         </div>
                      </div>

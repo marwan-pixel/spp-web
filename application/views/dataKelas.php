@@ -4,8 +4,11 @@
             <?= $this->session->flashdata('message'); ?>
             <div class="row">
                 <div class="col-sm-12">
-                    <button type="button" class="btn btn-success ml-3 mb-3" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    <button type="button" class="btn btn-success ml-3 mb-3 kelas-add" data-bs-toggle="modal" data-bs-target="#exampleModal">
                     Tambah Data
+                    </button>
+                    <button class="btn btn-secondary mb-3 kelas-btn">
+                        <i class="material-icons icon">help_outline</i>
                     </button>
                 </div>
 
@@ -109,8 +112,8 @@
                                                     <tr>
                                                         <th><center>No</center></th>
                                                         <th><center>Kelas</center> </th>
-                                                        <th><center>Instansi</center></th>
-                                                        <th><center>Aksi</center></th>
+                                                        <th class="instansi-kelas"><center>Instansi</center></th>
+                                                        <th class="kelas-update"><center>Aksi</center></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -133,7 +136,7 @@
                                                                             data-kelas="<?= $value['kelas']; ?>"
                                                                             data-kelasnew="<?= $value['kelas']; ?>"
                                                                             data-instansi="<?= $value['instansi']; ?>"
-                                                                            class="btn btn-warning btn-sm" data-bs-toggle="modal"
+                                                                            class="btn btn-warning btn-sm " data-bs-toggle="modal"
                                                                             data-bs-target="#exampleModalUpdate">Ubah</a>
                                                                         </center>
                                                                    </td>    
@@ -147,7 +150,9 @@
                                     </div>
                                 </div>
                             </div>
-                            <?= $this->pagination->create_links();?>                            
+                            <div class="kelas-pagination mt-3">
+                                <?= $this->pagination->create_links();?>                            
+                            </div>
                             <!-- /.table-responsive -->
                         </div>
                     </div>

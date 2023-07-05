@@ -4,11 +4,14 @@
             <?= $this->session->flashdata('message'); ?>
             <div class="row">
                 <div class="col-sm-12">
-                    <button type="button" class="btn btn-success ml-3 mb-3" data-bs-toggle="modal" data-bs-target="#insertData">
+                    <button type="button" class="btn btn-success ml-3 mb-3 siswa-add" data-bs-toggle="modal" data-bs-target="#insertData">
                     Tambah Data
                     </button>
-                    <button type="button" class="btn btn-success ml-3 mb-3" data-bs-toggle="modal" data-bs-target="#ExcelModal">
+                    <button type="button" class="btn btn-success ml mb-3 siswa-add-excel" data-bs-toggle="modal" data-bs-target="#ExcelModal">
                     Tambah Data (Impor Dari Excel)
+                    </button>
+                    <button class="btn btn-secondary mb-3 ">
+                        <i class="material-icons icon siswa-btn">help_outline</i>
                     </button>
                 </div>
 
@@ -268,7 +271,7 @@
                                 <div id="dataTable_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
                                     <div class="row">
                                         <div class="col-sm-12 mb-2 d-flex justify-content-between">
-                                            <div id="dataTable_filter" class="dataTables_filter input-group col-sm-4">
+                                            <div id="dataTable_filter" class="dataTables_filter input-group col-sm-4 siswa-cari">
                                                 <form action="<?= base_url('pages/datasiswa');?>" method="post" class="form-inline">
                                                     <div class="form-group mb-2 ">
                                                         <input type="text" size="20" class="form-control mr-2" id="cari" name="keyword" placeholder="Cari Nama Siswa" aria-controls="dataTable">
@@ -291,10 +294,10 @@
                                                         <th><center>No</center></th>
                                                         <th><center>NIPD</center> </th>
                                                         <th><center>Nama Siswa</center></th>
-                                                        <th><center>Kelas</center></th>
-                                                        <th><center>Tahun Akademik</center></th>
-                                                        <th><center>Status</center></th>
-                                                        <th><center>Aksi</center></th>
+                                                        <th class="siswa-kelas"><center>Kelas</center></th>
+                                                        <th class="siswa-thn-akademik"><center>Tahun Akademik</center></th>
+                                                        <th class="siswa-status"><center>Status</center></th>
+                                                        <th class="siswa-update"><center>Aksi</center></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -339,7 +342,9 @@
                                         </div>
                                     </div>
                                 </div>
-                                <?= $this->pagination->create_links();?>
+                                <div class="siswa-pagination mt-3">
+                                    <?= $this->pagination->create_links();?>
+                                </div>
                             </div>
                             <!-- /.table-responsive -->
 
