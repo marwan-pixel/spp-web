@@ -187,14 +187,14 @@
                </div>
             </div>
       <div class="col-sm-12">
-         <div class="card shadow mb-3 mt-3 fullscreen">
+         <div class="card shadow mb-3 mt-3 fullscreen cetak-transaksi">
             <div class="card-header py-3">
                <h5>Cetak Rekap Seluruh Data Pembayaran</h5>
                <div role="alert" id="errormessage"></div>
             </div>
             <div class="card-body" id="form">
                <form action="<?= base_url('admin/cetakDataTransaksi'); ?>" method="post">
-                  <div class="form-group row">
+                  <div class="form-group row tanggal-transaksi">
                      <input hidden name="function" value="cetak" type="text">
                      <input hidden id="nipd-print" name="nipd" type="text">
                      <div class="col-sm-2">

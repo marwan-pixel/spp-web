@@ -424,18 +424,16 @@
                             position: 'left'
                         },
                         {
-                            element: '.cari-siswa',
-                            intro: `Contoh di bawah ini adalah tabel yang menampilkan data transaksi yang telah dikirimkan oleh orang tua siswa
-                            , di situ terdapat sebuah tombol dengan tulisan <b>Ditunggu</b> yang di mana data transaksi orang tua siswa harus di
-                            konfirmasi oleh admin agar datanya diterima. Jika diterima, maka jumlah nominal transaksi yang masuk akan dikalkulasikan
-                            ke <b>Nominal Masuk</b>.`,
-                            position: 'left'
+                            element: '.cetak-transaksi',
+                            intro: `Data transaksi bisa dicetak ke dalam file dengan format Excel atau PDF jika diperlukan.
+                            <br>
+                            Data transaksi yang dapat dicetak bisa berdasarkan satu nipd siswa yang dimasukkan di pencarian atau semua
+                            siswa peserta didik aktif.`,
                         },
                         {
-                            element: '.biaya-update',
-                            intro: `Setelah data ditambahkan, pada kolom Aksi akan ada tombol <b>Ubah</b> dengan 
-                            jumlah yang sesuai dengan banyaknya baris pada tabel untuk mengubah data jika diperlukan.`,
-                        }
+                            element: '.tanggal-transaksi',
+                            intro: `Mencetak data transaksi bisa berdasarkan rentang tanggal tertentu atau tidak terikat tanggal.`,
+                        },
                     ]
                 });
                 intro.start();
