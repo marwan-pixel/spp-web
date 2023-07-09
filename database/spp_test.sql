@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.1.1
+-- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 04, 2023 at 03:54 PM
--- Server version: 10.4.21-MariaDB
--- PHP Version: 8.0.12
+-- Generation Time: Jul 09, 2023 at 11:59 AM
+-- Server version: 10.4.27-MariaDB
+-- PHP Version: 8.0.25
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -30,16 +30,19 @@ SET time_zone = "+00:00";
 CREATE TABLE `admin` (
   `kode_petugas` varchar(10) NOT NULL,
   `nama_petugas` varchar(28) NOT NULL,
-  `password` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `password` varchar(255) NOT NULL,
+  `status` tinyint(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `admin`
 --
 
-INSERT INTO `admin` (`kode_petugas`, `nama_petugas`, `password`) VALUES
-('12121', 'Jane Do', '$2y$10$8JQ0nOZ6vAufw2ihrIhOkOc6sqjOZuLJgPpAjZjqDCIs27zy3vPJO'),
-('12122', 'Alex', '$2y$10$BfFmuKbzhTbxf6Kuzi3Yh.1rTTTvRJW7w5XQps8MI2C3MkNSTAAqK');
+INSERT INTO `admin` (`kode_petugas`, `nama_petugas`, `password`, `status`) VALUES
+('12121', 'Jane Do', '$2y$10$8JQ0nOZ6vAufw2ihrIhOkOc6sqjOZuLJgPpAjZjqDCIs27zy3vPJO', 1),
+('12122', 'Alex', '$2y$10$BfFmuKbzhTbxf6Kuzi3Yh.1rTTTvRJW7w5XQps8MI2C3MkNSTAAqK', 1),
+('12123', 'Malas', '$2y$10$vC7SssMXOFs5UYq6fEfSzuDoVRR2oc88/J4Ysj6w5TAFNGMZZAwCO', 1),
+('6873278425', 'nlknlnl', '$2y$10$1mum/RiWanF8h/SO.XH2nupRN5yec/Pm1bMZzuz9Rr5dnUvV7LzEG', 1);
 
 -- --------------------------------------------------------
 
@@ -48,18 +51,47 @@ INSERT INTO `admin` (`kode_petugas`, `nama_petugas`, `password`) VALUES
 --
 
 CREATE TABLE `instansi` (
-  `instansi` varchar(16) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `jenis_instansi` varchar(16) NOT NULL,
+  `status` tinyint(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `instansi`
 --
 
-INSERT INTO `instansi` (`instansi`) VALUES
-('PONPES AR-RAHMAH'),
-('SD AR-RAHMAH'),
-('SMP AR-RAHMAH'),
-('TK AR-RAHMAH');
+INSERT INTO `instansi` (`jenis_instansi`, `status`) VALUES
+('PONPES AR-RAHMAH', 1),
+('SD AR-RAHMAH', 1),
+('SMK AR-RAHMAH', 0),
+('SMP AR-RAHMAH', 1),
+('TK AR-RAHMAH', 1);
+
+--
+-- Triggers `instansi`
+--
+DELIMITER $$
+CREATE TRIGGER `nonactivated_biaya` AFTER UPDATE ON `instansi` FOR EACH ROW IF (NEW.status = 0) 
+THEN
+    UPDATE jenis_pembayaran SET 
+    jenis_pembayaran.status = NEW.status
+    WHERE jenis_pembayaran.instansi = NEW.jenis_instansi;
+END IF
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `nonactivated_instansi` AFTER UPDATE ON `instansi` FOR EACH ROW IF (NEW.status = 0) THEN
+    UPDATE kelas SET kelas.status = NEW.status
+    WHERE kelas.instansi = NEW.jenis_instansi;
+END IF
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `update_instansi` AFTER UPDATE ON `instansi` FOR EACH ROW UPDATE kelas
+set kelas.instansi = NEW.jenis_instansi 
+WHERE
+kelas.instansi = NEW.jenis_instansi
+$$
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -71,17 +103,20 @@ CREATE TABLE `jenis_pembayaran` (
   `id_jenis_pembayaran` int(11) NOT NULL,
   `jenis_pembayaran` varchar(50) NOT NULL,
   `biaya` int(11) NOT NULL,
-  `instansi` varchar(50) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `instansi` varchar(50) NOT NULL,
+  `status` tinyint(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `jenis_pembayaran`
 --
 
-INSERT INTO `jenis_pembayaran` (`id_jenis_pembayaran`, `jenis_pembayaran`, `biaya`, `instansi`) VALUES
-(1, 'Biaya SPP SD', 100000, 'SMP AR-RAHMAH'),
-(2, 'Tabungan SD', 25000, 'SD AR-RAHMAH'),
-(3, 'Biaya Laundry', 15000, 'PONPES AR-RAHMAH');
+INSERT INTO `jenis_pembayaran` (`id_jenis_pembayaran`, `jenis_pembayaran`, `biaya`, `instansi`, `status`) VALUES
+(1, 'Biaya SPP SD', 100000, 'SD AR-RAHMAH', 1),
+(2, 'Tabungan SD', 25000, 'SD AR-RAHMAH', 1),
+(3, 'Biaya Laundry', 15000, 'PONPES AR-RAHMAH', 1),
+(4, 'Biaya SPP TK', 150000, 'TK AR-RAHMAH', 1),
+(5, 'Iuran Renang', 25000, 'SD AR-RAHMAH', 1);
 
 -- --------------------------------------------------------
 
@@ -91,31 +126,49 @@ INSERT INTO `jenis_pembayaran` (`id_jenis_pembayaran`, `jenis_pembayaran`, `biay
 
 CREATE TABLE `kelas` (
   `kelas` varchar(6) NOT NULL,
-  `instansi` varchar(16) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `instansi` varchar(16) NOT NULL,
+  `status` tinyint(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `kelas`
 --
 
-INSERT INTO `kelas` (`kelas`, `instansi`) VALUES
-('7C', 'PONPES AR-RAHMAH'),
-('8C', 'PONPES AR-RAHMAH'),
-('9C', 'PONPES AR-RAHMAH'),
-('1', 'SD AR-RAHMAH'),
-('2', 'SD AR-RAHMAH'),
-('3', 'SD AR-RAHMAH'),
-('4', 'SD AR-RAHMAH'),
-('5', 'SD AR-RAHMAH'),
-('6', 'SD AR-RAHMAH'),
-('7A', 'SMP AR-RAHMAH'),
-('7B', 'SMP AR-RAHMAH'),
-('8A', 'SMP AR-RAHMAH'),
-('8B', 'SMP AR-RAHMAH'),
-('9A', 'SMP AR-RAHMAH'),
-('9B', 'SMP AR-RAHMAH'),
-('TK A', 'TK AR-RAHMAH'),
-('TK B', 'TK AR-RAHMAH');
+INSERT INTO `kelas` (`kelas`, `instansi`, `status`) VALUES
+('1', 'SD AR-RAHMAH', 1),
+('2', 'SD AR-RAHMAH', 1),
+('3', 'SD AR-RAHMAH', 1),
+('4', 'SD AR-RAHMAH', 1),
+('5', 'SD AR-RAHMAH', 1),
+('6', 'SD AR-RAHMAH', 1),
+('7A', 'SMP AR-RAHMAH', 1),
+('7B', 'SMP AR-RAHMAH', 1),
+('7C', 'PONPES AR-RAHMAH', 1),
+('8A', 'SMP AR-RAHMAH', 1),
+('8B', 'SMP AR-RAHMAH', 1),
+('8C', 'PONPES AR-RAHMAH', 1),
+('9A', 'SMP AR-RAHMAH', 1),
+('9B', 'SMP AR-RAHMAH', 1),
+('9C', 'PONPES AR-RAHMAH', 1),
+('TK A', 'TK AR-RAHMAH', 1),
+('TK B', 'TK AR-RAHMAH', 1);
+
+--
+-- Triggers `kelas`
+--
+DELIMITER $$
+CREATE TRIGGER `nonactivated_kelas` AFTER UPDATE ON `kelas` FOR EACH ROW IF (NEW.status = 0) THEN
+    UPDATE siswa set siswa.status = new.status
+    WHERE siswa.kelas = new.kelas;
+END IF
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `update_kelas` AFTER UPDATE ON `kelas` FOR EACH ROW UPDATE siswa
+  SET kelas = NEW.kelas
+  WHERE siswa.kelas = NEW.kelas
+$$
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -126,32 +179,64 @@ INSERT INTO `kelas` (`kelas`, `instansi`) VALUES
 CREATE TABLE `siswa` (
   `nipd` int(10) NOT NULL,
   `nama_siswa` varchar(40) NOT NULL,
-  `kelas` varchar(6) NOT NULL,
+  `kelas` varchar(6) DEFAULT NULL,
+  `thn_akademik` varchar(11) DEFAULT NULL,
   `password` varchar(255) NOT NULL,
-  `potongan` int(2) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `potongan` int(2) NOT NULL,
+  `status` tinyint(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `siswa`
 --
 
-INSERT INTO `siswa` (`nipd`, `nama_siswa`, `kelas`, `password`, `potongan`) VALUES
-(101010101, 'Jin Doe', 'TK A', '$2y$10$SwEOwrXGJ37Xe0qfsssbs.OvEJ3.6T6aBiCXk8/a.N4xSpI0PmtnC', 0),
-(101010102, 'Jon Doe', 'TK A', '$2y$10$m.dr8XLYAoeM1pKtjL.EIenppu4JdpdEqgRD9ygdETFbWo7ZzeLPO', 0),
-(101010103, 'Jun Doe', 'TK B', '$2y$10$XroqxpwvW8A0j2R34dYlmOJJYOcf96RrEniOh3HxGD33GBTvNQIp.', 0),
-(101010104, 'Jo Do', '1', '$2y$10$WlvhCZyvgvLOiU6h4YqTpuvrqADl6FT7oZgLInV1Z0gfpupYN6Gyq', 10),
-(101010105, 'Alex', '1', '$2y$10$kyJ08nP9cQOn2.ifGSHHDOYieRIaLKObmnLTlKbBT3WBaq2n79qlK', 0),
-(101010106, 'Alexa', 'TK A', '$2y$10$ea/TCxsx6hV1EP2j/ADhL.kZ8vam0ozFajkE1t63jHVhwJrxypWSm', 0),
-(101010107, 'Lala', 'TK B', '$2y$10$efLXLp1fA2wCnPEg0zrYz.0B6KbpiPIU3zncDgKnK5d0d9PNQcAd2', 0),
-(101010108, 'Lili', 'TK B', '$2y$10$7hDEbBPsB.GgSV7Doq3vgO9nIZ3pS7rz/5bH.SX5fsBBJ6iQHhXX2', 0),
-(101010109, 'Lulu', 'TK B', '$2y$10$bCnt8Px4xYMbI9MSa7XgvOrAOCvAfLrRT90zBWuugQXrIrqROKD.y', 0),
-(101010110, 'Dila', '1', '$2y$10$D.AJxh6S/2rtvb4.T8uJX.0Xi9cAOlJe5PM55C1ZEc6TvG/Xusy5O', 0),
-(101010111, 'Laras', 'TK A', '$2y$10$iIxUQaBvaKQapYJjsJ2oqOGTp8YCgDD6LDqr0.UcDY7VDBPcZ/MZ2', 0),
-(101010112, 'Mono', '2', '$2y$10$D.o7LbOD6S/S9lLo25ejh.eZi7lDnXCGd4L0rcgwu08dnc2khyjI6', 0),
-(101010113, 'Ninoo', '7A', '$2y$10$R3mZ118ckWuJ0YBsuDckk.UOIk7LNFV0VkFB3jCzBf5h2vLzZGHCq', 0),
-(101010114, 'Bono', '7A', '$2y$10$Y75.192L9tFfynt/SI7/MuVGviMbiWkiHt/2.7EmME2EZOsfoK.tm', 0),
-(101010115, 'Bobob', '7A', '$2y$10$DD2ewntBO9Bhw.M94t9Vfe5nsU38C2HLnB3H6YLP56zmurJq2rVX6', 0),
-(101010116, 'Bibib', '7B', '$2y$10$dYPDov5TB.oeNHi/g6cXI.QgfDkHulB3HxBJVQToJjkgAZzqfM11m', 0);
+INSERT INTO `siswa` (`nipd`, `nama_siswa`, `kelas`, `thn_akademik`, `password`, `potongan`, `status`) VALUES
+(1010101010, 'FIONA ADELYA', '1', '2024/2025', '$2y$10$bbg3bV/OnhFlxdxaPaCJOuXz.hy8L0/PM1Ah/LrZpeECagcgao.ae', 0, 1),
+(1010101012, 'Jane Doe', '1', '2022/2023', '$2y$10$aSxcfudFcNN9i6erDeJjZepdnJWP2wHr9XfkzPA5yNJVa1LZl6ihu', 0, 1),
+(2147483647, 'Muhammad Alkenzio Ghaisan Firdaus', '3', '2024/2025', '$2y$10$86d92Skfw8lbyWcx4Xud6.iTExIxF2YCYpUxhJeSIMSp92C4i8u.6', 0, 1);
+
+--
+-- Triggers `siswa`
+--
+DELIMITER $$
+CREATE TRIGGER `update_siswa` AFTER UPDATE ON `siswa` FOR EACH ROW UPDATE transactions SET
+	transactions.nipd = NEW.nipd
+   	WHERE transactions.nipd = NEW.nipd
+$$
+DELIMITER ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tahun_akademik`
+--
+
+CREATE TABLE `tahun_akademik` (
+  `thn_akademik` varchar(11) NOT NULL,
+  `status` tinyint(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `tahun_akademik`
+--
+
+INSERT INTO `tahun_akademik` (`thn_akademik`, `status`) VALUES
+('2001/2002', 1),
+('2020/2021', 0),
+('2021/2022', 0),
+('2022/2023', 0),
+('2023/2024', 0),
+('2024/2025', 0);
+
+--
+-- Triggers `tahun_akademik`
+--
+DELIMITER $$
+CREATE TRIGGER `update_tahun_akademik` AFTER UPDATE ON `tahun_akademik` FOR EACH ROW UPDATE siswa 
+SET siswa.thn_akademik = NEW.thn_akademik
+WHERE siswa.thn_akademik = NEW.thn_akademik
+$$
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -163,12 +248,22 @@ CREATE TABLE `transactions` (
   `no_transaksi` int(11) NOT NULL,
   `nipd` int(10) NOT NULL,
   `nominal` int(7) NOT NULL,
-  `status` varchar(25) NOT NULL,
+  `status` tinyint(1) NOT NULL,
   `image` varchar(255) NOT NULL,
   `keterangan` varchar(255) NOT NULL,
   `created_at` datetime NOT NULL,
-  `updated_at` varchar(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `updated_at` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `transactions`
+--
+
+INSERT INTO `transactions` (`no_transaksi`, `nipd`, `nominal`, `status`, `image`, `keterangan`, `created_at`, `updated_at`) VALUES
+(1, 2147483647, 25000, 2, 'bukti.png', 'Biaya SPP SD Untuk 3 Bulan', '2023-06-02 11:02:15', '2023-07-07 11:49:55'),
+(2, 2147483647, 25000, 2, 'bukti.png', 'Biaya SPP SD', '2023-05-05 11:04:45', '2023-07-07 11:50:02'),
+(3, 2147483647, 25000, 2, 'bukti.png', 'Biaya SPP SD', '2023-04-06 11:04:45', '2023-07-07 11:50:03'),
+(4, 1010101010, 25000, 1, 'bukti.png', 'Biaya SPP SD', '2023-06-02 11:51:32', '2023-07-09 10:00:26');
 
 --
 -- Indexes for dumped tables
@@ -184,34 +279,42 @@ ALTER TABLE `admin`
 -- Indexes for table `instansi`
 --
 ALTER TABLE `instansi`
-  ADD PRIMARY KEY (`instansi`) USING BTREE;
+  ADD PRIMARY KEY (`jenis_instansi`) USING BTREE;
 
 --
 -- Indexes for table `jenis_pembayaran`
 --
 ALTER TABLE `jenis_pembayaran`
-  ADD PRIMARY KEY (`id_jenis_pembayaran`);
+  ADD PRIMARY KEY (`id_jenis_pembayaran`),
+  ADD KEY `instansi` (`instansi`) USING BTREE;
 
 --
 -- Indexes for table `kelas`
 --
 ALTER TABLE `kelas`
   ADD PRIMARY KEY (`kelas`) USING BTREE,
-  ADD KEY `instansi` (`instansi`);
+  ADD KEY `instansi` (`instansi`) USING BTREE;
 
 --
 -- Indexes for table `siswa`
 --
 ALTER TABLE `siswa`
   ADD PRIMARY KEY (`nipd`),
-  ADD KEY `kelas` (`kelas`);
+  ADD KEY `kelas` (`kelas`),
+  ADD KEY `tahun_akademik` (`thn_akademik`);
+
+--
+-- Indexes for table `tahun_akademik`
+--
+ALTER TABLE `tahun_akademik`
+  ADD PRIMARY KEY (`thn_akademik`);
 
 --
 -- Indexes for table `transactions`
 --
 ALTER TABLE `transactions`
   ADD PRIMARY KEY (`no_transaksi`),
-  ADD KEY `nis` (`nipd`);
+  ADD KEY `nipd` (`nipd`) USING BTREE;
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -221,7 +324,36 @@ ALTER TABLE `transactions`
 -- AUTO_INCREMENT for table `jenis_pembayaran`
 --
 ALTER TABLE `jenis_pembayaran`
-  MODIFY `id_jenis_pembayaran` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_jenis_pembayaran` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `jenis_pembayaran`
+--
+ALTER TABLE `jenis_pembayaran`
+  ADD CONSTRAINT `jenis_pembayaran_ibfk_1` FOREIGN KEY (`instansi`) REFERENCES `instansi` (`jenis_instansi`) ON UPDATE CASCADE;
+
+--
+-- Constraints for table `kelas`
+--
+ALTER TABLE `kelas`
+  ADD CONSTRAINT `kelas_ibfk_1` FOREIGN KEY (`instansi`) REFERENCES `instansi` (`jenis_instansi`) ON UPDATE CASCADE;
+
+--
+-- Constraints for table `siswa`
+--
+ALTER TABLE `siswa`
+  ADD CONSTRAINT `siswa_ibfk_1` FOREIGN KEY (`kelas`) REFERENCES `kelas` (`kelas`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `siswa_ibfk_2` FOREIGN KEY (`thn_akademik`) REFERENCES `tahun_akademik` (`thn_akademik`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `transactions`
+--
+ALTER TABLE `transactions`
+  ADD CONSTRAINT `transactions_ibfk_1` FOREIGN KEY (`nipd`) REFERENCES `siswa` (`nipd`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
