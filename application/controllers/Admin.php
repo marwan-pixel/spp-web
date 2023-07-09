@@ -1154,6 +1154,7 @@ class Admin extends User {
         echo json_encode($response);
         exit();
     }
+
     public function ubahDataAdmin(){
         $this->setData(
             array(
@@ -1293,6 +1294,7 @@ class Admin extends User {
         echo json_encode($response);
         exit();
     }
+
     public function restoreDataAdmin(){
         $this->setData(
             array(
@@ -1486,7 +1488,7 @@ class Admin extends User {
                 //Ambil Jumlah Uang Masuk Berdasarkan NIPD
                 $dataNominalMasuk = $this->db->select(['sum(nominal)'])
                     ->from('transactions')->join('siswa', "transactions.nipd = siswa.nipd")->join('tahun_akademik', "tahun_akademik.thn_akademik = siswa.thn_akademik")
-                    ->where(['transactions.status' => 'diterima', 'siswa.nipd' => $dataSiswa['nipd'], 'siswa.status' => 1, 'tahun_akademik.status' => 1,])
+                    ->where(['transactions.status' => 2, 'siswa.nipd' => $dataSiswa['nipd'], 'siswa.status' => 1, 'tahun_akademik.status' => 1,])
                     ->get()
                     ->result_array();
                 $response['dataNominal'] = $dataNominal[0]['sum(biaya)'];
@@ -1530,7 +1532,7 @@ class Admin extends User {
         $process = $this->model->updateDataModel($data['table'], $data['value'] ,$data['where']);
         if($process['status'] == true) {
             // $start = $this->uri->segment(3);
-            $jumlahNominal = $this->model->getDataModel($data['table'], ['sum(nominal)'], ['status' => '2',
+            $jumlahNominal = $this->model->getDataModel($data['table'], ['sum(nominal)'], ['status' => 2,
             'nipd' => $this->input->post('nipd')]);
             $response['success'] = true;
             $response['value'] = array($data['value']['status'], $data['where']['created_at'], $jumlahNominal[0]['sum(nominal)']);
