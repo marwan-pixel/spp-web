@@ -164,14 +164,7 @@
                                         </datalist>
                                         <small class="text-danger" id="thn_akademik-error"></small>
                                     </div>
-                                    <div class="form-group">
-                                        <label for="status">Keterangan:</label>
-                                        <input type="radio" value="1" name="status" id="status_aktif">
-                                        <label for="status_aktif">Aktif</label>
-                                        <input type="radio" value="0" name="status" id="status_tidak-aktif">
-                                        <label for="status_tidak-aktif">Tidak Aktif</label>
-                                        <small class="text-danger" id="status-error"></small>
-                                    </div>
+
                                     <div class="form-group">
                                         <label for="password">Password</label>
                                         <input type="password" value="<?= set_value('password');?>" name="password" class="form-control" id="password" aria-describedby="InputNIS">
@@ -207,7 +200,12 @@
                                 <div hidden class="form-group">
                                     <input type="text" class="form-control nipd" name="nipd" id="nipd" aria-describedby="InputNama">
                                 </div>
-                                 <div class="form-group">
+                                <div class="form-group">
+                                    <label for="nipdnew">NIPD Siswa</label>
+                                    <input type="text" class="form-control nipdnew" name="nipdnew" id="nipdnew" aria-describedby="Inputnipdnew">
+                                    <small class="text-danger" id="nipdnew-errorUpdateData"></small>
+                                </div>
+                                <div class="form-group">
                                     <label for="nama">Nama Siswa</label>
                                     <input type="text" class="form-control nama" name="nama" id="nama" aria-describedby="InputNama">
                                     <small class="text-danger" id="nama_siswa-errorUpdateData"></small>
@@ -240,14 +238,6 @@
                                     </datalist>
                                     <small class="text-danger" id="thn_akademik-errorUpdateData"></small>
                                 </div>
-                                <div class="form-group">
-                                    <label for="status">Keterangan:</label>
-                                    <input type="radio" value="1" name="status" id="status_aktif">
-                                    <label for="status_aktif">Aktif</label>
-                                    <input type="radio" value="0" name="status" id="status_tidak-aktif">
-                                    <label for="status_tidak-aktif">Tidak Aktif</label>
-                                    <small class="text-danger" id="status-errorUpdateData"></small>
-                                </div>
                                  <div class="form-group">
                                     <label for="potongan">Potongan</label>
                                     <input type="number" class="form-control" name="potongan" id="potongan" aria-describedby="InputNIS">
@@ -258,6 +248,25 @@
                                     <button type="submit" class="btn btn-primary">Ubah</button>
                                 </div>
                             </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Delete Confirm Modal -->
+                <div class="modal fade" id="DeleteConfirmSiswa" tabindex="-1" aria-labelledby="DeleteConfirmSiswaLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="DeleteConfirmSiswaLabel">Konfirmasi</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                            Apakah Anda yakin ingin menghapus data Siswa ini? Data yang terhapus tidak akan bisa melakukan pembayaran.
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Tidak</button>
+                                <button type="button"  class="btn modalDelete btn-danger text-white">Iya</button>
                             </div>
                         </div>
                     </div>
@@ -322,14 +331,18 @@
                                                             <center>
                                                             <a href="javascript:;" 
                                                             data-nipd = "<?= $value['nipd'] ;?>"
+                                                            data-nipdnew = "<?= $value['nipd'] ;?>"
                                                             data-nama = "<?= $value['nama_siswa'] ;?>"
                                                             data-kelas = "<?= $value['kelas'] ;?>"
                                                             data-thn_akademik = "<?= $value['thn_akademik'] ;?>"
-                                                            data-status = "<?= $value['status'] ;?>"
                                                             data-potongan = "<?= $value['potongan'] ;?>"
                                                             class="btn btn-warning btn-sm"  data-bs-toggle="modal" data-bs-target="#UpdateData"
                                                             >Ubah</a>
-                                                            <!-- <button class="btn btn-danger btn-sm">Hapus</button> -->                                                           
+                                                            <a href="javascript:;"
+                                                            data-nipd = "<?= $value['nipd'] ;?>"
+                                                            class="btn btn-danger btn-sm deleteData">
+                                                            Nonaktifkan
+                                                            </a>                                                           
                                                             </center>
                                                        </td>
                                                     </tr>
@@ -374,7 +387,6 @@
                     var thn_akademik = form.find('input[name="thn_akademik"]').val();
                     var password = form.find('input[name="password"]').val();
                     var potongan = form.find('input[name="potongan"]').val();
-                    var status = form.find('input[name="status:checked"]').val();
                     $.ajax({
                         url: form.attr('action'),
                         method: form.attr('method'),
@@ -462,6 +474,7 @@
 
                         // Isi nilai pada field
                     modal.find(`#nipd`).attr("value",div.data(`nipd`));
+                    modal.find(`#nipdnew`).attr("value",div.data(`nipdnew`));
                     modal.find(`#nama`).attr("value",div.data(`nama`));                  
                     modal.find(`#kelas`).val(div.data(`kelas`));
                     modal.find(`#thn_akademik`).val(div.data(`thn_akademik`));
@@ -479,11 +492,11 @@
     
                     var form = $(this);
                     var nipd = form.find('input[name="nipd"]').val();
+                    var nipdnew = form.find('input[name="nipdnew"]').val();
                     var nama = form.find('input[name="nama"]').val();
                     var kelas = form.find('input[name="kelas"]').val();
                     var thn_akademik = form.find('input[name="thn_akademik"]').val();
                     var potongan = form.find('input[name="potongan"]').val();
-                    var status = form.find('input[name="status"]:checked').val();
                     $.ajax({
                         url: form.attr('action'),
                         method: form.attr('method'),
@@ -498,13 +511,41 @@
                                 $.each(errors, function (field, message) {
                                     let errorElement = $('#' + field + '-errorUpdateData');
                                     errorElement.html(message);
-                                })
+                                });
                             }
                         },
                         error: function (xhr, status, error) {
                             console.error(error);
                         }
-                    })               
-                })
+                    });               
+                });
+
+                $('.deleteData').click(function(){
+                    event.preventDefault();
+                    let nipd = $(this).data('nipd');
+                    $('#DeleteConfirmSiswa').modal('show');
+                    $('.modalDelete').click(function(){
+                        $.ajax({
+                            url: '<?= base_url('admin/hapusDataSiswa');?>',
+                            method: 'POST',
+                            data: {nipd: nipd},
+                            dataType: 'json' ,
+                            success: function (response) {
+                                if(response.success) {
+                                    window.location.href = response.redirect;
+                                } else {                           
+                                    var errors = response.errors;
+                                    $.each(errors, function (field, message) {
+                                        let errorElement = $('#' + field + '-errorUpdate');
+                                        errorElement.html(message);
+                                    });
+                                }
+                            },
+                            error: function (xhr, status, error) {
+                                console.error(error);
+                            }
+                        });
+                    });
+                });
             })   
         </script>

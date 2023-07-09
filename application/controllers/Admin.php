@@ -61,8 +61,8 @@ class Admin extends User {
                                         </div>');
                 $this->load->view('login');
             } else {
-                if(password_verify($this->input->post('password'), $process['password'])){
-                    $this->session->set_userdata('kode_petugas', $process['kode_petugas']);
+                if(password_verify($this->input->post('password'), $process[0]['password'])){
+                    $this->session->set_userdata('kode_petugas', $process[0]['kode_petugas']);
                     redirect('/');
                 } else {
                     $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">
@@ -286,6 +286,76 @@ class Admin extends User {
         exit();
     }
 
+    public function hapusDataBiaya(){
+        $this->setData(
+            array(
+                'table' => 'jenis_pembayaran',
+                'where' =>  array('id_jenis_pembayaran' => $this->input->post('id_jenis_pembayaran')),
+                'value' => 
+                array(
+                    'status' => 0
+                 ),
+            )
+        );
+ 
+        $data = $this->getData();
+        $response = $this->response;
+        $process = $this->model->updateDataModel($data['table'],$data['value'], $data['where']);
+        if($process['status'] == true){
+            $this->session->set_flashdata("message", "<div class='alert alert-success' role='alert'>
+                                    Data berhasil dihapus
+                                    </div>");
+        } else {
+            $this->session->set_flashdata("message", "<div class='alert alert-danger' role='alert'>
+                                    Data gagal dihapus
+                                    </div>");
+        }
+        
+        $response['success'] = true;
+        $response['redirect'] = base_url('pages/databiaya');
+        header('Content-Type: application/json');
+        echo json_encode($response);
+        exit();
+    }
+
+    public function restoreDataBiaya(){
+        $this->setData(
+            array(
+                'table' => 'jenis_pembayaran',
+                'where' =>  array('id_jenis_pembayaran' => $this->input->post('id_jenis_pembayaran')),
+                'value' => 
+                array(
+                    'status' => 1,
+                ),
+            )
+         );
+        $response = $this->response;
+        $data = $this->getData();
+        $checkingKelasStatus = $this->model->getDataModel('instansi', ['status'], ['jenis_instansi' => $this->input->post('instansi')]);
+        if($checkingKelasStatus[0]['status'] == 0) {
+            $this->session->set_flashdata("message", "<div class='alert alert-danger' role='alert'>
+            Data gagal dipulihkan karena instansi yang bersangkutan belum dipulihkan. Pulihkan instansi tersebut
+            di Data Nonaktif Instansi.
+            </div>");
+        } else {
+            $process = $this->model->updateDataModel($data['table'],$data['value'], $data['where']);
+            if($process['status'] == true){
+                $this->session->set_flashdata("message", "<div class='alert alert-success' role='alert'>
+                Data berhasil dipulihkan
+                </div>");
+            } else {
+                $this->session->set_flashdata("message", "<div class='alert alert-danger' role='alert'>
+                Data Gagal dipulihkan
+                </div>");
+            }
+        }
+        $response['success'] = true;
+        $response['redirect'] = site_url('pages/datanonaktifbiaya');
+        header('Content-Type: application/json');
+        echo json_encode($response);
+        exit();
+    }
+
     public function tambahDataKelas(){
          $this->setData(
             array(
@@ -383,10 +453,14 @@ class Admin extends User {
         $this->form_validation->set_rules($data['config']);
 
         if($this->form_validation->run() == true) {
-            $existingData = $this->model->getDataModel($data['table'], ['kelas','instansi'], $data['value']);
+            $existingData = $this->model->getDataModel($data['table'], ['kelas','instansi'], $data['where']);
+            $CheckingSameData = $this->model->getDataModel($data['table'], ['kelas, instansi'], $data['value']);
             if($existingData == $data['value']) {
                 $response['errors'] = array( 'instansi' => "Data harus berbeda saat ingin diubah!");                
-            } else {
+            } elseif(!empty($CheckingSameData)){
+                $response['errors'] = array( 'instansi' => "Ada Data yang sama di Database!");
+            } 
+            else {
                 $process = $this->model->updateDataModel($data['table'],$data['value'], $data['where']);
                 if($process['status'] == true){
                     $this->session->set_flashdata("message", "<div class='alert alert-success' role='alert'>
@@ -403,6 +477,76 @@ class Admin extends User {
         } else {
             $response['errors'] = array('kelasnew' => form_error('kelasnew'), 'instansi' => form_error('instansi'));
         }
+        header('Content-Type: application/json');
+        echo json_encode($response);
+        exit();
+    }
+
+    public function hapusDataKelas(){
+        $this->setData(
+           array(
+               'table' => 'kelas',
+               'where' =>  array('kelas' => $this->input->post('kelas')),
+               'value' => 
+               array(
+                   'status' => 0
+                ),
+           )
+       );
+
+       $data = $this->getData();
+       $response = $this->response;
+       $process = $this->model->updateDataModel($data['table'],$data['value'], $data['where']);
+       if($process['status'] == true){
+           $this->session->set_flashdata("message", "<div class='alert alert-success' role='alert'>
+                                   Data berhasil dihapus
+                                   </div>");
+       } else {
+           $this->session->set_flashdata("message", "<div class='alert alert-danger' role='alert'>
+                                   Data gagal dihapus
+                                   </div>");
+       }
+       
+       $response['success'] = true;
+       $response['redirect'] = base_url('pages/datakelas');
+       header('Content-Type: application/json');
+       echo json_encode($response);
+       exit();
+    }
+
+    public function restoreDataKelas(){
+        $this->setData(
+            array(
+                'table' => 'kelas',
+                'where' =>  array('kelas' => $this->input->post('kelas')),
+                'value' => 
+                array(
+                    'status' => 1,
+                ),
+            )
+         );
+        $response = $this->response;
+        $data = $this->getData();
+        $checkingKelasStatus = $this->model->getDataModel('instansi', ['status'], ['jenis_instansi' => $this->input->post('jenis_instansi')]);
+        if($checkingKelasStatus[0]['status'] == 0) {
+            $this->session->set_flashdata("message", "<div class='alert alert-danger' role='alert'>
+            Data gagal dipulihkan karena instansi yang bersangkutan belum dipulihkan. Pulihkan instansi tersebut
+            di Data Nonaktif Instansi.
+            </div>");
+        } else {
+            $process = $this->model->updateDataModel($data['table'],$data['value'], $data['where']);
+            if($process['status'] == true){
+                $this->session->set_flashdata("message", "<div class='alert alert-success' role='alert'>
+                Data berhasil dipulihkan
+                </div>");
+            } else {
+                $this->session->set_flashdata("message", "<div class='alert alert-danger' role='alert'>
+                Data Gagal dipulihkan
+                </div>");
+            }
+        }
+        $response['success'] = true;
+        $response['redirect'] = site_url('pages/datanonaktifkelas');
         header('Content-Type: application/json');
         echo json_encode($response);
         exit();
@@ -459,20 +603,21 @@ class Admin extends User {
         $this->setData(
             array(
                 'table' => 'instansi',
-                'where' =>  array('instansi' => $this->input->post('instansi')),
+                'where' =>  array('jenis_instansi' => $this->input->post('instansi')),
                 'value' => 
                 array(
-                    'instansi' => htmlspecialchars($this->input->post('instansinew'))
+                    'jenis_instansi' => htmlspecialchars($this->input->post('instansinew'))
                 ),
                 'config' =>
                 array(
                      array(
                             'field' => 'instansinew',
                             'label' => 'Instansi',
-                            'rules' => 'required|trim',
+                            'rules' => 'required|trim|is_unique[instansi.jenis_instansi]',
                             'errors' =>
                             [
                                 'required' => 'Instansi wajib diisi!',
+                                'is_unique' => 'Data sudah ada tersimpan database!'
                             ]
                         ),
                     ),
@@ -482,26 +627,79 @@ class Admin extends User {
         $response = $this->response;
         $this->form_validation->set_rules($data['config']);
         if($this->form_validation->run() == true) {
-            $existingData = $this->model->getDataModel($data['table'], ['instansi'], $data['value']);
-            if($existingData == $data['value']){
-                $response['errors'] = array( 'instansinew' => "Data harus berbeda saat ingin diubah!");
+            $process = $this->model->updateDataModel($data['table'], $data['value'], $data['where']);
+            if($process['status'] == true){
+                $this->session->set_flashdata("message", "<div class='alert alert-success' role='alert'>
+                                        {$process['message']}
+                                        </div>");
             } else {
-                $process = $this->model->updateDataModel($data['table'], $data['value'], $data['where']);
-                if($process['status'] == true){
-                    $this->session->set_flashdata("message", "<div class='alert alert-success' role='alert'>
-                                            {$process['message']}
-                                            </div>");
-                } else {
-                    $this->session->set_flashdata("message", "<div class='alert alert-danger' role='alert'>
-                                            {$process['message']}
-                                            </div>");
-                }
-                $response['success'] = true;
-                $response['redirect'] = base_url('pages/datainstansi');
+                $this->session->set_flashdata("message", "<div class='alert alert-danger' role='alert'>
+                                        {$process['message']}
+                                        </div>");
             }
+            $response['success'] = true;
+            $response['redirect'] = base_url('pages/datainstansi');
         } else {
             $response['errors'] = array( 'instansinew' => form_error('instansinew'));
         }
+
+        header('Content-Type: application/json');
+        echo json_encode($response);
+        exit();
+    }
+
+    public function hapusDataInstansi(){
+        $this->setData(
+            array(
+                'table' => 'instansi',
+                'where' => array('jenis_instansi' => $this->input->post('instansi')),
+                'value' => array('status' => 0)
+            )
+        );
+        $data = $this->getData();
+        $response = $this->response;
+        $process = $this->model->updateDataModel($data['table'], $data['value'], $data['where']);
+        
+        if($process['status'] == true){
+            $this->session->set_flashdata("message", "<div class='alert alert-success' role='alert'>
+                                    Data berhasil dihapus
+                                    </div>");
+        } else {
+            $this->session->set_flashdata("message", "<div class='alert alert-danger' role='alert'>
+                                    Data gagal dihapus
+                                    </div>");
+        }
+        $response['success'] = true;
+        $response['redirect'] = base_url('pages/datainstansi');
+
+        header('Content-Type: application/json');
+        echo json_encode($response);
+        exit();
+    }
+
+    public function restoreDataInstansi(){
+        $this->setData(
+            array(
+                'table' => 'instansi',
+                'where' => array('jenis_instansi' => $this->input->post('jenis_instansi')),
+                'value' => array('status' => 1)
+            )
+        );
+        $data = $this->getData();
+        $response = $this->response;
+        $process = $this->model->updateDataModel($data['table'], $data['value'], $data['where']);
+        
+        if($process['status'] == true){
+            $this->session->set_flashdata("message", "<div class='alert alert-success' role='alert'>
+                                    Data berhasil dipulihkan
+                                    </div>");
+        } else {
+            $this->session->set_flashdata("message", "<div class='alert alert-danger' role='alert'>
+                                    Data gagal dipulihkan
+                                    </div>");
+        }
+        $response['success'] = true;
+        $response['redirect'] = base_url('pages/datanonaktifinstansi');
 
         header('Content-Type: application/json');
         echo json_encode($response);
@@ -521,7 +719,7 @@ class Admin extends User {
                     'thn_akademik' => htmlspecialchars($this->input->post('thn_akademik')),
                     'password' => password_hash($this->input->post('password'), PASSWORD_BCRYPT),
                     'potongan' => htmlspecialchars($this->input->post('potongan')),
-                    'status' => htmlspecialchars($this->input->post('status')),
+                    'status' => 1
                 ),
                 'config' =>
                 array(
@@ -569,15 +767,6 @@ class Admin extends User {
                         'errors' =>
                         [
                             'required' => 'Password wajib diisi!'
-                        ]
-                    ),
-                    array(
-                        'field' => 'status',
-                        'label' => 'Status',
-                        'rules' => 'required|trim',
-                        'errors' =>
-                        [
-                            'required' => 'Status wajib diisi!'
                         ]
                     ),
                 ),
@@ -688,14 +877,23 @@ class Admin extends User {
                'where' =>  array('nipd' => $this->input->post('nipd')),
                'value' => 
                array(
-                   'nama_siswa' => htmlspecialchars($this->input->post('nama')),
-                   'kelas' => htmlspecialchars($this->input->post('kelas')),
-                   'potongan' => htmlspecialchars($this->input->post('potongan')),
-                   'thn_akademik' => htmlspecialchars($this->input->post('thn_akademik')),
-                   'status' => htmlspecialchars($this->input->post('status')),
+                    'nipd' => htmlspecialchars($this->input->post('nipdnew')),
+                    'nama_siswa' => htmlspecialchars($this->input->post('nama')),
+                    'kelas' => htmlspecialchars($this->input->post('kelas')),
+                    'potongan' => htmlspecialchars($this->input->post('potongan')),
+                    'thn_akademik' => htmlspecialchars($this->input->post('thn_akademik')),
                ),
                'config' =>
                array(
+                    array(
+                        'field' => 'nipdnew',
+                        'label' => 'NIPD',
+                        'rules' => 'required|trim',
+                        'errors' =>
+                        [
+                            'required' => 'NIPD wajib diisi!'
+                        ]
+                    ),
                     array(
                            'field' => 'nama',
                            'label' => 'Nama',
@@ -733,9 +931,12 @@ class Admin extends User {
         }
         $this->form_validation->set_rules($data['config']);
         if($this->form_validation->run() == true) {
-            $existingData = $this->model->getDataModel($data['table'], ['nama_siswa', 'kelas', 'thn_akademik' ,'potongan'], $data['value']);
+            $existingData = $this->model->getDataModel($data['table'], ['nipd', 'nama_siswa', 'kelas', 'thn_akademik' ,'potongan'], $data['where']);
+            $CheckingSameData = $this->model->getDataModel($data['table'], ['nipd', 'nama_siswa', 'kelas', 'thn_akademik' ,'potongan'], $data['value']);
             if($existingData == $data['value']){
                 $response['errors'] = array('potongan' => "Data harus berbeda saat ingin diubah!");       
+            } else if(!empty($CheckingSameData)){
+                $response['errors'] = array('nipd' => "NIPD sudah tersimpan di database!");       
             } else {
                 $process = $this->model->updateDataModel($data['table'],$data['value'], $data['where']);
                 if($process['status'] == true){
@@ -755,10 +956,78 @@ class Admin extends User {
         }
         header('Content-Type: application/json');
         echo json_encode($response);
-        // exit();
+        exit();
     }
 
-        public function tambahDataTahunAkademik(){
+    public function hapusDataSiswa(){
+        $this->setData(
+            array(
+                'table' => 'siswa',
+                'where' =>  array('nipd' => $this->input->post('nipd')),
+                'value' => 
+                array(
+                    'status' => 0,
+                ),
+            )
+         );
+        $response = $this->response;
+        $data = $this->getData();
+        $process = $this->model->updateDataModel($data['table'],$data['value'], $data['where']);
+        if($process['status'] == true){
+            $this->session->set_flashdata("message", "<div class='alert alert-success' role='alert'>
+            Data berhasil dihapus!
+            </div>");
+        } else {
+            $this->session->set_flashdata("message", "<div class='alert alert-danger' role='alert'>
+            Data Gagal dihapus!
+            </div>");
+        }
+        $response['success'] = true;
+        $response['redirect'] = site_url('pages/datasiswa');
+        header('Content-Type: application/json');
+        echo json_encode($response);
+        exit();
+    }
+
+    public function restoreDataSiswa(){
+        $this->setData(
+            array(
+                'table' => 'siswa',
+                'where' =>  array('nipd' => $this->input->post('nipd')),
+                'value' => 
+                array(
+                    'status' => 1,
+                ),
+            )
+         );
+        $response = $this->response;
+        $data = $this->getData();
+        $checkingKelasStatus = $this->model->getDataModel('kelas', [ 'status'], ['kelas' => $this->input->post('kelas')]);
+        if($checkingKelasStatus[0]['status'] == 0) {
+            $this->session->set_flashdata("message", "<div class='alert alert-danger' role='alert'>
+            Data gagal dipulihkan karena kelas yang bersangkutan belum dipulihkan. Pulihkan kelas tersebut
+            di Data Kelas.
+            </div>");
+        } else {
+            $process = $this->model->updateDataModel($data['table'],$data['value'], $data['where']);
+            if($process['status'] == true){
+                $this->session->set_flashdata("message", "<div class='alert alert-success' role='alert'>
+                Data berhasil dipulihkan
+                </div>");
+            } else {
+                $this->session->set_flashdata("message", "<div class='alert alert-danger' role='alert'>
+                Data Gagal dipulihkan
+                </div>");
+            }
+        }
+        $response['success'] = true;
+        $response['redirect'] = site_url('pages/datanonaktifsiswa');
+        header('Content-Type: application/json');
+        echo json_encode($response);
+        exit();
+    }
+
+    public function tambahDataTahunAkademik(){
         $response = $this->response;
         $this->setData(
             array(
@@ -823,7 +1092,7 @@ class Admin extends User {
         $this->setData(
             array(
                 'table' => 'tahun_akademik',
-                'where' => array('thn_akademik' => htmlspecialchars($this->input->post('thn_akademik')),),
+                'where' => array('thn_akademik' => htmlspecialchars($this->input->post('thn_akademikold')),),
                 'value' => 
                 array(
                     'thn_akademik' => htmlspecialchars($this->input->post('thn_akademik')),
@@ -856,19 +1125,26 @@ class Admin extends User {
 
         $this->form_validation->set_rules($data['config']);
         if($this->form_validation->run() == true) {
-            $process = $this->model->updateDataModel($data['table'], $data['value'], $data['where']);
-
-            if($process['status'] == true){
-                $this->session->set_flashdata("message", "<div class='alert alert-success' role='alert'>
-                                        {$process['message']}
-                                        </div>");
+            $existingData = $this->model->getDataModel($data['table'], ['thn_akademik' ,'status'], $data['where']);
+            $CheckingSameData = $this->model->getDataModel($data['table'], ['thn_akademik'], $data['value']);
+            if($existingData == $data['value']){
+                $response['errors'] = array('status' => "Data harus berbeda saat ingin diubah!");       
+            } else if(!(empty($CheckingSameData))){
+                $response['errors'] = array('thn_akademik' => "Tahun akademik ini sudah tersedia di database!");       
             } else {
-                $this->session->set_flashdata("message", "<div class='alert alert-danger' role='alert'>
-                                        {$process['message']}
-                                        </div>");                                
+                $process = $this->model->updateDataModel($data['table'], $data['value'], $data['where']);
+                if($process['status'] == true){
+                    $this->session->set_flashdata("message", "<div class='alert alert-success' role='alert'>
+                                            {$process['message']}
+                                            </div>");
+                } else {
+                    $this->session->set_flashdata("message", "<div class='alert alert-danger' role='alert'>
+                                            {$process['message']}
+                                            </div>");                                
+                }
+                $response['success'] = true;
+                $response['redirect'] = base_url('pages/datatahunakademik');
             }
-            $response['success'] = true;
-            $response['redirect'] = base_url('pages/datatahunakademik');
 
         } else {
             $response['errors'] = array('thn_akademik' => form_error('thn_akademik'), 'status' => form_error('status')
@@ -986,6 +1262,68 @@ class Admin extends User {
         }
     }
 
+    public function hapusDataAdmin(){
+        $this->setData(
+            array(
+                'table' => 'admin',
+                'where' =>  array('kode_petugas' => $this->input->post('kode_petugas')),
+                'value' => 
+                array(
+                    'status' => 0
+                 ),
+            )
+        );
+ 
+        $data = $this->getData();
+        $response = $this->response;
+        $process = $this->model->updateDataModel($data['table'],$data['value'], $data['where']);
+        if($process['status'] == true){
+            $this->session->set_flashdata("message", "<div class='alert alert-success' role='alert'>
+                                    Data berhasil dihapus
+                                    </div>");
+        } else {
+            $this->session->set_flashdata("message", "<div class='alert alert-danger' role='alert'>
+                                    Data gagal dihapus
+                                    </div>");
+        }
+        
+        $response['success'] = true;
+        $response['redirect'] = base_url('pages/dataadmin');
+        header('Content-Type: application/json');
+        echo json_encode($response);
+        exit();
+    }
+    public function restoreDataAdmin(){
+        $this->setData(
+            array(
+                'table' => 'admin',
+                'where' =>  array('kode_petugas' => $this->input->post('kode_petugas')),
+                'value' => 
+                array(
+                    'status' => 1
+                 ),
+            )
+        );
+ 
+        $data = $this->getData();
+        $response = $this->response;
+        $process = $this->model->updateDataModel($data['table'],$data['value'], $data['where']);
+        if($process['status'] == true){
+            $this->session->set_flashdata("message", "<div class='alert alert-success' role='alert'>
+                                    Data berhasil dipulihkan
+                                    </div>");
+        } else {
+            $this->session->set_flashdata("message", "<div class='alert alert-danger' role='alert'>
+                                    Data gagal dipulihkan
+                                    </div>");
+        }
+        
+        $response['success'] = true;
+        $response['redirect'] = base_url('pages/datanonaktifadmin');
+        header('Content-Type: application/json');
+        echo json_encode($response);
+        exit();
+    }
 
     public function cetakExcel($data){
         $spreadsheet = new Spreadsheet();
@@ -1120,7 +1458,7 @@ class Admin extends User {
         if($this->session->userdata('kode_petugas')) {
             $this->setData(
 			array(
-				'base_url' => 'http://localhost:8080/spp-web/pages/datatransaksi/',
+				'base_url' => 'pages/datatransaksi/',
 				'total_rows' => $this->model->countAllData('tahun_akademik'),
 				'per_page' => 10,
 				
@@ -1129,7 +1467,7 @@ class Admin extends User {
             $response = [];
             $keyword = $this->input->get('query');
             //Ambil Data Siswa
-            $dataSiswa = $this->model->getDataJoinModel('siswa', 'kelas' ,['nama_siswa', 'siswa.kelas', 'potongan', 'instansi', 'nipd', 'thn_akademik', 'status'], 
+            $dataSiswa = $this->model->getDataJoinModel('siswa', 'kelas' ,['nama_siswa', 'siswa.kelas', 'potongan', 'instansi', 'nipd', 'thn_akademik', 'siswa.status'], 
             ["kelas", "nipd"], ['siswa.nama_siswa' => $keyword, 'nipd' => $keyword]);
             
             $start = $this->uri->segment(3);
@@ -1140,7 +1478,7 @@ class Admin extends User {
                 //Ambil Riwayat Data Transaksi Berdasarkan NIPD
                 $this->pagination->initialize($this->getData());
                 $dataTransaksi = $this->model->getDataModel('transactions', 
-                ['nipd', 'nominal', 'status', 'image', 'keterangan', 'created_at'], ['nipd' => $dataSiswa['nipd']], ['per_page' => 10], $this->getData()['per_page'], $start);
+                ['nipd', 'nominal', 'status', 'image', 'keterangan', 'created_at'], ['nipd' => $dataSiswa['nipd']], $this->getData()['per_page'], $start);
 
                 //Ambil Jumlah Nominal dari tabel jenis_pembayaran Berdasarkan instansi
                 $dataNominal = $this->model->getDataModel('jenis_pembayaran', ['sum(biaya)'], ['instansi' => $dataSiswa['instansi']]);
@@ -1151,7 +1489,7 @@ class Admin extends User {
                     ->where(['transactions.status' => 'diterima', 'siswa.nipd' => $dataSiswa['nipd'], 'siswa.status' => 1, 'tahun_akademik.status' => 1,])
                     ->get()
                     ->result_array();
-                $response['dataNominal'] = $dataNominal['sum(biaya)'];
+                $response['dataNominal'] = $dataNominal[0]['sum(biaya)'];
                 if(is_null($dataNominalMasuk[0]['sum(nominal)'])){
                     $response['dataNominalMasuk'] = 0;
                 } else {
@@ -1184,7 +1522,7 @@ class Admin extends User {
             array(
                 'table' => 'transactions',
                 'where' => array('created_at' => $this->input->post('created_at')),
-                'value' => array('status' => $this->input->post('status') == 'Ditunggu' ? "Diterima" : "Ditunggu",
+                'value' => array('status' => $this->input->post('status'),
                                 'updated_at' => date('Y-m-d H:i:s'))
             )
         );
@@ -1192,8 +1530,10 @@ class Admin extends User {
         $process = $this->model->updateDataModel($data['table'], $data['value'] ,$data['where']);
         if($process['status'] == true) {
             // $start = $this->uri->segment(3);
+            $jumlahNominal = $this->model->getDataModel($data['table'], ['sum(nominal)'], ['status' => '2',
+            'nipd' => $this->input->post('nipd')]);
             $response['success'] = true;
-            $response['value'] = array($data['value']['status'], $data['where']['created_at']);
+            $response['value'] = array($data['value']['status'], $data['where']['created_at'], $jumlahNominal[0]['sum(nominal)']);
         }
         header('Content-Type: application/json');
         echo json_encode($response);

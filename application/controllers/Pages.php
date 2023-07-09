@@ -69,7 +69,7 @@ class Pages extends User {
 		
 	}
 
-	public function datasiswa()
+	public function dataSiswa()
 	{
 		if(($this->input->post('keyword'))){
 			$keyword = array('nama_siswa' => $this->input->post('keyword'));
@@ -81,7 +81,7 @@ class Pages extends User {
 		
 		$this->setData(
 			array(
-				'base_url' => 'http://localhost:8080/spp-web/pages/datasiswa/',
+				'base_url' => base_url('pages/datasiswa/'),
 				'total_rows' => $this->db->from('siswa')->count_all_results(),
 
 				'per_page' => 20,
@@ -91,10 +91,10 @@ class Pages extends User {
 
 		$this->pagination->initialize($this->getData());
 		$dataSiswa = $this->db->select(['nipd', 'nama_siswa', 'kelas', 'potongan' ,'siswa.thn_akademik', 'siswa.status'])
-		->from('siswa')->join('tahun_akademik', "tahun_akademik.thn_akademik = siswa.thn_akademik")
-		->get(null,$this->getData()['per_page'], $start)
+		->join('tahun_akademik', "tahun_akademik.thn_akademik = siswa.thn_akademik")
+		->get_where('siswa', ['siswa.status' => 1], $this->getData()['per_page'], $start)
 		->result_array();
-		$dataKelas = $this->model->getDataModel('kelas', ['kelas']);
+		$dataKelas = $this->model->getDataModel('kelas', ['kelas'], ['status' => 1]);
 		$dataTahunAkademik = $this->model->getDataModel('tahun_akademik', ['thn_akademik']);
 		try {
 			$this->render('datasiswa', ['title' => 'Data Siswa', 'name' => $this->_userdata['nama_petugas'], 
@@ -102,15 +102,39 @@ class Pages extends User {
 		} catch (Exception $e) {
 			$e->getMessage();
 		}
-        
-		
 	}
 
-	public function datakelas()
+	public function datanonaktifSiswa(){
+		$this->setData(
+			array(
+				'base_url' => base_url("pages/datanonaktifsiswa/"),
+				'total_rows' => $this->model->countAllData('siswa'),
+				'per_page' => 10,
+				
+			)
+		);
+
+		$start = $this->uri->segment(3);
+		$this->pagination->initialize($this->getData());
+
+		$dataSiswa = $this->db->select(['nipd', 'nama_siswa', 'kelas', 'potongan' ,'siswa.thn_akademik', 'siswa.status'])
+		->join('tahun_akademik', "tahun_akademik.thn_akademik = siswa.thn_akademik")
+		->get_where('siswa', ['siswa.status' => 0], $this->getData()['per_page'], $start)
+		->result_array();
+
+		try {
+			$this->render('datanonaktifsiswa', ['title' => 'Data Non Aktif Siswa', 'name' => $this->_userdata['nama_petugas'], 
+			'data' => array('dataSiswa' => $dataSiswa),'start' => $start]);		
+		} catch (Exception $e){
+			$e->getMessage();
+		}
+	}
+
+	public function dataKelas()
 	{
 		$this->setData(
 			array(
-				'base_url' => 'http://localhost:8080/spp-web/pages/datakelas/',
+				'base_url' => base_url("pages/datakelas/"),
 				'total_rows' => $this->model->countAllData('kelas'),
 				'per_page' => 10,
 				
@@ -120,8 +144,9 @@ class Pages extends User {
 		$start = $this->uri->segment(3);
 		$this->pagination->initialize($this->getData());
 
-		$dataInstansi = $this->model->getDataModel('instansi', ['jenis_instansi']);
-		$dataKelas = $this->model->getDataModel('kelas', ['kelas', 'instansi'], null, $this->getData()['per_page'], $start);
+		$dataInstansi = $this->model->getDataModel('instansi', ['jenis_instansi'],['status' => 1]);
+		$dataKelas = $this->model->getDataModel('kelas', ['kelas', 'instansi'], ['status' => 1], $this->getData()['per_page'], $start);
+
 		try {
 			$this->render('datakelas', ['title' => 'Data Kelas', 'name' => $this->_userdata['nama_petugas'], 
 			'data' => array('dataKelas' => $dataKelas, 'dataInstansi' => $dataInstansi),'start' => $start]);		
@@ -130,11 +155,34 @@ class Pages extends User {
 		}
 	}
 
-	public function databiaya()
+	public function datanonaktifKelas(){
+		$this->setData(
+			array(
+				'base_url' => base_url("pages/datanonaktifkelas/"),
+				'total_rows' => $this->model->countAllData('kelas'),
+				'per_page' => 10,
+				
+			)
+		);
+
+		$start = $this->uri->segment(3);
+		$this->pagination->initialize($this->getData());
+
+		$dataKelas = $this->model->getDataModel('kelas', ['kelas', 'instansi'], ['status' => 0], $this->getData()['per_page'], $start);
+
+		try {
+			$this->render('datanonaktifkelas', ['title' => 'Data Non Aktif Kelas', 'name' => $this->_userdata['nama_petugas'], 
+			'data' => $dataKelas,'start' => $start]);		
+		} catch (Exception $e){
+			$e->getMessage();
+		}
+	}
+
+	public function dataBiaya()
 	{
 		$this->setData(
 			array(
-				'base_url' => 'http://localhost:8080/spp-web/pages/databiaya/',
+				'base_url' => base_url('pages/databiaya/'),
 				'total_rows' => $this->model->countAllData('jenis_pembayaran'),
 				'per_page' => 10,
 				
@@ -143,20 +191,46 @@ class Pages extends User {
 		
 		$start = $this->uri->segment(3);
 		$this->pagination->initialize($this->getData());
-		$dataInstansi = $this->model->getDataModel('instansi', ['jenis_instansi']);
-		$dataBiaya = $this->model->getDataModel('jenis_pembayaran', ['id_jenis_pembayaran','jenis_pembayaran', 'biaya', 'instansi'], null, $this->getData()['per_page'], $start);
+		$dataInstansi = $this->model->getDataModel('instansi', ['jenis_instansi'], ['status' => 1]);
+		$dataBiaya = $this->model->getDataModel('jenis_pembayaran', ['id_jenis_pembayaran','jenis_pembayaran', 'biaya', 'instansi'], 
+		['status' => 1], $this->getData()['per_page'], $start);
 		try {
-			$this->render('databiaya', ['title' => 'Data Biaya', 'name' => $this->_userdata['nama_petugas'], 'data' => array('dataBiaya' => $dataBiaya, 'dataInstansi' => $dataInstansi)]);
+			$this->render('databiaya', ['title' => 'Data Biaya', 'name' => $this->_userdata['nama_petugas'], 
+			'data' => array('dataBiaya' => $dataBiaya, 'dataInstansi' => $dataInstansi), 
+			'start' => $start]);
+		} catch (Exception $e){
+			$e->getMessage();
+		}
+	}
+	
+	public function datanonaktifBiaya()
+	{
+		$this->setData(
+			array(
+				'base_url' => base_url('pages/datanonaktifbiaya/'),
+				'total_rows' => $this->model->countAllData('jenis_pembayaran'),
+				'per_page' => 10,
+				
+			)
+		);
+		
+		$start = $this->uri->segment(3);
+		$this->pagination->initialize($this->getData());
+		$dataBiaya = $this->model->getDataModel('jenis_pembayaran', ['id_jenis_pembayaran','jenis_pembayaran', 'biaya', 'instansi'], 
+		['status' => 0], $this->getData()['per_page'], $start);
+		try {
+			$this->render('datanonaktifbiaya', ['title' => 'Data Non Aktif Biaya', 'name' => $this->_userdata['nama_petugas'], 'data' => $dataBiaya,
+			'start' => $start]);
 		} catch (Exception $e){
 			$e->getMessage();
 		}
 	}
 
-	public function datainstansi()
+	public function dataInstansi()
 	{
 		$this->setData(
 			array(
-				'base_url' => 'http://localhost:8080/spp-web/pages/datainstansi/',
+				'base_url' => base_url('pages/datainstansi/'),
 				'total_rows' => $this->model->countAllData('instansi'),
 				'per_page' => 10,
 				
@@ -165,9 +239,32 @@ class Pages extends User {
 
 		$start = $this->uri->segment(3);
 		$this->pagination->initialize($this->getData());
-		$dataInstansi = $this->model->getDataModel('instansi', ['jenis_instansi'], null, $this->getData()['per_page'], $start);
+		$dataInstansi = $this->model->getDataModel('instansi', ['jenis_instansi'], ['status' => 1], $this->getData()['per_page'], $start);
 		try {
-			$this->render('datainstansi', ['title' => 'Data Instansi', 'name' => $this->_userdata['nama_petugas'], 'data' => array('dataInstansi' => $dataInstansi)]);
+			$this->render('datainstansi', ['title' => 'Data Instansi', 'name' => $this->_userdata['nama_petugas'], 
+			'data' => array('dataInstansi' => $dataInstansi)]);
+			
+		} catch (Exception $e){
+			$e->getMessage();
+		}
+	}
+
+	public function datanonaktifInstansi(){
+		$this->setData(
+			array(
+				'base_url' => base_url('pages/datanonaktifinstansi/'),
+				'total_rows' => $this->model->countAllData('instansi'),
+				'per_page' => 10,
+				
+			)
+		);
+
+		$start = $this->uri->segment(3);
+		$this->pagination->initialize($this->getData());
+		$dataInstansi = $this->model->getDataModel('instansi', ['jenis_instansi'], ['status' => 0], $this->getData()['per_page'], $start);
+		try {
+			$this->render('datanonaktifinstansi', ['title' => 'Data Non Aktif Instansi', 'name' => $this->_userdata['nama_petugas'], 
+			'data' => array('dataInstansi' => $dataInstansi), 'start' => $start]);
 			
 		} catch (Exception $e){
 			$e->getMessage();
@@ -189,7 +286,7 @@ class Pages extends User {
 	{
 		$this->setData(
 			array(
-				'base_url' => 'http://localhost:8080/spp-web/pages/datadmin/',
+				'base_url' => base_url('pages/datadmin/'),
 				'total_rows' => $this->model->countAllData('admin'),
 				'per_page' => 10,
 				
@@ -197,7 +294,7 @@ class Pages extends User {
 		);
 		$start = $this->uri->segment(3);
 		$this->pagination->initialize($this->getData());
-		$dataAdmin = $this->model->getDataModel('admin', ['kode_petugas', 'nama_petugas'], null, $this->getData()['per_page'], $start);
+		$dataAdmin = $this->model->getDataModel('admin', ['kode_petugas', 'nama_petugas'], ['status' => 1], $this->getData()['per_page'], $start);
 		try {
 			$this->render('dataadmin', ['title' => 'Data Admin', 'name' => $this->_userdata['nama_petugas'], 'data' => $dataAdmin, 'start' => $start]);
 
@@ -206,12 +303,36 @@ class Pages extends User {
 		}
 	}
 
-	public function datatransaksi(): void
+	public function datanonaktifAdmin()
 	{
 		$this->setData(
 			array(
-				'base_url' => 'http://localhost:8080/spp-web/pages/datatransaksi/',
+				'base_url' => base_url('pages/datanonaktifadmin/'),
+				'total_rows' => $this->model->countAllData('admin'),
+				'per_page' => 10,
+				
+			)
+		);
+		$start = $this->uri->segment(3);
+		$this->pagination->initialize($this->getData());
+		$dataAdmin = $this->model->getDataModel('admin', ['kode_petugas', 'nama_petugas'], ['status' => 0], 
+		$this->getData()['per_page'], $start);
+		try {
+			$this->render('datanonaktifadmin', ['title' => 'Data Non Aktif Admin', 'name' => $this->_userdata['nama_petugas'], 
+			'data' => $dataAdmin, 'start' => $start]);
+
+		} catch (Exception $e){
+			$e->getMessage();
+		}
+	}
+
+	public function dataTransaksi()
+	{
+		$this->setData(
+			array(
+				'base_url' => base_url('spp-web/pages/datatransaksi/'),
 				'total_rows' => $this->model->countAllData('transactions'),
+				'per_page' => 10,
 			)
 		);
 		try {
@@ -221,10 +342,10 @@ class Pages extends User {
 		}
 	}
 
-	public function dataTahunAkademik(): void {
+	public function dataTahunAkademik() {
 		$this->setData(
 			array(
-				'base_url' => 'http://localhost:8080/spp-web/pages/datatahunakademik/',
+				'base_url' => base_url('pages/datatahunakademik/'),
 				'total_rows' => $this->model->countAllData('tahun_akademik'),
 				'per_page' => 10,
 				

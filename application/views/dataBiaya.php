@@ -99,6 +99,26 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Modal Delete -->
+                <div class="modal fade" id="DeleteConfirmBiaya" tabindex="-1" aria-labelledby="DeleteConfirmBiayaLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="DeleteConfirmBiayaLabel">Konfirmasi</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                            Apakah Anda yakin ingin menghapus data ini?
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Tidak</button>
+                                <button type="button"  class="btn modalDelete btn-danger text-white">Iya</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="col-sm-12">
                     <div class="card mb-4 fullscreen">
                         <div class="card-body">
@@ -150,7 +170,13 @@
                                                                     data-biaya="<?= $value['biaya']; ?>"
                                                                     data-instansi="<?= $value['instansi']; ?>"                                                                
                                                                     class="btn btn-warning btn-sm updateData" data-bs-toggle="modal"
-                                                                    data-bs-target="#updateBiaya">Ubah</a>
+                                                                    data-bs-target="#updateBiaya">Ubah
+                                                                </a>
+                                                                <a href="javascript:;"
+                                                                    data-id_jenis_pembayaran="<?= $value['id_jenis_pembayaran']; ?>"
+                                                                    class="btn btn-danger btn-sm deleteData">
+                                                                    Nonaktifkan
+                                                                </a>
                                                                 </center>
                                                             </td>    
                                                         </tr>
@@ -202,14 +228,14 @@
                                 $.each(errors, function (field, message) {
                                     let errorElement = $('#' + field + '-error');
                                     errorElement.html(message);
-                                })
+                                });
                             }
                         },
                         error: function (xhr, status, error) {
                             console.error(error);
                         }
-                    })                
-                })
+                    });                
+                });
 
                 //Modal Config Get Selected Data Kelas
                 // Untuk sunting
@@ -255,13 +281,42 @@
                                 $.each(errors, function (field, message) {
                                     let errorElement = $('#' + field + '-errorUpdate');
                                     errorElement.html(message);
-                                })
+                                });
                             }
                         },
                         error: function (xhr, status, error) {
                             console.error(error);
                         }
-                    })               
-                })
-            })   
+                    });              
+                });
+
+                $('.deleteData').click(function(){
+                    event.preventDefault();
+                    let id_jenis_pembayaran = $(this).data('id_jenis_pembayaran');
+
+                    $('#DeleteConfirmBiaya').modal('show');
+                    $('.modalDelete').click(function(){
+                        $.ajax({
+                            url: '<?= base_url('admin/hapusDataBiaya');?>',
+                            method: 'POST',
+                            data: {id_jenis_pembayaran: id_jenis_pembayaran},
+                            dataType: 'json' ,
+                            success: function (response) {
+                                if(response.success) {
+                                    window.location.href = response.redirect;
+                                } else {                           
+                                    var errors = response.errors;
+                                    $.each(errors, function (field, message) {
+                                        let errorElement = $('#' + field + '-errorUpdate');
+                                        errorElement.html(message);
+                                        })
+                                }
+                            },
+                            error: function (xhr, status, error) {
+                                console.error(error);
+                            }
+                        });
+                    });
+                });
+            });  
         </script>

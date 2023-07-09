@@ -54,6 +54,25 @@
                     </div>
                 </div>
 
+                <!-- Modal Delete -->
+                <div class="modal fade" id="DeleteConfirmAdmin" tabindex="-1" aria-labelledby="DeleteConfirmAdminLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="DeleteConfirmAdminLabel">Konfirmasi</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                            Apakah Anda yakin ingin menghapus data ini?
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Tidak</button>
+                                <button type="button"  class="btn modalDelete btn-danger text-white">Iya</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="col-sm-12">
                     <div class="card mb-4 fullscreen">
                         <div class="card-body">
@@ -74,8 +93,9 @@
                                                 <thead>
                                                     <tr>
                                                         <th><center>No</center></th>
-                                                        <th><center>Kode Petugas</center> </th>
+                                                        <th><center>Kode Petugas</center></th>
                                                         <th><center>Nama Petugas</center></th>
+                                                        <th><center>Aksi</center></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -92,6 +112,8 @@
                                                                     <th><center><?= ++$start;?></center></th>
                                                                     <td><center><?= $value['kode_petugas']; ?></center></td>
                                                                     <td><center><?= $value['nama_petugas']; ?></center></td>
+                                                                    <td><center><a class="btn btn-danger deleteData text-white btn-sm"
+                                                                    data-kode-petugas="<?= $value['kode_petugas']; ?>">Nonaktifkan</a></center></td>
                                                                 </tr>
                                                             <?php                                                       
                                                             }
@@ -141,15 +163,43 @@
                                 $.each(errors, function (field, message) {
                                     let errorElement = $('#' + field + '-error');
                                     errorElement.html(message);
-                                })
+                                });
                             }
                         },
                         error: function (xhr, status, error) {
                             console.error(error);
                             console.error(status);
-                            
                         }
-                    })                
-                })
-            })   
+                    });                
+                });
+
+                //Delete Modal
+                $('.deleteData').click(function(){
+                    event.preventDefault();
+                    let kode_petugas = $(this).data('kode-petugas');
+                    $('#DeleteConfirmAdmin').modal('show');
+                    $('.modalDelete').click(function(){
+                        $.ajax({
+                            url: '<?= base_url('admin/hapusDataAdmin');?>',
+                            method: 'POST',
+                            data: {kode_petugas: kode_petugas},
+                            dataType: 'json' ,
+                            success: function (response) {
+                                if(response.success) {
+                                    window.location.href = response.redirect;
+                                } else {                           
+                                    var errors = response.errors;
+                                    $.each(errors, function (field, message) {
+                                        let errorElement = $('#' + field + '-errorUpdate');
+                                        errorElement.html(message);
+                                    });
+                                }
+                            },
+                            error: function (xhr, status, error) {
+                                console.error(error);
+                            }
+                        });
+                    });
+                });
+            });
         </script>

@@ -38,6 +38,7 @@
                         </div>
                     </div>
                 </div>
+
                 <!-- Modal Update -->
                 <div class="modal fade" id="updateInstansi" tabindex="-1" aria-labelledby="updateInstansiLabel" aria-hidden="true">
                     <div class="modal-dialog">
@@ -65,6 +66,28 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Modal Confirm Delete-->
+                <div class="modal fade" id="DeleteConfirmInstansi" tabindex="-1" aria-labelledby="DeleteConfirmInstansiLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="DeleteConfirmInstansiLabel">Konfirmasi</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                            Apakah Anda yakin ingin menghapus data ini? Data yang terhapus ini secara otomatis
+                            membuat data dari tabel yang berkaitan ikut terhapus, di antaranya: Data Kelas dan Data Biaya.
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Tidak</button>
+                                <button type="button"  class="btn modalDelete btn-danger text-white">Iya</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tabel data instansi -->
                 <div class="col-sm-12">
                     <div class="card mb-4 fullscreen">
                         <div class="card-body">
@@ -105,11 +128,18 @@
                                                                 data-instansi="<?= $value['jenis_instansi']; ?>"
                                                                 data-instansinew="<?= $value['jenis_instansi']; ?>"
                                                                 class="btn btn-warning btn-sm updateData" data-bs-toggle="modal"
-                                                                data-bs-target="#updateInstansi">Ubah</a>
+                                                                data-bs-target="#updateInstansi">Ubah
+                                                            </a>
+                                                            <a href="javascript:;"
+                                                                data-instansi="<?= $value['jenis_instansi']; ?>"
+                                                                class="btn btn-danger btn-sm deleteData">
+                                                                Nonaktifkan
+                                                            </a>
                                                             </center>
                                                        </td>    
                                                     </tr>
                                                   </tr>
+                                                
                                                   <?php }  ?>
                                                 </tbody>
                                             </table>
@@ -153,20 +183,20 @@
                                 $.each(errors, function (field, message) {
                                     let errorElement = $('#' + field + '-error');
                                     errorElement.html(message);
-                                })
+                                });
                             }
                         },
                         error: function (xhr, status, error) {
                             console.error(error);
                         }
-                    })                
-                })
+                    });             
+                });
 
                 //Modal Config Get Selected Data Kelas
                 // Untuk sunting
                 $('#updateInstansi').on('show.bs.modal', function (event) {
                     var div = $(event.relatedTarget) // Tombol dimana modal di tampilkan
-                    var modal = $(this)
+                    var modal = $(this);
 
                         // Isi nilai pada field
                     modal.find(`#instansi`).attr("value",div.data(`instansi`));
@@ -200,14 +230,37 @@
                                 $.each(errors, function (field, message) {
                                     let errorElement = $('#' + field + '-errorUpdate');
                                     errorElement.html(message);
-                                })
+                                });
                             }
                         },
                         error: function (xhr, status, error) {
                             console.error(error);
                         }
-                    })               
-                })
-            })   
+                    });        
+                });
+
+                $('.deleteData').click(function(){
+                    let instansi = $(this).data('instansi');
+                    event.preventDefault();
+                    $('#DeleteConfirmInstansi').modal('show');
+                    $('.modalDelete').click(function(){
+    
+                        $.ajax({
+                            url: '<?= base_url('admin/hapusDataInstansi');?>',
+                            method: 'POST',
+                            data: {instansi: instansi},
+                            dataType: 'json' ,
+                            success: function (response) {
+                                if(response.success) {
+                                    window.location.href = response.redirect;
+                                }
+                            },
+                            error: function (xhr, status, error) {
+                                console.error(error);
+                            }
+                        });
+                    });
+                });
+            });
         </script>
       

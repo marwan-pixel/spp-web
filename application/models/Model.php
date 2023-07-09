@@ -9,11 +9,11 @@ class Model extends CI_Model {
         if($param == null) {
             $process = $this->db->get($table, $limit, $start)->result_array();
         } else {
-            if($table == 'transactions'){
-                $process = $this->db->get_where($table, $param)->result_array();
-            } else {
-                $process = $this->db->get_where($table, $param)->row_array();
-            }
+            $process = $this->db->get_where($table, $param, $limit, $start)->result_array();
+            // if($table == 'admin'){
+            //     $process = $this->db->get_where($table, $param)->row_array();
+            // } else {
+            // }
         }
         return $process;
     }

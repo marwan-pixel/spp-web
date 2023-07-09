@@ -19,6 +19,26 @@
                </div>
             </div>
 
+            <!-- Transaction Confirm Modal -->
+            <div class="modal fade" id="RestoreConfirmModal" tabindex="-1" aria-labelledby="RestoreConfirmModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="RestoreConfirmModalLabel">Konfirmasi</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                            Apakah Anda yakin ingin menerima atau menolak data ini? Data yang sudah diterima atau ditolak akan
+                            tersimpan permanen dan tidak dapat diubah kembali ke semula.
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" data-status="2" class="btn confirmModal btn-primary">Terima</button>
+                                <button type="button" data-status="0" class="btn confirmModal btn-danger text-white">Tolak</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             <!-- <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                <div class="modal-dialog">
                   <div class="modal-content">
@@ -230,7 +250,6 @@
                currency: 'IDR',
             });
             $(document).ready(function() {
-               // console.log($('#form .form-group').find('#nipd-print').val());
                $('#keyword').keyup(function(){
                   var searchText = $(this).val();
                   
@@ -267,13 +286,20 @@
                                              <td><center>${item.image}</center></td>
                                              <td><center>${item.keterangan}</center></td>
                                              <td><center>${item.created_at}</center></td>
-                                             <td><center><a href="#" class=" update-link btn text-white" data-created-at="${item.created_at}"
-                                              data-status="${item.status}">${item.status}</a></center></td>
+                                             <td><center><button class=" update-link btn text-white" 
+                                             data-created-at="${item.created_at}"
+                                             data-nipd="${item.nipd}">${item.status}
+                                             </button></center></td>
                                              '</tr>`;
                                     $('#table tbody').append(row);
-                                    item.status === "Diterima" ? $(`.update-link[data-created-at="${item.created_at}"]`).addClass('btn-success') : 
-                                    $(`.update-link[data-created-at="${item.created_at}"]`).addClass('btn-warning');
-                                    $('.add-transaction').find('#nipdtransaction').attr("value", item.nipd);
+                                    if(item.status == "2"){
+                                       $(`.update-link[data-created-at="${item.created_at}"]`).prop('disabled', true).addClass('btn-secondary').text('Diterima');
+                                    } else if(item.status == "1"){
+                                       $(`.update-link[data-created-at="${item.created_at}"]`).addClass('btn-warning').text('Ditunggu');
+                                    } else {
+                                       $(`.update-link[data-created-at="${item.created_at}"]`).prop('disabled', true).addClass('btn-danger').text('Ditolak');
+                                    }
+                                    // $('.add-transaction').find('#nipdtransaction').attr("value", item.nipd);
                                     $('#form .form-group').find('#nipd-print').attr("value", item.nipd);
                                  });
                                  $('#transaction h5').empty();
@@ -299,26 +325,36 @@
 
                $('#table').on('click', '.update-link' ,function(event) {
                   event.preventDefault();
-                  let status = $(this).data('status');
                   let created_at = $(this).data('created-at');
-                  $.ajax({
-                     url: '<?= base_url('admin/validasiPembayaran')?>',
-                     method: 'POST',
-                     data: { status: status, created_at: created_at },
-                     success: function(response) {
-                        // Update the status element with the new value
-                        $(`.update-link[data-created-at="${response.value[1]}"]`).data('status', response.value[0]).text(response.value[0]);
-                        if(response.value[0] === "Diterima") {
-                           $(`.update-link[data-created-at="${response.value[1]}"]`).removeClass('btn-warning').addClass('btn-success');
-                        } else {
-                           $(`.update-link[data-created-at="${response.value[1]}"]`).removeClass('btn-success').addClass('btn-warning');
+                  let nipd = $(this).data('nipd');
+                  $('#RestoreConfirmModal').modal('show');
+                  $('.confirmModal').click(function(){
+                     let status = $(this).data('status');
+                     $.ajax({
+                        url: '<?= base_url('admin/validasiPembayaran')?>',
+                        method: 'POST',
+                        data: { status: status, created_at: created_at, nipd: nipd },
+                        success: function(response) {
+                           $('#RestoreConfirmModal').modal('hide');
+                           console.log(response)
+                           // Update the status element with the new value
+                           if(response.value[0] == 2){
+                              $(`.update-link[data-created-at="${response.value[1]}"]`).data('status', response.value[0]).text("Diterima");
+                              $(`.update-link[data-created-at="${response.value[1]}"]`).prop('disabled', true).removeClass('btn-warning').addClass('btn-secondary');
+                           } else if(response.value[0] == 0){
+                              $(`.update-link[data-created-at="${response.value[1]}"]`).data('status', response.value[0]).text("Diterima");
+                              $(`.update-link[data-created-at="${response.value[1]}"]`).prop('disabled', true).removeClass('btn-warning').addClass('btn-secondary');
+                           }
+                           $('.nominal-container').find('#nominalmasuk').html(IDR.format(response.value[2]));
+                        },
+                        error: function(xhr, status, error) {
+                        // Handle the error if necessary
+                           console.error(error);
                         }
-                     },
-                     error: function(xhr, status, error) {
-                     // Handle the error if necessary
-                        console.error(error);
-                     }
+                     });
+
                   });
+
                });
 
                 //Modal Config Input Data Kelas

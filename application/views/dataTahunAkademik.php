@@ -50,6 +50,7 @@
                         </div>
                     </div>
                 </div>
+
                 <!-- Modal Update -->
                 <div class="modal fade" id="updateTahun" tabindex="-1" aria-labelledby="updateTahunLabel" aria-hidden="true">
                     <div class="modal-dialog">
@@ -57,28 +58,28 @@
                             <div class="modal-header">
                                 <h4 class="modal-title" id="updateTahunLabel">Data Biaya</h4>
                                 <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
+                                    <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
                             <div class="modal-body">
                                 <form method="post" action="<?= base_url('Admin/ubahDataTahunAkademik')?>">
+                                    <input hidden type="text" name="thn_akademikold" id="thn_akademikold">
                                     <div class="form-group">
                                         <label for="tahun_ganjil">Tahun Ganjil</label>
-                                        <input type="text" onchange="getYear(this.value)" name="thn_akademik" class="form-control" id="thn_akademik" aria-describedby="thn_akademik">
-                                                                                                                           
+                                        <input type="text" onchange="getYear(this.value)" name="thn_akademik" class="form-control" id="thn_akademik" aria-describedby="thn_akademik">                                                                 
                                     </div>
                                     <div class="form-group">
                                         <label for="tahun_genap">Tahun Genap</label>
                                         <input disabled type="number" name="tahun_genap" class="form-control" id="tahun_genap_update" aria-describedby="tahun_genap">
                                     </div>
-                                    <small class="text-danger" id="thn_akademik-error"></small>
+                                    <small class="text-danger" id="thn_akademik-errorUpdate"></small>
                                     <div class="form-group">
                                         <label for="status">Keterangan:</label>
                                         <input type="radio" value="1" name="status" id="status_aktif">
                                         <label for="status_aktif">Aktif</label>
                                         <input type="radio" value="0" name="status" id="status_tidak-aktif">
                                         <label for="status_tidak-aktif">Tidak Aktif</label>
-                                        <small class="text-danger" id="status-error"></small>
+                                        <small class="text-danger" id="status-errorUpdate"></small>
                                     </div>  
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" >Keluar</button>
@@ -135,10 +136,15 @@
                                                             <td>
                                                                 <center>
                                                                 <a href="javascript:;" 
+                                                                    data-thn_akademikold="<?= $value['thn_akademik']; ?>"
                                                                     data-thn_akademik="<?= $value['thn_akademik']; ?>"                                                            
                                                                     data-status="<?= $value['status']; ?>"
                                                                     class="btn btn-warning btn-sm updateData" data-bs-toggle="modal"
-                                                                    data-bs-target="#updateTahun">Ubah</a>
+                                                                    data-bs-target="#updateTahun">Ubah
+                                                                </a>
+                                                                <a href="javascript:;">
+
+                                                                </a>
                                                                 </center>
                                                             </td>
                                                        </tr>
@@ -163,9 +169,8 @@
         <!-- content page ends -->
       <script src="<?= base_url();?>/assets/js/jquery-3.2.1.min.js"></script>
         <script>
-           
             function getYear(value) {
-                var yearsend = parseInt(value) + 1;
+                let yearsend = parseInt(value) + 1;
                 $("#tahun_genap").val(yearsend);
                 $("#tahun_genap_update").val(yearsend);
 	        }
@@ -179,54 +184,56 @@
                 $('#exampleModal').on('submit', 'form' , function (event) {
                     event.preventDefault();
     
-                    var form = $(this);
-                    var tahun_ganjil = form.find('input[name="thn_akademik"]').val();             
-                    var tahun_genap = form.find('input[name="tahun_genap"]').val();
-                    var status = form.find('input[name="status"]:checked').val();
+                    let form = $(this);
+                    let tahun_ganjil = form.find('input[name="thn_akademik"]').val();             
+                    let tahun_genap = form.find('input[name="tahun_genap"]').val();
+                    let status = form.find('input[name="status"]:checked').val();
 
                     if(form.find('input[name="thn_akademik"]').val() === "" 
                     || form.find('input[name="tahun_genap"]').val() === ""){
                         $('#thn_akademik-error').html("Tahun Akademik tidak boleh kosong!");
                     } else {
-                        var thn_akademik = `${tahun_ganjil}/${tahun_genap}`;
+                        let thn_akademik = `${tahun_ganjil}/${tahun_genap}`;
                         $.ajax({
                             url: form.attr('action'),
                             method: form.attr('method'),
                             data: {thn_akademik: thn_akademik, status: status},
-                            dataType: 'json' ,
+                            dataType: 'json',
                             success: function (response) {
          
                                 if(response.success) {
                                     window.location.href = response.redirect;
                                     $('#exampleModal').modal('hide');
                                 } else {             
-                                    var errors = response.errors;
+                                    let errors = response.errors;
                                     $.each(errors, function (field, message) {
                                         let errorElement = $('#' + field + '-error');
                                         errorElement.html(message);
-                                    })
+                                    });
                                 }
                             },
                             error: function (xhr, status, error) {
                                 console.error(error);
                             }
-                        })                
+                        });              
                     }
-                })
+                });
 
                 //Modal Config Get Selected Data Kelas
                 // Untuk sunting
                 $('#updateTahun').on('show.bs.modal', function (event) {
-                    var div = $(event.relatedTarget) // Tombol dimana modal di tampilkan
-                    var modal = $(this)
+                    let div = $(event.relatedTarget) // Tombol dimana modal di tampilkan
+                    let modal = $(this)
 
-                    var year = div.data(`thn_akademik`);
-                    var yearValues = year.split("/");
-                    var tahun_awal = parseInt(yearValues[0]);
-                    var tahun_akhir = parseInt(yearValues[1]);   
+                    let year = div.data(`thn_akademik`);
+                    let yearValues = year.split("/");
+                    let tahun_awal = parseInt(yearValues[0]);
+                    let tahun_akhir = parseInt(yearValues[1]);
+
                         // Isi nilai pada field
                     modal.find(`#thn_akademik`).attr("value",tahun_awal);
                     modal.find(`#tahun_genap_update`).attr("value",tahun_akhir);
+                    modal.find(`#thn_akademikold`).attr("value", div.data('thn_akademikold'));
                     modal.find(`input[name="status"][value="${div.data('status')}"]`).prop('checked', true);
                 });
 
@@ -238,38 +245,40 @@
                 $('#updateTahun').on('submit', 'form' , function (event) {
                     event.preventDefault();
     
-                    var form = $(this);
-                    var tahun_ganjil = form.find('input[name="thn_akademik"]').val();             
-                    var tahun_genap = form.find('input[name="tahun_genap"]').val();
-                    var status = form.find('input[name="status"]:checked').val();
+                    let form = $(this);
+                    let thn_akademikold = form.find('input[name="thn_akademikold"]').val();             
+                    let tahun_ganjil = form.find('input[name="thn_akademik"]').val();             
+                    let tahun_genap = form.find('input[name="tahun_genap"]').val();
+                    let status = form.find('input[name="status"]:checked').val();
                     if(form.find('input[name="thn_akademik"]').val() === "" 
                     || form.find('input[name="tahun_genap"]').val() === ""){
                         $('#thn_akademik-error').html("Tahun Akademik tidak boleh kosong!");
                     } else {
-                        var thn_akademik = `${tahun_ganjil}/${tahun_genap}`;
+                        let thn_akademik = `${tahun_ganjil}/${tahun_genap}`;
                         $.ajax({
                             url: form.attr('action'),
                             method: form.attr('method'),
-                            data: {thn_akademik: thn_akademik, status: status},
-                            dataType: 'json' ,
+                            data: {thn_akademik: thn_akademik, status: status, thn_akademikold: thn_akademikold},
+                            dataType: 'json',
                             success: function (response) {
                                 console.log(response)
                                 if(response.success) {
                                     window.location.href = response.redirect;
                                     $('#exampleModal').modal('hide');
                                 } else {             
-                                    var errors = response.errors;
+                                    let errors = response.errors;
                                     $.each(errors, function (field, message) {
-                                        let errorElement = $('#' + field + '-error');
+                                        console.log(field)
+                                        let errorElement = $('#' + field + '-errorUpdate');
                                         errorElement.html(message);
-                                    })
+                                    });
                                 }
                             },
                             error: function (xhr, status, error) {
                                 console.error(error);
                             }
-                        })                
+                        });           
                     }             
-                })
-            })   
+                });
+            });
         </script>
