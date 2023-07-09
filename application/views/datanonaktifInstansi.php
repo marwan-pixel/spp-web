@@ -63,7 +63,10 @@
                                                                 <tr class="odd">
                                                                     <th><center><?= ++$start;?></center></th>
                                                                     <td><center><?= $value['jenis_instansi']; ?></center></td>
-                                                                    <td><center><a class="btn btn-primary text-white restoreData" data-jenis_instansi="<?= $value['jenis_instansi']; ?>">Pulihkan</a></center></td>
+                                                                    <td><center><a class="btn btn-primary text-white restoreData" 
+                                                                    data-jenis_instansi="<?= $value['jenis_instansi']; ?>">
+                                                                    <i class="material-icons icon">restore</i>
+                                                                    </a></center></td>
                                                                 </tr>
                                                             <?php                                                       
                                                             }

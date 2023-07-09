@@ -175,7 +175,7 @@
                                                                 <a href="javascript:;"
                                                                     data-id_jenis_pembayaran="<?= $value['id_jenis_pembayaran']; ?>"
                                                                     class="btn btn-danger btn-sm deleteData">
-                                                                    Nonaktifkan
+                                                                    <i class="material-icons icon">delete</i>
                                                                 </a>
                                                                 </center>
                                                             </td>    

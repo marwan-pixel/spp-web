@@ -1350,6 +1350,13 @@ class Admin extends User {
         $no = 1;
         $sn = 2;
         foreach ($data as $value) {
+            if($value['status'] == 1) {
+                $value['status'] = "Ditunggu";
+            } else if($value['status'] == 0) {
+                $value['status'] = "Ditolak";
+            } else {
+                $value['status'] = "Diterima";
+            }
             # code...
             $activeWorksheet->setCellValue('A'.$sn, $no++);
             $activeWorksheet->setCellValue('B'.$sn, $value['nama_siswa']);
@@ -1401,6 +1408,13 @@ class Admin extends User {
         $no = 1;
         
         foreach ($data as $row) {
+            if($row['status'] == 1) {
+                $row['status'] = "Ditunggu";
+            } else if($row['status'] == 0) {
+                $row['status'] = "Ditolak";
+            } else {
+                $row['status'] = "Diterima";
+            }
             $cellWidth = 50;
             $cellHeight = 10;
             if($pdf->GetStringWidth($row['nama_siswa']) < $cellWidth){
@@ -1497,11 +1511,13 @@ class Admin extends User {
                 } else {
                     $response['dataNominalMasuk'] = $dataNominalMasuk[0]['sum(nominal)'];
                 }
+
                 if(is_null($dataTransaksi) || empty($dataTransaksi)){
                     $response['errors'] = "Data Transaksi Belum Tersedia!";
                 } else {
                     $response['dataTransaksi'] = $dataTransaksi;
                 }
+
                 if($dataSiswa['status'] == 1){
                     $dataSiswa['status'] = "Aktif";
                 } else {

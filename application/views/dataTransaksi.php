@@ -13,7 +13,6 @@
                      <div class="form-group mx-sm-3 mb-2 col-sm-3">
                         <input type="text" class="form-control col-sm-12" id="keyword" placeholder="Masukkan NIPD / Nama Siswa" name="keyword">
                      </div>
-                     <!-- <button type="submit" class="btn btn-primary mb-2">Cari</button> -->
                   </form>
                   <ul class="list-group mx-sm-3 mb-2 col-sm-3" id="result"></ul>
                </div>
@@ -211,6 +210,7 @@
             <div class="card-header py-3">
                <h5>Cetak Rekap Seluruh Data Pembayaran</h5>
                <div role="alert" id="errormessage"></div>
+               <?= $this->session->flashdata('message'); ?>
             </div>
             <div class="card-body" id="form">
                <form action="<?= base_url('admin/cetakDataTransaksi'); ?>" method="post">

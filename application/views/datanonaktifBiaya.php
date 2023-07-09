@@ -69,7 +69,7 @@
                                                                     <td><center><?= $value['instansi']; ?></center></td>
                                                                     <td><center><a class="btn btn-primary text-white restoreData" data-id_jenis_pembayaran=
                                                                     "<?= $value['id_jenis_pembayaran']; ?>" data-instansi="<?= $value['instansi']; ?>"
-                                                                    >Pulihkan</a></center></td>
+                                                                    ><i class="material-icons icon">restore</i></a></center></td>
                                                                 </tr>
                                                             <?php                                                       
                                                             }

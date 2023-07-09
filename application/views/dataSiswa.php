@@ -341,7 +341,7 @@
                                                             <a href="javascript:;"
                                                             data-nipd = "<?= $value['nipd'] ;?>"
                                                             class="btn btn-danger btn-sm deleteData">
-                                                            Nonaktifkan
+                                                                <i class="material-icons icon">delete</i>
                                                             </a>                                                           
                                                             </center>
                                                        </td>

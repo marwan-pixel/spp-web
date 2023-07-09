@@ -65,7 +65,8 @@
                                                                     <td><center><?= $value['kode_petugas']; ?></center></td>
                                                                     <td><center><?= $value['nama_petugas']; ?></center></td>
                                                                     <td><center><a class="btn btn-primary text-white restoreData" 
-                                                                    data-kode-petugas="<?= $value['kode_petugas']; ?>">Pulihkan</a></center></td>
+                                                                    data-kode-petugas="<?= $value['kode_petugas']; ?>">
+                                                                    <i class="material-icons icon">restore</i></a></center></td>
                                                                 </tr>
                                                             <?php                                                       
                                                             }

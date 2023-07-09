@@ -133,7 +133,7 @@
                                                             <a href="javascript:;"
                                                                 data-instansi="<?= $value['jenis_instansi']; ?>"
                                                                 class="btn btn-danger btn-sm deleteData">
-                                                                Nonaktifkan
+                                                                <i class="material-icons icon">delete</i>
                                                             </a>
                                                             </center>
                                                        </td>    

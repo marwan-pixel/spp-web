@@ -113,7 +113,9 @@
                                                                     <td><center><?= $value['kode_petugas']; ?></center></td>
                                                                     <td><center><?= $value['nama_petugas']; ?></center></td>
                                                                     <td><center><a class="btn btn-danger deleteData text-white btn-sm"
-                                                                    data-kode-petugas="<?= $value['kode_petugas']; ?>">Nonaktifkan</a></center></td>
+                                                                    data-kode-petugas="<?= $value['kode_petugas']; ?>">
+                                                                        <i class="material-icons icon">delete</i>
+                                                                    </a></center></td>
                                                                 </tr>
                                                             <?php                                                       
                                                             }
