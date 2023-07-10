@@ -159,9 +159,10 @@
                                        <h5 align="left">Nominal Masuk</h5>
                                        <h4 align="left" id="nominalmasuk" class="text-primary"></h4>
                                     </div>
-                                    <div>
+                                    <div class="d-flex flex-sm-column justify-content-end">
                                        <h5 align="right">Total Biaya</h5>
                                        <h4 align="right" id="totalnominal" class="text-primary"></h4>
+                                       <button data-bs-toggle="modal" data-bs-target="#totalBiaya" class="btn btn-small btn-primary">Detail Biaya</button>
                                     </div>
                                  </div>
                                  <!-- <button type="button" class="btn btn-success mb-3 mt-3" data-toggle="modal" data-target="#exampleModal">
@@ -265,10 +266,9 @@
                            $('#biodata').removeAttr('hidden');
                            $('#table tbody').empty();
                            if (response.dataSiswa !== undefined) {
+                              console.log(response.dataSiswa);
                               $('.transactions').show();
                               $('.add-transaction').find('#nominaltransaction').attr("value", response.dataNominal);
-                              $('.nominal-container').find('#totalnominal').html(IDR.format(response.dataNominal * 12));
-                              $('.nominal-container').find('#nominalmasuk').html(IDR.format(response.dataNominalMasuk));
                               $.each(response.dataSiswa, function(index, item) {
                                  $('#dataTables-example').show();
                                  $('#message').empty();
@@ -276,6 +276,14 @@
                                  data.html(item);
                                  
                               });
+                              
+                              // Total Biaya
+                              $('.nominal-container').find('#totalnominal').html(IDR.format((response.dataNominal - 
+                              response.dataSiswa.potongan) * 12));
+
+                              // Biaya Masuk
+                              $('.nominal-container').find('#nominalmasuk').html(IDR.format(response.dataNominalMasuk));
+
                               if(response.dataTransaksi !== undefined) {
                                  let no = 1;
                                  $.each(response.dataTransaksi, function(index, item) {

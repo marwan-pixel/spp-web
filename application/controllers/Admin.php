@@ -1497,7 +1497,7 @@ class Admin extends User {
                 ['nipd', 'nominal', 'status', 'image', 'keterangan', 'created_at'], ['nipd' => $dataSiswa['nipd']], $this->getData()['per_page'], $start);
 
                 //Ambil Jumlah Nominal dari tabel jenis_pembayaran Berdasarkan instansi
-                $dataNominal = $this->model->getDataModel('jenis_pembayaran', ['sum(biaya)'], ['instansi' => $dataSiswa['instansi']]);
+                $dataNominal = $this->model->getDataModel('jenis_pembayaran', ['sum(biaya)'], ['instansi' => $dataSiswa['instansi'], 'status' => 1]);
 
                 //Ambil Jumlah Uang Masuk Berdasarkan NIPD
                 $dataNominalMasuk = $this->db->select(['sum(nominal)'])
