@@ -843,7 +843,7 @@ class Admin extends User {
                             );
                             if(count(array_unique($data['value'])) < count($data['value'])) {
                                 $response['errors'] = array('fileExcel' => "Terdapat Duplikasi Pada NIPD di Excel!");
-                            } else if(count($data['value']) > 300){
+                            } else if(ini_get('max_execution_time') > 120){
                                 $response['errors'] = array('fileExcel' => "Data yang dikirim maksimal sebanyak 300 data!");
                             } 
                             else {
