@@ -71,14 +71,6 @@ class Pages extends User {
 
 	public function dataSiswa()
 	{
-		if(($this->input->post('keyword'))){
-			$keyword = array('nama_siswa' => $this->input->post('keyword'));
-			$this->db->like($keyword);
-			$this->session->set_userdata('keyword', $keyword['nama_siswa']);
-		} else {
-			$keyword = $this->session->unset_userdata('keyword');
-		}
-		
 		$this->setData(
 			array(
 				'base_url' => base_url('pages/datasiswa/'),
@@ -88,8 +80,15 @@ class Pages extends User {
 			)
 		);
 		$start = $this->uri->segment(3);
-
 		$this->pagination->initialize($this->getData());
+
+		if(($this->input->post('keyword'))){
+			$keyword = array('nama_siswa' => $this->input->post('keyword'));
+			$this->db->like($keyword);
+			$this->session->set_userdata('keyword', $keyword['nama_siswa']);
+		} else {
+			$keyword = $this->session->unset_userdata('keyword');
+		}
 
 		$dataSiswa = $this->db->select(['nipd', 'nama_siswa', 'kelas', 'potongan' ,'siswa.thn_akademik', 'siswa.status'])
 		->join('tahun_akademik', "tahun_akademik.thn_akademik = siswa.thn_akademik")
@@ -109,25 +108,33 @@ class Pages extends User {
 	public function datanonaktifSiswa(){
 		$this->setData(
 			array(
-				'base_url' => base_url("pages/datanonaktifsiswa/"),
-				'total_rows' => $this->model->countAllData('siswa'),
-				'per_page' => 10,
-				
+				'base_url' => base_url('pages/datanonaktifsiswa/'),
+				'total_rows' => $this->db->from('siswa')->where(['status' => 0])->count_all_results(),
+
+				'per_page' => 20,
 			)
 		);
-
 		$start = $this->uri->segment(3);
 		$this->pagination->initialize($this->getData());
 
+		if(($this->input->post('keyword'))){
+			$keyword = array('nama_siswa' => $this->input->post('keyword'));
+			$this->db->like($keyword);
+			$this->session->set_userdata('keyword', $keyword['nama_siswa']);
+		} else {
+			$keyword = $this->session->unset_userdata('keyword');
+		}
+		
 		$dataSiswa = $this->db->select(['nipd', 'nama_siswa', 'kelas', 'potongan' ,'siswa.thn_akademik', 'siswa.status'])
 		->join('tahun_akademik', "tahun_akademik.thn_akademik = siswa.thn_akademik")
 		->get_where('siswa', ['siswa.status' => 0], $this->getData()['per_page'], $start)
 		->result_array();
 
 		try {
-			$this->render('datanonaktifsiswa', ['title' => 'Data Non Aktif Siswa', 'name' => $this->_userdata['nama_petugas'], 
-			'data' => array('dataSiswa' => $dataSiswa),'start' => $start]);		
-		} catch (Exception $e){
+			$this->render('datanonaktifsiswa', ['title' => 'Data Nonaktif Siswa', 'name' => $this->_userdata['nama_petugas'], 
+			'data' => $dataSiswa, 'start' => $start]);
+			
+		} catch (Exception $e) {
 			$e->getMessage();
 		}
 	}
@@ -136,18 +143,26 @@ class Pages extends User {
 	{
 		$this->setData(
 			array(
-				'base_url' => base_url("pages/datakelas/"),
-				'total_rows' => $this->model->countAllData('kelas'),
-				'per_page' => 10,
-				
+				'base_url' => base_url('pages/datakelas/'),
+				'total_rows' => $this->db->from('kelas')->count_all_results(),
+
+				'per_page' => 20,
 			)
 		);
-
+		
 		$start = $this->uri->segment(3);
 		$this->pagination->initialize($this->getData());
 
-		$dataInstansi = $this->model->getDataModel('instansi', ['jenis_instansi'],['status' => 1]);
+		if(($this->input->post('keyword'))){
+			$keyword = array('kelas' => $this->input->post('keyword'));
+			$this->db->like($keyword);
+			$this->session->set_userdata('keyword', $keyword['kelas']);
+		} else {
+			$keyword = $this->session->unset_userdata('keyword');
+		}
+
 		$dataKelas = $this->model->getDataModel('kelas', ['kelas', 'instansi'], ['status' => 1], $this->getData()['per_page'], $start);
+		$dataInstansi = $this->model->getDataModel('instansi', ['jenis_instansi'],['status' => 1]);
 
 		try {
 			$this->render('datakelas', ['title' => 'Data Kelas', 'name' => $this->_userdata['nama_petugas'], 
@@ -160,15 +175,23 @@ class Pages extends User {
 	public function datanonaktifKelas(){
 		$this->setData(
 			array(
-				'base_url' => base_url("pages/datanonaktifkelas/"),
-				'total_rows' => $this->model->countAllData('kelas'),
-				'per_page' => 10,
-				
+				'base_url' => base_url('pages/datanonaktifkelas/'),
+				'total_rows' => $this->db->from('kelas')->where(['status' => 0])->count_all_results(),
+
+				'per_page' => 20,
 			)
 		);
 
 		$start = $this->uri->segment(3);
 		$this->pagination->initialize($this->getData());
+
+		if(($this->input->post('keyword'))){
+			$keyword = array('kelas' => $this->input->post('keyword'));
+			$this->db->like($keyword);
+			$this->session->set_userdata('keyword', $keyword['kelas']);
+		} else {
+			$keyword = $this->session->unset_userdata('keyword');
+		}
 
 		$dataKelas = $this->model->getDataModel('kelas', ['kelas', 'instansi'], ['status' => 0], $this->getData()['per_page'], $start);
 
@@ -185,17 +208,26 @@ class Pages extends User {
 		$this->setData(
 			array(
 				'base_url' => base_url('pages/databiaya/'),
-				'total_rows' => $this->model->countAllData('jenis_pembayaran'),
-				'per_page' => 10,
-				
+				'total_rows' => $this->db->from('jenis_pembayaran')->count_all_results(),
+
+				'per_page' => 20,
 			)
 		);
 		
 		$start = $this->uri->segment(3);
 		$this->pagination->initialize($this->getData());
-		$dataInstansi = $this->model->getDataModel('instansi', ['jenis_instansi'], ['status' => 1]);
+
+		if(($this->input->post('keyword'))){
+			$keyword = array('jenis_pembayaran' => $this->input->post('keyword'));
+			$this->db->like($keyword);
+			$this->session->set_userdata('keyword', $keyword['jenis_pembayaran']);
+		} else {
+			$keyword = $this->session->unset_userdata('keyword');
+		}
+
 		$dataBiaya = $this->model->getDataModel('jenis_pembayaran', ['id_jenis_pembayaran','jenis_pembayaran', 'biaya', 'instansi'], 
 		['status' => 1], $this->getData()['per_page'], $start);
+		$dataInstansi = $this->model->getDataModel('instansi', ['jenis_instansi'], ['status' => 1]);
 		try {
 			$this->render('databiaya', ['title' => 'Data Biaya', 'name' => $this->_userdata['nama_petugas'], 
 			'data' => array('dataBiaya' => $dataBiaya, 'dataInstansi' => $dataInstansi), 
@@ -210,14 +242,23 @@ class Pages extends User {
 		$this->setData(
 			array(
 				'base_url' => base_url('pages/datanonaktifbiaya/'),
-				'total_rows' => $this->model->countAllData('jenis_pembayaran'),
-				'per_page' => 10,
-				
+				'total_rows' => $this->db->from('jenis_pembayaran')->where(['status' => 0])->count_all_results(),
+
+				'per_page' => 20,
 			)
 		);
 		
 		$start = $this->uri->segment(3);
 		$this->pagination->initialize($this->getData());
+
+		if(($this->input->post('keyword'))){
+			$keyword = array('jenis_pembayaran' => $this->input->post('keyword'));
+			$this->db->like($keyword);
+			$this->session->set_userdata('keyword', $keyword['jenis_pembayaran']);
+		} else {
+			$keyword = $this->session->unset_userdata('keyword');
+		}
+
 		$dataBiaya = $this->model->getDataModel('jenis_pembayaran', ['id_jenis_pembayaran','jenis_pembayaran', 'biaya', 'instansi'], 
 		['status' => 0], $this->getData()['per_page'], $start);
 		try {
@@ -233,11 +274,19 @@ class Pages extends User {
 		$this->setData(
 			array(
 				'base_url' => base_url('pages/datainstansi/'),
-				'total_rows' => $this->model->countAllData('instansi'),
-				'per_page' => 10,
-				
+				'total_rows' => $this->db->from('jenis_pembayaran')->count_all_results(),
+
+				'per_page' => 20,
 			)
 		);
+
+		if(($this->input->post('keyword'))){
+			$keyword = array('jenis_instansi' => $this->input->post('keyword'));
+			$this->db->like($keyword);
+			$this->session->set_userdata('keyword', $keyword['jenis_instansi']);
+		} else {
+			$keyword = $this->session->unset_userdata('keyword');
+		}
 
 		$start = $this->uri->segment(3);
 		$this->pagination->initialize($this->getData());
@@ -255,11 +304,19 @@ class Pages extends User {
 		$this->setData(
 			array(
 				'base_url' => base_url('pages/datanonaktifinstansi/'),
-				'total_rows' => $this->model->countAllData('instansi'),
-				'per_page' => 10,
+				'total_rows' => $this->db->from('jenis_pembayaran')->where(['status' => 0])->count_all_results(),
+				'per_page' => 20,
 				
 			)
 		);
+
+		if(($this->input->post('keyword'))){
+			$keyword = array('jenis_instansi' => $this->input->post('keyword'));
+			$this->db->like($keyword);
+			$this->session->set_userdata('keyword', $keyword['jenis_instansi']);
+		} else {
+			$keyword = $this->session->unset_userdata('keyword');
+		}
 
 		$start = $this->uri->segment(3);
 		$this->pagination->initialize($this->getData());
@@ -289,13 +346,23 @@ class Pages extends User {
 		$this->setData(
 			array(
 				'base_url' => base_url('pages/datadmin/'),
-				'total_rows' => $this->model->countAllData('admin'),
-				'per_page' => 10,
+				'total_rows' => $this->db->from('admin')->count_all_results(),
+				'per_page' => 20,
 				
 			)
 		);
+
 		$start = $this->uri->segment(3);
 		$this->pagination->initialize($this->getData());
+
+		if(($this->input->post('keyword'))){
+			$keyword = array('nama_petugas' => $this->input->post('keyword'));
+			$this->db->like($keyword);
+			$this->session->set_userdata('keyword', $keyword['nama_petugas']);
+		} else {
+			$keyword = $this->session->unset_userdata('keyword');
+		}
+
 		$dataAdmin = $this->model->getDataModel('admin', ['kode_petugas', 'nama_petugas'], ['status' => 1], $this->getData()['per_page'], $start);
 		try {
 			$this->render('dataadmin', ['title' => 'Data Admin', 'name' => $this->_userdata['nama_petugas'], 'data' => $dataAdmin, 'start' => $start]);
@@ -310,13 +377,23 @@ class Pages extends User {
 		$this->setData(
 			array(
 				'base_url' => base_url('pages/datanonaktifadmin/'),
-				'total_rows' => $this->model->countAllData('admin'),
-				'per_page' => 10,
+				'total_rows' => $this->db->from('admin')->where(['status' => 0])->count_all_results(),
+				'per_page' => 20,
 				
 			)
 		);
+
 		$start = $this->uri->segment(3);
 		$this->pagination->initialize($this->getData());
+
+		if(($this->input->post('keyword'))){
+			$keyword = array('nama_petugas' => $this->input->post('keyword'));
+			$this->db->like($keyword);
+			$this->session->set_userdata('keyword', $keyword['nama_petugas']);
+		} else {
+			$keyword = $this->session->unset_userdata('keyword');
+		}
+
 		$dataAdmin = $this->model->getDataModel('admin', ['kode_petugas', 'nama_petugas'], ['status' => 0], 
 		$this->getData()['per_page'], $start);
 		try {
@@ -350,12 +427,22 @@ class Pages extends User {
 		$this->setData(
 			array(
 				'base_url' => base_url('pages/datatahunakademik/'),
-				'total_rows' => $this->model->countAllData('tahun_akademik'),
-				'per_page' => 10,
+				'total_rows' => $this->db->from('tahun_akademik')->count_all_results(),
+				'per_page' => 20,
 			)
 		);
+
 		$start = $this->uri->segment(3);
 		$this->pagination->initialize($this->getData());
+
+		if(($this->input->post('keyword'))){
+			$keyword = array('thn_akademik' => $this->input->post('keyword'));
+			$this->db->like($keyword);
+			$this->session->set_userdata('keyword', $keyword['thn_akademik']);
+		} else {
+			$keyword = $this->session->unset_userdata('keyword');
+		}
+
 		$dataTahunAkademik = $this->model->getDataModel('tahun_akademik', ['thn_akademik', 'status'], null, $this->getData()['per_page'], $start);
 		try {
 			$this->render('datatahunakademik', ['title' => 'Data Tahun Akademik', 'name' => $this->_userdata['nama_petugas'], 'data' => $dataTahunAkademik, 'start' => $start]);
@@ -369,12 +456,22 @@ class Pages extends User {
 		$this->setData(
 			array(
 				'base_url' => base_url('pages/datapengeluaran/'),
-				'total_rows' => $this->model->countAllData('pengeluaran'),
+				'total_rows' => $this->db->from('pengeluaran')->count_all_results(),
 				'per_page' => 10,
 			)
 		);
+
 		$start = $this->uri->segment(3);
 		$this->pagination->initialize($this->getData());
+
+		if(($this->input->post('keyword'))){
+			$keyword = array('keterangan' => $this->input->post('keyword'));
+			$this->db->like($keyword);
+			$this->session->set_userdata('keyword', $keyword['keterangan']);
+		} else {
+			$keyword = $this->session->unset_userdata('keyword');
+		}
+
 		$dataPengeluaran = $this->model->getDataModel('pengeluaran', ['id_pengeluaran', 'nominal', 'arus_kas' ,'keterangan'], ['arus_kas' => 0, 'status' => 1], $this->getData()['per_page'], $start);
 		try {
 			$this->render('datapengeluaran', ['title' => 'Data Pengeluaran', 'name' => $this->_userdata['nama_petugas'], 'data' => $dataPengeluaran, 'start' => $start]);

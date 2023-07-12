@@ -19,8 +19,8 @@
                             Apakah Anda yakin ingin memulihkan data ini?
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Tidak</button>
-                                <button type="button"  class="btn restoreModal btn-danger text-white">Iya</button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tidak</button>
+                                <button type="button"  class="btn restoreModal btn-primary text-white">Iya</button>
                             </div>
                         </div>
                     </div>
@@ -32,7 +32,15 @@
                             <div class="table-responsive">
                                 <div id="dataTable_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
                                     <div class="row mb-3">                                        
-                                        <div class="col-sm-12 d-flex justify-content-end">
+                                        <div class="col-sm-12 d-flex justify-content-between">
+                                            <div id="dataTable_filter" class="dataTables_filter input-group col-sm-4 siswa-cari">
+                                                <form action="<?= base_url('pages/datanonaktifsiswa');?>" method="post" class="form-inline">
+                                                    <div class="form-group mb-2 ">
+                                                        <input type="text" size="20" class="form-control mr-2" id="cari" name="keyword" placeholder="Cari Nama Siswa" aria-controls="dataTable">
+                                                    </div>
+                                                    <button type="submit" class="btn btn-primary mb-2">Cari</button>
+                                                </form>
+                                            </div>
                                             <div class="media">
                                                 <a href="javascript:void(0);" class="icon-circle icon-30 content-color-secondary fullscreenbtn form-control-sm">
                                                     <i class="material-icons ">crop_free</i>
@@ -42,6 +50,7 @@
                                     </div>                             
                                     <div class="row">
                                         <div class="col-sm-12">
+                                            
                                             <table class="table hidden-overflow" id="dataTables-example">
                                                 <thead>
                                                     <tr>
@@ -56,13 +65,13 @@
                                                 </thead>
                                                 <tbody>
                                                     <?php
-                                                    if(count($data['dataSiswa']) == 0){?>
+                                                    if(count($data) == 0){?>
                                                             <tr class="odd">
                                                                 <td colspan="7"><center><h5>Data belum tersedia!</h5></center></td>
                                                             </tr>
                                                             <?php
                                                         } else {                                                   
-                                                            foreach ($data['dataSiswa'] as $value) { 
+                                                            foreach ($data as $value) { 
                                                                 ?>
                                                                 <tr class="odd">
                                                                     <th><center><?= ++$start;?></center></th>
@@ -85,8 +94,9 @@
                                     </div>
                                 </div>
                             </div>
-                            <?= $this->pagination->create_links();?>                            
-                            <!-- /.table-responsive -->
+                            <div class="siswa-pagination mt-3">
+                                <?= $this->pagination->create_links();?>
+                            </div>
                         </div>
                     </div>
                 </div>

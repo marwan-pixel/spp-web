@@ -302,8 +302,7 @@
             let data = [];
             let itemsPerPage = 10;
             let currentPage = 1;
-            
-            let no = 1;
+            let totalPages;
           
             let IDR = new Intl.NumberFormat('id-ID', {
                style: 'currency',
@@ -397,13 +396,13 @@
 
                               if(response.dataTransaksi !== undefined) {
                                  data = response.dataTransaksi;
-                                 let startIndex = (currentPage - 1) * itemsPerPage;
-                                 let endIndex = startIndex + itemsPerPage;
-                                 let totalPages = Math.ceil(data.length / itemsPerPage);
-                                 let pageData = data.slice(startIndex, endIndex);
+                                 let startIndex = (currentPage - 1) * itemsPerPage + 1;
+                                 let endIndex = startIndex + itemsPerPage - 1;
+                                 totalPages = Math.ceil(data.length / itemsPerPage);
+                                 let pageData = data.slice(startIndex - 1, endIndex);
 
-                                 
                                  $.each(pageData, function(index, item) {
+                                    let no = startIndex + index;
                                     let row = `<tr>
                                              <td><center>${no++}</center></td>
                                              <td><center>${item.nipd}</center></td>
@@ -480,13 +479,15 @@
 
                $('.pagination').on('click', 'a.page-link', function(e) {
                   e.preventDefault();
-                  currentPage = parseInt($(this).data('page'));
-                  let previousPage = currentPage;
-                  if(previousPage > currentPage) {
-                        no = 1;
+                  
+                  let targetPage = parseInt($(this).data('page'));
+                  if(targetPage === currentPage + 1 && currentPage === totalPages){
+                     currentPage = 1;
+                  } else {
+                     currentPage = targetPage;
                   }
-                  renderPagination();
                   fetchSearchResults();
+                  renderPagination();
                });
                
                $('#table').on('click', '.update-link' ,function(event) {
