@@ -131,7 +131,6 @@
                                                     <tr>
                                                         <th><center>No</center></th>
                                                         <th><center>Nominal</center> </th>
-                                                        <th><center>Arus Kas</center> </th>
                                                         <th><center>Keterangan</center></th>
                                                         <th class="biaya-update"><center>Aksi</center></th>
                                                     </tr>
@@ -149,7 +148,6 @@
                                                         <tr class="odd">
                                                             <td><center><?= $no++; ?></center></td>
                                                             <td><center><?= "Rp" . number_format($value['nominal'],2,',','.'); ?></center></td>
-                                                            <td><center><?= $value['arus_kas'] == 1 ? "Pemasukan" : "Pengeluaran"; ?></center></td>
                                                             <td><center><?= $value['keterangan']; ?></center></td>
                                                             <td>
                                                                 <center>

@@ -843,7 +843,10 @@ class Admin extends User {
                             );
                             if(count(array_unique($data['value'])) < count($data['value'])) {
                                 $response['errors'] = array('fileExcel' => "Terdapat Duplikasi Pada NIPD di Excel!");
-                            } else {
+                            } else if(count($data['value']) > 300){
+                                $response['errors'] = array('fileExcel' => "Data yang dikirim maksimal sebanyak 300 data!");
+                            } 
+                            else {
                                 $existingData = $this->model->getDataModel('siswa', ['nipd'], ['nipd' => $data['value']['nipd']]);
                                 if(!empty($existingData)){
                                     $response['errors'] = array('fileExcel' => "Terdapat Duplikasi Pada NIPD di Database!");

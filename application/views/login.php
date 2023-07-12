@@ -8,7 +8,9 @@
       <link rel="icon" href="assets/img/Yayasan Ar-Rahmah.jpeg">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="<?= base_url();?>assets/vendor/bootstrap-4.1.3/js/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+      <!-- Bootstrap CSS -->
+      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
 
     <!-- Material design icons CSS -->
     <link rel="stylesheet" href="<?= base_url();?>assets/vendor/materializeicon/material-icons.css">
@@ -102,6 +104,5 @@ if($this->session->userdata('kode_petugas')) {
     <script src="<?= base_url();?>/assets/js/main.js"></script>
 
     <!-- page specific script -->
-    <script src="<?= base_url();?>/assets/js/dashboard.js"></script>
 </body>
 </html>

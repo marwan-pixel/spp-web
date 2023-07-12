@@ -302,7 +302,7 @@
             let data = [];
             let itemsPerPage = 10;
             let currentPage = 1;
-            let previousPage = currentPage;
+            
             let no = 1;
           
             let IDR = new Intl.NumberFormat('id-ID', {
@@ -336,7 +336,7 @@
                            
                            if (response.dataSiswa !== undefined) {
                               console.log(response);
-
+                              $('#table tbody').empty();
                               $('.transactions').show();
                               $('.add-transaction').find('#nominaltransaction').attr("value", response.dataNominal);
                               $.each(response.dataSiswa, function(index, item) {
@@ -395,7 +395,6 @@
                                  </li>
                               `);
 
-
                               if(response.dataTransaksi !== undefined) {
                                  data = response.dataTransaksi;
                                  let startIndex = (currentPage - 1) * itemsPerPage;
@@ -403,7 +402,6 @@
                                  let totalPages = Math.ceil(data.length / itemsPerPage);
                                  let pageData = data.slice(startIndex, endIndex);
 
-                                 $('#table tbody').empty();
                                  
                                  $.each(pageData, function(index, item) {
                                     let row = `<tr>
@@ -471,12 +469,9 @@
                      var pageLink = '<li class="page-item ' + activeClass + '">' +
                                     '<a class="page-link" href="#" data-page="' + i + '">' + i + '</a>' +
                                     '</li>';
-                     if(previousPage < currentPage) {
-                        no = 1;
-                     }
+                     
                      $('.pagination').append(pageLink);
                   }
-                  
                }
 
                $('.detailBiaya').click(function(){
@@ -486,6 +481,10 @@
                $('.pagination').on('click', 'a.page-link', function(e) {
                   e.preventDefault();
                   currentPage = parseInt($(this).data('page'));
+                  let previousPage = currentPage;
+                  if(previousPage > currentPage) {
+                        no = 1;
+                  }
                   renderPagination();
                   fetchSearchResults();
                });

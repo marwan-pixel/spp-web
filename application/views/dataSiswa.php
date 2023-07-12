@@ -138,30 +138,28 @@
                                     </div>
                                     <div class="form-group">
                                         <label for="kelas">Kelas</label>
-                                        <input class="form-control" value="<?= set_value('kelas');?>" name="kelas" list="kelasList" id="kelas" placeholder="Kelas">
-                                        <datalist id="kelasList" >
+                                        <select class="form-select kelas" name="kelas" class="kelas" id="kelas" >
                                         <?php
                                             foreach ($data['dataKelas'] as $value) {
                                                 ?>
-                                            <option value="<?= $value['kelas']; ?>" id="kelas"></option>
+                                            <option value="<?= $value['kelas']; ?>"><?= $value['kelas']; ?></option>
                                         <?php
                                             }
                                         ?>
-                                        </datalist>
+                                        </select>
                                         <small class="text-danger" id="kelas-error"></small>
                                     </div>
                                     <div class="form-group">
                                         <label for="thn_akademik">Tahun Akademik</label>
-                                        <input class="form-control" value="<?= set_value('thn_akademik');?>" name="thn_akademik" list="thn_akademikList" id="thn_akademik" placeholder="Tahun Akademik">
-                                        <datalist id="thn_akademikList">
+                                        <select class="form-select thn_akademik" name="thn_akademik" id="thn_akademik">
                                         <?php
                                             foreach ($data['dataTahunAkademik'] as $value) {
                                                 ?>
-                                            <option value="<?= $value['thn_akademik']; ?>" id="thn_akademik"></option>
+                                            <option value="<?= $value['thn_akademik']; ?>"><?= $value['thn_akademik']; ?></option>
                                         <?php
                                             }
                                         ?>
-                                        </datalist>
+                                        </select>
                                         <small class="text-danger" id="thn_akademik-error"></small>
                                     </div>
 
@@ -212,22 +210,20 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="kelas">Kelas</label>
-                                    <input class="form-control" value="<?= set_value('kelas');?>" name="kelas" list="kelasList" id="kelas" placeholder="Kelas">
-                                    <datalist id="kelasList">
+                                    <select class="select-control kelas" name="kelas" id="kelas">
                                     <?php
                                         foreach ($data['dataKelas'] as $value) {
                                             ?>
-                                        <option value="<?= $value['kelas']; ?>"></option>
+                                        <option value="<?= $value['kelas']; ?>"><?= $value['kelas']; ?></option>
                                     <?php
                                         }
                                     ?>
-                                    </datalist>
+                                    </select>
                                     <small class="text-danger" id="kelas-errorUpdateData"></small>
                                 </div>
                                 <div class="form-group">
                                     <label for="thn_akademik">Tahun Akademik</label>
-                                    <input class="form-control" value="<?= set_value('thn_akademik');?>" name="thn_akademik" list="thn_akademikList" id="thn_akademik" placeholder="Tahun Akademik">
-                                    <datalist id="thn_akademikList">
+                                    <select class="form-control thn_akademik" id="thn_akademik" name="thn_akademik">
                                     <?php
                                         foreach ($data['dataTahunAkademik'] as $value) {
                                             ?>
@@ -235,7 +231,7 @@
                                     <?php
                                         }
                                     ?>
-                                    </datalist>
+                                    </select>
                                     <small class="text-danger" id="thn_akademik-errorUpdateData"></small>
                                 </div>
                                  <div class="form-group">
@@ -466,6 +462,8 @@
                         }
                     })                
                 });
+
+                
                 //Modal Config Get Selected Data Kelas
                 // Untuk sunting
                 $('#UpdateData').on('show.bs.modal', function (event) {

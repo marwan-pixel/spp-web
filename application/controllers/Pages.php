@@ -90,6 +90,7 @@ class Pages extends User {
 		$start = $this->uri->segment(3);
 
 		$this->pagination->initialize($this->getData());
+
 		$dataSiswa = $this->db->select(['nipd', 'nama_siswa', 'kelas', 'potongan' ,'siswa.thn_akademik', 'siswa.status'])
 		->join('tahun_akademik', "tahun_akademik.thn_akademik = siswa.thn_akademik")
 		->get_where('siswa', ['siswa.status' => 1], $this->getData()['per_page'], $start)
@@ -99,6 +100,7 @@ class Pages extends User {
 		try {
 			$this->render('datasiswa', ['title' => 'Data Siswa', 'name' => $this->_userdata['nama_petugas'], 
 			'data' => array('dataSiswa' => $dataSiswa, 'dataKelas' => $dataKelas, 'dataTahunAkademik' => $dataTahunAkademik), 'start' => $start]);
+			
 		} catch (Exception $e) {
 			$e->getMessage();
 		}
@@ -363,22 +365,22 @@ class Pages extends User {
 		}
 	}
 
-	// public function dataPengeluaran() {
-	// 	$this->setData(
-	// 		array(
-	// 			'base_url' => base_url('pages/datapengeluaran/'),
-	// 			'total_rows' => $this->model->countAllData('pengeluaran'),
-	// 			'per_page' => 10,
-	// 		)
-	// 	);
-	// 	$start = $this->uri->segment(3);
-	// 	$this->pagination->initialize($this->getData());
-	// 	$dataPengeluaran = $this->model->getDataModel('pengeluaran', ['id_pengeluaran', 'nominal', 'arus_kas' ,'keterangan'], [ 'status' => 1], $this->getData()['per_page'], $start);
-	// 	try {
-	// 		$this->render('datapengeluaran', ['title' => 'Data Pengeluaran', 'name' => $this->_userdata['nama_petugas'], 'data' => $dataPengeluaran, 'start' => $start]);
+	public function dataPengeluaran() {
+		$this->setData(
+			array(
+				'base_url' => base_url('pages/datapengeluaran/'),
+				'total_rows' => $this->model->countAllData('pengeluaran'),
+				'per_page' => 10,
+			)
+		);
+		$start = $this->uri->segment(3);
+		$this->pagination->initialize($this->getData());
+		$dataPengeluaran = $this->model->getDataModel('pengeluaran', ['id_pengeluaran', 'nominal', 'arus_kas' ,'keterangan'], ['arus_kas' => 0, 'status' => 1], $this->getData()['per_page'], $start);
+		try {
+			$this->render('datapengeluaran', ['title' => 'Data Pengeluaran', 'name' => $this->_userdata['nama_petugas'], 'data' => $dataPengeluaran, 'start' => $start]);
 
-	// 	} catch (Exception $e){
-	// 		$e->getMessage();
-	// 	}
-	// }
+		} catch (Exception $e){
+			$e->getMessage();
+		}
+	}
 }
