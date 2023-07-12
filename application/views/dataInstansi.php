@@ -116,7 +116,14 @@
                                                 </thead>
                                                 <tbody>
                                                     <?php
-                                                    $no = 1; 
+                                                    $no = 1;
+                                                    if(count($data['dataInstansi']) == 0){
+                                                        ?>
+                                                        <tr class="odd">
+                                                                <td colspan="3"><center><h5>Data belum tersedia!</h5></center></td>
+                                                        </tr>
+                                                    <?php
+                                                    }
                                                     foreach ($data['dataInstansi'] as $value) {
                                                     ?>
                                                     <tr class="odd">

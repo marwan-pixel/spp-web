@@ -127,6 +127,9 @@
                      <li class="nav-item transaksi">
                         <a href="<?= base_url('pages/datatransaksi'); ?>" class="nav-link success-gradient-active"><i class="material-icons icon">credit_card</i> <span>Data Transaksi</span> </a>
                      </li>                     
+                     <!-- <li class="nav-item pengeluaran">
+                        <a href="<?= base_url('pages/datapengeluaran'); ?>" class="nav-link success-gradient-active"><i class="material-icons icon">credit_card</i> <span>Data Pengeluaran</span> </a>
+                     </li>                      -->
                   </ul>
                </li>
                <li class="nav-item non-aktif-status">

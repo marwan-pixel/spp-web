@@ -275,7 +275,7 @@ class Pages extends User {
 	{
 		$dataAdmin = $this->model->getDataModel('admin', ['kode_petugas', 'nama_petugas'], ['kode_petugas' => $this->session->userdata('kode_petugas')]);
 		try {
-			$this->render('halamanadmin', ['title' => 'Halaman Admin', 'name' => $this->_userdata['nama_petugas'], 'kode' => $dataAdmin['kode_petugas']]);
+			$this->render('halamanadmin', ['title' => 'Halaman Admin', 'name' => $this->_userdata['nama_petugas'], 'kode' => $dataAdmin[0]['kode_petugas']]);
 
 		} catch (Exception $e){
 			$e->getMessage();
@@ -335,8 +335,10 @@ class Pages extends User {
 				'per_page' => 10,
 			)
 		);
+		$dataTahunAkademik = $this->model->getDataModel('tahun_akademik', ['thn_akademik']);
+
 		try {
-			$this->render('datatransaksi', ['title' => 'Data Transaksi', 'name' => $this->_userdata['nama_petugas']]);
+			$this->render('datatransaksi', ['title' => 'Data Transaksi', 'name' => $this->_userdata['nama_petugas'], 'data' => $dataTahunAkademik]);
 		} catch (Exception $e){
 			$e->getMessage();
 		}
@@ -348,7 +350,6 @@ class Pages extends User {
 				'base_url' => base_url('pages/datatahunakademik/'),
 				'total_rows' => $this->model->countAllData('tahun_akademik'),
 				'per_page' => 10,
-				
 			)
 		);
 		$start = $this->uri->segment(3);
@@ -361,4 +362,23 @@ class Pages extends User {
 			$e->getMessage();
 		}
 	}
+
+	// public function dataPengeluaran() {
+	// 	$this->setData(
+	// 		array(
+	// 			'base_url' => base_url('pages/datapengeluaran/'),
+	// 			'total_rows' => $this->model->countAllData('pengeluaran'),
+	// 			'per_page' => 10,
+	// 		)
+	// 	);
+	// 	$start = $this->uri->segment(3);
+	// 	$this->pagination->initialize($this->getData());
+	// 	$dataPengeluaran = $this->model->getDataModel('pengeluaran', ['id_pengeluaran', 'nominal', 'arus_kas' ,'keterangan'], [ 'status' => 1], $this->getData()['per_page'], $start);
+	// 	try {
+	// 		$this->render('datapengeluaran', ['title' => 'Data Pengeluaran', 'name' => $this->_userdata['nama_petugas'], 'data' => $dataPengeluaran, 'start' => $start]);
+
+	// 	} catch (Exception $e){
+	// 		$e->getMessage();
+	// 	}
+	// }
 }

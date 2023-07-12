@@ -126,6 +126,7 @@ class Admin extends User {
                                 'kode_petugas' => htmlspecialchars($this->input->post('kode_petugas')),
                                 'nama_petugas' => htmlspecialchars($this->input->post('nama_petugas')),
                                 'password' => password_hash($this->input->post('password'), PASSWORD_BCRYPT),
+                                'status' => 1
                                 )
                     )
             );
@@ -163,7 +164,8 @@ class Admin extends User {
                 array(
                     'jenis_pembayaran' => htmlspecialchars($this->input->post('jenis_pembayaran')),
                     'biaya' => htmlspecialchars($this->input->post('biaya')),
-                    'instansi' => htmlspecialchars($this->input->post('instansi'))                    
+                    'instansi' => htmlspecialchars($this->input->post('instansi')),
+                    'status' => 1                  
                 ),
                 'config' =>
                 array(
@@ -363,7 +365,8 @@ class Admin extends User {
                 'value' => 
                 array(
                     'kelas' => htmlspecialchars($this->input->post('kelas')),
-                    'instansi' => htmlspecialchars($this->input->post('instansi'))
+                    'instansi' => htmlspecialchars($this->input->post('instansi')),
+                    'status' => 1
                 ),
                 'config' =>
                 array(
@@ -558,7 +561,8 @@ class Admin extends User {
                 'table' => 'instansi',
                 'value' => 
                 array(
-                    'instansi' => htmlspecialchars($this->input->post('instansi'))
+                    'jenis_instansi' => htmlspecialchars($this->input->post('instansi')),
+                    'status' => 1
                 ),
                 'config' =>
                 array(
@@ -825,7 +829,8 @@ class Admin extends User {
                         $potongan = $worksheet->getCell('F' . $row)->getValue();
                         if($nipd == null || $nama_siswa == null || $kelas == null || $thn_akademik == null || $password == null) {
                             $response['errors'] = array('fileExcel' => "Terdapat nilai yang kosong pada kolom di Excel!");
-                        } else {
+                        }
+                         else {
                             $potongan == null ? 0 : $potongan;
                             $data['value'] = array(
                                 'nipd' => strval($nipd),
@@ -836,27 +841,27 @@ class Admin extends User {
                                 'potongan' => strval($potongan),
                                 'status' => 1
                             );
-                            
-                            $existingData = $this->model->getDataModel('siswa', ['nipd'], ['nipd' => $nipd]);
-                            if(!is_null($existingData)){
-                                if(count(array_unique($data['value'])) !== count($data['value'])) {
-                                    $response['errors'] = array('fileExcel' => "Terdapat Duplikasi Pada NIPD di Excel!");
-                                } else if ($existingData['nipd'] == $data['value']['nipd']) {
-                                    $response['errors'] = array('fileExcel' => "Terdapat Duplikasi Pada NIPD di Database!");
-                                }
+                            if(count(array_unique($data['value'])) < count($data['value'])) {
+                                $response['errors'] = array('fileExcel' => "Terdapat Duplikasi Pada NIPD di Excel!");
                             } else {
-                                $process = $this->model->insertDataModel('siswa', $data['value']);
-                                if($process['status'] == true){
-                                    $this->session->set_flashdata("message", "<div class='alert alert-success' role='alert'>
-                                                            {$process['message']}
-                                                            </div>");
+                                $existingData = $this->model->getDataModel('siswa', ['nipd'], ['nipd' => $data['value']['nipd']]);
+                                if(!empty($existingData)){
+                                    $response['errors'] = array('fileExcel' => "Terdapat Duplikasi Pada NIPD di Database!");
                                 } else {
-                                    $this->session->set_flashdata("message", "<div class='alert alert-danger' role='alert'>
-                                                            {$process['message']}
-                                                            </div>");                                
+                                    $process = $this->model->insertDataModel('siswa', $data['value']);
+                                    if($process['status'] == true){
+                                        $this->session->set_flashdata("message", "<div class='alert alert-success' role='alert'>
+                                                                {$process['message']}
+                                                                </div>");
+                                    } else {
+                                        $this->session->set_flashdata("message", "<div class='alert alert-danger' role='alert'>
+                                                                {$process['message']}
+                                                                </div>");                                
+                                    }
+                                    $response['success'] = true;
+                                    // $response['errors'] = null;
+                                    $response['redirect'] = base_url('pages/datasiswa');
                                 }
-                                $response['success'] = true;
-                                $response['redirect'] = base_url('pages/datasiswa');
                             }
                         }
                         
@@ -867,7 +872,7 @@ class Admin extends User {
             }
         } 
         echo json_encode($response);
-        exit();
+        // exit();
     }
 
     public function ubahDataSiswa(){
@@ -1245,7 +1250,7 @@ class Admin extends User {
         );
         $data = $this->getData();
         $process = $this->model->printDataModel($data['table'],['siswa.nama_siswa', 'kelas.kelas', 
-        'kelas.instansi' ,'nominal', 'transactions.status', 'keterangan', 'created_at'], $data['param']);
+        'kelas.instansi' ,'nominal', 'transactions.status', 'keterangan', 'created_at', 'transactions.thn_akademik'], $data['param']);
         if(count($process) == 0){
             $this->session->set_flashdata('message', 
             '<div class="alert alert-danger" role="alert">
@@ -1395,12 +1400,13 @@ class Admin extends User {
         $pdf->Cell(190, 7, 'Data Transaksi SPP', 0, 1);
         $pdf->Ln(15); // Berpindah baris
         
-        $pdf->SetFont('Arial', '', '12');
+        $pdf->SetFont('Arial', '', '11');
         $pdf->Cell(10, 10, "No", 1);
         $pdf->Cell(50, 10, "Nama Siswa", 1);
         $pdf->Cell(15, 10, "Kelas", 1);
-        $pdf->Cell(40, 10, "Instansi", 1);
-        $pdf->Cell(27, 10, "Nominal", 1);
+        $pdf->Cell(37, 10, "Instansi", 1);
+        $pdf->Cell(30, 10, "Tahun Akademik", 1);
+        $pdf->Cell(25, 10, "Nominal", 1);
         $pdf->Cell(50, 10, "Keterangan", 1);
         $pdf->Cell(42, 10, "Tanggal Bayar", 1);
         $pdf->Cell(20, 10, "Status", 1);
@@ -1452,8 +1458,9 @@ class Admin extends User {
             $pdf->SetXY($xPos + $cellWidth, $yPos);
 
             $pdf->Cell(15,  $line * $cellHeight, $row['kelas'], 1);
-            $pdf->Cell(40,  $line * $cellHeight, $row['instansi'], 1);
-            $pdf->Cell(27,  $line * $cellHeight, $row['nominal'], 1);
+            $pdf->Cell(37,  $line * $cellHeight, $row['instansi'], 1);
+            $pdf->Cell(30,  $line * $cellHeight, $row['thn_akademik'], 1);
+            $pdf->Cell(25,  $line * $cellHeight, $row['nominal'], 1);
             if($pdf->GetStringWidth($row['keterangan']) < $cellWidth){
                 $pdf->Cell(50,  $line * $cellHeight, $row['keterangan'], 1);
             } else {
@@ -1472,40 +1479,44 @@ class Admin extends User {
 
     function cariDataTransaksi() {
         if($this->session->userdata('kode_petugas')) {
-            $this->setData(
-			array(
-				'base_url' => 'pages/datatransaksi/',
-				'total_rows' => $this->model->countAllData('tahun_akademik'),
-				'per_page' => 10,
-				
-			)
-		);
+            
             $response = [];
             $keyword = $this->input->get('query');
+            $tahunAkademik = $this->input->get('thn_akademik');
             //Ambil Data Siswa
             $dataSiswa = $this->model->getDataJoinModel('siswa', 'kelas' ,['nama_siswa', 'siswa.kelas', 'potongan', 'instansi', 'nipd', 'thn_akademik', 'siswa.status'], 
             ["kelas", "nipd"], ['siswa.nama_siswa' => $keyword, 'nipd' => $keyword]);
             
-            $start = $this->uri->segment(3);
             if(is_null($dataSiswa)) {
                 $response['errors'] = "Data tidak ditemukan!";
             } else {
 
                 //Ambil Riwayat Data Transaksi Berdasarkan NIPD
-                $this->pagination->initialize($this->getData());
+
                 $dataTransaksi = $this->model->getDataModel('transactions', 
-                ['nipd', 'nominal', 'status', 'image', 'keterangan', 'created_at'], ['nipd' => $dataSiswa['nipd']], $this->getData()['per_page'], $start);
+                ['nipd', 'nominal', 'status', 'image', 'keterangan', 'created_at'], ['nipd' => $dataSiswa['nipd'], 'thn_akademik' => $tahunAkademik]);
 
                 //Ambil Jumlah Nominal dari tabel jenis_pembayaran Berdasarkan instansi
-                $dataNominal = $this->model->getDataModel('jenis_pembayaran', ['sum(biaya)'], ['instansi' => $dataSiswa['instansi'], 'status' => 1]);
+                $dataNominal = $this->model->getDataModel('jenis_pembayaran', ['biaya', 'jenis_pembayaran'], ['instansi' => $dataSiswa['instansi'], 'status' => 1]);
 
                 //Ambil Jumlah Uang Masuk Berdasarkan NIPD
                 $dataNominalMasuk = $this->db->select(['sum(nominal)'])
                     ->from('transactions')->join('siswa', "transactions.nipd = siswa.nipd")->join('tahun_akademik', "tahun_akademik.thn_akademik = siswa.thn_akademik")
-                    ->where(['transactions.status' => 2, 'siswa.nipd' => $dataSiswa['nipd'], 'siswa.status' => 1, 'tahun_akademik.status' => 1,])
+                    ->where(['transactions.status' => 2, 'siswa.nipd' => $dataSiswa['nipd'], 'siswa.status' => 1, 'transactions.thn_akademik' => $tahunAkademik,])
                     ->get()
                     ->result_array();
-                $response['dataNominal'] = $dataNominal[0]['sum(biaya)'];
+                $totalBiaya = 0;
+                if(empty($dataNominal)){
+                    $response['biaya'] = 0;
+                } else {
+                    foreach ($dataNominal as $biaya) {
+                        # code...
+                        $totalBiaya += $biaya['biaya'];
+                    }
+                    $response['biaya'] = $totalBiaya;
+    
+                }
+                $response['dataNominal'] = $dataNominal;
                 if(is_null($dataNominalMasuk[0]['sum(nominal)'])){
                     $response['dataNominalMasuk'] = 0;
                 } else {
@@ -1547,9 +1558,8 @@ class Admin extends User {
         $data = $this->getData();
         $process = $this->model->updateDataModel($data['table'], $data['value'] ,$data['where']);
         if($process['status'] == true) {
-            // $start = $this->uri->segment(3);
             $jumlahNominal = $this->model->getDataModel($data['table'], ['sum(nominal)'], ['status' => 2,
-            'nipd' => $this->input->post('nipd')]);
+            'nipd' => $this->input->post('nipd'), 'thn_akademik' => $this->input->post('thn_akademik')]);
             $response['success'] = true;
             $response['value'] = array($data['value']['status'], $data['where']['created_at'], $jumlahNominal[0]['sum(nominal)']);
         }

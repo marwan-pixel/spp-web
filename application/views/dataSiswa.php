@@ -465,7 +465,7 @@
                             
                         }
                     })                
-                })
+                });
                 //Modal Config Get Selected Data Kelas
                 // Untuk sunting
                 $('#UpdateData').on('show.bs.modal', function (event) {
