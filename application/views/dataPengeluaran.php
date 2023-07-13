@@ -44,17 +44,17 @@
                     </div>
                 </div>
                 <!-- Modal Update -->
-                <div class="modal fade" id="updateBiaya" tabindex="-1" aria-labelledby="updateBiayaLabel" aria-hidden="true">
+                <div class="modal fade" id="ubahDataPengeluaran" tabindex="-1" aria-labelledby="ubahDataPengeluaranLabel" aria-hidden="true">
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h4 class="modal-title" id="updateBiayaLabel">Data Biaya</h4>
+                                <h4 class="modal-title" id="ubahDataPengeluaranLabel">Data Biaya</h4>
                                 <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
                             <div class="modal-body">
-                                <form method="post" action="<?= base_url('Admin/ubahDataBiaya')?>">
+                                <form method="post" action="<?= base_url('Admin/ubahDataPengeluaran')?>">
                                     <input hidden type="text" name="id_jenis_pembayaran"  class="form-control" id="id_jenis_pembayaran" aria-describedby="id_jenis_pembayaran">
                                     <div class="form-group">
                                         <label for="jenis_pembayaran">Jenis Biaya</label>

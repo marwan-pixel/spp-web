@@ -33,14 +33,14 @@
                                         <input readonly type="number" name="tahun_genap" class="form-control" id="tahun_genap" aria-describedby="tahun_genap">
                                     </div>
                                     <small class="text-danger" id="thn_akademik-error"></small>
-                                    <div class="form-group">
+                                    <!-- <div class="form-group">
                                         <label for="status">Keterangan:</label>
                                         <input type="radio" value="1" name="status" id="status_aktif">
                                         <label for="status_aktif">Aktif</label>
                                         <input type="radio" value="0" name="status" id="status_tidak-aktif">
                                         <label for="status_tidak-aktif">Tidak Aktif</label>
                                         <small class="text-danger" id="status-error"></small>
-                                    </div>   
+                                    </div>    -->
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" >Keluar</button>
                                         <button type="submit" class="btn btn-primary">Simpan</button>
@@ -73,12 +73,11 @@
                                         <input disabled type="number" name="tahun_genap" class="form-control" id="tahun_genap_update" aria-describedby="tahun_genap">
                                     </div>
                                     <small class="text-danger" id="thn_akademik-errorUpdate"></small>
-                                    <div class="form-group">
+
+                                    <div hidden class="form-group">
                                         <label for="status">Keterangan:</label>
-                                        <input type="radio" value="1" name="status" id="status_aktif">
+                                        <input type="radio" value="0" name="status" id="status_aktif">
                                         <label for="status_aktif">Aktif</label>
-                                        <input type="radio" value="0" name="status" id="status_tidak-aktif">
-                                        <label for="status_tidak-aktif">Tidak Aktif</label>
                                         <small class="text-danger" id="status-errorUpdate"></small>
                                     </div>  
                                     <div class="modal-footer">
@@ -195,7 +194,7 @@
                     let form = $(this);
                     let tahun_ganjil = form.find('input[name="thn_akademik"]').val();             
                     let tahun_genap = form.find('input[name="tahun_genap"]').val();
-                    let status = form.find('input[name="status"]:checked').val();
+                    // let status = form.find('input[name="status"]:checked').val();
 
                     if(form.find('input[name="thn_akademik"]').val() === "" 
                     || form.find('input[name="tahun_genap"]').val() === ""){
@@ -205,7 +204,7 @@
                         $.ajax({
                             url: form.attr('action'),
                             method: form.attr('method'),
-                            data: {thn_akademik: thn_akademik, status: status},
+                            data: {thn_akademik: thn_akademik},
                             dataType: 'json',
                             success: function (response) {
          
@@ -242,7 +241,11 @@
                     modal.find(`#thn_akademik`).attr("value",tahun_awal);
                     modal.find(`#tahun_genap_update`).attr("value",tahun_akhir);
                     modal.find(`#thn_akademikold`).attr("value", div.data('thn_akademikold'));
-                    modal.find(`input[name="status"][value="${div.data('status')}"]`).prop('checked', true);
+                    if(div.data('status') == 0){
+                        $('.form-group').attr('hidden', false);
+                    } else {
+                        modal.find(`input[name="status"][value="${div.data('status')}"]`).prop('checked', true);
+                    }
                 });
 
                 //Modal Config Update Data Kelas
@@ -258,6 +261,9 @@
                     let tahun_ganjil = form.find('input[name="thn_akademik"]').val();             
                     let tahun_genap = form.find('input[name="tahun_genap"]').val();
                     let status = form.find('input[name="status"]:checked').val();
+                    if (status == 0) {
+                        status = 1;
+                    }
                     if(form.find('input[name="thn_akademik"]').val() === "" 
                     || form.find('input[name="tahun_genap"]').val() === ""){
                         $('#thn_akademik-error').html("Tahun Akademik tidak boleh kosong!");

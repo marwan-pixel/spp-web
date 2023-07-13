@@ -1045,7 +1045,7 @@ class Admin extends User {
                 'value' => 
                 array(
                     'thn_akademik' => htmlspecialchars($this->input->post('thn_akademik')),
-                    'status' => (int)htmlspecialchars($this->input->post('status')),
+                    'status' => 0,
                 ),
                 'config' =>
                 array(
@@ -1058,15 +1058,15 @@ class Admin extends User {
                             'is_unique' => 'Tahun Akademik sudah tersedia!'
                         ]
                     ),
-                    array(
-                        'field' => 'status',
-                        'label' => 'Status',
-                        'rules' => 'required|trim',
-                        'errors' =>
-                        [
-                            'required' => 'Status wajib diisi!'
-                        ]
-                    ),
+                    // array(
+                    //     'field' => 'status',
+                    //     'label' => 'Status',
+                    //     'rules' => 'required|trim',
+                    //     'errors' =>
+                    //     [
+                    //         'required' => 'Status wajib diisi!'
+                    //     ]
+                    // ),
                 ),
             )
         );

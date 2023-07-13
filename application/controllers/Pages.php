@@ -480,4 +480,32 @@ class Pages extends User {
 			$e->getMessage();
 		}
 	}
+	public function datanonaktifPengeluaran() {
+		$this->setData(
+			array(
+				'base_url' => base_url('pages/datanonaktifpengeluaran/'),
+				'total_rows' => $this->db->from('pengeluaran')->where(['status' => 0])->count_all_results(),
+				'per_page' => 20,
+			)
+		);
+
+		$start = $this->uri->segment(3);
+		$this->pagination->initialize($this->getData());
+
+		if(($this->input->post('keyword'))){
+			$keyword = array('keterangan' => $this->input->post('keyword'));
+			$this->db->like($keyword);
+			$this->session->set_userdata('keyword', $keyword['keterangan']);
+		} else {
+			$keyword = $this->session->unset_userdata('keyword');
+		}
+
+		$dataPengeluaran = $this->model->getDataModel('pengeluaran', ['id_pengeluaran', 'nominal', 'arus_kas' ,'keterangan'], ['arus_kas' => 0, 'status' => 1], $this->getData()['per_page'], $start);
+		try {
+			$this->render('datanonaktifpengeluaran', ['title' => 'Data Nonaktif Pengeluaran', 'name' => $this->_userdata['nama_petugas'], 'data' => $dataPengeluaran, 'start' => $start]);
+
+		} catch (Exception $e){
+			$e->getMessage();
+		}
+	}
 }

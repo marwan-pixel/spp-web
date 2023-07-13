@@ -127,29 +127,32 @@
                      <li class="nav-item transaksi">
                         <a href="<?= base_url('pages/datatransaksi'); ?>" class="nav-link success-gradient-active"><i class="material-icons icon">credit_card</i> <span>Data Transaksi</span> </a>
                      </li>                     
-                     <li class="nav-item pengeluaran">
+                     <!-- <li class="nav-item pengeluaran">
                         <a href="<?= base_url('pages/datapengeluaran'); ?>" class="nav-link success-gradient-active"><i class="material-icons icon">credit_card</i> <span>Data Pengeluaran</span> </a>
-                     </li>                     
+                     </li>                      -->
                   </ul>
                </li>
                <li class="nav-item non-aktif-status">
                   <a href="javascript:void(0);" class="nav-link dropdwown-toggle transaksi-nav"> <i class="material-icons icon">folder</i> <span>Nonaktif Data</span><i class="material-icons icon arrow">expand_more</i></a>                  
                   <ul class="nav flex-column transaksi-ul">
                   <li class="nav-item instansi">
-                        <a href="<?= base_url('pages/datanonaktifinstansi'); ?>" class="nav-link success-gradient-active"><i class="material-icons icon">inbox</i> <span>Data Nonaktif Instansi</span> </a>
+                        <a href="<?= base_url('pages/datanonaktifinstansi'); ?>" class="nav-link success-gradient-active"><i class="material-icons icon">inbox</i> <span>Data Instansi</span> </a>
                      </li>
                      <li class="nav-item kelas">
-                        <a href="<?= base_url('pages/datanonaktifkelas'); ?>" class="nav-link success-gradient-active"><i class="material-icons icon">group</i> <span>Data Nonaktif Kelas</span> </a>
+                        <a href="<?= base_url('pages/datanonaktifkelas'); ?>" class="nav-link success-gradient-active"><i class="material-icons icon">group</i> <span>Data Kelas</span> </a>
                      </li>
                      <li class="nav-item siswa">
-                        <a href="<?= base_url('pages/datanonaktifsiswa'); ?>" class="nav-link success-gradient-active"><i class="material-icons icon">person</i> <span>Data Nonaktif Siswa</span></a>
+                        <a href="<?= base_url('pages/datanonaktifsiswa'); ?>" class="nav-link success-gradient-active"><i class="material-icons icon">person</i> <span>Data Siswa</span></a>
                      </li>
                      <li class="nav-item admin">
-                        <a href="<?= base_url('pages/datanonaktifadmin'); ?>" class="nav-link success-gradient-active"><i class="material-icons icon">person_outline</i> <span>Data Nonaktif Admin</span></a>
+                        <a href="<?= base_url('pages/datanonaktifadmin'); ?>" class="nav-link success-gradient-active"><i class="material-icons icon">person_outline</i> <span>Data Admin</span></a>
                      </li>
                      <li class="nav-item biaya">
-                        <a href="<?= base_url('pages/datanonaktifbiaya'); ?>" class="nav-link success-gradient-active"><i class="material-icons icon">attach_money</i> <span>Data Nonaktif Biaya</span></a>
+                        <a href="<?= base_url('pages/datanonaktifbiaya'); ?>" class="nav-link success-gradient-active"><i class="material-icons icon">attach_money</i> <span>Data Biaya</span></a>
                      </li>                
+                     <!-- <li class="nav-item pengeluaran">
+                        <a href="<?= base_url('pages/datanonaktifpengeluaran'); ?>" class="nav-link success-gradient-active"><i class="material-icons icon">attach_money</i> <span>Data Pengeluaran</span></a>
+                     </li>                 -->
                   </ul>
                </li>
             </ul>
