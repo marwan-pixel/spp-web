@@ -72,12 +72,12 @@
                             position: 'center'
                         },
                         {
-                            intro: 'Ini adalah bagian header pada aplikasi',
+                            intro: 'Ini adalah bagian header pada aplikasi, terdapat nama yayasan sekolah ini dan tombol Admin',
                             element: document.querySelector('.main-header'),
                             positon: 'center'
                         },
                         {
-                            intro: 'Pada bagian sidebar inilah tempat di mana admin mengelola data. ',      
+                            intro: 'Pada bagian sidebar ini terdapat tiga buah folder sebagai tempat untuk mengelola data.',      
                             element: document.querySelector('.sidebar'),
                         },
                         {
@@ -111,14 +111,15 @@
                             position: 'center'
                         },
                         {
-                            intro: 'Sidebar ini merupakan tempat untuk menambah serta mengubah data, terdapat folder Master Data dan Transaksi',      
+                            intro: `Sidebar ini merupakan tempat untuk menambah serta mengubah data, terdapat tiga buah folder yang di dalamnya terdapat tombol - tombol
+                            untuk mengarah ke halaman setiap data`,      
                             element: document.querySelector('.sidebar'),
                         },
                     ],
                 });
                 intro.addStep({
                     element: document.querySelector('.master-data-ul'),
-                    intro: 'Pada master data, terdapat Data Instansi, Data Kelas, Data Tahun Akademik, Data Siswa, dan Data Admin. Proses penambahan data di sini harus mengisi data dari yang paling atas hingga ke yang paling bawah (kecuali Data Admin)',
+                    intro: 'Pada master data, merupakan folder untuk mengelola data utama seperti Data Instansi, Data Kelas, Data Tahun Akademik, Data Siswa, dan Data Admin. Proses penambahan data di sini harus mengisi data dari yang paling atas hingga ke yang paling bawah (kecuali Data Admin)',
                 }).onchange(function(targetElement) {
                     var currentStep = intro._introItems.findIndex(item => item.element === targetElement);
                     if(currentStep === 2) {
@@ -129,14 +130,13 @@
                         document.querySelector('.master-data-ul').style.display = 'none';
                         document.querySelector('.master-data-nav').classList.remove('active');
                     }
-                })
-                intro.addStep(
+                }).addStep(
                     {
                         element: document.querySelector('.transaksi-ul'),
                         intro: `Pada bagian transaksi, Data Biaya berfungsi untuk menentukan jumlah biaya setiap instansi lalu data ini akan dikirim ke aplikasi mobile. 
-                        Sedangkan Data Transaksi berfungsi untuk menerima biaya SPP yang dikirimkan dari aplikasi mobile`,
+                        Sedangkan Data Transaksi berfungsi untuk menerima biaya SPP yang dikirimkan dari aplikasi mobile dan juga mencetak histori pembayaran`,
                     },
-                ).onbeforechange(function(targetElement) {
+                ).onchange(function(targetElement) {
                     var currentStep = intro._introItems.findIndex(item => item.element === targetElement);
                     if(currentStep === 3){
                         // Show the element
@@ -147,11 +147,30 @@
                         document.querySelector('.transaksi-ul').style.display = 'none';
                         document.querySelector('.transaksi-nav').classList.remove('active');
                     }
+                }).addStep(
+                    {
+                        element: document.querySelector('.nonaktif-ul'),
+                        intro: `Jika ada data usang yang sudah tidak dibutuhkan, data akan disimpan pada folder ini. Ketika
+                        data ternyata memang masih dibutuhkan, data dapat dipulihkan kembali. Pada folder ini, terdapat beberapa data yang bisa disimpan di sini `,
+                    },
+                ).onbeforechange(function(targetElement) {
+                    var currentStep = intro._introItems.findIndex(item => item.element === targetElement);
+                    if(currentStep === 4){
+                        // Show the element
+                        document.querySelector('.nonaktif-ul').style.display = 'block';
+                        document.querySelector('.nonaktif-nav').classList.add('active');
+                    } else {
+                        // hide the element
+                        document.querySelector('.nonaktif-ul').style.display = 'none';
+                        document.querySelector('.nonaktif-nav').classList.remove('active');
+                    }
                 }).onexit(function() {
                     document.querySelector('.master-data-ul').style.display = 'none';
                     document.querySelector('.master-data-nav').classList.remove('active');
                     document.querySelector('.transaksi-ul').style.display = 'none';
                     document.querySelector('.transaksi-nav').classList.remove('active');
+                    document.querySelector('.nonaktif-ul').style.display = 'none';
+                    document.querySelector('.nonaktif-nav').classList.remove('active');
                 });
                 intro.start();
             });
@@ -164,7 +183,7 @@
                         {
                             title: 'Data Instansi',
                             intro: `Ini adalah halaman yang menampilkan data instansi sekolah. 
-                            Terdapat sebuah tabel di mana data instansi akan disajikan`
+                            data instansi disajikan ke dalam tabel seperti ini`
                         },
                         {
                             element: '.instansi-add',
@@ -172,11 +191,26 @@
                             sebuah form.`
                         },
                         {
+                            element: '.instansi-cari',
+                            intro: `Untuk memudahkan pencarian instansi sekolah, bisa melakukan pencarian di sini 
+                            dengan mengetikkan instansi lalu mengklik tombol cari.`
+                        },
+                        {
                             element: '.instansi-update',
-                            intro: `Setelah data ditambahkan, pada kolom Aksi akan ada tombol <b>Ubah</b> dengan 
-                            jumlah yang sesuai dengan banyaknya baris pada tabel untuk mengubah data jika diperlukan.`,
+                            intro: `Setelah data ditambahkan, pada kolom Aksi akan ada tombol <b>Ubah</b>, dengan 
+                            jumlah yang sesuai dengan banyaknya baris pada tabel, untuk mengubah data dan logo tempat sampah untuk
+                            membuang sementara data ke folder <b>Data Nonaktif</b>.`,
                             position: 'left'
-                        }
+                        },
+                        {
+                            element: '.siswa-pagination',
+                            intro: `
+                            <img src="<?= base_url();?>assets/img/pagination.png" />
+                            <br>
+                            Setiap halaman akan memuat sepuluh data dalam tabel, sehingga ketika ada lebih dari 
+                            itu akan muncul sebuah tombol <b>Pagination</b> seperti pada gambar di atas untuk 
+                            berpindah ke halaman lainnya`,
+                        },
                     ]
                 });
                 intro.start();
@@ -356,36 +390,36 @@
                 intro.start();
             });
 
-            $('.biaya-btn').click(function(){
-                let intro = introJs();
-                intro.setOptions({
-                    tooltipClass: 'introjs-tooltip',
-                    steps: [
-                        {
-                            title: 'Data Biaya',
-                            intro: `Ini adalah halaman yang menambah, mengubah, serta menampilkan data biaya sekolah. 
-                            Terdapat sebuah tabel di mana data instansi akan disajikan`
-                        },
-                        {
-                            element: '.biaya-add',
-                            intro: `Jika ingin menambahkan data, klik tombol <b>Tambah Data</b> untuk menampilkan 
-                            sebuah form.`
-                        },
-                        {
-                            element: '.biaya-instansi',
-                            intro: `kolom <b>Data Instansi</b> berarti bahwa jumlah biaya ditentukan berdasarkan instansi
-                            masing - masing.`,
-                            position: 'left'
-                        },
-                        {
-                            element: '.biaya-update',
-                            intro: `Setelah data ditambahkan, pada kolom Aksi akan ada tombol <b>Ubah</b> dengan 
-                            jumlah yang sesuai dengan banyaknya baris pada tabel untuk mengubah data jika diperlukan.`,
-                        }
-                    ]
-                });
-                intro.start();
-            });
+            // $('.biaya-btn').click(function(){
+            //     let intro = introJs();
+            //     intro.setOptions({
+            //         tooltipClass: 'introjs-tooltip',
+            //         steps: [
+            //             {
+            //                 title: 'Data Biaya',
+            //                 intro: `Ini adalah halaman yang menambah, mengubah, serta menampilkan data biaya sekolah. 
+            //                 Terdapat sebuah tabel di mana data instansi akan disajikan`
+            //             },
+            //             {
+            //                 element: '.biaya-add',
+            //                 intro: `Jika ingin menambahkan data, klik tombol <b>Tambah Data</b> untuk menampilkan 
+            //                 sebuah form.`
+            //             },
+            //             {
+            //                 element: '.biaya-instansi',
+            //                 intro: `kolom <b>Data Instansi</b> berarti bahwa jumlah biaya ditentukan berdasarkan instansi
+            //                 masing - masing.`,
+            //                 position: 'left'
+            //             },
+            //             {
+            //                 element: '.biaya-update',
+            //                 intro: `Setelah data ditambahkan, pada kolom Aksi akan ada tombol <b>Ubah</b> dengan 
+            //                 jumlah yang sesuai dengan banyaknya baris pada tabel untuk mengubah data jika diperlukan.`,
+            //             }
+            //         ]
+            //     });
+            //     intro.start();
+            // });
 
             $('.transaksi-btn').click(function(){
                 let intro = introJs();

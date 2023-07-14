@@ -40,7 +40,7 @@
                      </div>
                      <div class="col p-xs-0">
                         <div class="dropdown guide">
-                           <button class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" type="button">Pengenalan Aplikasi</button>
+                           <button class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" type="button"><i class="material-icons icon biaya-btn">help_outline</i></button>
                            <ul class="dropdown-menu">
                               <li><a class="dropdown-item about">Tentang Aplikasi</a></li>
                               <li><a class="dropdown-item using">Cara Menggunakan Aplikasi</a></li>
@@ -132,9 +132,9 @@
                      </li>                      -->
                   </ul>
                </li>
-               <li class="nav-item non-aktif-status">
-                  <a href="javascript:void(0);" class="nav-link dropdwown-toggle transaksi-nav"> <i class="material-icons icon">folder</i> <span>Nonaktif Data</span><i class="material-icons icon arrow">expand_more</i></a>                  
-                  <ul class="nav flex-column transaksi-ul">
+               <li class="nav-item nonaktif">
+                  <a href="javascript:void(0);" class="nav-link dropdwown-toggle nonaktif-nav"> <i class="material-icons icon">folder</i> <span>Data Nonaktif</span><i class="material-icons icon arrow">expand_more</i></a>                  
+                  <ul class="nav flex-column nonaktif-ul">
                   <li class="nav-item instansi">
                         <a href="<?= base_url('pages/datanonaktifinstansi'); ?>" class="nav-link success-gradient-active"><i class="material-icons icon">inbox</i> <span>Data Instansi</span> </a>
                      </li>

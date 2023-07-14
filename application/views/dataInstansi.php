@@ -95,8 +95,8 @@
                                 <div id="dataTable_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
                                     <div class="row">
                                         <div class="col-sm-12 d-flex justify-content-between">
-                                            <div id="dataTable_filter" class="dataTables_filter input-group col-sm-4 instansi-cari">
-                                                <form action="<?= base_url('pages/datainstansi');?>" method="post" class="form-inline">
+                                            <div id="dataTable_filter" class="dataTables_filter input-group col-sm-4 ">
+                                                <form action="<?= base_url('pages/datainstansi');?>" method="post" class="form-inline instansi-cari">
                                                     <div class="form-group mb-2 ">
                                                         <input type="text" size="20" class="form-control mr-2" id="cari" name="keyword" placeholder="Cari instansi" aria-controls="dataTable">
                                                     </div>
@@ -160,6 +160,9 @@
                                             </table>
                                         </div>
                                     </div>
+                                </div>
+                                <div class="siswa-pagination mt-3">
+                                    <?= $this->pagination->create_links();?>
                                 </div>
                             </div>
                             <!-- /.table-responsive -->

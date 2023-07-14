@@ -807,7 +807,7 @@ class Admin extends User {
     }
 
     public function tambahDataSiswaExcel(){
-        $data = $process = array();
+        $data = array();
         header('Content-Type: application/json');
         $response = $this->response;
         if(isset($_FILES['fileExcel']['name'])){
@@ -816,61 +816,106 @@ class Admin extends User {
                 $path = $_FILES['fileExcel']['tmp_name'];
                 
                 $spreadsheet = IOFactory::load($path);
+                $errors = [];
                 // $sheetCount = $spreadsheet->getSheetCount();
                 foreach ($spreadsheet->getWorksheetIterator() as $worksheet) {
-                    
+                    $uniqueValues = [];
                     $highestRow = $worksheet->getHighestRow();
                     if($highestRow > 250){
                         $response['errors'] = array('fileExcel' => "Data yang dikirim haruslah maksimal sebanyak 250 baris!");
                     } else {
                         for ($row = 2; $row <= $highestRow; $row++) {
+                            
                             $nipd = $worksheet->getCell('A' . $row)->getValue();
                             $nama_siswa = $worksheet->getCell('B' . $row)->getValue();
                             $kelas = $worksheet->getCell('C' . $row)->getValue();
                             $thn_akademik = $worksheet->getCell('D' . $row)->getValue();
                             $password = $worksheet->getCell('E' . $row)->getValue();
                             $potongan = $worksheet->getCell('F' . $row)->getValue();
-                            if($nipd == null || $nama_siswa == null || $kelas == null || $thn_akademik == null || $password == null) {
-                                $response['errors'] = array('fileExcel' => "Terdapat nilai yang kosong pada kolom di Excel!");
-                            }
-                             else {
-                                $potongan == null ? 0 : $potongan;
-                                $data['value'] = array(
-                                    'nipd' => strval($nipd),
-                                    'nama_siswa' => $nama_siswa,
-                                    'kelas' => $kelas,
-                                    'thn_akademik' => $thn_akademik,
-                                    'password' => password_hash($password, PASSWORD_BCRYPT),
-                                    'potongan' => strval($potongan),
-                                    'status' => 1
-                                );
-                                if(count(array_unique($data['value'])) < count($data['value'])) {
-                                    $response['errors'] = array('fileExcel' => "Terdapat Duplikasi Pada NIPD di Excel!");
-                                }
-                                else {
-                                    $existingData = $this->model->getDataModel('siswa', ['nipd'], ['nipd' => $data['value']['nipd']]);
-                                    if(!empty($existingData)){
-                                        $response['errors'] = array('fileExcel' => "Terdapat Duplikasi Pada NIPD di Database!");
-                                    } else {
-                                        $process = $this->model->insertDataModel('siswa', $data['value']);
-                                        if($process['status'] == true){
-                                            $this->session->set_flashdata("message", "<div class='alert alert-success' role='alert'>
-                                                                    {$process['message']}
-                                                                    </div>");
-                                        } else {
-                                            $this->session->set_flashdata("message", "<div class='alert alert-danger' role='alert'>
-                                                                    {$process['message']}
-                                                                    </div>");                                
-                                        }
-                                        $response['success'] = true;
-                                        // $response['errors'] = null;
-                                        $response['redirect'] = base_url('pages/datasiswa');
-                                    }
-                                }
-                            }
+
                             
+                            if($nipd === null && $nama_siswa === null && $kelas === null && $thn_akademik === null && $password === null) {
+                                if ($row === $highestRow) {
+                                    // Last row, stop processing
+                                    break;
+                                } else {
+                                    // Not the last row, bypass to the next row
+                                    continue;
+                                }
+                            }
+                            if(in_array($nipd, $uniqueValues)){
+                                $errors = array('fileExcel' => "Terdapat duplikasi pada NIPD $nipd di Excel!");
+                                break;
+                            } else {
+                                $uniqueValues[] = $nipd;
+                            }
+                            if($nipd === null || $nama_siswa === null || $kelas === null || $thn_akademik === null || $password === null) {
+                                $errors = array('fileExcel' => "Data NIPD, nama siswa, kelas, tahun akademik, dan password tidak boleh kosong!");
+                            } 
+                            else {
+                                $existingData = array(
+                                    'siswa' => $this->model->getDataModel('siswa', ['nipd'], ['nipd' => $nipd]),
+                                    'kelas' => $this->model->getDataModel('kelas', ['kelas'], ['kelas' => $kelas]),
+                                    'tahun_akademik' => $this->model->getDataModel('tahun_akademik', ['thn_akademik'], ['thn_akademik' => $thn_akademik]),
+                                );
+                                if(empty($existingData['kelas'])){
+                                    $errors = array('fileExcel' => "Kelas ". $kelas . " tidak tersedia di tabel Kelas! Tambahkan terlebih dahulu di Data Kelas!");
+                                } else if(empty($existingData['tahun_akademik'])){
+                                    $errors = array('fileExcel' => "Tahun Akademik " . $thn_akademik . " tidak tersedia di tabel Tahun Akademik! Tambahkan terlebih dahulu di Data Tahun Akademik!");
+                                } else if(!empty($existingData['siswa'])){
+                                    $errors = array('fileExcel' => "NIPD " . $nipd . " sudah tersedia di Database!");
+                                }                 
+                            }
                         }
                     }
+                }
+                if(!empty($errors)){
+                    $response['errors'] = $errors;
+                } else {
+                    foreach ($spreadsheet->getWorksheetIterator() as $worksheet) {
+                        for ($row = 2; $row <= $highestRow; $row++) {
+                            
+                            $nipd = $worksheet->getCell('A' . $row)->getValue();
+                            $nama_siswa = $worksheet->getCell('B' . $row)->getValue();
+                            $kelas = $worksheet->getCell('C' . $row)->getValue();
+                            $thn_akademik = $worksheet->getCell('D' . $row)->getValue();
+                            $password = $worksheet->getCell('E' . $row)->getValue();
+                            $potongan = $worksheet->getCell('F' . $row)->getValue();
+                            
+                            if($nipd === null && $nama_siswa === null && $kelas === null && $thn_akademik === null && $password === null) {
+                                if ($row === $highestRow) {
+                                    // Last row, stop processing
+                                    break;
+                                } else {
+                                    // Not the last row, bypass to the next row
+                                    continue;
+                                }
+                            }
+
+                            $potongan == null ? 0 : $potongan;
+                            $data['value'] = array(
+                               'nipd' => strval($nipd),
+                                'nama_siswa' => $nama_siswa,
+                                'kelas' => $kelas,
+                                'thn_akademik' => $thn_akademik,
+                                'password' => password_hash($password, PASSWORD_BCRYPT),
+                                'potongan' => strval($potongan),
+                                'status' => 1
+                            );
+                            $process = $this->model->insertDataModel('siswa', $data['value']);
+                            if($process['status'] == true){
+                                $this->session->set_flashdata("message", "<div class='alert alert-success' role='alert'>
+                                        {$process['message']}
+                                </div>");
+                            } else {
+                                $this->session->set_flashdata("message", "<div class='alert alert-danger' role='alert'>
+                                        {$process['message']}
+                                </div>");                                
+                            }
+                        }
+                    }
+                    $response['success'] = true;
+                    $response['redirect'] = base_url('pages/datasiswa');
                 }
             } else {
                 $response['errors'] = array('fileExcel' => "Hanya menerima file dengan format .csv, .xls, dan .xlsx!");
