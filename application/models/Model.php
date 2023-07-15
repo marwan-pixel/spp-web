@@ -86,7 +86,7 @@ class Model extends CI_Model {
                     $this->db->update('tahun_akademik', array('status' => 0));
                     $this->db->where('thn_akademik', $data['thn_akademik']);
                     $this->db->update('tahun_akademik', array('status' => 1));
-                }        
+                }
             }
             if($this->db->affected_rows() > 0) {
                  return [

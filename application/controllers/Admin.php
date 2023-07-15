@@ -1151,7 +1151,7 @@ class Admin extends User {
                 'value' => 
                 array(
                     'thn_akademik' => htmlspecialchars($this->input->post('thn_akademik')),
-                    'status' => (int)htmlspecialchars($this->input->post('status')),
+                   
                 ),
                 'config' =>
                 array(
@@ -1164,20 +1164,16 @@ class Admin extends User {
                             'required' => 'Tahun Akademik wajib diisi!'
                         ]
                     ),
-                    array(
-                        'field' => 'status',
-                        'label' => 'Status',
-                        'rules' => 'required|trim',
-                        'errors' =>
-                        [
-                            'required' => 'Status wajib diisi!'
-                        ]
-                    ),
                 ),
             )
         );
         $data = $this->getData();
-
+        if(!empty($this->input->post('status'))){
+            $data['value']['status'] = (int)htmlspecialchars($this->input->post('status'));
+            $this->form_validation->set_rules('status','Status','required|trim', array('required' => 'Status wajib diisi!'));
+        } else {
+            $data['value']['status'] = 0;
+        }
         $this->form_validation->set_rules($data['config']);
         if($this->form_validation->run() == true) {
             $existingData = $this->model->getDataModel($data['table'], ['thn_akademik' ,'status'], $data['where']);

@@ -33,21 +33,20 @@
          <header class="main-header">
             <div class="container-fluid">
                <nav >
-                  <div class="row align-items-center">
+                  <div class="row justify-content-between align-items-center">
                      <div class="col-auto pl-0">
                         <button style="width:10vw;" class="btn success-gradient btn-icon" id="left-menu"><img class="img-fluid" height="40" width="60" src="<?= base_url();?>/assets/img/Yayasan Ar-Rahmah.jpeg" alt=""></button>
                         <a href="<?= base_url('/');?>" class="logo"><span class="text-hide-xs">Yayasan Islam Rahmatan Lil Alamin</span></a>
                      </div>
-                     <div class="col p-xs-0">
+
+                     <div class="col-auto pr-0 d-flex align-items-center">             
                         <div class="dropdown guide">
-                           <button class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" type="button"><i class="material-icons icon biaya-btn">help_outline</i></button>
+                           <button class="btn  dropdown-toggle" data-bs-toggle="dropdown" type="button"><i class="material-icons icon biaya-btn">help_outline</i></button>
                            <ul class="dropdown-menu">
                               <li><a class="dropdown-item about">Tentang Aplikasi</a></li>
                               <li><a class="dropdown-item using">Cara Menggunakan Aplikasi</a></li>
                            </ul>
                         </div>
-                     </div>
-                     <div class="col-auto pr-0">             
                         <div class="dropdown info">
                            <a class="btn header-color-secondary dropdown-toggle username" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                               <figure class="userpic"><img src="<?=base_url();?>/assets/img/user.png" alt=""></figure>
