@@ -41,7 +41,7 @@
 
                      <div class="col-auto pr-0 d-flex align-items-center">             
                         <div class="dropdown guide">
-                           <button class="btn  dropdown-toggle" data-bs-toggle="dropdown" type="button"><i class="material-icons icon biaya-btn">help_outline</i></button>
+                           <button class="btn  dropdown-toggle" data-bs-toggle="dropdown" type="button"><i class="material-icons icon ">help_outline</i></button>
                            <ul class="dropdown-menu">
                               <li><a class="dropdown-item about">Tentang Aplikasi</a></li>
                               <li><a class="dropdown-item using">Cara Menggunakan Aplikasi</a></li>

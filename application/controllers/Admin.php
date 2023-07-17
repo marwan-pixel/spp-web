@@ -25,7 +25,7 @@ class Admin extends User {
         $this->setData(
             array(
                 'table' => 'admin',
-                'selectedData' => array('kode_petugas', 'nama_petugas', 'password'),
+                'selectedData' => array('kode_petugas', 'nama_petugas', 'password', 'status'),
                 'value' =>  array(
                             'kode_petugas' => htmlspecialchars($this->input->post('id')),
                             ),
@@ -64,7 +64,13 @@ class Admin extends User {
                 if(password_verify($this->input->post('password'), $process[0]['password'])){
                     $this->session->set_userdata('kode_petugas', $process[0]['kode_petugas']);
                     redirect('/');
-                } else {
+                } else if($process[0]['status'] == 0){
+                    $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">
+                    Akun ini sudah tidak aktif!
+                    </div>');
+                    $this->load->view('login');
+                }
+                else {
                     $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">
                                         Password tidak sesuai
                                         </div>');
@@ -1090,7 +1096,7 @@ class Admin extends User {
                 'value' => 
                 array(
                     'thn_akademik' => htmlspecialchars($this->input->post('thn_akademik')),
-                    'status' => 0,
+                    'status' => htmlspecialchars($this->input->post('status')),
                 ),
                 'config' =>
                 array(
@@ -1103,15 +1109,6 @@ class Admin extends User {
                             'is_unique' => 'Tahun Akademik sudah tersedia!'
                         ]
                     ),
-                    // array(
-                    //     'field' => 'status',
-                    //     'label' => 'Status',
-                    //     'rules' => 'required|trim',
-                    //     'errors' =>
-                    //     [
-                    //         'required' => 'Status wajib diisi!'
-                    //     ]
-                    // ),
                 ),
             )
         );

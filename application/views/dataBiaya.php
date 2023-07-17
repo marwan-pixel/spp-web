@@ -126,8 +126,8 @@
                                 <div id="dataTable_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
                                     <div class="row">
                                         <div class="col-sm-12 d-flex justify-content-between">
-                                            <div id="dataTable_filter" class="dataTables_filter input-group col-sm-4 biaya-cari">
-                                                <form action="<?= base_url('pages/databiaya');?>" method="post" class="form-inline">
+                                            <div id="dataTable_filter" class="dataTables_filter input-group col-sm-4">
+                                                <form action="<?= base_url('pages/databiaya');?>" method="post" class="form-inline biaya-cari">
                                                     <div class="form-group mb-2 ">
                                                         <input type="text" size="20" class="form-control mr-2" id="cari" name="keyword" placeholder="Cari Jenis Pembayaran" aria-controls="dataTable">
                                                     </div>
@@ -197,8 +197,10 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="biaya-pagination mt-3">
+                                <?= $this->pagination->create_links();?>
+                            </div>
                             <!-- /.table-responsive -->
-                             <?= $this->pagination->create_links();?>
                         </div>
                     </div>
                 </div>

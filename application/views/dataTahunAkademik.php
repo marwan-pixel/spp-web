@@ -33,14 +33,12 @@
                                         <input readonly type="number" name="tahun_genap" class="form-control" id="tahun_genap" aria-describedby="tahun_genap">
                                     </div>
                                     <small class="text-danger" id="thn_akademik-error"></small>
-                                    <!-- <div class="form-group">
-                                        <label for="status">Keterangan:</label>
-                                        <input type="radio" value="1" name="status" id="status_aktif">
-                                        <label for="status_aktif">Aktif</label>
-                                        <input type="radio" value="0" name="status" id="status_tidak-aktif">
-                                        <label for="status_tidak-aktif">Tidak Aktif</label>
-                                        <small class="text-danger" id="status-error"></small>
-                                    </div>    -->
+                                    <div class="form-check">
+                                        <input class="form-check-input" name="status" type="checkbox" id="status">
+                                        <label class="form-check-label" for="status">
+                                            Status: Aktif/Tidak Aktif
+                                        </label>
+                                    </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" >Keluar</button>
                                         <button type="submit" class="btn btn-primary">Simpan</button>
@@ -56,7 +54,7 @@
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h4 class="modal-title" id="updateTahunLabel">Data Biaya</h4>
+                                <h4 class="modal-title" id="updateTahunLabel">Data Tahun Akademik</h4>
                                 <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
@@ -74,8 +72,8 @@
                                     </div>
                                     <small class="text-danger" id="thn_akademik-errorUpdate"></small>
 
-                                    <div hidden class="form-group">
-                                        <label for="status">Keterangan:</label>
+                                    <div hidden id="statusUpdate" class="form-group ">
+                                        <label for="status">Status:</label>
                                         <input type="radio" value="0" name="status" id="status_aktif">
                                         <label for="status_aktif">Aktif</label>
                                         <small class="text-danger" id="status-errorUpdate"></small>
@@ -96,8 +94,8 @@
                                 <div id="dataTable_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
                                     <div class="row">
                                         <div class="col-sm-12 d-flex justify-content-between">
-                                            <div id="dataTable_filter" class="dataTables_filter input-group col-sm-4 siswa-cari">
-                                                <form action="<?= base_url('pages/datatahunakademik');?>" method="post" class="form-inline">
+                                            <div id="dataTable_filter" class="dataTables_filter input-group col-sm-4 ">
+                                                <form action="<?= base_url('pages/datatahunakademik');?>" method="post" class="form-inline thn-akademik-cari">
                                                     <div class="form-group mb-2 ">
                                                         <input type="text" size="20" class="form-control mr-2" id="cari" name="keyword" placeholder="Cari Tahun Akademik" aria-controls="dataTable">
                                                     </div>
@@ -194,8 +192,13 @@
                     let form = $(this);
                     let tahun_ganjil = form.find('input[name="thn_akademik"]').val();             
                     let tahun_genap = form.find('input[name="tahun_genap"]').val();
-                    // let status = form.find('input[name="status"]:checked').val();
-
+                    let status = form.find('input[name="status"]').is(':checked');
+                    if(status){
+                        status = 1;
+                    } else {
+                        status = 0;
+                    }
+                    console.log(status);
                     if(form.find('input[name="thn_akademik"]').val() === "" 
                     || form.find('input[name="tahun_genap"]').val() === ""){
                         $('#thn_akademik-error').html("Tahun Akademik tidak boleh kosong!");
@@ -204,7 +207,7 @@
                         $.ajax({
                             url: form.attr('action'),
                             method: form.attr('method'),
-                            data: {thn_akademik: thn_akademik},
+                            data: {thn_akademik: thn_akademik, status: status},
                             dataType: 'json',
                             success: function (response) {
          
@@ -241,10 +244,12 @@
                     modal.find(`#thn_akademik`).attr("value",tahun_awal);
                     modal.find(`#tahun_genap_update`).attr("value",tahun_akhir);
                     modal.find(`#thn_akademikold`).attr("value", div.data('thn_akademikold'));
-                    if(div.data('status') == 0){
-                        $('.form-group').attr('hidden', false);
+
+                    let status = $(div).data('status');
+                    if(status == 0){
+                        $('#statusUpdate').attr('hidden', false);
                     } else {
-                        modal.find(`input[name="status"][value="${div.data('status')}"]`).prop('checked', true);
+                        $('#statusUpdate').attr('hidden', true);
                     }
                 });
 

@@ -3,7 +3,7 @@
             <div class="row">
                 <div class="col-sm-12">
                     <button class="btn btn-secondary mb-3">
-                        <i class="material-icons icon admin-btn">help_outline</i>
+                        <i class="material-icons icon nonaktifSiswa-btn">help_outline</i>
                     </button>
                 </div>
 
@@ -33,8 +33,8 @@
                                 <div id="dataTable_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
                                     <div class="row mb-3">                                        
                                         <div class="col-sm-12 d-flex justify-content-between">
-                                            <div id="dataTable_filter" class="dataTables_filter input-group col-sm-4 siswa-cari">
-                                                <form action="<?= base_url('pages/datanonaktifsiswa');?>" method="post" class="form-inline">
+                                            <div id="dataTable_filter" class="dataTables_filter input-group col-sm-4">
+                                                <form action="<?= base_url('pages/datanonaktifsiswa');?>" method="post" class="form-inline nonaktifSiswa-cari">
                                                     <div class="form-group mb-2 ">
                                                         <input type="text" size="20" class="form-control mr-2" id="cari" name="keyword" placeholder="Cari Nama Siswa" aria-controls="dataTable">
                                                     </div>
@@ -57,10 +57,10 @@
                                                         <th><center>No</center></th>
                                                         <th><center>NIPD</center> </th>
                                                         <th><center>Nama Siswa</center></th>
-                                                        <th class="siswa-kelas"><center>Kelas</center></th>
-                                                        <th class="siswa-thn-akademik"><center>Tahun Akademik</center></th>
-                                                        <th class="siswa-status"><center>Status</center></th>
-                                                        <th class="siswa-update"><center>Aksi</center></th>
+                                                        <th><center>Kelas</center></th>
+                                                        <th><center>Tahun Akademik</center></th>
+                                                        <th><center>Status</center></th>
+                                                        <th class="nonaktifSiswa-update"><center>Aksi</center></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -94,7 +94,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="siswa-pagination mt-3">
+                            <div class="nonaktifSiswa-pagination mt-3">
                                 <?= $this->pagination->create_links();?>
                             </div>
                         </div>

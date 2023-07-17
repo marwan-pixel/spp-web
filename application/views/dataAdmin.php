@@ -80,8 +80,8 @@
                                 <div id="dataTable_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
                                     <div class="row mb-3">                                        
                                         <div class="col-sm-12 d-flex justify-content-between">
-                                            <div id="dataTable_filter" class="dataTables_filter input-group col-sm-4 admin-cari">
-                                                <form action="<?= base_url('pages/dataadmin');?>" method="post" class="form-inline">
+                                            <div id="dataTable_filter" class="dataTables_filter input-group col-sm-4 ">
+                                                <form action="<?= base_url('pages/dataadmin');?>" method="post" class="form-inline admin-cari">
                                                     <div class="form-group mb-2 ">
                                                         <input type="text" size="20" class="form-control mr-2" id="cari" name="keyword" placeholder="Cari Nama Petugas" aria-controls="dataTable">
                                                     </div>
@@ -103,7 +103,7 @@
                                                         <th><center>No</center></th>
                                                         <th><center>Kode Petugas</center></th>
                                                         <th><center>Nama Petugas</center></th>
-                                                        <th><center>Aksi</center></th>
+                                                        <th class="admin-action"><center>Aksi</center></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -134,7 +134,9 @@
                                     </div>
                                 </div>
                             </div>
-                            <?= $this->pagination->create_links();?>                            
+                            <div class="admin-pagination mt-3">
+                                <?= $this->pagination->create_links();?>
+                            </div>                          
                             <!-- /.table-responsive -->
                         </div>
                     </div>

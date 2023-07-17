@@ -210,7 +210,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="kelas">Kelas</label>
-                                    <select class="select-control kelas" name="kelas" id="kelas">
+                                    <select class="form-select kelas" name="kelas" id="kelas">
                                     <?php
                                         foreach ($data['dataKelas'] as $value) {
                                             ?>
@@ -223,11 +223,11 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="thn_akademik">Tahun Akademik</label>
-                                    <select class="form-control thn_akademik" id="thn_akademik" name="thn_akademik">
+                                    <select class="form-select thn_akademik" id="thn_akademik" name="thn_akademik">
                                     <?php
                                         foreach ($data['dataTahunAkademik'] as $value) {
                                             ?>
-                                        <option value="<?= $value['thn_akademik']; ?>"></option>
+                                        <option value="<?= $value['thn_akademik']; ?>"><?= $value['thn_akademik']; ?></option>
                                     <?php
                                         }
                                     ?>
@@ -276,8 +276,8 @@
                                 <div id="dataTable_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
                                     <div class="row">
                                         <div class="col-sm-12 mb-2 d-flex justify-content-between">
-                                            <div id="dataTable_filter" class="dataTables_filter input-group col-sm-4 siswa-cari">
-                                                <form action="<?= base_url('pages/datasiswa');?>" method="post" class="form-inline">
+                                            <div id="dataTable_filter" class="dataTables_filter input-group col-sm-4">
+                                                <form action="<?= base_url('pages/datasiswa');?>" method="post" class="form-inline siswa-cari">
                                                     <div class="form-group mb-2 ">
                                                         <input type="text" size="20" class="form-control mr-2" id="cari" name="keyword" placeholder="Cari Nama Siswa" aria-controls="dataTable">
                                                     </div>
@@ -468,8 +468,7 @@
                 $('#UpdateData').on('show.bs.modal', function (event) {
                     var div = $(event.relatedTarget) // Tombol dimana modal di tampilkan
                     var modal = $(this)
-
-                        // Isi nilai pada field
+                    // Isi nilai pada field
                     modal.find(`#nipd`).attr("value",div.data(`nipd`));
                     modal.find(`#nipdnew`).attr("value",div.data(`nipdnew`));
                     modal.find(`#nama`).attr("value",div.data(`nama`));                  

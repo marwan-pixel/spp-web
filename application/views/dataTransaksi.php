@@ -315,7 +315,6 @@
                });
 
                $('#thn_akademikList').change(function(){
-                  console.log('tes')
                   fetchSearchResults();
                });
 
@@ -334,7 +333,6 @@
                            $('#biodata').removeAttr('hidden');
                            
                            if (response.dataSiswa !== undefined) {
-                              console.log(response);
                               $('#table tbody').empty();
                               $('.transactions').show();
                               $('.add-transaction').find('#nominaltransaction').attr("value", response.dataNominal);
@@ -434,13 +432,20 @@
                                     // $('.add-transaction').find('#nipdtransaction').attr("value", item.nipd);
                                     $('#form .form-group').find('#nipd-print').attr("value", item.nipd);
                                  });
-
-                                 renderPagination(totalPages);
+                                 console.log(currentPage === 1 && pageData.length >= 10);
+                                 if ((currentPage === 1 && pageData.length >= 10)) {
+                                    renderPagination(totalPages);
+                                 } else if(currentPage !== 1){
+                                    renderPagination(totalPages);
+                                 } else {
+                                    $('.pagination').empty();
+                                 }
                                  
                                  $('#transaction h5').empty();
                               } else {
                                     let emptyRow = `<tr><td colspan="7"><center>${response.errors}</center></td></tr>`;
                                     $('#table tbody').append(emptyRow);
+                                    $('.pagination').empty();
                               }
                            } else {
                               if (!$('#message').text().includes(response.errors)) {
