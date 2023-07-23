@@ -39,34 +39,84 @@ class Pages extends User {
 
 	public function home()
 	{
-		$this->setData(
-			array(
-				'datasiswa' => array( 
-					'all' => $this->model->countAllData('siswa'),
-					'tk' => $this->model->countAllData('siswa', 'kelas', 'tk'),
-					'sd' => $this->db->select('kelas')->from('siswa')->where("kelas REGEXP '[0-6]'")->get()->num_rows(),
-					'smp' => $this->db->select('kelas')->from('siswa')->where("kelas REGEXP '[7-9][A-B]'")->get()->num_rows(),
-					'ponpes' => $this->model->countAllData('siswa', 'kelas', 'c')
-				),
-				'datakelas' => array(
-					'all' => $this->model->countAllData('kelas'),
-					'tk' => $this->model->countAllData('kelas', 'instansi', 'tk'),
-					'sd' => $this->model->countAllData('kelas', 'instansi', 'sd'),
-					'smp' => $this->model->countAllData('kelas', 'instansi', 'smp'),
-					'ponpes' => $this->model->countAllData('kelas', 'instansi', 'ponpes')	
-				),
-				'total' => $this->db->select_sum('nominal')->from('transactions')->where('status', 2)->get()->row_array(),
-				'datatransaksi' => array(
-					'all' => $this->db->select('nipd')->from('transactions')->where('MONTH(created_at) = MONTH(CURDATE())')->get()->num_rows(),
-				)
-			)
-		);
+		$thnAkademik = $this->model->getDataModel('tahun_akademik', ['thn_akademik']);
+		$thnAkademikSelected = $this->model->getDataModel('tahun_akademik', ['thn_akademik', 'status'], ['status' => 1]);
 		try {
-			$this->render('home', ["title" => "Dashboard", 'name' => $this->_userdata['nama_petugas'], 'data' => $this->getData()]);
+			$this->render('home', ["title" => "Dashboard", 'name' => $this->_userdata['nama_petugas'], 'data' => [$thnAkademik, $thnAkademikSelected]]);
 		} catch (Exception $e) {
 			$e->getMessage();
 		}
 		
+	}
+
+	public function homeData(){
+		header('Content-Type: application/json');
+		$thn_akademik = (string) $this->input->get('thn_akademik');
+		$data = 
+			array(
+				// 'dataSiswa' => array( 
+				// 	'all' => $this->model->countAllData('siswa', ['status'], [1]),
+				// 	'tk' => $this->model->countAllData('siswa', ['kelas', 'status'], ['tk', 1]),
+				// 	'sd' => $this->model->countAllData('siswa', ["kelas REGEXP'[0-6]'", "status"], ['sd', 1]),
+				// 	'smp' =>$this->model->countAllData('siswa', ["kelas REGEXP'[7-9][A-B]'", "status"], ['smp', 1]),
+				// 	'ponpes' => $this->model->countAllData('siswa', ['kelas', 'status'], ['c', 1])
+				// ),
+				// 'dataKelas' => array(
+				// 	'all' => $this->model->countAllData('kelas'),
+				// 	'tk' => $this->model->countAllData('kelas', ['instansi'], ['tk']),
+				// 	'sd' => $this->model->countAllData('kelas', ['instansi'], ['sd']),
+				// 	'smp' => $this->model->countAllData('kelas', ['instansi'], ['smp']),
+				// 	'ponpes' => $this->model->countAllData('kelas', ['instansi'], ['ponpes'])	
+				// ),
+				'totalPemasukan' => array(
+					'curdate' => $this->db->select_sum('nominal')->from('transactions')->where('status', 2)->where('MONTH(created_at) = MONTH(CURDATE())')->where("thn_akademik", $thn_akademik)->get()->row_array(),
+					'januari' => $this->db->select_sum('nominal')->from('transactions')->where('status', 2)->where("MONTHNAME(created_at) = 'January'")->where("thn_akademik", $thn_akademik)->get()->row_array(),
+					'februari' => $this->db->select_sum('nominal')->from('transactions')->where('status', 2)->where("MONTHNAME(created_at) = 'February'")->where("thn_akademik", $thn_akademik)->get()->row_array(),
+					'maret' => $this->db->select_sum('nominal')->from('transactions')->where('status', 2)->where("MONTHNAME(created_at) = 'March'")->where("thn_akademik", $thn_akademik)->get()->row_array(),
+					'april' => $this->db->select_sum('nominal')->from('transactions')->where('status', 2)->where("MONTHNAME(created_at) = 'April'")->where("thn_akademik", $thn_akademik)->get()->row_array(),
+					'mei' => $this->db->select_sum('nominal')->from('transactions')->where('status', 2)->where("MONTHNAME(created_at) = 'May'")->where("thn_akademik", $thn_akademik)->get()->row_array(),
+					'juni' => $this->db->select_sum('nominal')->from('transactions')->where('status', 2)->where("MONTHNAME(created_at) = 'June'")->where("thn_akademik", $thn_akademik)->get()->row_array(),
+					'juli' => $this->db->select_sum('nominal')->from('transactions')->where('status', 2)->where("MONTHNAME(created_at) = 'July'")->where("thn_akademik", $thn_akademik)->get()->row_array(),
+					'agustus' => $this->db->select_sum('nominal')->from('transactions')->where('status', 2)->where("MONTHNAME(created_at) = 'August'")->where("thn_akademik", $thn_akademik)->get()->row_array(),
+					'september' => $this->db->select_sum('nominal')->from('transactions')->where('status', 2)->where("MONTHNAME(created_at) = 'September'")->where("thn_akademik", $thn_akademik)->get()->row_array(),
+					'oktober' => $this->db->select_sum('nominal')->from('transactions')->where('status', 2)->where("MONTHNAME(created_at) = 'October'")->where("thn_akademik", $thn_akademik)->get()->row_array(),
+					'november' => $this->db->select_sum('nominal')->from('transactions')->where('status', 2)->where("MONTHNAME(created_at) = 'November'")->where("thn_akademik", $thn_akademik)->get()->row_array(),
+					'desember' => $this->db->select_sum('nominal')->from('transactions')->where('status', 2)->where("MONTHNAME(created_at) = 'Desember'")->where("thn_akademik", $thn_akademik)->get()->row_array(),
+					'tahun' => $this->db->select_sum('nominal')->from('transactions')->where('status', 2)->where("thn_akademik", $thn_akademik)->get()->row_array()
+				),
+				'dataTransaksi' => array(
+					'curdate' => $this->db->select('*')->from('transactions')->where('status', 2)->where('MONTH(created_at) = MONTH(CURDATE())')->where("thn_akademik", $thn_akademik)->get()->num_rows(),
+					'januari' => $this->model->countAllData('transactions', ['status', 'MONTHNAME(created_at)', "thn_akademik" ], [2, 'January', $thn_akademik]),
+					'februari' => $this->model->countAllData('transactions', ['status', 'MONTHNAME(created_at)', "thn_akademik" ], [2, 'February', $thn_akademik]),
+					'maret' => $this->model->countAllData('transactions', ['status', 'MONTHNAME(created_at)', "thn_akademik" ], [2, 'March', $thn_akademik]),
+					'april' => $this->model->countAllData('transactions', ['status', 'MONTHNAME(created_at)', "thn_akademik" ], [2, 'April', $thn_akademik]),
+					'mei' => $this->model->countAllData('transactions', ['status', 'MONTHNAME(created_at)', "thn_akademik" ], [2, 'May', $thn_akademik]),
+					'juni' => $this->model->countAllData('transactions', ['status', 'MONTHNAME(created_at)', "thn_akademik" ], [2, 'June', $thn_akademik]),
+					'juli' => $this->model->countAllData('transactions', ['status', 'MONTHNAME(created_at)', "thn_akademik" ], [2, 'July', $thn_akademik]),
+					'agustus' => $this->model->countAllData('transactions', ['status', 'MONTHNAME(created_at)', "thn_akademik" ], [2, 'August', $thn_akademik]),
+					'september' => $this->model->countAllData('transactions', ['status', 'MONTHNAME(created_at)', "thn_akademik" ], [2, 'September', $thn_akademik]),
+					'oktober' => $this->model->countAllData('transactions', ['status', 'MONTHNAME(created_at)', "thn_akademik" ], [2, 'October', $thn_akademik]),
+					'november' => $this->model->countAllData('transactions', ['status', 'MONTHNAME(created_at)', "thn_akademik" ], [2, 'November', $thn_akademik]),
+					'desember' => $this->model->countAllData('transactions', ['status', 'MONTHNAME(created_at)', "thn_akademik" ], [2, 'Desember', $thn_akademik]),
+					'tahun' => $this->model->countAllData('transactions', ['status', "thn_akademik" ], [2, $thn_akademik]),
+				),
+				// 'dataInstansi' => $this->model->getDataModel('instansi', ['jenis_instansi'], ['status' => 1]),
+				
+			);
+		
+		// foreach ($data['dataInstansi'] as $value) {
+		// 	$biaya = $this->model->getDataModel('jenis_pembayaran', ['sum(biaya)'], ['instansi' => $value['jenis_instansi'], 'status' => 1]);
+		// 	if(empty($biaya)){
+		// 		continue;
+		// 	}
+		// 	$data['dataBiaya'][] = $biaya[0]['sum(biaya)'];
+		// }
+		if(!is_null($this->input->get('thn_akademik'))){
+
+		}
+
+		echo json_encode($data);
+		exit();
 	}
 
 	public function dataSiswa()

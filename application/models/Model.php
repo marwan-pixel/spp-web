@@ -10,10 +10,6 @@ class Model extends CI_Model {
             $process = $this->db->get($table, $limit, $start)->result_array();
         } else {
             $process = $this->db->get_where($table, $param, $limit, $start)->result_array();
-            // if($table == 'admin'){
-            //     $process = $this->db->get_where($table, $param)->row_array();
-            // } else {
-            // }
         }
         return $process;
     }
@@ -47,9 +43,11 @@ class Model extends CI_Model {
         return $process;
     }
 
-    public function countAllData($table, $where = null ,$param = null){
-        if(!is_null($param)){
-            $this->db->like($where, $param);
+    public function countAllData($table, $where = null, $params = null){
+        if(!is_null($params)){
+            foreach ($where as $index => $value) {
+                $this->db->like($where[$index], $params[$index]);
+            }
         }
         return $this->db->get($table)->num_rows();
     }

@@ -16,10 +16,11 @@
                      <div class=" inputtahun">
                         <label for="thn_akademikList">Tahun Akademik</label>
                         <select id="thn_akademikList" class="form-select" name="thn_akademik">
+                           
                            <?php
                            foreach ($data as $value) {
                            ?>
-                            <option value="<?= $value['thn_akademik'];?>"><?= $value['thn_akademik'];?></option>
+                           <option value="<?= $value['thn_akademik'];?>"><?= $value['thn_akademik'];?></option>
                            <?php
                            }
                            ?>
@@ -88,49 +89,6 @@
                </div>
             </div>
 
-            <!-- <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-               <div class="modal-dialog">
-                  <div class="modal-content">
-                     <div class="modal-header">
-                        <h4 class="modal-title" id="exampleModalLabel">Data Kelas</h4>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                           <span aria-hidden="true">&times;</span>
-                        </button>
-                     </div>
-                     <div class="modal-body add-transaction">
-                        <form method="post" action="<?=  base_url('admin/tambahDataTransaksi'); ?>">
-                           <div class="form-group">
-                              <label for="nipd">NIPD</label>
-                              <input disabled type="text" id="nipdtransaction" name="nipd" class="form-control"  aria-describedby="nipd">
-                           </div>
-                           <div class="form-group">
-                              <label for="nominal">Nominal</label>
-                              <input disabled type="number" name="nominal" class="form-control" id="nominaltransaction" aria-describedby="nominal">
-                              <small id="nominal-error" class="text-danger"></small>
-                           </div>
-                           <div class="form-group">
-                              <label for="status">Status</label>
-                              <input type="text" disabled value="Diterima" name="status" class="form-control" id="status-transaction" aria-describedby="status">
-                           </div>
-                           <div class="form-group">
-                              <label for="Keterangan">Keterangan</label>
-                              <input type="text" name="keterangan" class="form-control" id="keterangan-transaction" aria-describedby="Keterangan">
-                              <small id="keterangan-error" class="text-danger"></small>
-                           </div>
-                           <div class="form-group">
-                              <label for="created_at">Tanggal Bayar</label>
-                              <input type="date" name="created_at" class="form-control" id="created_at-transaction" aria-describedby="created_at">
-                              <small id="created_at-error" class="text-danger"></small>
-                           </div>
-                           <div class="modal-footer">
-                              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                              <button type="submit" class="btn btn-primary">Tambah Data</button>
-                           </div>
-                        </form>
-                     </div>
-                  </div>
-               </div>
-            </div> -->
          </div>
          <div hidden id="biodata" class="col-sm-12">
             <div class="card mt-4 shadow fullscreen">
@@ -303,6 +261,9 @@
             let itemsPerPage = 10;
             let currentPage = 1;
             let totalPages;
+
+            var created_at;
+            var nipd;
           
             let IDR = new Intl.NumberFormat('id-ID', {
                style: 'currency',
@@ -394,10 +355,10 @@
 
                               if(response.dataTransaksi !== undefined) {
                                  data = response.dataTransaksi;
-                                 let startIndex = (currentPage - 1) * itemsPerPage + 1;
-                                 let endIndex = startIndex + itemsPerPage - 1;
+                                  startIndex = (currentPage - 1) * itemsPerPage + 1;
+                                  endIndex = startIndex + itemsPerPage - 1;
                                  totalPages = Math.ceil(data.length / itemsPerPage);
-                                 let pageData = data.slice(startIndex - 1, endIndex);
+                                  pageData = data.slice(startIndex - 1, endIndex);
 
                                  $.each(pageData, function(index, item) {
                                     let no = startIndex + index;
@@ -422,17 +383,17 @@
                                        var imageSrc = $(this).data('image');
                                        $('.image').attr('src', `<?= base_url();?>/uploads/${imageSrc}`);
                                     });
+                                    console.log(item.status);
                                     if(item.status == "2"){
                                        $(`.update-link[data-created-at="${item.created_at}"]`).prop('disabled', true).addClass('btn-secondary').text('Diterima');
                                     } else if(item.status == "1"){
                                        $(`.update-link[data-created-at="${item.created_at}"]`).addClass('btn-warning').text('Ditunggu');
-                                    } else {
+                                    } else if(item.status == "0") {
                                        $(`.update-link[data-created-at="${item.created_at}"]`).prop('disabled', true).addClass('btn-danger').text('Ditolak');
                                     }
                                     // $('.add-transaction').find('#nipdtransaction').attr("value", item.nipd);
                                     $('#form .form-group').find('#nipd-print').attr("value", item.nipd);
                                  });
-                                 console.log(currentPage === 1 && pageData.length >= 10);
                                  if ((currentPage === 1 && pageData.length >= 10)) {
                                     renderPagination(totalPages);
                                  } else if(currentPage !== 1){
@@ -494,83 +455,43 @@
                   fetchSearchResults();
                   renderPagination();
                });
-               
-               $('#table').on('click', '.update-link' ,function(event) {
-                  event.preventDefault();
-                  let created_at = $(this).data('created-at');
-                  let nipd = $(this).data('nipd');
-                  let thn_akademik = $('#thn_akademikList').val();
+
+               $('#table').on('click', '.update-link' ,function(event) {  
+                  event.preventDefault();        
+                  created_at = $(this).data('created-at');
+                  nipd = $(this).data('nipd');
                   $('#RestoreConfirmModal').modal('show');
-                  $('.confirmModal').click(function(){
-                     let status = $(this).data('status');
-                     console.log(status);
-                     $.ajax({
-                        url: '<?= base_url('admin/validasiPembayaran')?>',
-                        method: 'POST',
-                        data: { status: status, created_at: created_at, nipd: nipd, thn_akademik: thn_akademik },
-                        success: function(response) {
-                           $('#RestoreConfirmModal').modal('hide');
-                           console.log(response)
-                           // Update the status element with the new value
-                           if(response.value[0] == 2){
-                              $(`.update-link[data-created-at="${response.value[1]}"]`).data('status', response.value[0]).text("Diterima");
-                              $(`.update-link[data-created-at="${response.value[1]}"]`).prop('disabled', true).removeClass('btn-warning').addClass('btn-secondary');
-                           } else if(response.value[0] == 0){
-                              $(`.update-link[data-created-at="${response.value[1]}"]`).data('status', response.value[0]).text("Ditolak");
-                              $(`.update-link[data-created-at="${response.value[1]}"]`).prop('disabled', true).removeClass('btn-warning').addClass('btn-danger');
-                           }
-                           $('.nominal-container').find('#nominalmasuk').html(IDR.format(response.value[2]));
-                        },
-                        error: function(xhr, status, error) {
-                        // Handle the error if necessary
-                           console.error(error);
-                        }
-                     });
-
-                  });
-
                });
 
-                //Modal Config Input Data Kelas
-               //  $('#exampleModal').on('hide.bs.modal', function(event) {
-               //      $(this).find('.text-danger');
-               //  });
-    
-               //  $('#exampleModal').on('submit', 'form' , function (event) {
-               //      event.preventDefault();
-    
-               //      let form = $(this);
-               //      let nipd = form.find('input[name="nipd"]').val();                  
-               //      let nominal = form.find('input[name="nominal"]').val();
-               //      let status = form.find('input[name="status"]').val();
-               //      let keterangan = form.find('input[name="keterangan"]').val();
-               //      let created_at = form.find('input[name="created_at"]').val();
-    
-               //      $.ajax({
-               //          url: form.attr('action'),
-               //          method: form.attr('method'),
-               //          data: form.serialize(),
-               //          dataType: 'json' ,
-               //          success: function (response) {
-     
-               //              if(response.success) {
-               //                  window.location.href = response.redirect;
-               //                  $('#exampleModal').modal('hide');
-               //              } else {             
-               //                  var errors = response.errors;
-               //                  $.each(errors, function (field, message) {
-               //                      let errorElement = $('#' + field + '-error');
-               //                      errorElement.html(message);
-               //                  })
-               //              }
-               //          },
-               //          error: function (xhr, status, error) {
-               //              console.error(error);
-               //              console.error(status);
-                            
-               //          }
-               //      })                
-               //  })
+               $('.confirmModal').click(function(){
+                  let thn_akademik = $('#thn_akademikList').val();
+                  let status = $(this).data('status');
+                  const data = {status: status, created_at: created_at, nipd: nipd, thn_akademik: thn_akademik }
+                  $('#RestoreConfirmModal').modal('hide');
+                  $.ajax({
+                     url: '<?= base_url('admin/validasiPembayaran')?>',
+                     method: 'POST',
+                     data: data,
+                     success: function(response) {
+                        $('#RestoreConfirmModal').modal('hide');
+                        console.log(response);
+                        // Update the status element with the new value
+                        if(response.value[0] == 2){
+                           $(`.update-link[data-created-at="${response.value[1]}"]`).data('status', response.value[0]).text("Diterima");
+                           $(`.update-link[data-created-at="${response.value[1]}"]`).prop('disabled', true).removeClass('btn-warning').addClass('btn-secondary');
+                        } else if(response.value[0] == 0){
+                           $(`.update-link[data-created-at="${response.value[1]}"]`).data('status', response.value[0]).text("Ditolak");
+                           $(`.update-link[data-created-at="${response.value[1]}"]`).prop('disabled', true).removeClass('btn-warning').addClass('btn-danger');
+                        }
+                        $('.nominal-container').find('#nominalmasuk').html(IDR.format(response.value[2]));
+                     },
+                     error: function(xhr, status, error) {
+                     // Handle the error if necessary
+                        console.error(error);
+                     }
+                  });
+               });
+
             })   
              
         </script>

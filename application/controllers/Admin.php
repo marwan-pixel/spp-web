@@ -1287,13 +1287,14 @@ class Admin extends User {
                 'param' => array(
                     'nipd' => $this->input->post('nipd'),
                     'since' => $this->input->post('since'),
-                    'to' => $this->input->post('till')
+                    'to' => $this->input->post('till'),
+                    'status' => 2
                 ),
             )
         );
         $data = $this->getData();
         $process = $this->model->printDataModel($data['table'],['siswa.nama_siswa', 'kelas.kelas', 
-        'kelas.instansi' ,'nominal', 'transactions.status', 'keterangan', 'created_at', 'transactions.thn_akademik'], $data['param']);
+        'kelas.instansi' ,'nominal', 'keterangan', 'created_at'], $data['param']);
         if(count($process) == 0){
             $this->session->set_flashdata('message', 
             '<div class="alert alert-danger" role="alert">
@@ -1386,7 +1387,6 @@ class Admin extends User {
         $activeWorksheet->setCellValue('E1', 'Nominal');
         $activeWorksheet->setCellValue('F1', 'Keterangan');
         $activeWorksheet->setCellValue('G1', 'Tanggal Bayar');
-        $activeWorksheet->setCellValue('H1', 'Status');
         $activeWorksheet->getColumnDimension('A')->setWidth(5);
         $activeWorksheet->getColumnDimension('B')->setWidth(14);
         $activeWorksheet->getColumnDimension('C')->setWidth(8);
@@ -1413,7 +1413,6 @@ class Admin extends User {
             $activeWorksheet->setCellValue('E'.$sn, $value['nominal']);
             $activeWorksheet->setCellValue('F'.$sn, $value['keterangan']);
             $activeWorksheet->setCellValue('G'.$sn, $value['created_at']);
-            $activeWorksheet->setCellValue('H'.$sn, $value['status']);
             $activeWorksheet->getStyle('C'.$sn)->getAlignment()->
             setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
             $activeWorksheet->getStyle('E'.$sn)->getAlignment()->
@@ -1448,22 +1447,14 @@ class Admin extends User {
         $pdf->Cell(50, 10, "Nama Siswa", 1);
         $pdf->Cell(15, 10, "Kelas", 1);
         $pdf->Cell(37, 10, "Instansi", 1);
-        $pdf->Cell(30, 10, "Tahun Akademik", 1);
         $pdf->Cell(25, 10, "Nominal", 1);
         $pdf->Cell(50, 10, "Keterangan", 1);
         $pdf->Cell(42, 10, "Tanggal Bayar", 1);
-        $pdf->Cell(20, 10, "Status", 1);
 
         $no = 1;
         
         foreach ($data as $row) {
-            if($row['status'] == 1) {
-                $row['status'] = "Ditunggu";
-            } else if($row['status'] == 0) {
-                $row['status'] = "Ditolak";
-            } else {
-                $row['status'] = "Diterima";
-            }
+
             $cellWidth = 50;
             $cellHeight = 10;
             if($pdf->GetStringWidth($row['nama_siswa']) < $cellWidth){
@@ -1490,20 +1481,48 @@ class Admin extends User {
                 $line = count($textArray);
             }
 
+            if($pdf->GetStringWidth($row['keterangan']) < $cellWidth) {
+                $line = 1;
+            } else {
+                $textArray = array();
+                $textLength = strlen($row['keterangan']);
+                $errMargin = 10;
+                $startChar = 0;
+                $maxChar = 0;
+                
+                $tmpString = "";
+                while($startChar < $textLength) {
+                    while(($pdf->GetStringWidth($tmpString) < ($cellWidth - $errMargin)
+                    && ($startChar + $maxChar) < $textLength) ){
+                        $maxChar++;
+                        $tmpString = substr($row['keterangan'], $startChar, $maxChar);
+                    }
+                    $startChar = $startChar + $maxChar;
+                    array_push($textArray, $tmpString);
+                    $maxChar = 0;
+                    $tmpString = '';
+                }
+                $line = count($textArray);
+            }
+
             $pdf->Ln();
             $pdf->SetFont('Arial', '', 11);
             $pdf->Cell(10, $line * $cellHeight, $no++, 1);
             
-            $xPos = $pdf->GetX();
-            $yPos = $pdf->GetY();
-            
-            $pdf->MultiCell($cellWidth, $cellHeight, $row['nama_siswa'], 1);
-            $pdf->SetXY($xPos + $cellWidth, $yPos);
+            if($pdf->GetStringWidth($row['nama_siswa']) < $cellWidth){
+                $pdf->Cell(50,  $line * $cellHeight, $row['nama_siswa'], 1);
+            } else {
+                $xPos = $pdf->GetX();
+                $yPos = $pdf->GetY();
+                
+                $pdf->MultiCell($cellWidth, $cellHeight, $row['nama_siswa'], 1);
+                $pdf->SetXY($xPos + $cellWidth, $yPos);
+            }
 
             $pdf->Cell(15,  $line * $cellHeight, $row['kelas'], 1);
             $pdf->Cell(37,  $line * $cellHeight, $row['instansi'], 1);
-            $pdf->Cell(30,  $line * $cellHeight, $row['thn_akademik'], 1);
             $pdf->Cell(25,  $line * $cellHeight, $row['nominal'], 1);
+
             if($pdf->GetStringWidth($row['keterangan']) < $cellWidth){
                 $pdf->Cell(50,  $line * $cellHeight, $row['keterangan'], 1);
             } else {
@@ -1515,7 +1534,6 @@ class Admin extends User {
             }
 
             $pdf->Cell(42, $line * $cellHeight, $row['created_at'], 1);
-            $pdf->Cell(20, $line * $cellHeight, $row['status'], 1);
         }
         $pdf->Output();
     }
