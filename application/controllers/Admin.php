@@ -1292,6 +1292,8 @@ class Admin extends User {
                 $response['errors'] = array('bulanAkhirPembayaran' => 'Rentang akhir tanggal tidak bisa lebih dulu dari rentang awal!');
             } elseif($dateStart == $dateEnd && $nominalMasuk > $dataBiaya){
                 $response['errors'] = array('nominalInsert' => 'Nominal ini terlalu besar jika hanya untuk satu bulan saja!');
+            } elseif($nominalMasuk > ($dataBiaya * 12)){
+                $response['errors'] = array('nominalInsert' => 'Nominal ini terlalu besar dari total biaya yang ada!');
             } else {
                 $this->setData(
                     array(
@@ -1383,7 +1385,7 @@ class Admin extends User {
                     }
                    
                     $dateStart->modify('+1 month');
-                    if($nominalMasuk > 0 && $dateStart == $dateEnd){
+                    if(($nominalMasuk > 0 && $dateStart == $dateEnd)){
                         $dateEnd->modify('+1 month');
                     }
                 }
