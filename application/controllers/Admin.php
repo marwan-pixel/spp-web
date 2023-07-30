@@ -1383,6 +1383,9 @@ class Admin extends User {
                     }
                    
                     $dateStart->modify('+1 month');
+                    if($nominalMasuk > 0 && $dateStart == $dateEnd){
+                        $dateEnd->modify('+1 month');
+                    }
                 }
                 if(!empty($errors)){
                     $response['errors'] = $errors;
