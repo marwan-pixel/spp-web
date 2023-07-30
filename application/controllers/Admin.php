@@ -916,7 +916,7 @@ class Admin extends User {
                             } else {
                                 $this->session->set_flashdata("message", "<div class='alert alert-danger' role='alert'>
                                         {$process['message']}
-                                </div>");                                
+                                </div>");
                             }
                         }
                     }
@@ -1188,7 +1188,7 @@ class Admin extends User {
                 } else {
                     $this->session->set_flashdata("message", "<div class='alert alert-danger' role='alert'>
                                             {$process['message']}
-                                            </div>");                                
+                                            </div>");
                 }
                 $response['success'] = true;
                 $response['redirect'] = base_url('pages/datatahunakademik');
@@ -1282,6 +1282,7 @@ class Admin extends User {
         } else {
             $dateStart = new DateTime($bulanRentangAwal);
             $dateEnd = new DateTime($bulanRentangAkhir);
+            $monthDiff = date_diff($dateStart, $dateEnd)->format('%m')+1;
             
             $dataInstansi = $this->model->getDataJoinModel('siswa', 'kelas' ,['instansi', 'siswa.potongan'], 
             ["kelas", "nipd"], ['nipd' => $nipd]);
@@ -1290,8 +1291,8 @@ class Admin extends User {
 
             if($dateEnd < $dateStart) {
                 $response['errors'] = array('bulanAkhirPembayaran' => 'Rentang akhir tanggal tidak bisa lebih dulu dari rentang awal!');
-            } elseif($dateStart == $dateEnd && $nominalMasuk > $dataBiaya){
-                $response['errors'] = array('nominalInsert' => 'Nominal ini terlalu besar jika hanya untuk satu bulan saja!');
+            } elseif($nominalMasuk > ($dataBiaya * $monthDiff)){
+                $response['errors'] = array('nominalInsert' => "Nominal $nominalMasuk terlalu besar jika hanya untuk $monthDiff bulan saja!");
             } elseif($nominalMasuk > ($dataBiaya * 12)){
                 $response['errors'] = array('nominalInsert' => 'Nominal ini terlalu besar dari total biaya yang ada!');
             } else {
@@ -1331,7 +1332,7 @@ class Admin extends User {
                         } else {
                             $this->session->set_flashdata("message", "<div class='alert alert-danger' role='alert'>
                             Pembayaran Gagal!
-                            </div>");                                
+                            </div>");
                         }
                         $nominalMasuk -= $dataBiaya;
                     } else {
@@ -1385,9 +1386,6 @@ class Admin extends User {
                     }
                    
                     $dateStart->modify('+1 month');
-                    if(($nominalMasuk > 0 && $dateStart == $dateEnd)){
-                        $dateEnd->modify('+1 month');
-                    }
                 }
                 if(!empty($errors)){
                     $response['errors'] = $errors;
