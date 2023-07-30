@@ -1290,6 +1290,8 @@ class Admin extends User {
 
             if($dateEnd < $dateStart) {
                 $response['errors'] = array('bulanAkhirPembayaran' => 'Rentang akhir tanggal tidak bisa lebih dulu dari rentang awal!');
+            } elseif($dateStart == $dateEnd && $nominalMasuk > $dataBiaya){
+                $response['errors'] = array('nominalInsert' => 'Nominal ini terlalu besar jika hanya untuk satu bulan saja!');
             } else {
                 $this->setData(
                     array(
@@ -1339,14 +1341,16 @@ class Admin extends User {
                         $nominalTransaksiBulanTerakhir = $this->model->getDataModel('transactions', ['sum(nominal)'], 
                         ['bulan' => (new DateTime())->setDate((new DateTime())->format('Y'), 6, 1)->format('Y-m-d'), 'nipd' => $nipd, 'status' => 2, 'thn_akademik' => $data['value']['thn_akademik']]);
                         $totalNominal = $totalNominalTransaksi[0]['sum(nominal)'];
-                        
+                        $nominalBulanIni = $nominalTransaksiBulanIni[0]['sum(nominal)'];
                         if(!empty($totalNominalTransaksi) && ($totalNominal + $nominalMasuk) > ($dataBiaya * 12)){
                             $errors = array('nominalInsert' => "Total nominal sekarang ($totalNominal) dan nominal masuk
-                            ($nominalMasuk) melebihi total data biaya!");
+                            ($nominalMasuk) melebihi total biaya!");
+                            break;
+                        } else if(($nominalTransaksiBulanIni[0]['sum(nominal)'] < $dataBiaya) && (($nominalTransaksiBulanIni[0]['sum(nominal)'] + $nominalMasuk) > $dataBiaya)) {
+                            $errors = array('nominalInsert' => "Nominal masuk bulan ini ($nominalBulanIni) dan nominal masuk
+                            ($nominalMasuk) melebihi total biaya $dataBiaya!");
                             break;
                         }
-      
-                        
                         if($nominalTransaksiBulanIni[0]['sum(nominal)'] >= $dataBiaya){
                             $errors = array('nominalInsert' => 'Nominal pada bulan yang dituju ada yang sudah lunas!');
                             break;
