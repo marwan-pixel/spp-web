@@ -106,7 +106,7 @@
             var pemasukanChart = new Chart(ctx, {
                 type: 'bar',
                 data: {
-                    labels: ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'],
+                    labels: ['Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember', 'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni'],
                     datasets: [{
                     label: 'Total Pemasukan SPP Setiap Bulan',
                     data: [],
@@ -126,7 +126,7 @@
             var totalTransaksi = new Chart(ctx2, {
                 type: 'bar',
                 data: {
-                    labels: ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'],
+                    labels: ['Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember', 'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni'],
                     datasets: [{
                     label: 'Total Transaksi Aktif SPP Setiap Bulan',
                     data: [],
@@ -158,39 +158,17 @@
                         $('.pemasukanTahun').text(IDR.format(response.totalPemasukan.tahun.nominal));
                         $('.transaksiAktifTahun').text(response.dataTransaksi.tahun);
                         
-                        // $('.jumlahSiswa').text(response.dataSiswa.all);
-                        // $('.jumlahKelas').text(response.dataKelas.all);
-
-                        // $.each(response.dataBiaya, function(index, item){
-                        //     let row = `
-                        //     <tr>
-                        //         <td>${response.dataInstansi[index].jenis_instansi}</td>
-                        //         <td>${IDR.format(item)}</td>
-                        //     '</tr>`;
-                        //     $('.biayaInstansi tbody').append(row);
-                        // });
-
-                        // $.each(response.dataSiswa, function(index, item){
-                        //     console.log(item)
-                        //     let row = `
-                        //     <tr>
-                        //         <td>${response.dataInstansi[index].jenis_instansi}</td>
-                        //         <td>${IDR.format(item)}</td>
-                        //     '</tr>`;
-                        //     $('.jumlahPeserta tbody').append(row);
-                        // });
-
                         pemasukanChart.data.datasets[0].data = [
-                        response.totalPemasukan.januari.nominal, response.totalPemasukan.februari.nominal, response.totalPemasukan.maret.nominal,
-                        response.totalPemasukan.april.nominal, response.totalPemasukan.mei.nominal, response.totalPemasukan.juni.nominal,
                         response.totalPemasukan.juli.nominal, response.totalPemasukan.agustus.nominal, response.totalPemasukan.september.nominal,
                         response.totalPemasukan.oktober.nominal, response.totalPemasukan.november.nominal, response.totalPemasukan.desember.nominal,
+                        response.totalPemasukan.januari.nominal, response.totalPemasukan.februari.nominal, response.totalPemasukan.maret.nominal,
+                        response.totalPemasukan.april.nominal, response.totalPemasukan.mei.nominal, response.totalPemasukan.juni.nominal,
                         ];
 
                         totalTransaksi.data.datasets[0].data = [
-                        response.dataTransaksi.januari, response.dataTransaksi.februari, response.dataTransaksi.maret, response.dataTransaksi.april, 
-                        response.dataTransaksi.mei, response.dataTransaksi.juni, response.dataTransaksi.juli, response.dataTransaksi.agustus, 
-                        response.dataTransaksi.september, response.dataTransaksi.oktober, response.dataTransaksi.november, response.dataTransaksi.desember,
+                        response.dataTransaksi.juli, response.dataTransaksi.agustus, response.dataTransaksi.september, response.dataTransaksi.oktober, 
+                        response.dataTransaksi.november, response.dataTransaksi.desember,response.dataTransaksi.januari, response.dataTransaksi.februari, 
+                        response.dataTransaksi.maret, response.dataTransaksi.april,  response.dataTransaksi.mei, response.dataTransaksi.juni, 
                         ];
                         pemasukanChart.update();
                         totalTransaksi.update();

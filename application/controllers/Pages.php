@@ -54,20 +54,6 @@ class Pages extends User {
 		$thn_akademik = (string) $this->input->get('thn_akademik');
 		$data = 
 			array(
-				// 'dataSiswa' => array( 
-				// 	'all' => $this->model->countAllData('siswa', ['status'], [1]),
-				// 	'tk' => $this->model->countAllData('siswa', ['kelas', 'status'], ['tk', 1]),
-				// 	'sd' => $this->model->countAllData('siswa', ["kelas REGEXP'[0-6]'", "status"], ['sd', 1]),
-				// 	'smp' =>$this->model->countAllData('siswa', ["kelas REGEXP'[7-9][A-B]'", "status"], ['smp', 1]),
-				// 	'ponpes' => $this->model->countAllData('siswa', ['kelas', 'status'], ['c', 1])
-				// ),
-				// 'dataKelas' => array(
-				// 	'all' => $this->model->countAllData('kelas'),
-				// 	'tk' => $this->model->countAllData('kelas', ['instansi'], ['tk']),
-				// 	'sd' => $this->model->countAllData('kelas', ['instansi'], ['sd']),
-				// 	'smp' => $this->model->countAllData('kelas', ['instansi'], ['smp']),
-				// 	'ponpes' => $this->model->countAllData('kelas', ['instansi'], ['ponpes'])	
-				// ),
 				'totalPemasukan' => array(
 					'curdate' => $this->db->select_sum('nominal')->from('transactions')->where('status', 2)->where('MONTH(created_at) = MONTH(CURDATE())')->where("thn_akademik", $thn_akademik)->get()->row_array(),
 					'januari' => $this->db->select_sum('nominal')->from('transactions')->where('status', 2)->where("MONTHNAME(created_at) = 'January'")->where("thn_akademik", $thn_akademik)->get()->row_array(),
@@ -85,7 +71,7 @@ class Pages extends User {
 					'tahun' => $this->db->select_sum('nominal')->from('transactions')->where('status', 2)->where("thn_akademik", $thn_akademik)->get()->row_array()
 				),
 				'dataTransaksi' => array(
-					'curdate' => $this->db->select('*')->from('transactions')->where('status', 2)->where('MONTH(created_at) = MONTH(CURDATE())')->where("thn_akademik", $thn_akademik)->get()->num_rows(),
+					'curdate' => $this->db->select('nipd')->from('transactions')->where('status', 2)->where('MONTH(created_at) = MONTH(CURDATE())')->where("thn_akademik", $thn_akademik)->get()->num_rows(),
 					'januari' => $this->model->countAllData('transactions', ['status', 'MONTHNAME(created_at)', "thn_akademik" ], [2, 'January', $thn_akademik]),
 					'februari' => $this->model->countAllData('transactions', ['status', 'MONTHNAME(created_at)', "thn_akademik" ], [2, 'February', $thn_akademik]),
 					'maret' => $this->model->countAllData('transactions', ['status', 'MONTHNAME(created_at)', "thn_akademik" ], [2, 'March', $thn_akademik]),
@@ -99,22 +85,8 @@ class Pages extends User {
 					'november' => $this->model->countAllData('transactions', ['status', 'MONTHNAME(created_at)', "thn_akademik" ], [2, 'November', $thn_akademik]),
 					'desember' => $this->model->countAllData('transactions', ['status', 'MONTHNAME(created_at)', "thn_akademik" ], [2, 'Desember', $thn_akademik]),
 					'tahun' => $this->model->countAllData('transactions', ['status', "thn_akademik" ], [2, $thn_akademik]),
-				),
-				// 'dataInstansi' => $this->model->getDataModel('instansi', ['jenis_instansi'], ['status' => 1]),
-				
+				),				
 			);
-		
-		// foreach ($data['dataInstansi'] as $value) {
-		// 	$biaya = $this->model->getDataModel('jenis_pembayaran', ['sum(biaya)'], ['instansi' => $value['jenis_instansi'], 'status' => 1]);
-		// 	if(empty($biaya)){
-		// 		continue;
-		// 	}
-		// 	$data['dataBiaya'][] = $biaya[0]['sum(biaya)'];
-		// }
-		if(!is_null($this->input->get('thn_akademik'))){
-
-		}
-
 		echo json_encode($data);
 		exit();
 	}
@@ -465,9 +437,9 @@ class Pages extends User {
 			)
 		);
 		$dataTahunAkademik = $this->model->getDataModel('tahun_akademik', ['thn_akademik']);
-
+		$dataTahunAkademikSelected = $this->model->getDataModel('tahun_akademik', ['thn_akademik', 'status'], ['status' => 1]);
 		try {
-			$this->render('datatransaksi', ['title' => 'Data Transaksi', 'name' => $this->_userdata['nama_petugas'], 'data' => $dataTahunAkademik]);
+			$this->render('datatransaksi', ['title' => 'Data Transaksi', 'name' => $this->_userdata['nama_petugas'], 'data' => [$dataTahunAkademik, $dataTahunAkademikSelected]]);
 		} catch (Exception $e){
 			$e->getMessage();
 		}

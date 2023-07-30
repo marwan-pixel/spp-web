@@ -16,9 +16,14 @@
                      <div class=" inputtahun">
                         <label for="thn_akademikList">Tahun Akademik</label>
                         <select id="thn_akademikList" class="form-select" name="thn_akademik">
-                           
                            <?php
-                           foreach ($data as $value) {
+                           ?>
+                           <option selected value="<?= $data[1][0]['thn_akademik'];?>"><?= $data[1][0]['thn_akademik'];?></option>
+                           <?php
+                           foreach ($data[0] as $value) {
+                              if($value['thn_akademik'] === $data[1][0]['thn_akademik']){
+                                 continue;
+                             }
                            ?>
                            <option value="<?= $value['thn_akademik'];?>"><?= $value['thn_akademik'];?></option>
                            <?php
@@ -30,7 +35,9 @@
                </div>
             </div>
 
-               <!-- Detail Biya Modal -->
+            
+                     
+               <!-- Detail Biaya Modal -->
             <div class="modal fade" id="detailBiayaModal" tabindex="-1" aria-labelledby="detailBiayaModalLabel" aria-hidden="true">
                <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
                   <div class="modal-content">
@@ -47,6 +54,79 @@
                      </div>
                      <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                     </div>
+                  </div>
+               </div>
+            </div>
+
+               <!-- Detail Nominal Masuk -->
+            <div class="modal fade" id="detailNominalMasukModal" tabindex="-1" aria-labelledby="detailNominalMasukModalLabel" aria-hidden="true">
+               <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                  <div class="modal-content">
+                     <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="detailNominalMasukModalLabel">Detail Nominal Masuk</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                     </div>
+                     <div class="modal-body ">
+                        <ul class="detailNominalMasukContent list-group list-group-flush">
+                        </ul>
+                     </div>
+                     <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            
+            <!-- Modal Insert-->
+            <div class="modal fade" id="insertTransaksi" tabindex="-1" aria-labelledby="insertTransaksiLabel" aria-hidden="true">
+               <div class="modal-dialog">
+                  <div class="modal-content">
+                     <div class="modal-header">
+                           <h4 class="modal-title" id="insertTransaksiLabel">Data Transaksi</h4>
+                           <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                           <span aria-hidden="true">&times;</span>
+                           </button>
+                     </div>
+                     <div class="modal-body">
+                           <form method="post" action="<?= base_url('admin/tambahDataTransaksi');?>"> 
+                              <div class="form-group">
+                                 <label for="nipdInsert">NIPD</label>
+                                 <input type="text" readonly name="nipdInsert"  class="form-control" id="nipdInsert" aria-describedby="nipdInsert">
+                              </div>
+                              <div class="form-group">
+                                 <label for="thn_akademikInsert">Tahun Akademik</label>
+                                 <input type="text" readonly name="thn_akademikInsert"  class="form-control" id="thn_akademikInsert" aria-describedby="thn_akademikInsert">
+                              </div>
+                              <div class="form-group">
+                                 <label for="nominalInsert">Nominal Bayar</label>
+                                 <input type="number" name="nominalInsert" class="form-control" id="nominalInsert" aria-describedby="nominalInsert">
+                                 <small class="text-danger" id="nominalInsert-error"></small>
+                              </div>
+                              <div class="form-group">
+                                 <label for="keteranganInsert">Keterangan</label>
+                                 <input type="text" name="keteranganInsert" class="form-control" id="keteranganInsert" aria-describedby="keteranganInsert">
+                                 <small class="text-danger" id="keteranganInsert-error"></small>
+                              </div>
+                              <div class="form-group">
+                                 <label for="bulanAwalPembayaran">Rentang Awal Tanggal</label>
+                                 <input type="month" name="bulanAwalPembayaran" class="form-control" id="bulanAwalPembayaran" aria-describedby="bulanAwalPembayaran">
+                                 <small class="text-danger" id="bulanAwalPembayaran-error"></small>
+                              </div>
+                              <div class="form-group">
+                                 <label for="bulanAkhirPembayaran">Rentang Akhir Tanggal</label>
+                                 <input type="month" name="bulanAkhirPembayaran" class="form-control" id="bulanAkhirPembayaran" aria-describedby="bulanAkhirPembayaran">
+                                 <small class="text-danger" id="bulanAkhirPembayaran-error"></small>
+                              </div>
+                              <div class="form-group">
+                                 <label for="statusInsert">Status</label>
+                                 <input type="text" readonly value="Diterima" name="statusInsert" class="form-control" id="statusInsert" aria-describedby="statusInsert">
+                              </div>
+                              <div class="modal-footer">
+                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" >Keluar</button>
+                                 <button type="submit" class="btn btn-primary">Simpan</button>
+                              </div>
+                           </form>
                      </div>
                   </div>
                </div>
@@ -91,6 +171,7 @@
 
          </div>
          <div hidden id="biodata" class="col-sm-12">
+            
             <div class="card mt-4 shadow fullscreen">
                <div class="card-header border-bottom">
                   <div class="card-title">
@@ -133,7 +214,7 @@
                                     <tr>
                                        <td>Status</td>
                                        <td align="left" id="status"></td>
-                                    </tr>                                    
+                                    </tr>
                                  </tbody>
                               </table>
                            </div>
@@ -157,15 +238,21 @@
                                     <i class="material-icons ">crop_free</i>
                                     </a>
                               </div>
+                              
                            </div>
-
-                        </div>                        
-                        <div class="row mt-3">
+                           
+                        </div>
+                        <div class="row">
                            <div class="col-sm-12 hidden-overflow">
+                              
+                              <button type="button" class="btn btn-success mb-3 mt-3 " id="insertDataTransaksi" data-bs-toggle="modal" data-bs-target="#insertTransaksi">
+                                 Tambah Data (Jika Membayar dengan Cash)
+                              </button>
                               <div class="nominal-container d-flex justify-content-between">
                                  <div>
                                     <h5 align="left">Nominal Masuk</h5>
                                     <h4 align="left" id="nominalmasuk" class="text-primary"></h4>
+                                    <button class="btn btn-small btn-primary detailNominalMasuk">Detail Nominal Masuk</button>
                                  </div>
                                  <div class="d-flex flex-sm-column justify-content-end mb-3">
                                     <h5 align="right">Total Biaya</h5>
@@ -173,9 +260,7 @@
                                     <button class="btn btn-small btn-primary detailBiaya">Detail Biaya</button>
                                  </div>
                               </div>
-                                 <!-- <button type="button" class="btn btn-success mb-3 mt-3" data-toggle="modal" data-target="#exampleModal">
-                                       Tambah Data (Jika Membayar dengan Cash)
-                                 </button> -->
+                                 
                               <table class="table hidden-overflow " id="table">
                                  <thead>
                                     <tr>
@@ -189,6 +274,9 @@
                                           <center>Nominal</center>
                                        </th>
                                        <th>
+                                          <center>Bulan Pembayaran</center>
+                                       </th>
+                                       <th>
                                           <center>Bukti</center>
                                        </th>
                                        <th>
@@ -199,7 +287,7 @@
                                        </th>
                                        <th>
                                           <center>Status</center>
-                                    </th>
+                                       </th>
                                     </tr>
                                  </thead>
                                  <tbody>
@@ -262,6 +350,8 @@
             let currentPage = 1;
             let totalPages;
 
+            var biayaSisa;
+            var potongan;
             var created_at;
             var nipd;
           
@@ -270,7 +360,6 @@
                currency: 'IDR',
             });
             $(document).ready(function() {
-               
                $('#keyword').keyup(function(){
                   fetchSearchResults();
                });
@@ -294,16 +383,22 @@
                            $('#biodata').removeAttr('hidden');
                            
                            if (response.dataSiswa !== undefined) {
+                              console.log(response);
+
                               $('#table tbody').empty();
                               $('.transactions').show();
-                              $('.add-transaction').find('#nominaltransaction').attr("value", response.dataNominal);
+                              $('.add-transaction').find('#nominaltransaction').attr("value", response.dataBiaya);
+                              $('#nipdInsert').attr('value', response.dataSiswa.nipd);
+                              $('#thn_akademikInsert').attr('value', response.dataSiswa.thn_akademik);
                               $.each(response.dataSiswa, function(index, item) {
                                  $('#dataTables-example').show();
                                  $('#message').empty();
                                  let data = $('#' + index);
                                  data.html(item);
                               });
-                              if((response.dataNominal).length === 0) {
+
+                              
+                              if((response.dataBiaya).length === 0) {
                                  $('.detailBiaya').prop('disabled', true);
                                  $('.nominal-container').find('#totalnominal').html(IDR.format(0));
                                  $('.nominal-container').find('#nominalmasuk').html(IDR.format(0));
@@ -314,12 +409,18 @@
                                  response.dataSiswa.potongan) * 12));
 
                                  // Biaya Masuk
-                                 $('.nominal-container').find('#nominalmasuk').html(IDR.format(response.dataNominalMasuk));
+                                 $('.nominal-container').find('#nominalmasuk').html(IDR.format(response.nominalMasuk));
+                                 if(response.nominalMasuk == ((response.biaya - response.dataSiswa.potongan) * 12)){
+                                    $('#insertDataTransaksi').prop('disabled', true);
+                                 } else {
+                                    $('#insertDataTransaksi').prop('disabled', false);
+                                 }
                               }
-                              $('.detailBiayaContent').empty();
 
+                              $('.detailBiayaContent').empty();
+                              $('.detailNominalMasukContent').empty();
                               //Detail Biaya
-                              $.each(response.dataNominal, function(index, item){
+                              $.each(response.dataBiaya, function(index, item){
                                  let detailBiaya = `
                                     <li class="list-group-item">
                                        <div class=" d-flex align-items-center justify-content-between">
@@ -353,24 +454,41 @@
                                  </li>
                               `);
 
+                              $.each(response.dataNominalMasuk, function(index, item){
+                                 let bulan = new Date(item.bulan);
+                                 let month = bulan.toLocaleString('id-ID', {month: 'long'});
+                                 let detailNominalMasuk = `
+                                    <li class="list-group-item">
+                                       <div class=" d-flex align-items-center justify-content-between">
+                                       <p class="fw-semibold fs-6">${month}</p> <p class="fw-semibold fs-6">${IDR.format(item.nominal)}</p>
+                                       </div>
+                                    </li>
+                                 `;
+                                 $('.detailNominalMasukContent').append(detailNominalMasuk);
+                              });
+
                               if(response.dataTransaksi !== undefined) {
+                                 
                                  data = response.dataTransaksi;
-                                  startIndex = (currentPage - 1) * itemsPerPage + 1;
-                                  endIndex = startIndex + itemsPerPage - 1;
+                                 startIndex = (currentPage - 1) * itemsPerPage + 1;
+                                 endIndex = startIndex + itemsPerPage - 1;
                                  totalPages = Math.ceil(data.length / itemsPerPage);
-                                  pageData = data.slice(startIndex - 1, endIndex);
+                                 pageData = data.slice(startIndex - 1, endIndex);
 
                                  $.each(pageData, function(index, item) {
+                                    let bulan = new Date(item.bulan);
+                                    let month = bulan.toLocaleString('id-ID', {month: 'long'});
                                     let no = startIndex + index;
                                     let row = `<tr>
                                              <td><center>${no++}</center></td>
                                              <td><center>${item.nipd}</center></td>
                                              <td><center>${IDR.format(item.nominal)}</center></td>
-                                             <td><center><button class="btn btn-small btn-primary
+                                             <td><center>${month}</center></td>
+                                             <td><center>${item.image !== null ? `<button class="btn btn-small btn-primary
                                              showImage" data-bs-toggle="modal" data-bs-target="#showImageModal" 
                                              data-image="${item.image}">
                                              Bukti
-                                             </button></center></td>
+                                             </button>` : "Tidak Ada"}</center></td>
                                              <td><center>${item.keterangan}</center></td>
                                              <td><center>${item.created_at}</center></td>
                                              <td><center><button class="update-link btn text-white" 
@@ -383,7 +501,6 @@
                                        var imageSrc = $(this).data('image');
                                        $('.image').attr('src', `<?= base_url();?>/uploads/${imageSrc}`);
                                     });
-                                    console.log(item.status);
                                     if(item.status == "2"){
                                        $(`.update-link[data-created-at="${item.created_at}"]`).prop('disabled', true).addClass('btn-secondary').text('Diterima');
                                     } else if(item.status == "1"){
@@ -404,13 +521,13 @@
                                  
                                  $('#transaction h5').empty();
                               } else {
-                                    let emptyRow = `<tr><td colspan="7"><center>${response.errors}</center></td></tr>`;
+                                    let emptyRow = `<tr><td colspan="8"><center>${response.errors}</center></td></tr>`;
                                     $('#table tbody').append(emptyRow);
                                     $('.pagination').empty();
                               }
                            } else {
                               if (!$('#message').text().includes(response.errors)) {
-                                 $('#message').append(response.errors);                          
+                                 $('#message').append(response.errors);
                               }
                               $('#dataTables-example').hide();
                               $('.transactions').hide();
@@ -434,13 +551,63 @@
                      var pageLink = '<li class="page-item ' + activeClass + '">' +
                                     '<a class="page-link" href="#" data-page="' + i + '">' + i + '</a>' +
                                     '</li>';
-                     
                      $('.pagination').append(pageLink);
                   }
                }
 
+               $('#insertTransaksi').on('hide.bs.modal', function(event) {
+                  $(this).find('.text-danger');
+               });
+
+               $('#insertTransaksi').on('submit', 'form' , function (event) {
+                  event.preventDefault();
+                  let form = $(this);
+
+                  let data = {
+                     nipdInsert: form.find('input[name="nipdInsert"]').val(),
+                     thn_akademikInsert: form.find('input[name="thn_akademikInsert"]').val(),
+                     nominalInsert: form.find('input[name="nominalInsert"]').val(),
+                     keteranganInsert: form.find('input[name="keteranganInsert"]').val(),
+                     bulanAwalPembayaran: form.find('input[name="bulanAwalPembayaran"]').val(),
+                     bulanAkhirPembayaran: form.find('input[name="bulanAkhirPembayaran"]').val(),
+                     status: 2,
+                  };
+                  if(data.nominalInsert > biayaSisa) {
+                     console.log('kelebihan!', biayaSisa);
+                     let errorElement = $('#nominalInsert-error');
+                     errorElement.html("Biaya yang dibayar lebih dari nominal yang ditentukan!");
+                  } else {
+                     $.ajax({
+                         url: form.attr('action'),
+                         method: form.attr('method'),
+                         data: data,
+                         dataType: 'json' ,
+                         success: function (response) {
+                           console.log(response);
+                             if(response.success) {
+                                 window.location.href = response.redirect;
+                                 $('#exampleModal').modal('hide');
+                             } else {             
+                                 var errors = response.errors;
+                                 $.each(errors, function (field, message) {
+                                    let errorElement = $('#' + field + '-error');
+                                    errorElement.html(message);
+                                 });
+                             }
+                         },
+                         error: function (xhr, status, error) {
+                             console.error(xhr, status,error);
+                         }
+                     }); 
+                  }
+               });
+
                $('.detailBiaya').click(function(){
                   $('#detailBiayaModal').modal('show');
+               });
+               
+               $('.detailNominalMasuk').click(function(){
+                  $('#detailNominalMasukModal').modal('show');
                });
 
                $('.pagination').on('click', 'a.page-link', function(e) {
@@ -484,6 +651,7 @@
                            $(`.update-link[data-created-at="${response.value[1]}"]`).prop('disabled', true).removeClass('btn-warning').addClass('btn-danger');
                         }
                         $('.nominal-container').find('#nominalmasuk').html(IDR.format(response.value[2]));
+                        
                      },
                      error: function(xhr, status, error) {
                      // Handle the error if necessary
@@ -492,7 +660,7 @@
                   });
                });
 
-            })   
+            });
              
         </script>
 </div>

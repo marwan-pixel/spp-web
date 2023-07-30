@@ -1266,18 +1266,133 @@ class Admin extends User {
     }
 
     public function tambahDataTransaksi() {
-        $this->setData(
-            array(
-                'table' => 'transactions',
-                'value' => array(
-                    'nipd' => $this->input->post('nipd'),
-                    'nominal' => $this->input->post('nominal'),
-                    'status' => $this->input->post('status'),
-                    'keterangan' => $this->input->post('keterangan'),
-                    'created_at' => $this->input->post('')
-                )
-            )
-        );
+        $response = $this->response;
+        $bulanRentangAwal = $this->input->post('bulanAwalPembayaran');
+        $bulanRentangAkhir = $this->input->post('bulanAkhirPembayaran');
+        $nipd = $this->input->post('nipdInsert');
+        $keterangan = $this->input->post('keteranganInsert');
+        $nominalMasuk = (int)$this->input->post('nominalInsert');
+        $errors = [];
+        if(empty($bulanRentangAwal) || empty($bulanRentangAkhir) || $nominalMasuk < 1 || empty($keterangan)){
+            $response['errors'] = array(
+                'bulanAwalPembayaran' => 'Rentang awal tanggal wajib diisi!', 
+                'bulanAkhirPembayaran' => 'Rentang akhir tanggal wajib diisi!', 
+                'nominalInsert' => 'Nominal tidak boleh kosong atau kurang dari 1!',
+                'keteranganInsert' => 'Keterangan tidak boleh kosong!');
+        } else {
+            $dateStart = new DateTime($bulanRentangAwal);
+            $dateEnd = new DateTime($bulanRentangAkhir);
+            
+            $dataInstansi = $this->model->getDataJoinModel('siswa', 'kelas' ,['instansi', 'siswa.potongan'], 
+            ["kelas", "nipd"], ['nipd' => $nipd]);
+            $dataBiaya = $this->model->getDataModel('jenis_pembayaran', ['sum(biaya)'], ['instansi' => $dataInstansi['instansi']]);
+            $dataBiaya = $dataBiaya[0]['sum(biaya)'] - $dataInstansi['potongan'];
+
+            if($dateEnd < $dateStart) {
+                $response['errors'] = array('bulanAkhirPembayaran' => 'Rentang akhir tanggal tidak bisa lebih dulu dari rentang awal!');
+            } else {
+                $this->setData(
+                    array(
+                        'table' => 'transactions',
+                        'value' => array(
+                            'nipd' => $nipd,
+                            'thn_akademik' => $this->input->post('thn_akademikInsert'),
+                            'nominal' => null,
+                            'bulan'=> '',
+                            'status' => 2,
+                            'keterangan' => $keterangan,
+                            'created_at' => date('Y-m-d H:i:s')
+                        )
+                    )
+                );
+                $data = $this->getData();
+                while($dateStart <= $dateEnd) {
+                    $bulanRentangAwalStr = $dateStart->format('Y-m-d');
+                    $data['value']['nominal'] = min($nominalMasuk, $dataBiaya);
+                    $data['value']['bulan'] = $bulanRentangAwalStr;
+                    if ($nominalMasuk <= 0) {
+                        break;
+                    }
+                    $transaksiBulanIni = $this->model->getDataModel('transactions', ['nipd', 'thn_akademik', 'nominal', 'bulan', 'status', 'keterangan', 'created_at'], 
+                    ['bulan' => $bulanRentangAwalStr, 'nipd' => $nipd, 'status' => 2, 'thn_akademik' => $data['value']['thn_akademik']]);
+                    $nominalTransaksiBulanIni = $this->model->getDataModel('transactions', ['sum(nominal)'], 
+                    ['bulan' => $bulanRentangAwalStr, 'nipd' => $nipd, 'status' => 2, 'thn_akademik' => $data['value']['thn_akademik']]);
+                    
+                    if(empty($transaksiBulanIni)) {
+                        $process = $this->model->insertDataModel($data['table'], $data['value']);
+                        if($process['status'] == true){
+                            $this->session->set_flashdata("message", "<div class='alert alert-success' role='alert'>
+                            Pembayaran Berhasil!
+                            </div>");
+                        } else {
+                            $this->session->set_flashdata("message", "<div class='alert alert-danger' role='alert'>
+                            Pembayaran Gagal!
+                            </div>");                                
+                        }
+                        $nominalMasuk -= $dataBiaya;
+                    } else {
+                        if ($nominalMasuk <= 0) {
+                            break;
+                        }
+                        $totalNominalTransaksi = $this->model->getDataModel('transactions', ['sum(nominal)'], 
+                        ['nipd' => $nipd, 'status' => 2, 'thn_akademik' => $data['value']['thn_akademik']]);
+                        $nominalTransaksiBulanTerakhir = $this->model->getDataModel('transactions', ['sum(nominal)'], 
+                        ['bulan' => (new DateTime())->setDate((new DateTime())->format('Y'), 6, 1)->format('Y-m-d'), 'nipd' => $nipd, 'status' => 2, 'thn_akademik' => $data['value']['thn_akademik']]);
+                        $totalNominal = $totalNominalTransaksi[0]['sum(nominal)'];
+                        
+                        if(!empty($totalNominalTransaksi) && ($totalNominal + $nominalMasuk) > ($dataBiaya * 12)){
+                            $errors = array('nominalInsert' => "Total nominal sekarang ($totalNominal) dan nominal masuk
+                            ($nominalMasuk) melebihi total data biaya!");
+                            break;
+                        }
+      
+                        
+                        if($nominalTransaksiBulanIni[0]['sum(nominal)'] >= $dataBiaya){
+                            $errors = array('nominalInsert' => 'Nominal pada bulan yang dituju ada yang sudah lunas!');
+                            break;
+                        } 
+                        else {
+                            if(!empty($nominalTransaksiBulanTerakhir)) {
+                                $sisaPembayaranBulanTerakhir = $dataBiaya - $nominalTransaksiBulanTerakhir[0]['sum(nominal)'];
+                                if($nominalMasuk > $sisaPembayaranBulanTerakhir) {
+                                    $errors = array('nominalInsert' => 'Nominal melebihi sisa pembayaran di bulan terakhir!');
+                                    break;
+                                }
+                            } 
+                            $data['value'] = $transaksiBulanIni[0];
+                            $sisaBiayaBulanIni = $dataBiaya - $data['value']['nominal'];
+                            $nominalTambah = min($nominalMasuk, $sisaBiayaBulanIni);
+                            $data['value']['nominal'] = $nominalTambah;
+                            $data['value']['created_at'] = date('Y-m-d H:i:s');
+                            $process = $this->model->insertDataModel($data['table'], $data['value']);
+                            if($process['status'] == true){
+                                $this->session->set_flashdata("message", "<div class='alert alert-success' role='alert'>
+                                Pembayaran Berhasil!
+                                </div>");
+                            } else {
+                                $this->session->set_flashdata("message", "<div class='alert alert-danger' role='alert'>
+                                Pembayaran Gagal!
+                                </div>");                                
+                            }
+                            $nominalMasuk -= $sisaBiayaBulanIni;
+                        }
+                    }
+                   
+                    $dateStart->modify('+1 month');
+                }
+                if(!empty($errors)){
+                    $response['errors'] = $errors;
+                } else {
+                    $response['success'] = true;
+                    $response['redirect'] = base_url('pages/datatransaksi');
+            
+                }
+            }
+        }
+        echo json_encode($response);
+        header('Content-Type: application/json');
+        exit();
+    
     }
 
     public function cetakDataTransaksi(){
@@ -1555,34 +1670,40 @@ class Admin extends User {
                 //Ambil Riwayat Data Transaksi Berdasarkan NIPD
 
                 $dataTransaksi = $this->model->getDataModel('transactions', 
-                ['nipd', 'nominal', 'status', 'image', 'keterangan', 'created_at'], ['nipd' => $dataSiswa['nipd'], 'thn_akademik' => $tahunAkademik]);
+                ['nipd', 'nominal', 'status', 'image', 'keterangan', 'bulan' ,'created_at'], ['nipd' => $dataSiswa['nipd'], 'thn_akademik' => $tahunAkademik]);
 
                 //Ambil Jumlah Nominal dari tabel jenis_pembayaran Berdasarkan instansi
-                $dataNominal = $this->model->getDataModel('jenis_pembayaran', ['biaya', 'jenis_pembayaran'], ['instansi' => $dataSiswa['instansi'], 'status' => 1]);
+                $dataBiaya = $this->model->getDataModel('jenis_pembayaran', ['biaya', 'jenis_pembayaran'], ['instansi' => $dataSiswa['instansi'], 'status' => 1]);
 
                 //Ambil Jumlah Uang Masuk Berdasarkan NIPD
-                $dataNominalMasuk = $this->db->select(['sum(nominal)'])
+                $dataNominalMasuk = $this->db->select(['nominal', 'bulan'])
                     ->from('transactions')->join('siswa', "transactions.nipd = siswa.nipd")->join('tahun_akademik', "tahun_akademik.thn_akademik = siswa.thn_akademik")
                     ->where(['transactions.status' => 2, 'siswa.nipd' => $dataSiswa['nipd'], 'siswa.status' => 1, 'transactions.thn_akademik' => $tahunAkademik,])
                     ->get()
                     ->result_array();
-                $totalBiaya = 0;
-                if(empty($dataNominal)){
+                
+                $dataSumNominalMasuk = $this->db->select(['sum(nominal)'])
+                    ->from('transactions')->join('siswa', "transactions.nipd = siswa.nipd")->join('tahun_akademik', "tahun_akademik.thn_akademik = siswa.thn_akademik")
+                    ->where(['transactions.status' => 2, 'siswa.nipd' => $dataSiswa['nipd'], 'siswa.status' => 1, 'transactions.thn_akademik' => $tahunAkademik,])
+                    ->get()
+                    ->result_array();
+                
+                $total = 0;
+                if(empty($dataBiaya)){
                     $response['biaya'] = 0;
                 } else {
-                    foreach ($dataNominal as $biaya) {
+                    foreach ($dataBiaya as $biaya) {
                         # code...
-                        $totalBiaya += $biaya['biaya'];
+                        $total += $biaya['biaya'];
                     }
-                    $response['biaya'] = $totalBiaya;
+                    $response['biaya'] = $total;
     
                 }
-                $response['dataNominal'] = $dataNominal;
-                if(is_null($dataNominalMasuk[0]['sum(nominal)'])){
-                    $response['dataNominalMasuk'] = 0;
-                } else {
-                    $response['dataNominalMasuk'] = $dataNominalMasuk[0]['sum(nominal)'];
-                }
+                $response['dataBiaya'] = $dataBiaya;
+                
+                $response['nominalMasuk'] = $dataSumNominalMasuk[0]['sum(nominal)'];
+
+                $response['dataNominalMasuk'] = $dataNominalMasuk;
 
                 if(is_null($dataTransaksi) || empty($dataTransaksi)){
                     $response['errors'] = "Data Transaksi Belum Tersedia!";
@@ -1595,6 +1716,7 @@ class Admin extends User {
                 } else {
                     $dataSiswa['status'] = "Tidak Aktif";
                 }
+
                 $response['dataSiswa'] = array('nipd' => $dataSiswa['nipd'], 'nama_siswa' => $dataSiswa['nama_siswa'], 'kelas' => $dataSiswa['kelas'], 
                 'instansi' => $dataSiswa['instansi'], 'potongan' => $dataSiswa['potongan'], 'thn_akademik' => $dataSiswa['thn_akademik'], 'status' => $dataSiswa['status']);
             }
@@ -1606,6 +1728,7 @@ class Admin extends User {
         }
 		
     }
+
     function validasiPembayaran() {
         $response = [];
         $this->setData(
