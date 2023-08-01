@@ -56,7 +56,7 @@ class Pages extends User {
 			array(
 				'totalPemasukan' => array(
 					'curdate' => $this->db->select_sum('nominal')->from('transactions')->where('status', 2)->where('MONTH(created_at) = MONTH(CURDATE())')->where("thn_akademik", $thn_akademik)->get()->row_array(),
-					'januari' => $this->db->select_sum('nominal')->from('transactions')->where('status', 2)->where("MONTHNAME(created_at) = 'January'")->where("thn_akademik", $thn_akademik)->get()->row_array(),
+					'januari' => $this->db->select_sum('nominal')->from('transactions')->where('status', 2)->where("bulan = 'January'")->where("thn_akademik", $thn_akademik)->get()->row_array(),
 					'februari' => $this->db->select_sum('nominal')->from('transactions')->where('status', 2)->where("MONTHNAME(created_at) = 'February'")->where("thn_akademik", $thn_akademik)->get()->row_array(),
 					'maret' => $this->db->select_sum('nominal')->from('transactions')->where('status', 2)->where("MONTHNAME(created_at) = 'March'")->where("thn_akademik", $thn_akademik)->get()->row_array(),
 					'april' => $this->db->select_sum('nominal')->from('transactions')->where('status', 2)->where("MONTHNAME(created_at) = 'April'")->where("thn_akademik", $thn_akademik)->get()->row_array(),

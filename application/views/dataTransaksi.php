@@ -350,7 +350,7 @@
             // Retrieve the values of specific parameters
             const query = urlParams.get('nipd');
             if(query == null || query == ''){
-               window.location.href = '<?= base_url();?>pages/datatransaksihome/';
+               window.location.href = '<?= base_url();?>pages/datatransaksihome';
             }
             let IDR = new Intl.NumberFormat('id-ID', {
                style: 'currency',
@@ -376,7 +376,6 @@
                         $('#biodata').removeAttr('hidden');
                         
                         if (response.dataSiswa !== undefined) {
-                           console.log(response);
    
                            $('#table tbody').empty();
                            $('.transactions').show();
@@ -578,7 +577,6 @@
                      status: 2,
                   };
                   if(data.nominalInsert > biayaSisa) {
-                     console.log('kelebihan!', biayaSisa);
                      let errorElement = $('#nominalInsert-error');
                      errorElement.html("Biaya yang dibayar lebih dari nominal yang ditentukan!");
                   } else {
@@ -588,7 +586,6 @@
                          data: data,
                          dataType: 'json' ,
                          success: function (response) {
-                           console.log(response);
                              if(response.success) {
                                  window.location.href = response.redirect;
                                  $('#exampleModal').modal('hide');

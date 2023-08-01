@@ -117,13 +117,11 @@
                 dataType: 'json',
                 success: function(response) {
                     $('#table tbody').empty();
-                    console.log(response);
                     if((response).length !== 0) {
                         data = response;
                         startIndex = (currentPage - 1) * itemsPerPage + 1;
                         endIndex = startIndex + itemsPerPage - 1;
                         totalPages = Math.ceil(data.length / itemsPerPage);
-                        console.log(totalPages);
                         pageData = data.slice(startIndex - 1, endIndex);
                         $.each(pageData, function(index, item){
                             let no = startIndex + index;

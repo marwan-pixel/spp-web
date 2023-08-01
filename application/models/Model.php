@@ -75,8 +75,9 @@ class Model extends CI_Model {
 
     public function countAllData($table, $where = null, $params = null){
         if(!is_null($params)){
-            foreach ($where as $index) {
-                $this->db->like($where[$index], $params[$index]);
+            for ($i=0; $i < count($where); $i++) { 
+                # code...
+                $this->db->like($where[$i], $params[$i]);
             }
         }
         return $this->db->get($table)->num_rows();
