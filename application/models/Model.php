@@ -1,7 +1,7 @@
 <?php 
 class Model extends CI_Model {
 
-    public function getDataModel($table, $data, $param = null, $limit = null ,$start = null, $keyword = null) {
+    public function getDataModel($table, $data, $param = null, $limit = null, $start = null, $keyword = null) {
         $process = $this->db->select(implode(",",$data));
         if($keyword) {
             $process = $this->db->like($keyword);
@@ -31,21 +31,51 @@ class Model extends CI_Model {
         return $process;
     }
 
-    public function getDataJoinModel($table1, $table2, $data ,$column, $keyword = null){
-        $this->db->select($data)->from($table1)->join($table2, "$table2.$column[0] = $table1.$column[0]");
+    public function getDataJoinModel($table, $data, $column, $keyword = null, $array = 0, $groupBy = null){
+        
+        $this->db->select($data)->from($table[0]);
+        for ($i = 1; $i < count($table); $i++) {
+            $this->db->join($table[$i], "$table[$i].{$column[$i-1]} = $table[0].{$column[$i-1]}");
+        }
+        if(!is_null($keyword)){
+            $this->db->where($keyword);
+        }
+
+        if($array == 1) {
+            $this->db->group_by("$groupBy");
+            $process = $this->db->get()->result_array();
+        } else {
+            $process = $this->db->get()->row_array();
+        }
+        return $process;
+
+    }
+    public function getSearchDataJoinModel($table, $data, $column, $keyword = null, $array = 0, $groupBy = null){
+        
+        $this->db->select($data)->from($table[0]);
+          // Loop through the remaining tables for JOIN
+        for ($i = 1; $i < count($table); $i++) {
+            $this->db->join($table[$i], "$table[$i].{$column[$i-1]} = $table[0].{$column[$i-1]}");
+        }
         if(!is_null($keyword)){
             $this->db->group_start();
             $this->db->like($keyword);
             $this->db->or_like($keyword);
             $this->db->group_end();
         }
-        $process = $this->db->get()->row_array();
+        if($array == 1) {
+            $this->db->group_by("$groupBy");
+            $process = $this->db->get()->result_array();
+        } else {
+            $process = $this->db->get()->row_array();
+        }
         return $process;
+
     }
 
     public function countAllData($table, $where = null, $params = null){
         if(!is_null($params)){
-            foreach ($where as $index => $value) {
+            foreach ($where as $index) {
                 $this->db->like($where[$index], $params[$index]);
             }
         }

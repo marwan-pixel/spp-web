@@ -7,12 +7,6 @@
             <div class="card mt-3 fullscreen cari-siswa">
                <div class="card-body d-flex justify-content-between">
                   <form class="form-inline">
-                     <div class="form-group">
-                        <label class="mx-2" for="keyword">NIPD / Nama Siswa</label>
-                        <input type="text" class="form-control" id="keyword" placeholder="Masukkan NIPD / Nama " name="keyword">
-                     </div>
-                  </form>
-                  <form class="form-inline">
                      <div class=" inputtahun">
                         <label for="thn_akademikList">Tahun Akademik</label>
                         <select id="thn_akademikList" class="form-select" name="thn_akademik">
@@ -34,9 +28,7 @@
                   </form>
                </div>
             </div>
-
-            
-                     
+ 
                <!-- Detail Biaya Modal -->
             <div class="modal fade" id="detailBiayaModal" tabindex="-1" aria-labelledby="detailBiayaModalLabel" aria-hidden="true">
                <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
@@ -354,191 +346,191 @@
             var potongan;
             var created_at;
             var nipd;
-          
+            const urlParams = new URLSearchParams(window.location.search);
+            // Retrieve the values of specific parameters
+            const query = urlParams.get('nipd');
+            if(query == null || query == ''){
+               window.location.href = '<?= base_url();?>pages/datatransaksihome/';
+            }
             let IDR = new Intl.NumberFormat('id-ID', {
                style: 'currency',
                currency: 'IDR',
             });
             $(document).ready(function() {
-               $('#keyword').keyup(function(){
-                  fetchSearchResults();
-               });
 
                $('#thn_akademikList').change(function(){
                   fetchSearchResults();
                });
-
+               
+               $('#thn_akademikList').ready(function(){
+                  fetchSearchResults();
+               });
                function fetchSearchResults(){
-                  let searchText = $('#keyword').val();
+
                   let thn_akademik = $('#thn_akademikList').val();
-                  if(searchText == "") {
-                     $('#biodata').attr('hidden', true);
-                     $('#form .form-group').find('#nipd-print').attr("value", '');
-                  } else {
-                     $.ajax({
-                        url: '<?= base_url('admin/cariDataTransaksi')?>',
-                        method: 'GET',
-                        data: { query: searchText, thn_akademik: thn_akademik },
-                        success: function(response) {
-                           $('#biodata').removeAttr('hidden');
+                  $.ajax({
+                     url: '<?= base_url('pages/dataTransaksiData')?>',
+                     method: 'GET',
+                     data: { query: query, thn_akademik: thn_akademik },
+                     success: function(response) {
+                        $('#biodata').removeAttr('hidden');
+                        
+                        if (response.dataSiswa !== undefined) {
+                           console.log(response);
+   
+                           $('#table tbody').empty();
+                           $('.transactions').show();
+                           $('.add-transaction').find('#nominaltransaction').attr("value", response.dataBiaya);
+                           $('#nipdInsert').attr('value', response.dataSiswa.nipd);
+                           $('#thn_akademikInsert').attr('value', response.dataSiswa.thn_akademik);
+                           $.each(response.dataSiswa, function(index, item) {
+                              $('#dataTables-example').show();
+                              $('#message').empty();
+                              let data = $('#' + index);
+                              data.html(item);
+                           });
+   
                            
-                           if (response.dataSiswa !== undefined) {
-                              console.log(response);
-
-                              $('#table tbody').empty();
-                              $('.transactions').show();
-                              $('.add-transaction').find('#nominaltransaction').attr("value", response.dataBiaya);
-                              $('#nipdInsert').attr('value', response.dataSiswa.nipd);
-                              $('#thn_akademikInsert').attr('value', response.dataSiswa.thn_akademik);
-                              $.each(response.dataSiswa, function(index, item) {
-                                 $('#dataTables-example').show();
-                                 $('#message').empty();
-                                 let data = $('#' + index);
-                                 data.html(item);
-                              });
-
-                              
-                              if((response.dataBiaya).length === 0) {
-                                 $('.detailBiaya').prop('disabled', true);
-                                 $('.nominal-container').find('#totalnominal').html(IDR.format(0));
-                                 $('.nominal-container').find('#nominalmasuk').html(IDR.format(0));
+                           if((response.dataBiaya).length === 0) {
+                              $('.detailBiaya').prop('disabled', true);
+                              $('.nominal-container').find('#totalnominal').html(IDR.format(0));
+                              $('.nominal-container').find('#nominalmasuk').html(IDR.format(0));
+                           } else {
+                              $('.detailBiaya').prop('disabled', false);
+                              // Total Biaya
+                              $('.nominal-container').find('#totalnominal').html(IDR.format((response.biaya - 
+                              response.dataSiswa.potongan) * 12));
+   
+                              // Biaya Masuk
+                              $('.nominal-container').find('#nominalmasuk').html(IDR.format(response.nominalMasuk));
+                              if(response.nominalMasuk == ((response.biaya - response.dataSiswa.potongan) * 12)){
+                                 $('#insertDataTransaksi').prop('disabled', true);
                               } else {
-                                 $('.detailBiaya').prop('disabled', false);
-                                 // Total Biaya
-                                 $('.nominal-container').find('#totalnominal').html(IDR.format((response.biaya - 
-                                 response.dataSiswa.potongan) * 12));
-
-                                 // Biaya Masuk
-                                 $('.nominal-container').find('#nominalmasuk').html(IDR.format(response.nominalMasuk));
-                                 if(response.nominalMasuk == ((response.biaya - response.dataSiswa.potongan) * 12)){
-                                    $('#insertDataTransaksi').prop('disabled', true);
-                                 } else {
-                                    $('#insertDataTransaksi').prop('disabled', false);
-                                 }
+                                 $('#insertDataTransaksi').prop('disabled', false);
                               }
-
-                              $('.detailBiayaContent').empty();
-                              $('.detailNominalMasukContent').empty();
-                              //Detail Biaya
-                              $.each(response.dataBiaya, function(index, item){
-                                 let detailBiaya = `
-                                    <li class="list-group-item">
-                                       <div class=" d-flex align-items-center justify-content-between">
-                                       <p class="fw-semibold fs-6">${item.jenis_pembayaran}</p> <p class="fw-semibold fs-6">${IDR.format(item.biaya)}</p>
-                                       </div>
-                                    </li>
-                                 `;
-                                 $('.detailBiayaContent').append(detailBiaya);
-                              });
-
-                              //Potongan dan Detail Biaya
-                              $('.detailBiayaContent').append(`
+                           }
+   
+                           $('.detailBiayaContent').empty();
+                           $('.detailNominalMasukContent').empty();
+                           //Detail Biaya
+                           $.each(response.dataBiaya, function(index, item){
+                              let detailBiaya = `
                                  <li class="list-group-item">
                                     <div class=" d-flex align-items-center justify-content-between">
-                                    <p class="fw-semibold fs-6">Total Biaya</p>
-                                    <p class="fw-semibold fs-6">${IDR.format(response.biaya)}</p>
+                                    <p class="fw-semibold fs-6">${item.jenis_pembayaran}</p> <p class="fw-semibold fs-6">${IDR.format(item.biaya)}</p>
                                     </div>
                                  </li>
+                              `;
+                              $('.detailBiayaContent').append(detailBiaya);
+                           });
+   
+                           //Potongan dan Detail Biaya
+                           $('.detailBiayaContent').append(`
+                              <li class="list-group-item">
+                                 <div class=" d-flex align-items-center justify-content-between">
+                                 <p class="fw-semibold fs-6">Total Biaya</p>
+                                 <p class="fw-semibold fs-6">${IDR.format(response.biaya)}</p>
+                                 </div>
+                              </li>
+                              <li class="list-group-item">
+                                 <div class=" d-flex align-items-center justify-content-between">
+                                 <p class="fw-semibold fs-6">Potongan Biaya</p>
+                                 <p class="fw-semibold fs-6">${IDR.format(response.dataSiswa.potongan)}</p>
+                                 </div>
+                              </li>
+                              <li class="list-group-item">
+                                 <div class=" d-flex align-items-center justify-content-between">
+                                 <p class="fw-semibold fs-6">Total Seluruh Biaya</p>
+                                 <p class="fw-semibold fs-6 w-50">(Total Biaya - Potongan Biaya) x 12 bulan =
+                                 ${IDR.format((response.biaya - response.dataSiswa.potongan) * 12)}</p>
+                                 </div>
+                              </li>
+                           `);
+   
+                           $.each(response.dataNominalMasuk, function(index, item){
+                              let bulan = new Date(item.bulan);
+                              let month = bulan.toLocaleString('id-ID', {month: 'long'});
+                              let detailNominalMasuk = `
                                  <li class="list-group-item">
                                     <div class=" d-flex align-items-center justify-content-between">
-                                    <p class="fw-semibold fs-6">Potongan Biaya</p>
-                                    <p class="fw-semibold fs-6">${IDR.format(response.dataSiswa.potongan)}</p>
+                                    <p class="fw-semibold fs-6">${month}</p> <p class="fw-semibold fs-6">${IDR.format(item.nominal)}</p>
                                     </div>
                                  </li>
-                                 <li class="list-group-item">
-                                    <div class=" d-flex align-items-center justify-content-between">
-                                    <p class="fw-semibold fs-6">Total Seluruh Biaya</p>
-                                    <p class="fw-semibold fs-6 w-50">(Total Biaya - Potongan Biaya) x 12 bulan =
-                                    ${IDR.format((response.biaya - response.dataSiswa.potongan) * 12)}</p>
-                                    </div>
-                                 </li>
-                              `);
-
-                              $.each(response.dataNominalMasuk, function(index, item){
+                              `;
+                              $('.detailNominalMasukContent').append(detailNominalMasuk);
+                           });
+   
+                           if(response.dataTransaksi !== undefined) {
+                              
+                              data = response.dataTransaksi;
+                              startIndex = (currentPage - 1) * itemsPerPage + 1;
+                              endIndex = startIndex + itemsPerPage - 1;
+                              totalPages = Math.ceil(data.length / itemsPerPage);
+                              pageData = data.slice(startIndex - 1, endIndex);
+   
+                              $.each(pageData, function(index, item) {
                                  let bulan = new Date(item.bulan);
                                  let month = bulan.toLocaleString('id-ID', {month: 'long'});
-                                 let detailNominalMasuk = `
-                                    <li class="list-group-item">
-                                       <div class=" d-flex align-items-center justify-content-between">
-                                       <p class="fw-semibold fs-6">${month}</p> <p class="fw-semibold fs-6">${IDR.format(item.nominal)}</p>
-                                       </div>
-                                    </li>
-                                 `;
-                                 $('.detailNominalMasukContent').append(detailNominalMasuk);
-                              });
-
-                              if(response.dataTransaksi !== undefined) {
-                                 
-                                 data = response.dataTransaksi;
-                                 startIndex = (currentPage - 1) * itemsPerPage + 1;
-                                 endIndex = startIndex + itemsPerPage - 1;
-                                 totalPages = Math.ceil(data.length / itemsPerPage);
-                                 pageData = data.slice(startIndex - 1, endIndex);
-
-                                 $.each(pageData, function(index, item) {
-                                    let bulan = new Date(item.bulan);
-                                    let month = bulan.toLocaleString('id-ID', {month: 'long'});
-                                    let no = startIndex + index;
-                                    let row = `<tr>
-                                             <td><center>${no++}</center></td>
-                                             <td><center>${item.nipd}</center></td>
-                                             <td><center>${IDR.format(item.nominal)}</center></td>
-                                             <td><center>${month}</center></td>
-                                             <td><center>${item.image !== null ? `<button class="btn btn-small btn-primary
-                                             showImage" data-bs-toggle="modal" data-bs-target="#showImageModal" 
-                                             data-image="${item.image}">
-                                             Bukti
-                                             </button>` : "Tidak Ada"}</center></td>
-                                             <td><center>${item.keterangan}</center></td>
-                                             <td><center>${item.created_at}</center></td>
-                                             <td><center><button class="update-link btn text-white" 
-                                             data-created-at="${item.created_at}"
-                                             data-nipd="${item.nipd}">${item.status}
-                                             </button></center></td>
-                                             '</tr>`;
-                                    $('#table tbody').append(row);
-                                    $('.showImage').click(function() {
-                                       var imageSrc = $(this).data('image');
-                                       $('.image').attr('src', `<?= base_url();?>/uploads/${imageSrc}`);
-                                    });
-                                    if(item.status == "2"){
-                                       $(`.update-link[data-created-at="${item.created_at}"]`).prop('disabled', true).addClass('btn-secondary').text('Diterima');
-                                    } else if(item.status == "1"){
-                                       $(`.update-link[data-created-at="${item.created_at}"]`).addClass('btn-warning').text('Ditunggu');
-                                    } else if(item.status == "0") {
-                                       $(`.update-link[data-created-at="${item.created_at}"]`).prop('disabled', true).addClass('btn-danger').text('Ditolak');
-                                    }
-                                    // $('.add-transaction').find('#nipdtransaction').attr("value", item.nipd);
-                                    $('#form .form-group').find('#nipd-print').attr("value", item.nipd);
+                                 let no = startIndex + index;
+                                 let row = `<tr>
+                                          <td><center>${no++}</center></td>
+                                          <td><center>${item.nipd}</center></td>
+                                          <td><center>${IDR.format(item.nominal)}</center></td>
+                                          <td><center>${month}</center></td>
+                                          <td><center>${item.image != 'Bayar Langsung' ? `<button class="btn btn-small btn-primary
+                                          showImage" data-bs-toggle="modal" data-bs-target="#showImageModal" 
+                                          data-image="${item.image}">
+                                          Bukti
+                                          </button>` : "Bayar Langsung"}</center></td>
+                                          <td><center>${item.keterangan}</center></td>
+                                          <td><center>${item.created_at}</center></td>
+                                          <td><center><button class="update-link btn text-white" 
+                                          data-created-at="${item.created_at}"
+                                          data-nipd="${item.nipd}">${item.status}
+                                          </button></center></td>
+                                          '</tr>`;
+                                 $('#table tbody').append(row);
+                                 $('.showImage').click(function() {
+                                    var imageSrc = $(this).data('image');
+                                    $('.image').attr('src', `<?= base_url();?>/uploads/${imageSrc}`);
                                  });
-                                 if ((currentPage === 1 && pageData.length >= 10)) {
-                                    renderPagination(totalPages);
-                                 } else if(currentPage !== 1){
-                                    renderPagination(totalPages);
-                                 } else {
-                                    $('.pagination').empty();
+                                 if(item.status == "2"){
+                                    $(`.update-link[data-created-at="${item.created_at}"]`).prop('disabled', true).addClass('btn-secondary').text('Diterima');
+                                 } else if(item.status == "1"){
+                                    $(`.update-link[data-created-at="${item.created_at}"]`).addClass('btn-warning').text('Ditunggu');
+                                 } else if(item.status == "0") {
+                                    $(`.update-link[data-created-at="${item.created_at}"]`).prop('disabled', true).addClass('btn-danger').text('Ditolak');
                                  }
-                                 
-                                 $('#transaction h5').empty();
+                                 // $('.add-transaction').find('#nipdtransaction').attr("value", item.nipd);
+                                 $('#form .form-group').find('#nipd-print').attr("value", item.nipd);
+                              });
+                              if ((currentPage === 1 && pageData.length >= 10)) {
+                                 renderPagination(totalPages);
+                              } else if(currentPage !== 1){
+                                 renderPagination(totalPages);
                               } else {
-                                    let emptyRow = `<tr><td colspan="8"><center>${response.errors}</center></td></tr>`;
-                                    $('#table tbody').append(emptyRow);
-                                    $('.pagination').empty();
+                                 $('.pagination').empty();
                               }
+                              
+                              $('#transaction h5').empty();
                            } else {
-                              if (!$('#message').text().includes(response.errors)) {
-                                 $('#message').append(response.errors);
-                              }
-                              $('#dataTables-example').hide();
-                              $('.transactions').hide();
+                              let emptyRow = `<tr><td colspan="8"><center>${response.errors}</center></td></tr>`;
+                              $('#table tbody').append(emptyRow);
+                              $('.pagination').empty();
                            }
-                        },
-                        error: function(xhr, status, error) {
-                           console.error(error);
-                           $('#result').append(`<li>${error}</li>`); // Handle the error if necessary
+                        } else {
+                           if (!$('#message').text().includes(response.errors)) {
+                              $('#message').append(response.errors);
+                           }
+                           $('#dataTables-example').hide();
+                           $('.transactions').hide();
                         }
-                     });
-                  }
+                     },
+                     error: function(xhr, status, error) {
+                        console.error(error);
+                        $('#result').append(`<li>${error}</li>`); // Handle the error if necessary
+                     }
+                  });
                }
 
                function renderPagination(totalPages) {
@@ -554,6 +546,19 @@
                      $('.pagination').append(pageLink);
                   }
                }
+
+               $('.pagination').on('click', 'a.page-link', function(e) {
+                  e.preventDefault();
+                  
+                  let targetPage = parseInt($(this).data('page'));
+                  if(targetPage === currentPage + 1 && currentPage === totalPages){
+                     currentPage = 1;
+                  } else {
+                     currentPage = targetPage;
+                  }
+                  fetchSearchResults();
+                  renderPagination();
+               });
 
                $('#insertTransaksi').on('hide.bs.modal', function(event) {
                   $(this).find('.text-danger');
@@ -610,18 +615,7 @@
                   $('#detailNominalMasukModal').modal('show');
                });
 
-               $('.pagination').on('click', 'a.page-link', function(e) {
-                  e.preventDefault();
-                  
-                  let targetPage = parseInt($(this).data('page'));
-                  if(targetPage === currentPage + 1 && currentPage === totalPages){
-                     currentPage = 1;
-                  } else {
-                     currentPage = targetPage;
-                  }
-                  fetchSearchResults();
-                  renderPagination();
-               });
+               
 
                $('#table').on('click', '.update-link' ,function(event) {  
                   event.preventDefault();        

@@ -63,6 +63,7 @@ $route['datanonaktifbiaya'] = 'Pages/databiaya';
 $route['datanonaktifadmin'] = 'Pages/dataadmin';
 $route['datanonaktifpengeluaran'] = 'Pages/datanonaktifpengeluaran';
 $route['datatransaksi'] = 'Pages/datatransaksi';
+$route['datatransaksihome'] = 'Pages/datatransaksihome';
 $route['datatahunakademik'] = 'Pages/datatahunakademik';
 $route['halamanadmin'] = 'Pages/halamanadmin';
 $route['cetak'] = 'Admin/cetak';

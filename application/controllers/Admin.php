@@ -1284,17 +1284,18 @@ class Admin extends User {
             $dateEnd = new DateTime($bulanRentangAkhir);
             $monthDiff = date_diff($dateStart, $dateEnd)->format('%m')+1;
             
-            $dataInstansi = $this->model->getDataJoinModel('siswa', 'kelas' ,['instansi', 'siswa.potongan'], 
-            ["kelas", "nipd"], ['nipd' => $nipd]);
+            $dataInstansi = $this->model->getDataJoinModel(table: ['siswa', 'kelas'], data: ['kelas.instansi', 'siswa.potongan'], 
+            column: ["kelas"], keyword: ["nipd" => $nipd]);
             $dataBiaya = $this->model->getDataModel('jenis_pembayaran', ['sum(biaya)'], ['instansi' => $dataInstansi['instansi']]);
+            
             $dataBiaya = $dataBiaya[0]['sum(biaya)'] - $dataInstansi['potongan'];
 
             if($dateEnd < $dateStart) {
                 $response['errors'] = array('bulanAkhirPembayaran' => 'Rentang akhir tanggal tidak bisa lebih dulu dari rentang awal!');
-            } elseif($nominalMasuk > ($dataBiaya * $monthDiff)){
-                $response['errors'] = array('nominalInsert' => "Nominal $nominalMasuk terlalu besar jika hanya untuk $monthDiff bulan saja!");
             } elseif($nominalMasuk > ($dataBiaya * 12)){
                 $response['errors'] = array('nominalInsert' => 'Nominal ini terlalu besar dari total biaya yang ada!');
+            } elseif($nominalMasuk > ($dataBiaya * $monthDiff)){
+                $response['errors'] = array('nominalInsert' => "Nominal $nominalMasuk terlalu besar jika hanya untuk $monthDiff bulan saja!");
             } else {
                 $this->setData(
                     array(
@@ -1305,6 +1306,7 @@ class Admin extends User {
                             'nominal' => null,
                             'bulan'=> '',
                             'status' => 2,
+                            'image' => 'Bayar Langsung',
                             'keterangan' => $keterangan,
                             'created_at' => date('Y-m-d H:i:s')
                         )
@@ -1391,7 +1393,7 @@ class Admin extends User {
                     $response['errors'] = $errors;
                 } else {
                     $response['success'] = true;
-                    $response['redirect'] = base_url('pages/datatransaksi');
+                    $response['redirect'] = base_url("pages/datatransaksi?nipd=$nipd");
             
                 }
             }
@@ -1565,21 +1567,21 @@ class Admin extends User {
         $pdf->Ln(15); // Berpindah baris
         
         $pdf->SetFont('Arial', '', '11');
-        $pdf->Cell(10, 10, "No", 1);
-        $pdf->Cell(50, 10, "Nama Siswa", 1);
-        $pdf->Cell(15, 10, "Kelas", 1);
-        $pdf->Cell(37, 10, "Instansi", 1);
-        $pdf->Cell(25, 10, "Nominal", 1);
-        $pdf->Cell(50, 10, "Keterangan", 1);
+        $pdf->Cell(12, 10, "No", 1);
+        $pdf->Cell(53, 10, "Nama Siswa", 1);
+        $pdf->Cell(18, 10, "Kelas", 1);
+        $pdf->Cell(45, 10, "Instansi", 1);
+        $pdf->Cell(40, 10, "Nominal", 1);
+        $pdf->Cell(53, 10, "Keterangan", 1);
         $pdf->Cell(42, 10, "Tanggal Bayar", 1);
 
         $no = 1;
         
         foreach ($data as $row) {
 
-            $cellWidth = 50;
+            $cellWidth = 53;
             $cellHeight = 10;
-            if($pdf->GetStringWidth($row['nama_siswa']) < $cellWidth){
+            if($pdf->GetStringWidth($row['nama_siswa']) < $cellWidth ){
                 $line = 1;
             } else {
                 $textArray = array();
@@ -1603,9 +1605,7 @@ class Admin extends User {
                 $line = count($textArray);
             }
 
-            if($pdf->GetStringWidth($row['keterangan']) < $cellWidth) {
-                $line = 1;
-            } else {
+            if($pdf->GetStringWidth($row['keterangan']) > $cellWidth) {
                 $textArray = array();
                 $textLength = strlen($row['keterangan']);
                 $errMargin = 10;
@@ -1629,10 +1629,10 @@ class Admin extends User {
 
             $pdf->Ln();
             $pdf->SetFont('Arial', '', 11);
-            $pdf->Cell(10, $line * $cellHeight, $no++, 1);
+            $pdf->Cell(12, $line * $cellHeight, $no++, 1);
             
             if($pdf->GetStringWidth($row['nama_siswa']) < $cellWidth){
-                $pdf->Cell(50,  $line * $cellHeight, $row['nama_siswa'], 1);
+                $pdf->Cell(53,  $line * $cellHeight, $row['nama_siswa'], 1);
             } else {
                 $xPos = $pdf->GetX();
                 $yPos = $pdf->GetY();
@@ -1641,12 +1641,12 @@ class Admin extends User {
                 $pdf->SetXY($xPos + $cellWidth, $yPos);
             }
 
-            $pdf->Cell(15,  $line * $cellHeight, $row['kelas'], 1);
-            $pdf->Cell(37,  $line * $cellHeight, $row['instansi'], 1);
-            $pdf->Cell(25,  $line * $cellHeight, $row['nominal'], 1);
+            $pdf->Cell(18,  $line * $cellHeight, $row['kelas'], 1);
+            $pdf->Cell(45,  $line * $cellHeight, $row['instansi'], 1);
+            $pdf->Cell(40,  $line * $cellHeight, "Rp " . number_format($row['nominal'],2,',','.'), 1);
 
             if($pdf->GetStringWidth($row['keterangan']) < $cellWidth){
-                $pdf->Cell(50,  $line * $cellHeight, $row['keterangan'], 1);
+                $pdf->Cell(53,  $line * $cellHeight, $row['keterangan'], 1);
             } else {
                 $xPos = $pdf->GetX();
                 $yPos = $pdf->GetY();
@@ -1660,81 +1660,81 @@ class Admin extends User {
         $pdf->Output();
     }
 
-    function cariDataTransaksi() {
-        if($this->session->userdata('kode_petugas')) {
+    // function cariDataTransaksi() {
+    //     if($this->session->userdata('kode_petugas')) {
             
-            $response = [];
-            $keyword = $this->input->get('query');
-            $tahunAkademik = $this->input->get('thn_akademik');
-            //Ambil Data Siswa
-            $dataSiswa = $this->model->getDataJoinModel('siswa', 'kelas' ,['nama_siswa', 'siswa.kelas', 'potongan', 'instansi', 'nipd', 'thn_akademik', 'siswa.status'], 
-            ["kelas", "nipd"], ['siswa.nama_siswa' => $keyword, 'nipd' => $keyword]);
+    //         $response = [];
+    //         $keyword = $this->input->get('query');
+    //         $tahunAkademik = $this->input->get('thn_akademik');
+    //         //Ambil Data Siswa
+    //         $dataSiswa = $this->model->getSearchDataJoinModel(['siswa', 'kelas'] ,['nama_siswa', 'siswa.kelas', 'potongan', 'instansi', 'nipd', 'thn_akademik', 'siswa.status'], 
+    //         ["kelas", "nipd"], ['siswa.nama_siswa' => $keyword, 'nipd' => $keyword]);
             
-            if(is_null($dataSiswa)) {
-                $response['errors'] = "Data tidak ditemukan!";
-            } else {
+    //         if(is_null($dataSiswa)) {
+    //             $response['errors'] = "Data tidak ditemukan!";
+    //         } else {
 
-                //Ambil Riwayat Data Transaksi Berdasarkan NIPD
+    //             //Ambil Riwayat Data Transaksi Berdasarkan NIPD
 
-                $dataTransaksi = $this->model->getDataModel('transactions', 
-                ['nipd', 'nominal', 'status', 'image', 'keterangan', 'bulan' ,'created_at'], ['nipd' => $dataSiswa['nipd'], 'thn_akademik' => $tahunAkademik]);
+    //             $dataTransaksi = $this->model->getDataModel('transactions', 
+    //             ['nipd', 'nominal', 'status', 'image', 'keterangan', 'bulan' ,'created_at'], ['nipd' => $dataSiswa['nipd'], 'thn_akademik' => $tahunAkademik]);
 
-                //Ambil Jumlah Nominal dari tabel jenis_pembayaran Berdasarkan instansi
-                $dataBiaya = $this->model->getDataModel('jenis_pembayaran', ['biaya', 'jenis_pembayaran'], ['instansi' => $dataSiswa['instansi'], 'status' => 1]);
+    //             //Ambil Jumlah Nominal dari tabel jenis_pembayaran Berdasarkan instansi
+    //             $dataBiaya = $this->model->getDataModel('jenis_pembayaran', ['biaya', 'jenis_pembayaran'], ['instansi' => $dataSiswa['instansi'], 'status' => 1]);
 
-                //Ambil Jumlah Uang Masuk Berdasarkan NIPD
-                $dataNominalMasuk = $this->db->select(['nominal', 'bulan'])
-                    ->from('transactions')->join('siswa', "transactions.nipd = siswa.nipd")->join('tahun_akademik', "tahun_akademik.thn_akademik = siswa.thn_akademik")
-                    ->where(['transactions.status' => 2, 'siswa.nipd' => $dataSiswa['nipd'], 'siswa.status' => 1, 'transactions.thn_akademik' => $tahunAkademik,])
-                    ->get()
-                    ->result_array();
+    //             //Ambil Jumlah Uang Masuk Berdasarkan NIPD
+    //             $dataNominalMasuk = $this->db->select(['nominal', 'bulan'])
+    //                 ->from('transactions')->join('siswa', "transactions.nipd = siswa.nipd")->join('tahun_akademik', "tahun_akademik.thn_akademik = siswa.thn_akademik")
+    //                 ->where(['transactions.status' => 2, 'siswa.nipd' => $dataSiswa['nipd'], 'siswa.status' => 1, 'transactions.thn_akademik' => $tahunAkademik,])
+    //                 ->get()
+    //                 ->result_array();
                 
-                $dataSumNominalMasuk = $this->db->select(['sum(nominal)'])
-                    ->from('transactions')->join('siswa', "transactions.nipd = siswa.nipd")->join('tahun_akademik', "tahun_akademik.thn_akademik = siswa.thn_akademik")
-                    ->where(['transactions.status' => 2, 'siswa.nipd' => $dataSiswa['nipd'], 'siswa.status' => 1, 'transactions.thn_akademik' => $tahunAkademik,])
-                    ->get()
-                    ->result_array();
+    //             $dataSumNominalMasuk = $this->db->select(['sum(nominal)'])
+    //                 ->from('transactions')->join('siswa', "transactions.nipd = siswa.nipd")->join('tahun_akademik', "tahun_akademik.thn_akademik = siswa.thn_akademik")
+    //                 ->where(['transactions.status' => 2, 'siswa.nipd' => $dataSiswa['nipd'], 'siswa.status' => 1, 'transactions.thn_akademik' => $tahunAkademik,])
+    //                 ->get()
+    //                 ->result_array();
                 
-                $total = 0;
-                if(empty($dataBiaya)){
-                    $response['biaya'] = 0;
-                } else {
-                    foreach ($dataBiaya as $biaya) {
-                        # code...
-                        $total += $biaya['biaya'];
-                    }
-                    $response['biaya'] = $total;
+    //             $total = 0;
+    //             if(empty($dataBiaya)){
+    //                 $response['biaya'] = 0;
+    //             } else {
+    //                 foreach ($dataBiaya as $biaya) {
+    //                     # code...
+    //                     $total += $biaya['biaya'];
+    //                 }
+    //                 $response['biaya'] = $total;
     
-                }
-                $response['dataBiaya'] = $dataBiaya;
+    //             }
+    //             $response['dataBiaya'] = $dataBiaya;
                 
-                $response['nominalMasuk'] = $dataSumNominalMasuk[0]['sum(nominal)'];
+    //             $response['nominalMasuk'] = $dataSumNominalMasuk[0]['sum(nominal)'];
 
-                $response['dataNominalMasuk'] = $dataNominalMasuk;
+    //             $response['dataNominalMasuk'] = $dataNominalMasuk;
 
-                if(is_null($dataTransaksi) || empty($dataTransaksi)){
-                    $response['errors'] = "Data Transaksi Belum Tersedia!";
-                } else {
-                    $response['dataTransaksi'] = $dataTransaksi;
-                }
+    //             if(is_null($dataTransaksi) || empty($dataTransaksi)){
+    //                 $response['errors'] = "Data Transaksi Belum Tersedia!";
+    //             } else {
+    //                 $response['dataTransaksi'] = $dataTransaksi;
+    //             }
 
-                if($dataSiswa['status'] == 1){
-                    $dataSiswa['status'] = "Aktif";
-                } else {
-                    $dataSiswa['status'] = "Tidak Aktif";
-                }
+    //             if($dataSiswa['status'] == 1){
+    //                 $dataSiswa['status'] = "Aktif";
+    //             } else {
+    //                 $dataSiswa['status'] = "Tidak Aktif";
+    //             }
 
-                $response['dataSiswa'] = array('nipd' => $dataSiswa['nipd'], 'nama_siswa' => $dataSiswa['nama_siswa'], 'kelas' => $dataSiswa['kelas'], 
-                'instansi' => $dataSiswa['instansi'], 'potongan' => $dataSiswa['potongan'], 'thn_akademik' => $dataSiswa['thn_akademik'], 'status' => $dataSiswa['status']);
-            }
-            header('Content-Type: application/json');
-            echo json_encode($response);
+    //             $response['dataSiswa'] = array('nipd' => $dataSiswa['nipd'], 'nama_siswa' => $dataSiswa['nama_siswa'], 'kelas' => $dataSiswa['kelas'], 
+    //             'instansi' => $dataSiswa['instansi'], 'potongan' => $dataSiswa['potongan'], 'thn_akademik' => $dataSiswa['thn_akademik'], 'status' => $dataSiswa['status']);
+    //         }
+    //         header('Content-Type: application/json');
+    //         echo json_encode($response);
             
-        } else {
-            exit();
-        }
+    //     } else {
+    //         exit();
+    //     }
 		
-    }
+    // }
 
     function validasiPembayaran() {
         $response = [];

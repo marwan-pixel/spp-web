@@ -124,7 +124,7 @@
                         <a href="<?= base_url('pages/databiaya'); ?>" class="nav-link success-gradient-active"><i class="material-icons icon">attach_money</i> <span>Data Biaya</span></a>
                      </li>
                      <li class="nav-item transaksi">
-                        <a href="<?= base_url('pages/datatransaksi'); ?>" class="nav-link success-gradient-active"><i class="material-icons icon">credit_card</i> <span>Data Transaksi</span> </a>
+                        <a href="<?= base_url('pages/datatransaksihome'); ?>" class="nav-link success-gradient-active"><i class="material-icons icon">credit_card</i> <span>Data Transaksi</span> </a>
                      </li>                     
                      <!-- <li class="nav-item pengeluaran">
                         <a href="<?= base_url('pages/datapengeluaran'); ?>" class="nav-link success-gradient-active"><i class="material-icons icon">credit_card</i> <span>Data Pengeluaran</span> </a>

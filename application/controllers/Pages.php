@@ -429,13 +429,6 @@ class Pages extends User {
 
 	public function dataTransaksi()
 	{
-		$this->setData(
-			array(
-				'base_url' => base_url('spp-web/pages/datatransaksi/'),
-				'total_rows' => $this->model->countAllData('transactions'),
-				'per_page' => 10,
-			)
-		);
 		$dataTahunAkademik = $this->model->getDataModel('tahun_akademik', ['thn_akademik']);
 		$dataTahunAkademikSelected = $this->model->getDataModel('tahun_akademik', ['thn_akademik', 'status'], ['status' => 1]);
 		try {
@@ -443,6 +436,131 @@ class Pages extends User {
 		} catch (Exception $e){
 			$e->getMessage();
 		}
+	}
+
+	public function dataTransaksiData(){
+		$nipd = $this->input->get('query');
+		$tahunAkademik = $this->input->get('thn_akademik');
+		$dataSiswa = $this->model->getDataJoinModel(['siswa', 'kelas'] ,['nama_siswa', 'siswa.kelas', 'potongan', 'instansi', 'nipd', 'thn_akademik', 'siswa.status'], 
+		["kelas", "nipd"], ['nipd' => $nipd]);
+		
+		if(is_null($dataSiswa)) {
+			$response['errors'] = "Data tidak ditemukan!";
+		} else {
+
+			//Ambil Riwayat Data Transaksi Berdasarkan NIPD
+			$dataTransaksi = $this->model->getDataModel('transactions', 
+			['nipd', 'nominal', 'status', 'image', 'keterangan', 'bulan' ,'created_at'], ['nipd' => $dataSiswa['nipd'], 'thn_akademik' => $tahunAkademik]);
+
+			//Ambil Jumlah Nominal dari tabel jenis_pembayaran Berdasarkan instansi
+			$dataBiaya = $this->model->getDataModel('jenis_pembayaran', ['biaya', 'jenis_pembayaran'], ['instansi' => $dataSiswa['instansi'], 'status' => 1]);
+
+			//Ambil Jumlah Uang Masuk Berdasarkan NIPD
+			$dataNominalMasuk = $this->db->select(['nominal', 'bulan'])
+				->from('transactions')->join('siswa', "transactions.nipd = siswa.nipd")->join('tahun_akademik', "tahun_akademik.thn_akademik = siswa.thn_akademik")
+				->where(['transactions.status' => 2, 'siswa.nipd' => $dataSiswa['nipd'], 'siswa.status' => 1, 'transactions.thn_akademik' => $tahunAkademik,])
+				->get()
+				->result_array();
+			
+			$dataSumNominalMasuk = $this->db->select(['sum(nominal)'])
+				->from('transactions')->join('siswa', "transactions.nipd = siswa.nipd")->join('tahun_akademik', "tahun_akademik.thn_akademik = siswa.thn_akademik")
+				->where(['transactions.status' => 2, 'siswa.nipd' => $dataSiswa['nipd'], 'siswa.status' => 1, 'transactions.thn_akademik' => $tahunAkademik,])
+				->get()
+				->result_array();
+			
+			$total = 0;
+			if(empty($dataBiaya)){
+				$response['biaya'] = 0;
+			} else {
+				foreach ($dataBiaya as $biaya) {
+					# code...
+					$total += $biaya['biaya'];
+				}
+				$response['biaya'] = $total;
+
+			}
+			$response['dataBiaya'] = $dataBiaya;
+			
+			$response['nominalMasuk'] = $dataSumNominalMasuk[0]['sum(nominal)'];
+
+			$response['dataNominalMasuk'] = $dataNominalMasuk;
+
+			if(is_null($dataTransaksi) || empty($dataTransaksi)){
+				$response['errors'] = "Data Transaksi Belum Tersedia!";
+			} else {
+				$response['dataTransaksi'] = $dataTransaksi;
+			}
+
+			if($dataSiswa['status'] == 1){
+				$dataSiswa['status'] = "Aktif";
+			} else {
+				$dataSiswa['status'] = "Tidak Aktif";
+			}
+
+			$response['dataSiswa'] = array('nipd' => $dataSiswa['nipd'], 'nama_siswa' => $dataSiswa['nama_siswa'], 'kelas' => $dataSiswa['kelas'], 
+			'instansi' => $dataSiswa['instansi'], 'potongan' => $dataSiswa['potongan'], 'thn_akademik' => $dataSiswa['thn_akademik'], 'status' => $dataSiswa['status']);
+			header('Content-Type: application/json');
+            echo json_encode($response);
+		}
+	}
+
+	public function dataTransaksiHome()
+	{
+
+		$dataKelas = $this->model->getDataModel('kelas', ['kelas']);
+		try {
+			$this->render('datatransaksiHome', ['title' => 'Data Transaksi', 'name' => $this->_userdata['nama_petugas'], 'data' => [$dataKelas]]);
+		} catch (Exception $e){
+			$e->getMessage();
+		}
+	}
+
+	public function dataTransaksiHomeData()
+	{
+		header('Content-Type: application/json');
+		$kelas = $this->input->get('kelas');
+		$status = $this->input->get('status');
+		$keyword = $this->input->get('keyword');
+
+		$data = [];
+		if(!(empty($kelas)) && !(empty($status)) && !(empty($keyword))) {
+			if($status == 'aktif') {
+				$status = 1;
+			} else {
+				$status = 0;
+			}
+			$dataSiswa = $this->model->getDataModel(table: 'siswa', data: ['nipd, nama_siswa, kelas, status, potongan'], param: ['status' => $status, 'kelas' => $kelas], 
+			keyword: ['nama_siswa' => $keyword]);
+		} elseif(!(empty($keyword))) {
+			$dataSiswa = $this->model->getDataModel(table: 'siswa', data: ['nipd, nama_siswa, kelas, status, potongan'], keyword: ['nama_siswa' => $keyword]);
+		} elseif(!(empty($kelas))) {
+			$dataSiswa = $this->model->getDataModel(table: 'siswa', data: ['nipd, nama_siswa, kelas, status, potongan'], param: ['kelas' => $kelas]);
+		} elseif(!(empty($status))){
+			if($status == 'aktif') {
+				$status = 1;
+			} else {
+				$status = 0;
+			}
+			$dataSiswa = $this->model->getDataModel(table: 'siswa', data: ['nipd, nama_siswa, kelas, status, potongan'], param: ['status' => $status]);
+		} else {
+			$dataSiswa = $this->model->getDataModel(table: 'siswa', data: ['nipd, nama_siswa, kelas, status, potongan']);
+		}
+		for ($i=0; $i < count($dataSiswa); $i++) { 
+			# code...
+			$dataTransaksi = $this->model->getDataModel(table: 'transactions', data: ['sum(nominal) as nominal_masuk'], param: ['nipd' => $dataSiswa[$i]['nipd'], "bulan" => date('Y-m-01')]);
+			$dataSiswa[$i]['nominal_masuk'] = $dataTransaksi[0]['nominal_masuk'];
+			$dataInstansi = $this->model->getDataModel(table: 'kelas', data: ['instansi'], param: ['kelas' => $dataSiswa[$i]['kelas']]);
+			$dataBiaya = $this->model->getDataModel(table: 'jenis_pembayaran', data: ['sum(biaya) as biaya'], param: ['instansi' => $dataInstansi[0]['instansi']]);
+			if($dataSiswa[$i]['nominal_masuk'] == ($dataBiaya[0]['biaya'] - $dataSiswa[$i]['potongan'])){
+				$dataSiswa[$i]['status'] = 'Lunas'; 
+			} else {
+				$dataSiswa[$i]['status'] = 'Belum Lunas'; 
+				
+			}
+		}
+		echo json_encode($dataSiswa);
+		$data['dataSiswa'] = $dataSiswa;
+		exit();
 	}
 
 	public function dataTahunAkademik() {
