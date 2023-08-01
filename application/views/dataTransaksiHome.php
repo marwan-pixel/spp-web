@@ -116,6 +116,7 @@
                 data: {kelas: kelas, status: status, keyword: keyword},
                 dataType: 'json',
                 success: function(response) {
+                    console.log(response)
                     $('#table tbody').empty();
                     if((response).length !== 0) {
                         data = response;

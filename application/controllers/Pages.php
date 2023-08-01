@@ -531,6 +531,13 @@ class Pages extends User {
 			}
 			$dataSiswa = $this->model->getDataModel(table: 'siswa', data: ['nipd, nama_siswa, kelas, status, potongan'], param: ['status' => $status, 'kelas' => $kelas], 
 			keyword: ['nama_siswa' => $keyword]);
+		} elseif(!(empty($kelas)) && !(empty($status))){
+			if($status == 'aktif') {
+				$status = 1;
+			} else {
+				$status = 0;
+			}
+			$dataSiswa = $this->model->getDataModel(table: 'siswa', data: ['nipd, nama_siswa, kelas, status, potongan'], param: ['status' => $status, 'kelas' => $kelas]);
 		} elseif(!(empty($keyword))) {
 			$dataSiswa = $this->model->getDataModel(table: 'siswa', data: ['nipd, nama_siswa, kelas, status, potongan'], keyword: ['nama_siswa' => $keyword]);
 		} elseif(!(empty($kelas))) {
