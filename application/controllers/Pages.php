@@ -51,39 +51,39 @@ class Pages extends User {
 
 	public function homeData(){
 		header('Content-Type: application/json');
-		$thn_akademik = (string) $this->input->get('thn_akademik');
+		$thn_akademik = $this->input->get('thn_akademik');
 		$data = 
 			array(
 				'totalPemasukan' => array(
-					'curdate' => $this->db->select_sum('nominal')->from('transactions')->where('status', 2)->where('MONTH(created_at) = MONTH(CURDATE())')->where("thn_akademik", $thn_akademik)->get()->row_array(),
-					'januari' => $this->db->select_sum('nominal')->from('transactions')->where('status', 2)->where("bulan = 'January'")->where("thn_akademik", $thn_akademik)->get()->row_array(),
-					'februari' => $this->db->select_sum('nominal')->from('transactions')->where('status', 2)->where("MONTHNAME(created_at) = 'February'")->where("thn_akademik", $thn_akademik)->get()->row_array(),
-					'maret' => $this->db->select_sum('nominal')->from('transactions')->where('status', 2)->where("MONTHNAME(created_at) = 'March'")->where("thn_akademik", $thn_akademik)->get()->row_array(),
-					'april' => $this->db->select_sum('nominal')->from('transactions')->where('status', 2)->where("MONTHNAME(created_at) = 'April'")->where("thn_akademik", $thn_akademik)->get()->row_array(),
-					'mei' => $this->db->select_sum('nominal')->from('transactions')->where('status', 2)->where("MONTHNAME(created_at) = 'May'")->where("thn_akademik", $thn_akademik)->get()->row_array(),
-					'juni' => $this->db->select_sum('nominal')->from('transactions')->where('status', 2)->where("MONTHNAME(created_at) = 'June'")->where("thn_akademik", $thn_akademik)->get()->row_array(),
-					'juli' => $this->db->select_sum('nominal')->from('transactions')->where('status', 2)->where("MONTHNAME(created_at) = 'July'")->where("thn_akademik", $thn_akademik)->get()->row_array(),
-					'agustus' => $this->db->select_sum('nominal')->from('transactions')->where('status', 2)->where("MONTHNAME(created_at) = 'August'")->where("thn_akademik", $thn_akademik)->get()->row_array(),
-					'september' => $this->db->select_sum('nominal')->from('transactions')->where('status', 2)->where("MONTHNAME(created_at) = 'September'")->where("thn_akademik", $thn_akademik)->get()->row_array(),
-					'oktober' => $this->db->select_sum('nominal')->from('transactions')->where('status', 2)->where("MONTHNAME(created_at) = 'October'")->where("thn_akademik", $thn_akademik)->get()->row_array(),
-					'november' => $this->db->select_sum('nominal')->from('transactions')->where('status', 2)->where("MONTHNAME(created_at) = 'November'")->where("thn_akademik", $thn_akademik)->get()->row_array(),
-					'desember' => $this->db->select_sum('nominal')->from('transactions')->where('status', 2)->where("MONTHNAME(created_at) = 'Desember'")->where("thn_akademik", $thn_akademik)->get()->row_array(),
-					'tahun' => $this->db->select_sum('nominal')->from('transactions')->where('status', 2)->where("thn_akademik", $thn_akademik)->get()->row_array()
+					'curdate' => $this->model->getDataModel(table: 'transactions', data: ['sum(nominal) as nominal'], param: ["status" => 2, "MONTH(created_at)" => date("m"), "thn_akademik" => $thn_akademik], array: 0),
+					'januari' => $this->model->getDataModel(table: 'transactions', data: ['sum(nominal) as nominal'], param: ["status" => 2, "MONTHNAME(bulan)" => "January", "thn_akademik" => $thn_akademik], array: 0),
+					'februari' => $this->model->getDataModel(table: 'transactions', data: ['sum(nominal) as nominal'], param: ["status" => 2, "MONTHNAME(bulan)" => "February", "thn_akademik" => $thn_akademik], array: 0),
+					'maret' => $this->model->getDataModel(table: 'transactions', data: ['sum(nominal) as nominal'], param: ["status" => 2, "MONTHNAME(bulan)" => "March", "thn_akademik" => $thn_akademik], array: 0),
+					'april' => $this->model->getDataModel(table: 'transactions', data: ['sum(nominal) as nominal'], param: ["status" => 2, "MONTHNAME(bulan)" => "April", "thn_akademik" => $thn_akademik], array: 0),
+					'mei' => $this->model->getDataModel(table: 'transactions', data: ['sum(nominal) as nominal'], param: ["status" => 2, "MONTHNAME(bulan)" => "May", "thn_akademik" => $thn_akademik], array: 0),
+					'juni' => $this->model->getDataModel(table: 'transactions', data: ['sum(nominal) as nominal'], param: ["status" => 2, "MONTHNAME(bulan)" => "June", "thn_akademik" => $thn_akademik], array: 0),
+					'juli' => $this->model->getDataModel(table: 'transactions', data: ['sum(nominal) as nominal'], param: ["status" => 2, "MONTHNAME(bulan)" => "July", "thn_akademik" => $thn_akademik], array: 0),
+					'agustus' => $this->model->getDataModel(table: 'transactions', data: ['sum(nominal) as nominal'], param: ["status" => 2, "MONTHNAME(bulan)" => "August", "thn_akademik" => $thn_akademik], array: 0),
+					'september' => $this->model->getDataModel(table: 'transactions', data: ['sum(nominal) as nominal'], param: ["status" => 2, "MONTHNAME(bulan)" => "September", "thn_akademik" => $thn_akademik], array: 0),
+					'oktober' => $this->model->getDataModel(table: 'transactions', data: ['sum(nominal) as nominal'], param: ["status" => 2, "MONTHNAME(bulan)" => "October", "thn_akademik" => $thn_akademik], array: 0),
+					'november' => $this->model->getDataModel(table: 'transactions', data: ['sum(nominal) as nominal'], param: ["status" => 2, "MONTHNAME(bulan)" => "November", "thn_akademik" => $thn_akademik], array: 0),
+					'desember' => $this->model->getDataModel(table: 'transactions', data: ['sum(nominal) as nominal'], param: ["status" => 2, "MONTHNAME(bulan)" => "December", "thn_akademik" => $thn_akademik], array: 0),
+					'tahun' => $this->model->getDataModel(table: 'transactions', data: ['sum(nominal) as nominal'], param: ["status" => 2, "thn_akademik" => $thn_akademik], array: 0)
 				),
 				'dataTransaksi' => array(
 					'curdate' => $this->db->select('nipd')->from('transactions')->where('status', 2)->where('MONTH(created_at) = MONTH(CURDATE())')->where("thn_akademik", $thn_akademik)->get()->num_rows(),
-					'januari' => $this->model->countAllData('transactions', ['status', 'MONTHNAME(created_at)', "thn_akademik" ], [2, 'January', $thn_akademik]),
-					'februari' => $this->model->countAllData('transactions', ['status', 'MONTHNAME(created_at)', "thn_akademik" ], [2, 'February', $thn_akademik]),
-					'maret' => $this->model->countAllData('transactions', ['status', 'MONTHNAME(created_at)', "thn_akademik" ], [2, 'March', $thn_akademik]),
-					'april' => $this->model->countAllData('transactions', ['status', 'MONTHNAME(created_at)', "thn_akademik" ], [2, 'April', $thn_akademik]),
-					'mei' => $this->model->countAllData('transactions', ['status', 'MONTHNAME(created_at)', "thn_akademik" ], [2, 'May', $thn_akademik]),
-					'juni' => $this->model->countAllData('transactions', ['status', 'MONTHNAME(created_at)', "thn_akademik" ], [2, 'June', $thn_akademik]),
-					'juli' => $this->model->countAllData('transactions', ['status', 'MONTHNAME(created_at)', "thn_akademik" ], [2, 'July', $thn_akademik]),
-					'agustus' => $this->model->countAllData('transactions', ['status', 'MONTHNAME(created_at)', "thn_akademik" ], [2, 'August', $thn_akademik]),
-					'september' => $this->model->countAllData('transactions', ['status', 'MONTHNAME(created_at)', "thn_akademik" ], [2, 'September', $thn_akademik]),
-					'oktober' => $this->model->countAllData('transactions', ['status', 'MONTHNAME(created_at)', "thn_akademik" ], [2, 'October', $thn_akademik]),
-					'november' => $this->model->countAllData('transactions', ['status', 'MONTHNAME(created_at)', "thn_akademik" ], [2, 'November', $thn_akademik]),
-					'desember' => $this->model->countAllData('transactions', ['status', 'MONTHNAME(created_at)', "thn_akademik" ], [2, 'Desember', $thn_akademik]),
+					'januari' => $this->model->countAllData('transactions', ['status', 'MONTHNAME(bulan)', "thn_akademik" ], [2, 'January', $thn_akademik]),
+					'februari' => $this->model->countAllData('transactions', ['status', 'MONTHNAME(bulan)', "thn_akademik" ], [2, 'February', $thn_akademik]),
+					'maret' => $this->model->countAllData('transactions', ['status', 'MONTHNAME(bulan)', "thn_akademik" ], [2, 'March', $thn_akademik]),
+					'april' => $this->model->countAllData('transactions', ['status', 'MONTHNAME(bulan)', "thn_akademik" ], [2, 'April', $thn_akademik]),
+					'mei' => $this->model->countAllData('transactions', ['status', 'MONTHNAME(bulan)', "thn_akademik" ], [2, 'May', $thn_akademik]),
+					'juni' => $this->model->countAllData('transactions', ['status', 'MONTHNAME(bulan)', "thn_akademik" ], [2, 'June', $thn_akademik]),
+					'juli' => $this->model->countAllData('transactions', ['status', 'MONTHNAME(bulan)', "thn_akademik" ], [2, 'July', $thn_akademik]),
+					'agustus' => $this->model->countAllData('transactions', ['status', 'MONTHNAME(bulan)', "thn_akademik" ], [2, 'August', $thn_akademik]),
+					'september' => $this->model->countAllData('transactions', ['status', 'MONTHNAME(bulan)', "thn_akademik" ], [2, 'September', $thn_akademik]),
+					'oktober' => $this->model->countAllData('transactions', ['status', 'MONTHNAME(bulan)', "thn_akademik" ], [2, 'October', $thn_akademik]),
+					'november' => $this->model->countAllData('transactions', ['status', 'MONTHNAME(bulan)', "thn_akademik" ], [2, 'November', $thn_akademik]),
+					'desember' => $this->model->countAllData('transactions', ['status', 'MONTHNAME(bulan)', "thn_akademik" ], [2, 'December', $thn_akademik]),
 					'tahun' => $this->model->countAllData('transactions', ['status', "thn_akademik" ], [2, $thn_akademik]),
 				),				
 			);
@@ -93,69 +93,57 @@ class Pages extends User {
 
 	public function dataSiswa()
 	{
-		$this->setData(
-			array(
-				'base_url' => base_url('pages/datasiswa/'),
-				'total_rows' => $this->db->from('siswa')->count_all_results(),
-
-				'per_page' => 20,
-			)
-		);
-		$start = $this->uri->segment(3);
-		$this->pagination->initialize($this->getData());
-
-		if(($this->input->post('keyword'))){
-			$keyword = array('nama_siswa' => $this->input->post('keyword'));
-			$this->db->like($keyword);
-			$this->session->set_userdata('keyword', $keyword['nama_siswa']);
-		} else {
-			$keyword = $this->session->unset_userdata('keyword');
-		}
-
-		$dataSiswa = $this->db->select(['nipd', 'nama_siswa', 'kelas', 'potongan' ,'siswa.thn_akademik', 'siswa.status'])
-		->join('tahun_akademik', "tahun_akademik.thn_akademik = siswa.thn_akademik")
-		->get_where('siswa', ['siswa.status' => 1], $this->getData()['per_page'], $start)
-		->result_array();
 		$dataKelas = $this->model->getDataModel('kelas', ['kelas'], ['status' => 1]);
 		$dataTahunAkademik = $this->model->getDataModel('tahun_akademik', ['thn_akademik']);
 		try {
 			$this->render('datasiswa', ['title' => 'Data Siswa', 'name' => $this->_userdata['nama_petugas'], 
-			'data' => array('dataSiswa' => $dataSiswa, 'dataKelas' => $dataKelas, 'dataTahunAkademik' => $dataTahunAkademik), 'start' => $start]);
+			'data' => array( 'dataKelas' => $dataKelas, 'dataTahunAkademik' => $dataTahunAkademik)]);
 			
 		} catch (Exception $e) {
 			$e->getMessage();
 		}
 	}
 
-	public function datanonaktifSiswa(){
-		$this->setData(
-			array(
-				'base_url' => base_url('pages/datanonaktifsiswa/'),
-				'total_rows' => $this->db->from('siswa')->where(['status' => 0])->count_all_results(),
-
-				'per_page' => 20,
-			)
-		);
-		$start = $this->uri->segment(3);
-		$this->pagination->initialize($this->getData());
-
-		if(($this->input->post('keyword'))){
-			$keyword = array('nama_siswa' => $this->input->post('keyword'));
-			$this->db->like($keyword);
-			$this->session->set_userdata('keyword', $keyword['nama_siswa']);
+	public function dataSiswaData()
+	{
+		$kelas = $this->input->get('kelas');
+		$keyword = $this->input->get('keyword');
+		$status = $this->input->get('status');
+		$data = [];
+		if(!(empty($kelas)) && !(empty($keyword))) {
+			$dataSiswa = $this->model->getDataJoinModel(table: ['siswa', 'tahun_akademik'], data: ['nipd', 'nama_siswa', 'kelas', 'potongan' ,'siswa.thn_akademik as thn_akademik', 'siswa.status as status'],
+			column: ['thn_akademik'], params: ['siswa.status' => $status, 'siswa.kelas' => $kelas], keyword: ['nama_siswa' => $keyword], array: 1);
+			$dataSiswaTotal = $this->model->getDataModel(table: 'siswa', data: ['count(nipd) as total'], param: ['status' => $status, 'kelas' => $kelas], keyword: ['nama_siswa' => $keyword]);
+		} elseif(!(empty($keyword))) {
+			$dataSiswa = $this->model->getDataJoinModel(table: ['siswa', 'tahun_akademik'], data: ['nipd', 'nama_siswa', 'kelas', 'potongan' ,'siswa.thn_akademik as thn_akademik', 'siswa.status as status'],
+			column: ['thn_akademik'], params: ['siswa.status' => $status], keyword: ['nama_siswa' => $keyword], array: 1);
+			$dataSiswaTotal = $this->model->getDataModel(table: 'siswa', data: ['count(nipd) as total'], param: ['status' => $status], keyword: ['nama_siswa' => $keyword]);
+		} elseif(!(empty($kelas))) {
+			$dataSiswa = $this->model->getDataJoinModel(table: ['siswa', 'tahun_akademik'], data: ['nipd', 'nama_siswa', 'kelas', 'potongan' ,'siswa.thn_akademik as thn_akademik', 'siswa.status as status'],
+			column: ['thn_akademik'], params: ['siswa.status' => $status, 'kelas' => $kelas], array: 1);
+			$dataSiswaTotal = $this->model->getDataModel(table: 'siswa', data: ['count(nipd) as total'], param: ['status' => $status, 'kelas' => $kelas]);
 		} else {
-			$keyword = $this->session->unset_userdata('keyword');
+			$dataSiswa = $this->model->getDataJoinModel(table: ['siswa', 'tahun_akademik'], data: ['nipd', 'nama_siswa', 'kelas', 'potongan' ,'siswa.thn_akademik as thn_akademik', 'siswa.status'],
+			column: ['thn_akademik'], params: ['siswa.status' => $status], array: 1);
+			$dataSiswaTotal = $this->model->getDataModel(table: 'siswa', data: ['count(nipd) as total'], param: ['status' => $status]);
 		}
-		
-		$dataSiswa = $this->db->select(['nipd', 'nama_siswa', 'kelas', 'potongan' ,'siswa.thn_akademik', 'siswa.status'])
-		->join('tahun_akademik', "tahun_akademik.thn_akademik = siswa.thn_akademik")
-		->get_where('siswa', ['siswa.status' => 0], $this->getData()['per_page'], $start)
-		->result_array();
+		if(empty($dataSiswaTotal)){
+			$dataSiswaTotal = 0;
+		} else {
+			$dataSiswaTotal = $dataSiswaTotal[0]['total'];
+		}
+		$data['dataSiswa'] = $dataSiswa;
+		$data['dataSiswaTotal'] = $dataSiswaTotal;
+		header('Content-Type: application/json');
+        echo json_encode($data);
+	}
 
+	public function datanonaktifSiswa()
+	{
+		$dataKelas = $this->model->getDataModel(table: 'kelas', data: ['kelas']);
 		try {
 			$this->render('datanonaktifsiswa', ['title' => 'Data Nonaktif Siswa', 'name' => $this->_userdata['nama_petugas'], 
-			'data' => $dataSiswa, 'start' => $start]);
-			
+			'data' => array('dataKelas' => $dataKelas)]);
 		} catch (Exception $e) {
 			$e->getMessage();
 		}
@@ -163,63 +151,50 @@ class Pages extends User {
 
 	public function dataKelas()
 	{
-		$this->setData(
-			array(
-				'base_url' => base_url('pages/datakelas/'),
-				'total_rows' => $this->db->from('kelas')->count_all_results(),
-
-				'per_page' => 20,
-			)
-		);
-		
-		$start = $this->uri->segment(3);
-		$this->pagination->initialize($this->getData());
-
-		if(($this->input->post('keyword'))){
-			$keyword = array('kelas' => $this->input->post('keyword'));
-			$this->db->like($keyword);
-			$this->session->set_userdata('keyword', $keyword['kelas']);
-		} else {
-			$keyword = $this->session->unset_userdata('keyword');
-		}
-
-		$dataKelas = $this->model->getDataModel('kelas', ['kelas', 'instansi'], ['status' => 1], $this->getData()['per_page'], $start);
 		$dataInstansi = $this->model->getDataModel('instansi', ['jenis_instansi'],['status' => 1]);
-
 		try {
 			$this->render('datakelas', ['title' => 'Data Kelas', 'name' => $this->_userdata['nama_petugas'], 
-			'data' => array('dataKelas' => $dataKelas, 'dataInstansi' => $dataInstansi),'start' => $start]);		
+			'data' => array('dataInstansi' => $dataInstansi)]);		
 		} catch (Exception $e){
 			$e->getMessage();
 		}
 	}
 
-	public function datanonaktifKelas(){
-		$this->setData(
-			array(
-				'base_url' => base_url('pages/datanonaktifkelas/'),
-				'total_rows' => $this->db->from('kelas')->where(['status' => 0])->count_all_results(),
-
-				'per_page' => 20,
-			)
-		);
-
-		$start = $this->uri->segment(3);
-		$this->pagination->initialize($this->getData());
-
-		if(($this->input->post('keyword'))){
-			$keyword = array('kelas' => $this->input->post('keyword'));
-			$this->db->like($keyword);
-			$this->session->set_userdata('keyword', $keyword['kelas']);
+	public function dataKelasData()
+	{
+		$instansi = $this->input->get('instansi');
+		$keyword = $this->input->get('keyword');
+		$status = $this->input->get('status');
+		$data = [];
+		if(!(empty($instansi)) && !(empty($keyword))) {
+			$dataKelas = $this->model->getDataModel(table: 'kelas', data: ['kelas', 'instansi'], param: ['instansi' => $instansi, 'status' => $status], keyword: ['kelas' => $keyword]);
+			$dataKelasTotal = $this->model->getDataModel(table: 'kelas', data: ['count(kelas) as total'], param: ['instansi' => $instansi, 'status' => $status], keyword: ['kelas' => $keyword]);
+		} elseif(!(empty($keyword))) {
+			$dataKelas = $this->model->getDataModel(table: 'kelas', data: ['kelas', 'instansi'], param: ['status' => $status], keyword: ['kelas' => $keyword]);
+			$dataKelasTotal = $this->model->getDataModel(table: 'kelas', data: ['count(kelas) as total'], param: ['status' => $status], keyword: ['kelas' => $keyword]);
+		} elseif(!(empty($instansi))) {
+			$dataKelas = $this->model->getDataModel(table: 'kelas', data: ['kelas', 'instansi'], param: ['instansi' => $instansi, 'status' => $status]);
+			$dataKelasTotal = $this->model->getDataModel(table: 'kelas', data: ['count(kelas) as total'], param: ['instansi' => $instansi, 'status' => $status]);
 		} else {
-			$keyword = $this->session->unset_userdata('keyword');
+			$dataKelas = $this->model->getDataModel(table: 'kelas', data: ['kelas', 'instansi'], param: ['status' => $status]);
+			$dataKelasTotal = $this->model->getDataModel(table: 'kelas', data: ['count(kelas) as total'], param: ['status' => $status]);
 		}
+		if(empty($dataKelasTotal)){
+			$dataKelasTotal = 0;
+		} else {
+			$dataKelasTotal = $dataKelasTotal[0]['total'];
+		}
+		$data['dataKelas'] = $dataKelas;
+		$data['dataKelasTotal'] = $dataKelasTotal;
+		header('Content-Type: application/json');
+        echo json_encode($data);
+	}
 
-		$dataKelas = $this->model->getDataModel('kelas', ['kelas', 'instansi'], ['status' => 0], $this->getData()['per_page'], $start);
-
+	public function datanonaktifKelas(){
+		$dataInstansi = $this->model->getDataModel('instansi', ['jenis_instansi'],['status' => 1]);
 		try {
 			$this->render('datanonaktifkelas', ['title' => 'Data Non Aktif Kelas', 'name' => $this->_userdata['nama_petugas'], 
-			'data' => $dataKelas,'start' => $start]);		
+			'data' => array('dataInstansi' => $dataInstansi)]);		
 		} catch (Exception $e){
 			$e->getMessage();
 		}
@@ -227,65 +202,49 @@ class Pages extends User {
 
 	public function dataBiaya()
 	{
-		$this->setData(
-			array(
-				'base_url' => base_url('pages/databiaya/'),
-				'total_rows' => $this->db->from('jenis_pembayaran')->count_all_results(),
-
-				'per_page' => 20,
-			)
-		);
-		
-		$start = $this->uri->segment(3);
-		$this->pagination->initialize($this->getData());
-
-		if(($this->input->post('keyword'))){
-			$keyword = array('jenis_pembayaran' => $this->input->post('keyword'));
-			$this->db->like($keyword);
-			$this->session->set_userdata('keyword', $keyword['jenis_pembayaran']);
-		} else {
-			$keyword = $this->session->unset_userdata('keyword');
-		}
-
-		$dataBiaya = $this->model->getDataModel('jenis_pembayaran', ['id_jenis_pembayaran','jenis_pembayaran', 'biaya', 'instansi'], 
-		['status' => 1], $this->getData()['per_page'], $start);
 		$dataInstansi = $this->model->getDataModel('instansi', ['jenis_instansi'], ['status' => 1]);
 		try {
-			$this->render('databiaya', ['title' => 'Data Biaya', 'name' => $this->_userdata['nama_petugas'], 
-			'data' => array('dataBiaya' => $dataBiaya, 'dataInstansi' => $dataInstansi), 
-			'start' => $start]);
+			$this->render('databiaya', ['title' => 'Data Biaya', 'name' => $this->_userdata['nama_petugas'], 'data' => array('dataInstansi' => $dataInstansi)]);
 		} catch (Exception $e){
 			$e->getMessage();
 		}
 	}
+
+	public function dataBiayaData()
+	{
+		$instansi = $this->input->get('instansi');
+		$keyword = $this->input->get('keyword');
+		$status = $this->input->get('status');
+		$data = [];
+		if(!(empty($instansi)) && !(empty($keyword))) {
+			$dataBiaya = $this->model->getDataModel(table: 'jenis_pembayaran', data: ['id_jenis_pembayaran', 'jenis_pembayaran', 'biaya' ,'instansi'], param: ['instansi' => $instansi, 'status' => $status], keyword: ['jenis_pembayaran' => $keyword]);
+			$dataBiayaTotal = $this->model->getDataModel(table: 'jenis_pembayaran', data: ['count(jenis_pembayaran) as total'], param: ['instansi' => $instansi, 'status' => $status], keyword: ['jenis_pembayaran' => $keyword]);
+		} elseif(!(empty($keyword))) {
+			$dataBiaya = $this->model->getDataModel(table: 'jenis_pembayaran', data: ['id_jenis_pembayaran','jenis_pembayaran', 'biaya' , 'instansi'], param: ['status' => $status], keyword: ['jenis_pembayaran' => $keyword]);
+			$dataBiayaTotal = $this->model->getDataModel(table: 'jenis_pembayaran', data: ['count(jenis_pembayaran) as total'], param: ['status' => $status], keyword: ['jenis_pembayaran' => $keyword]);
+		} elseif(!(empty($instansi))) {
+			$dataBiaya = $this->model->getDataModel(table: 'jenis_pembayaran', data: ['id_jenis_pembayaran', 'jenis_pembayaran', 'biaya', 'instansi'], param: ['instansi' => $instansi, 'status' => $status]);
+			$dataBiayaTotal = $this->model->getDataModel(table: 'jenis_pembayaran', data: ['count(jenis_pembayaran) as total'], param: ['instansi' => $instansi, 'status' => $status]);
+		} else {
+			$dataBiaya = $this->model->getDataModel(table: 'jenis_pembayaran', data: ['id_jenis_pembayaran', 'jenis_pembayaran', 'biaya', 'instansi'], param: ['status' => $status]);
+			$dataBiayaTotal = $this->model->getDataModel(table: 'jenis_pembayaran', data: ['count(jenis_pembayaran) as total'], param: ['status' => $status]);
+		}
+		if(empty($dataBiayaTotal)){
+			$dataBiayaTotal = 0;
+		} else {
+			$dataBiayaTotal = $dataBiayaTotal[0]['total'];
+		}
+		$data['dataBiaya'] = $dataBiaya;
+		$data['dataBiayaTotal'] = $dataBiayaTotal;
+		header('Content-Type: application/json');
+        echo json_encode($data);
+	}
 	
 	public function datanonaktifBiaya()
 	{
-		$this->setData(
-			array(
-				'base_url' => base_url('pages/datanonaktifbiaya/'),
-				'total_rows' => $this->db->from('jenis_pembayaran')->where(['status' => 0])->count_all_results(),
-
-				'per_page' => 20,
-			)
-		);
-		
-		$start = $this->uri->segment(3);
-		$this->pagination->initialize($this->getData());
-
-		if(($this->input->post('keyword'))){
-			$keyword = array('jenis_pembayaran' => $this->input->post('keyword'));
-			$this->db->like($keyword);
-			$this->session->set_userdata('keyword', $keyword['jenis_pembayaran']);
-		} else {
-			$keyword = $this->session->unset_userdata('keyword');
-		}
-
-		$dataBiaya = $this->model->getDataModel('jenis_pembayaran', ['id_jenis_pembayaran','jenis_pembayaran', 'biaya', 'instansi'], 
-		['status' => 0], $this->getData()['per_page'], $start);
+		$dataInstansi = $this->model->getDataModel('instansi', ['jenis_instansi'], ['status' => 1]);
 		try {
-			$this->render('datanonaktifbiaya', ['title' => 'Data Non Aktif Biaya', 'name' => $this->_userdata['nama_petugas'], 'data' => $dataBiaya,
-			'start' => $start]);
+			$this->render('datanonaktifbiaya', ['title' => 'Data Non Aktif Biaya', 'name' => $this->_userdata['nama_petugas'], 'data' => array('dataInstansi' => $dataInstansi)]);
 		} catch (Exception $e){
 			$e->getMessage();
 		}
@@ -293,60 +252,40 @@ class Pages extends User {
 
 	public function dataInstansi()
 	{
-		$this->setData(
-			array(
-				'base_url' => base_url('pages/datainstansi/'),
-				'total_rows' => $this->db->from('jenis_pembayaran')->count_all_results(),
-
-				'per_page' => 20,
-			)
-		);
-
-		if(($this->input->post('keyword'))){
-			$keyword = array('jenis_instansi' => $this->input->post('keyword'));
-			$this->db->like($keyword);
-			$this->session->set_userdata('keyword', $keyword['jenis_instansi']);
-		} else {
-			$keyword = $this->session->unset_userdata('keyword');
-		}
-
-		$start = $this->uri->segment(3);
-		$this->pagination->initialize($this->getData());
-		$dataInstansi = $this->model->getDataModel('instansi', ['jenis_instansi'], ['status' => 1], $this->getData()['per_page'], $start);
 		try {
-			$this->render('datainstansi', ['title' => 'Data Instansi', 'name' => $this->_userdata['nama_petugas'], 
-			'data' => array('dataInstansi' => $dataInstansi)]);
+			$this->render('datainstansi', ['title' => 'Data Instansi', 'name' => $this->_userdata['nama_petugas']]);
 			
 		} catch (Exception $e){
 			$e->getMessage();
 		}
 	}
 
-	public function datanonaktifInstansi(){
-		$this->setData(
-			array(
-				'base_url' => base_url('pages/datanonaktifinstansi/'),
-				'total_rows' => $this->db->from('jenis_pembayaran')->where(['status' => 0])->count_all_results(),
-				'per_page' => 20,
-				
-			)
-		);
-
-		if(($this->input->post('keyword'))){
-			$keyword = array('jenis_instansi' => $this->input->post('keyword'));
-			$this->db->like($keyword);
-			$this->session->set_userdata('keyword', $keyword['jenis_instansi']);
+	public function dataInstansiData(){
+		$keyword = $this->input->get('keyword');
+		$status = $this->input->get('status');
+		$data = [];
+		if(!(empty($keyword))) {
+			$dataInstansi = $this->model->getDataModel(table: 'instansi', data: ['*'], param: ['status' => $status], keyword: ['jenis_instansi' => $keyword]);
+			$dataInstansiTotal = $this->model->getDataModel(table: 'instansi', data: ['count(jenis_instansi) as total'], keyword: ['jenis_instansi' => $keyword]);
 		} else {
-			$keyword = $this->session->unset_userdata('keyword');
+			$dataInstansi = $this->model->getDataModel(table: 'instansi', data: ['*'], param: ['status' => $status]);
+			$dataInstansiTotal = $this->model->getDataModel(table: 'instansi', data: ['count(jenis_instansi) as total'], param: ['status' => $status]);
 		}
+		if(empty($dataInstansiTotal)){
+			$dataInstansiTotal = 0;
+		} else {
+			$dataInstansiTotal = $dataInstansiTotal[0]['total'];
+		}
+		$data['dataInstansi'] = $dataInstansi;
+		$data['dataInstansiTotal'] = $dataInstansiTotal;
+		header('Content-Type: application/json');
+        echo json_encode($data);
+	}
 
-		$start = $this->uri->segment(3);
-		$this->pagination->initialize($this->getData());
-		$dataInstansi = $this->model->getDataModel('instansi', ['jenis_instansi'], ['status' => 0], $this->getData()['per_page'], $start);
+	public function datanonaktifInstansi()
+	{
 		try {
-			$this->render('datanonaktifinstansi', ['title' => 'Data Non Aktif Instansi', 'name' => $this->_userdata['nama_petugas'], 
-			'data' => array('dataInstansi' => $dataInstansi), 'start' => $start]);
-			
+			$this->render('datanonaktifinstansi', ['title' => 'Data Non Aktif Instansi', 'name' => $this->_userdata['nama_petugas']]);
 		} catch (Exception $e){
 			$e->getMessage();
 		}
@@ -392,6 +331,29 @@ class Pages extends User {
 		} catch (Exception $e){
 			$e->getMessage();
 		}
+	}
+
+	public function dataAdminData()
+	{
+		$keyword = $this->input->get('keyword');
+		$status = $this->input->get('status');
+		$data = [];
+		if(!(empty($keyword))) {
+			$dataAdmin = $this->model->getDataModel(table: 'admin', data: ['kode_petugas, nama_petugas'], param: ['status' => $status], keyword: ['nama_petugas' => $keyword]);
+			$dataAdminTotal = $this->model->getDataModel(table: 'admin', data: ['count(nama_petugas) as total'], param: ['status' => $status], keyword: ['nama_petugas' => $keyword]);
+		} else {
+			$dataAdmin = $this->model->getDataModel(table: 'admin', data: ['kode_petugas, nama_petugas'], param: ['status' => $status]);
+			$dataAdminTotal = $this->model->getDataModel(table: 'admin', data: ['count(nama_petugas) as total'], param: ['status' => $status]);
+		}
+		if(empty($dataAdminTotal)){
+			$dataAdminTotal = 0;
+		} else {
+			$dataAdminTotal = $dataAdminTotal[0]['total'];
+		}
+		$data['dataAdmin'] = $dataAdmin;
+		$data['dataAdminTotal'] = $dataAdminTotal;
+		header('Content-Type: application/json');
+        echo json_encode($data);
 	}
 
 	public function datanonaktifAdmin()

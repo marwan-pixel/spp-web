@@ -3,7 +3,7 @@
             <?= $this->session->flashdata('message'); ?>
             <div class="row">
                 <div class="col-sm-12">
-                    <button type="button" class="btn btn-success ml-3 mb-3 biaya-add" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    <button type="button" class="btn btn-success mb-3 biaya-add" data-bs-toggle="modal" data-bs-target="#exampleModal">
                     Tambah Data
                     </button>
                     <button class="btn btn-secondary mb-3">
@@ -126,12 +126,29 @@
                                 <div id="dataTable_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
                                     <div class="row">
                                         <div class="col-sm-12 d-flex justify-content-between">
-                                            <div id="dataTable_filter" class="dataTables_filter input-group col-sm-4">
-                                                <form action="<?= base_url('pages/databiaya');?>" method="post" class="form-inline biaya-cari">
+                                            <div id="dataTable_filter" class="d-flex justify-content-between input-group">
+                                                <form class="biaya-cari">
                                                     <div class="form-group mb-2 ">
+                                                        <label for="cari">Jenis Pembayaran</label>
                                                         <input type="text" size="20" class="form-control mr-2" id="cari" name="keyword" placeholder="Cari Jenis Pembayaran" aria-controls="dataTable">
                                                     </div>
-                                                    <button type="submit" class="btn btn-primary mb-2">Cari</button>
+                                                </form>
+                                                <form class="form mr-2">
+                                                    <div class="form-group inputtahun">
+                                                       <label for="instansiList">Instansi</label>
+                                                       <select id="instansiList" class="form-select" name="kelas">
+                                                          <?php
+                                                          ?>
+                                                          <option selected value="">Semua</option>
+                                                          <?php 
+                                                            foreach ($data['dataInstansi'] as $value) {
+                                                                ?>
+                                                                <option value="<?=$value['jenis_instansi'];?>"><?=$value['jenis_instansi'];?></option>
+                                                                <?php
+                                                            }
+                                                        ?>
+                                                       </select>
+                                                    </div>
                                                 </form>
                                             </div>
                                             <div class="media">
@@ -145,7 +162,7 @@
                                     <div class="row">
                                         <div class="col-sm-12">
 
-                                            <table class="table hidden-overflow" id="dataTables-example">
+                                            <table class="table hidden-overflow" id="table">
                                                 <thead>
                                                     <tr>
                                                         <th><center>No</center></th>
@@ -156,62 +173,134 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    <?php
-                                                    if(count($data['dataBiaya']) === 0){
-                                                        ?>
-
-                                                        <?php
-                                                    } else {
-                                                        $no = 1; 
-                                                        foreach ($data['dataBiaya'] as $value) {
-                                                        ?>
-                                                        <tr class="odd">
-                                                            <td><center><?= $no++; ?></center></td>
-                                                            <td><center><?= $value['jenis_pembayaran']; ?></center></td>
-                                                            <td><center><?= "Rp" . number_format($value['biaya'],2,',','.'); ?></center></td>
-                                                            <td><center><?= $value['instansi']; ?></center></td>
-                                                            <td>
-                                                                <center>
-                                                                <a href="javascript:;" 
-                                                                    data-id_jenis_pembayaran="<?= $value['id_jenis_pembayaran']; ?>"                                                            
-                                                                    data-jenis_pembayaran="<?= $value['jenis_pembayaran']; ?>"
-                                                                    data-biaya="<?= $value['biaya']; ?>"
-                                                                    data-instansi="<?= $value['instansi']; ?>"                                                                
-                                                                    class="btn btn-warning btn-sm updateData" data-bs-toggle="modal"
-                                                                    data-bs-target="#updateBiaya">Ubah
-                                                                </a>
-                                                                <a href="javascript:;"
-                                                                    data-id_jenis_pembayaran="<?= $value['id_jenis_pembayaran']; ?>"
-                                                                    class="btn btn-danger btn-sm deleteData">
-                                                                    <i class="material-icons icon">delete</i>
-                                                                </a>
-                                                                </center>
-                                                            </td>    
-                                                        </tr>
-                                                        <?php
-                                                    }
-                                                }  ?>
                                                 </tbody>
                                             </table>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="biaya-pagination mt-3">
-                                <?= $this->pagination->create_links();?>
-                            </div>
                             <!-- /.table-responsive -->
+                            <div id="pagination-container ">
+                                <ul class="pagination mt-3">
+                                </ul>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
         <!-- content page ends -->
-      <script src="<?= base_url();?>/assets/js/jquery-3.2.1.min.js"></script>
+        <script src="<?= base_url();?>/assets/js/jquery-3.2.1.min.js"></script>
         <script>
-            
+            let itemsPerPage = 10;
+            let currentPage = 1;
+            let totalPages;
+            let data = [];
+            var id_jenis_pembayaran;
+            let IDR = new Intl.NumberFormat('id-ID', {
+               style: 'currency',
+               currency: 'IDR',
+            });
             $(document).ready(function() {
-                //Modal Config Input Data Kelas
+                $('#cari').keyup(function(){
+                    getData();
+                });
+
+                $('#instansiList').change(function(){
+                    getData();
+                });
+                
+                $('#instansiList').ready(function(){
+                    getData();
+                });
+
+                function getData(){
+                    let keyword = $('#cari').val();
+                    let instansi = $('#instansiList').val();
+                    $.ajax({
+                        url: '<?= base_url('pages/dataBiayaData')?>',
+                        method: 'GET',
+                        data: {keyword: keyword, instansi: instansi, status: 1},
+                        success: function(response){
+                            $('#table tbody').empty();
+                            if((response.dataBiaya).length !== 0) {
+                                data = response.dataBiaya;
+                                startIndex = (currentPage - 1) * itemsPerPage + 1;
+                                endIndex = startIndex + itemsPerPage - 1;
+                                totalPages = Math.ceil(data.length / itemsPerPage);
+                                pageData = data.slice(startIndex - 1, endIndex);
+                                $.each(pageData, function(index, item){
+                                    let no = startIndex + index;
+                                    let row = 
+                                    `<tr>
+                                        <td><center>${no++}</center></td>
+                                        <td><center>${item.jenis_pembayaran}</center></td>
+                                        <td><center>${IDR.format(item.biaya)}</center></td>
+                                        <td><center>${item.instansi}</center></td>
+                                        <td><center>
+                                        <a href="javascript:;" 
+                                            data-id_jenis_pembayaran="${item.id_jenis_pembayaran}"                                                            
+                                            data-jenis_pembayaran="${item.jenis_pembayaran}"
+                                            data-biaya="${item.biaya}"
+                                            data-instansi="${item.instansi}"                                                                
+                                            class="btn btn-warning btn-sm updateData" data-bs-toggle="modal"
+                                            data-bs-target="#updateBiaya">Ubah
+                                        </a>
+                                        <a href="javascript:;"
+                                            data-id_jenis_pembayaran="${item.id_jenis_pembayaran}"
+                                            class="btn btn-danger btn-sm deleteData">
+                                            <i class="material-icons icon">delete</i>
+                                        </a>
+                                        </center></td>
+                                    '</tr>`;
+                                    $('#table tbody').append(row);
+                                });
+                                if ((currentPage === 1 && pageData.length >= 10)) {
+                                    renderPagination(totalPages);
+                                } else if(currentPage !== 1){
+                                    renderPagination(totalPages);
+                                } else {
+                                    $('.pagination').empty();
+                                }
+                            } else {
+                                let emptyRow = `<tr><td colspan="5"><center><h5>Data belum tersedia!</h5></center></td></tr>`;
+                                $('#table tbody').append(emptyRow);
+                                $('.pagination').empty();
+                            }
+                            $('.jumlahKelas').html(response.dataKelasTotal);
+                        }
+    
+                    });
+                }
+
+                function renderPagination(totalPages) {
+                    // Clear the pagination container
+                    $('.pagination').empty();
+                    
+                    // Generate the pagination links
+                    for (var i = 1; i <= totalPages; i++) {
+                       var activeClass = i === currentPage ? 'active' : '';
+                       var pageLink = '<li class="page-item ' + activeClass + '">' +
+                                      '<a class="page-link" href="#" data-page="' + i + '">' + i + '</a>' +
+                                      '</li>';
+                       $('.pagination').append(pageLink);
+                    }
+                }
+
+                $('.pagination').on('click', 'a.page-link', function(e) {
+                   e.preventDefault();
+                   
+                   let targetPage = parseInt($(this).data('page'));
+                   if(targetPage === currentPage + 1 && currentPage === totalPages){
+                      currentPage = 1;
+                   } else {
+                      currentPage = targetPage;
+                   }
+                   getData();
+                   renderPagination();
+                });
+
+                //Modal Config Input Data Biaya
                 $('#exampleModal').on('hide.bs.modal', function(event) {
                     $(this).find('.text-danger');
                 });
@@ -247,7 +336,7 @@
                     });                
                 });
 
-                //Modal Config Get Selected Data Kelas
+                //Modal Config Get Selected Data Biaya
                 // Untuk sunting
                 $('#updateBiaya').on('show.bs.modal', function (event) {
                     var div = $(event.relatedTarget) // Tombol dimana modal di tampilkan
@@ -260,7 +349,7 @@
                     modal.find('#instansi').val(div.data(`instansi`));
                 });
 
-                //Modal Config Update Data Kelas
+                //Modal Config Update Data Biaya
                 $('#updateBiaya').on('hide.bs.modal', function(event) {
                     $(this).find('.text-danger');
                 });
@@ -300,32 +389,32 @@
                     });              
                 });
 
-                $('.deleteData').click(function(){
+                $('#table').on('click', '.deleteData' ,function(event) {  
                     event.preventDefault();
-                    let id_jenis_pembayaran = $(this).data('id_jenis_pembayaran');
-
+                    id_jenis_pembayaran = $(this).data('id_jenis_pembayaran');
                     $('#DeleteConfirmBiaya').modal('show');
-                    $('.modalDelete').click(function(){
-                        $.ajax({
-                            url: '<?= base_url('admin/hapusDataBiaya');?>',
-                            method: 'POST',
-                            data: {id_jenis_pembayaran: id_jenis_pembayaran},
-                            dataType: 'json' ,
-                            success: function (response) {
-                                if(response.success) {
-                                    window.location.href = response.redirect;
-                                } else {                           
-                                    var errors = response.errors;
-                                    $.each(errors, function (field, message) {
-                                        let errorElement = $('#' + field + '-errorUpdate');
-                                        errorElement.html(message);
-                                        })
-                                }
-                            },
-                            error: function (xhr, status, error) {
-                                console.error(error);
+                });
+
+                $('.modalDelete').click(function(){
+                    $.ajax({
+                        url: '<?= base_url('admin/hapusDataBiaya');?>',
+                        method: 'POST',
+                        data: {id_jenis_pembayaran: id_jenis_pembayaran},
+                        dataType: 'json' ,
+                        success: function (response) {
+                            if(response.success) {
+                                window.location.href = response.redirect;
+                            } else {                           
+                                var errors = response.errors;
+                                $.each(errors, function (field, message) {
+                                    let errorElement = $('#' + field + '-errorUpdate');
+                                    errorElement.html(message);
+                                    })
                             }
-                        });
+                        },
+                        error: function (xhr, status, error) {
+                            console.error(error);
+                        }
                     });
                 });
             });  

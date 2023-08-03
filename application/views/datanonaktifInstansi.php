@@ -26,6 +26,22 @@
                     </div>
                 </div>
 
+                <div class="col-12 col-lg-3 mb-3 jumlah-instansi" style="border-radius: 20px">
+                    <div class="card shadow-sm d-flex flex-fill">
+                        <div class="card-body" >
+                            <div class="media ">
+                                <div class="media-body text-wrap text-truncate" >
+                                    <p class="content-color-secondary mb-0">Jumlah Instansi</p>
+                                    <div class="d-flex justify-content-between">
+                                        <p class=" content-color-primary mt-2 mb-3 fs-5 jumlahInstansi"></p>
+                                    </div>
+                                </div>
+                                <h5 class="material-icons icon text-dark">person</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="col-sm-12">
                     <div class="card mb-4 fullscreen">
                         <div class="card-body">
@@ -34,11 +50,11 @@
                                     <div class="row mb-3">                                        
                                         <div class="col-sm-12 d-flex justify-content-between">
                                             <div id="dataTable_filter" class="dataTables_filter input-group col-sm-4 ">
-                                                <form action="<?= base_url('pages/datanonaktifinstansi');?>" method="post" class="form-inline nonaktifInstansi-cari">
+                                                <form class="nonaktifInstansi-cari">
                                                     <div class="form-group mb-2 ">
-                                                        <input type="text" size="20" class="form-control mr-2" id="cari" name="keyword" placeholder="Cari Instansi" aria-controls="dataTable">
+                                                        <label for="cari">Nama Instansi</label>
+                                                        <input type="text" size="20" class="form-control" id="cari" name="keyword" placeholder="Cari instansi" aria-controls="dataTable">
                                                     </div>
-                                                    <button type="submit" class="btn btn-primary mb-2">Cari</button>
                                                 </form>
                                             </div>
                                             <div class="media">
@@ -50,7 +66,7 @@
                                     </div>                             
                                     <div class="row">
                                         <div class="col-sm-12">
-                                            <table class="table hidden-overflow" id="dataTables-example">
+                                            <table class="table hidden-overflow" id="table">
                                                 <thead>
                                                     <tr>
                                                         <th><center>No</center></th>
@@ -59,36 +75,20 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    <?php
-                                                    if(count($data['dataInstansi']) == 0){?>
-                                                            <tr class="odd">
-                                                                <td colspan="4"><center><h5>Data belum tersedia!</h5></center></td>
-                                                            </tr>
-                                                            <?php
-                                                        } else {                                                   
-                                                            foreach ($data['dataInstansi'] as $value) { 
-                                                                ?>
-                                                                <tr class="odd">
-                                                                    <th><center><?= ++$start;?></center></th>
-                                                                    <td><center><?= $value['jenis_instansi']; ?></center></td>
-                                                                    <td><center><a class="btn btn-primary text-white restoreData" 
-                                                                    data-jenis_instansi="<?= $value['jenis_instansi']; ?>">
-                                                                    <i class="material-icons icon">restore</i>
-                                                                    </a></center></td>
-                                                                </tr>
-                                                            <?php                                                       
-                                                            }
-                                                        }?>
                                                 </tbody>
                                             </table>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="nonaktifInstansi-pagination mt-3">
+                            <!-- <div class="nonaktifInstansi-pagination mt-3">
                                 <?= $this->pagination->create_links();?>
-                            </div>                           
-                            <!-- /.table-responsive -->
+                            </div> -->
+                            <div id="pagination-container ">
+                                <ul class="pagination mt-3">
+                                </ul>
+                            </div>                 
+                                <!-- /.table-responsive -->
                         </div>
                     </div>
                 </div>
@@ -96,29 +96,114 @@
         </div>
         <script src="<?= base_url();?>/assets/js/jquery-3.2.1.min.js"></script>
         <script>
+            let itemsPerPage = 10;
+            let currentPage = 1;
+            let totalPages;
+            let data = [];
+            var instansi;
             $(document).ready(function(){
-                $('.restoreData').click(function(){
-                    let instansi = $(this).data('jenis_instansi');
+                getData();
+                $('#cari').keyup(function(){
+                    getData();
+                });
+
+                function getData(){
+                    let keyword = $('#cari').val();
+                    $.ajax({
+                        url: '<?= base_url('pages/dataInstansiData')?>',
+                        method: 'GET',
+                        data: {keyword: keyword, status: 0},
+                        success: function(response){
+                            $('#table tbody').empty();
+                            console.log(response);
+                            if((response.dataInstansi).length !== 0) {
+                                data = response.dataInstansi;
+                                startIndex = (currentPage - 1) * itemsPerPage + 1;
+                                endIndex = startIndex + itemsPerPage - 1;
+                                totalPages = Math.ceil(data.length / itemsPerPage);
+                                pageData = data.slice(startIndex - 1, endIndex);
+                                $.each(pageData, function(index, item){
+                                    let no = startIndex + index;
+                                    let row = 
+                                    `<tr>
+                                        <td><center>${no++}</center></td>
+                                        <td><center>${item.jenis_instansi}</center></td>
+                                        <td><center>
+                                        <a class="btn btn-primary text-white restoreData" 
+                                        data-jenis_instansi="${item.jenis_instansi}">
+                                        <i class="material-icons icon">restore</i>
+                                        </a></center></td>
+                                    '</tr>`;
+                                    $('#table tbody').append(row);
+                                });
+                                if ((currentPage === 1 && pageData.length >= 10)) {
+                                    renderPagination(totalPages);
+                                } else if(currentPage !== 1){
+                                    renderPagination(totalPages);
+                                } else {
+                                    $('.pagination').empty();
+                                }
+                            } else {
+                                let emptyRow = `<tr><td colspan="3"><center><h5>Data belum tersedia!</h5></center></td></tr>`;
+                                $('#table tbody').append(emptyRow);
+                                $('.pagination').empty();
+                            }
+                            $('.jumlahInstansi').html(response.dataInstansiTotal);
+                        }
+    
+                    });
+                }
+
+                function renderPagination(totalPages) {
+                    // Clear the pagination container
+                    $('.pagination').empty();
+                    
+                    // Generate the pagination links
+                    for (var i = 1; i <= totalPages; i++) {
+                       var activeClass = i === currentPage ? 'active' : '';
+                       var pageLink = '<li class="page-item ' + activeClass + '">' +
+                                      '<a class="page-link" href="#" data-page="' + i + '">' + i + '</a>' +
+                                      '</li>';
+                       $('.pagination').append(pageLink);
+                    }
+                }
+
+                $('.pagination').on('click', 'a.page-link', function(e) {
+                   e.preventDefault();
+                   
+                   let targetPage = parseInt($(this).data('page'));
+                   if(targetPage === currentPage + 1 && currentPage === totalPages){
+                      currentPage = 1;
+                   } else {
+                      currentPage = targetPage;
+                   }
+                   getData();
+                   renderPagination();
+                });
+
+                $('#table').on('click', '.restoreData' ,function(event) {  
+                    instansi = $(this).data('jenis_instansi');
                     event.preventDefault();
                     $('#RestoreConfirmInstansi').modal('show');
-                    $('.restoreModal').click(function(){
-    
-                        $.ajax({
-                            url: '<?= base_url('admin/restoreDataInstansi');?>',
-                            method: 'POST',
-                            data: {jenis_instansi: instansi},
-                            dataType: 'json' ,
-                            success: function (response) {
-                                console.log(response)
-                                if(response.success) {
-                                    window.location.href = response.redirect;
-                                }
-                            },
-                            error: function (xhr, status, error) {
-                                console.error(error);
+                });
+
+                $('.restoreModal').click(function(){
+                    $.ajax({
+                        url: '<?= base_url('admin/restoreDataInstansi');?>',
+                        method: 'POST',
+                        data: {jenis_instansi: instansi},
+                        dataType: 'json' ,
+                        success: function (response) {
+                            console.log(response)
+                            if(response.success) {
+                                window.location.href = response.redirect;
                             }
-                        });
+                        },
+                        error: function (xhr, status, error) {
+                            console.error(error);
+                        }
                     });
                 });
+                        
             });
         </script>

@@ -4,7 +4,7 @@
             <?= $this->session->flashdata('message'); ?>
             <div class="row">
                 <div class="col-sm-12">
-                    <button type="button" class="btn btn-success ml-3 mb-3 kelas-add" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    <button type="button" class="btn btn-success mb-3 kelas-add" data-bs-toggle="modal" data-bs-target="#exampleModal">
                     Tambah Data
                     </button>
                     <button class="btn btn-secondary mb-3 kelas-btn">
@@ -112,6 +112,22 @@
                     </div>
                 </div>
 
+                <div class="col-12 col-lg-3 mb-3 jumlah-kelas" style="border-radius: 20px">
+                    <div class="card shadow-sm d-flex flex-fill">
+                        <div class="card-body" >
+                            <div class="media ">
+                                <div class="media-body text-wrap text-truncate" >
+                                    <p class="content-color-secondary mb-0">Jumlah Kelas</p>
+                                    <div class="d-flex justify-content-between">
+                                        <p class=" content-color-primary mt-2 mb-3 fs-5 jumlahKelas"></p>
+                                    </div>
+                                </div>
+                                <h5 class="material-icons icon text-success">person</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="col-sm-12">
                     <div class="card mb-4 fullscreen">
                         <div class="card-body">
@@ -119,12 +135,29 @@
                                 <div id="dataTable_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
                                     <div class="row mb-3">                                        
                                         <div class="col-sm-12 d-flex justify-content-between">
-                                            <div id="dataTable_filter" class="dataTables_filter input-group col-sm-4 kelas-cari">
-                                                <form action="<?= base_url('pages/datakelas');?>" method="post" class="form-inline">
+                                            <div id="dataTable_filter" class="d-flex justify-content-between input-group">
+                                                <form class="form">
                                                     <div class="form-group mb-2 ">
+                                                        <label for="cari">Nama Kelas</label>
                                                         <input type="text" size="20" class="form-control mr-2" id="cari" name="keyword" placeholder="Cari Kelas" aria-controls="dataTable">
                                                     </div>
-                                                    <button type="submit" class="btn btn-primary mb-2">Cari</button>
+                                                </form>
+                                                <form class="form mr-2">
+                                                    <div class="form-group inputtahun">
+                                                       <label for="instansiList">Kelas</label>
+                                                       <select id="instansiList" class="form-select" name="instansi">
+                                                          <?php
+                                                          ?>
+                                                          <option selected value="">Semua</option>
+                                                          <?php 
+                                                            foreach ($data['dataInstansi'] as $value) {
+                                                                ?>
+                                                                <option value="<?=$value['jenis_instansi'];?>"><?=$value['jenis_instansi'];?></option>
+                                                                <?php
+                                                            }
+                                                            ?>
+                                                       </select>
+                                                    </div>
                                                 </form>
                                             </div>
                                             <div class="media">
@@ -136,7 +169,7 @@
                                     </div>                             
                                     <div class="row">
                                         <div class="col-sm-12">
-                                            <table class="table hidden-overflow" id="dataTables-example">
+                                            <table class="table hidden-overflow" id="table">
                                                 <thead>
                                                     <tr>
                                                         <th><center>No</center></th>
@@ -146,49 +179,17 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    <?php
-                                                    if(count($data['dataKelas']) == 0){?>
-                                                            <tr class="odd">
-                                                                <td colspan="4"><center><h5>Data belum tersedia!</h5></center></td>
-                                                            </tr>
-                                                            <?php
-                                                        } else {                                                   
-                                                            foreach ($data['dataKelas'] as $value) { 
-                                                                ?>
-                                                                <tr class="odd">
-                                                                    <th><center><?= ++$start;?></center></th>
-                                                                    <td><center><?= $value['kelas']; ?></center></td>
-                                                                    <td><center><?= $value['instansi']; ?></center></td>
-                                                                    <td>
-                                                                        <center>
-                                                                        <a href="javascript:;" 
-                                                                            data-kelas="<?= $value['kelas']; ?>"
-                                                                            data-kelasnew="<?= $value['kelas']; ?>"
-                                                                            data-instansi="<?= $value['instansi']; ?>"
-                                                                            class="btn btn-warning btn-sm " data-bs-toggle="modal"
-                                                                            data-bs-target="#exampleModalUpdate">Ubah
-                                                                        </a>
-                                                                        <a href="javascript:;"
-                                                                            data-kelas="<?= $value['kelas']; ?>"
-                                                                            class="btn btn-danger btn-sm deleteData">
-                                                                            <i class="material-icons icon">delete</i>
-                                                                        </a>
-                                                                        </center>
-                                                                   </td>    
-                                                                </tr>
-                                                            <?php                                                       
-                                                            }
-                                                        }?>
                                                 </tbody>
                                             </table>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="kelas-pagination mt-3">
-                                <?= $this->pagination->create_links();?>                            
-                            </div>
                             <!-- /.table-responsive -->
+                            <div id="pagination-container ">
+                                <ul class="pagination mt-3">
+                                </ul>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -197,8 +198,108 @@
         <!-- content page ends -->
         <script src="<?= base_url();?>/assets/js/jquery-3.2.1.min.js"></script>
         <script>
-            
+            let itemsPerPage = 10;
+            let currentPage = 1;
+            let totalPages;
+            let data = [];
+            var kelas;
             $(document).ready(function() {
+                $('#cari').keyup(function(){
+                    getData();
+                });
+
+                $('#instansiList').change(function(){
+                    getData();
+                });
+                
+                $('#instansiList').ready(function(){
+                    getData();
+                });
+
+                function getData(){
+                    let keyword = $('#cari').val();
+                    let instansi = $('#instansiList').val();
+                    $.ajax({
+                        url: '<?= base_url('pages/dataKelasData')?>',
+                        method: 'GET',
+                        data: {keyword: keyword, instansi: instansi, status: 1},
+                        success: function(response){
+                            $('#table tbody').empty();
+                            console.log((response.dataKelas).length);
+                            if((response.dataKelas).length !== 0) {
+                                data = response.dataKelas;
+                                startIndex = (currentPage - 1) * itemsPerPage + 1;
+                                endIndex = startIndex + itemsPerPage - 1;
+                                totalPages = Math.ceil(data.length / itemsPerPage);
+                                pageData = data.slice(startIndex - 1, endIndex);
+                                $.each(pageData, function(index, item){
+                                    let no = startIndex + index;
+                                    let row = 
+                                    `<tr>
+                                        <td><center>${no++}</center></td>
+                                        <td><center>${item.kelas}</center></td>
+                                        <td><center>${item.instansi}</center></td>
+                                        <td><center>
+                                        <a href="javascript:;" 
+                                            data-kelas="${item.kelas}"
+                                            data-kelasnew="${item.kelas}"
+                                            data-instansi="${item.instansi}"
+                                            class="btn btn-warning btn-sm " data-bs-toggle="modal"
+                                            data-bs-target="#exampleModalUpdate">Ubah
+                                        </a>
+                                        <a href="javascript:;"
+                                            data-kelas="${item.kelas}"
+                                            class="btn btn-danger btn-sm deleteData">
+                                            <i class="material-icons icon">delete</i>
+                                        </a></center></td>
+                                    '</tr>`;
+                                    $('#table tbody').append(row);
+                                });
+                                if ((currentPage === 1 && pageData.length >= 10)) {
+                                    renderPagination(totalPages);
+                                } else if(currentPage !== 1){
+                                    renderPagination(totalPages);
+                                } else {
+                                    $('.pagination').empty();
+                                }
+                            } else {
+                                let emptyRow = `<tr><td colspan="4"><center><h5>Data belum tersedia!</h5></center></td></tr>`;
+                                $('#table tbody').append(emptyRow);
+                                $('.pagination').empty();
+                            }
+                            $('.jumlahKelas').html(response.dataKelasTotal);
+                        }
+    
+                    });
+                }
+
+                function renderPagination(totalPages) {
+                    // Clear the pagination container
+                    $('.pagination').empty();
+                    
+                    // Generate the pagination links
+                    for (var i = 1; i <= totalPages; i++) {
+                       var activeClass = i === currentPage ? 'active' : '';
+                       var pageLink = '<li class="page-item ' + activeClass + '">' +
+                                      '<a class="page-link" href="#" data-page="' + i + '">' + i + '</a>' +
+                                      '</li>';
+                       $('.pagination').append(pageLink);
+                    }
+                }
+
+                $('.pagination').on('click', 'a.page-link', function(e) {
+                   e.preventDefault();
+                   
+                   let targetPage = parseInt($(this).data('page'));
+                   if(targetPage === currentPage + 1 && currentPage === totalPages){
+                      currentPage = 1;
+                   } else {
+                      currentPage = targetPage;
+                   }
+                   getData();
+                   renderPagination();
+                });
+
                 //Modal Config Input Data Kelas
                 $('#exampleModal').on('hide.bs.modal', function(event) {
                     $(this).find('.text-danger');
@@ -283,25 +384,27 @@
                     });       
                 });
 
-                $('.deleteData').click(function(){
+                $('#table').on('click', '.deleteData' ,function(event) {  
                     event.preventDefault();
-                    let kelas = $(this).data('kelas');
+                    kelas = $(this).data('kelas');
                     $('#DeleteConfirmKelas').modal('show');
-                    $('.modalDelete').click(function(){
-                        $.ajax({
-                            url: '<?= base_url('admin/hapusDataKelas');?>',
-                            method: 'POST',
-                            data: {kelas: kelas},
-                            dataType: 'json' ,
-                            success: function (response) {
-                                if(response.success) {
-                                    window.location.href = response.redirect;
-                                } 
-                            },
-                            error: function (xhr, status, error) {
-                                console.error(error);
-                            }
-                        });
+
+                });
+
+                $('.modalDelete').click(function(){
+                    $.ajax({
+                        url: '<?= base_url('admin/hapusDataKelas');?>',
+                        method: 'POST',
+                        data: {kelas: kelas},
+                        dataType: 'json' ,
+                        success: function (response) {
+                            if(response.success) {
+                                window.location.href = response.redirect;
+                            } 
+                        },
+                        error: function (xhr, status, error) {
+                            console.error(error);
+                        }
                     });
                 });
             })   
