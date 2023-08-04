@@ -632,7 +632,6 @@
                      data: data,
                      success: function(response) {
                         $('#RestoreConfirmModal').modal('hide');
-                        console.log(response);
                         // Update the status element with the new value
                         if(response.value[0] == 2){
                            $(`.update-link[data-created-at="${response.value[1]}"]`).data('status', response.value[0]).text("Diterima");

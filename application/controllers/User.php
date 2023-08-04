@@ -31,7 +31,7 @@ class User extends CI_Controller {
     }
 
     public function login($data){
-        $process = $this->model->getDataModel($data['table'],$data['selectedData'],$data['value']);
+        $process = $this->model->getDataModel($data['table'],$data['selectedData'],$data['value'], array: 0);
         return $process;
 	}
 

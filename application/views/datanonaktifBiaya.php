@@ -98,7 +98,7 @@
         <script>
             let itemsPerPage = 10;
             let currentPage = 1;
-            let totalPages;
+            var totalPages;
             let data = [];
             var id_jenis_pembayaran;
             var instansi;
@@ -152,9 +152,9 @@
                                     $('#table tbody').append(row);
                                 });
                                 if ((currentPage === 1 && pageData.length >= 10)) {
-                                    renderPagination(totalPages);
+                                    renderPagination(totalPages, 4);
                                 } else if(currentPage !== 1){
-                                    renderPagination(totalPages);
+                                    renderPagination(totalPages, 4);
                                 } else {
                                     $('.pagination').empty();
                                 }
@@ -169,33 +169,46 @@
                     });
                 }
 
-                function renderPagination(totalPages) {
+                function renderPagination(totalPages, visiblePages) {
                     // Clear the pagination container
                     $('.pagination').empty();
                     
-                    // Generate the pagination links
-                    for (var i = 1; i <= totalPages; i++) {
-                       var activeClass = i === currentPage ? 'active' : '';
-                       var pageLink = '<li class="page-item ' + activeClass + '">' +
-                                      '<a class="page-link" href="#" data-page="' + i + '">' + i + '</a>' +
-                                      '</li>';
-                       $('.pagination').append(pageLink);
+                    // Calculate the range of pages to be displayed
+                    var startPage = Math.max(1, currentPage - Math.floor(visiblePages / 2));
+                    var endPage = Math.min(totalPages, startPage + visiblePages - 1);
+                    startPage = Math.max(1, endPage - visiblePages + 1);
+
+                    var pageLinks = '';
+                    if (currentPage > 1) {
+                        pageLinks += '<li class="page-item"><a class="page-link" href="#" data-page="prev">&laquo;</a></li>';
                     }
+                    for (var i = startPage; i <= endPage; i++) {
+                        var activeClass = i === currentPage ? 'active' : '';
+                        var pageLink = '<li class="page-item ' + activeClass + '">' +
+                            '<a class="page-link" href="#" data-page="' + i + '">' + i + '</a>' +
+                            '</li>';
+                        pageLinks += pageLink;
+                    }
+                    if (currentPage < totalPages) {
+                        pageLinks += '<li class="page-item"><a class="page-link" href="#" data-page="next">&raquo;</a></li>';
+                    }
+                    $('.pagination').append(pageLinks);
                 }
 
                 $('.pagination').on('click', 'a.page-link', function(e) {
-                   e.preventDefault();
+                    e.preventDefault();
                    
-                   let targetPage = parseInt($(this).data('page'));
-                   if(targetPage === currentPage + 1 && currentPage === totalPages){
-                      currentPage = 1;
-                   } else {
-                      currentPage = targetPage;
-                   }
+                    let targetPage = $(this).data('page');
+                    if (targetPage === 'first') {
+                        currentPage = 1;
+                    } else if (targetPage === 'last') {
+                        currentPage = totalPages;
+                    } else {
+                        currentPage = parseInt(targetPage);
+                    }
                    getData();
-                   renderPagination();
+                   renderPagination(totalPages, 4);
                 });
-
                 $('#table').on('click', '.restoreData' ,function(event) {  
                     instansi = $(this).data('instansi');
                     id_jenis_pembayaran = $(this).data('id_jenis_pembayaran');
@@ -210,7 +223,6 @@
                         data: {id_jenis_pembayaran: id_jenis_pembayaran, instansi: instansi},
                         dataType: 'json' ,
                         success: function (response) {
-                            console.log(response)
                             if(response.success) {
                                 window.location.href = response.redirect;
                             }

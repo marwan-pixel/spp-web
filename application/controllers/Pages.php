@@ -293,9 +293,9 @@ class Pages extends User {
 
 	public function halamanAdmin()
 	{
-		$dataAdmin = $this->model->getDataModel('admin', ['kode_petugas', 'nama_petugas'], ['kode_petugas' => $this->session->userdata('kode_petugas')]);
+		$dataAdmin = $this->model->getDataModel('admin', ['kode_petugas', 'nama_petugas'], ['kode_petugas' => $this->session->userdata('kode_petugas')], array: 0);
 		try {
-			$this->render('halamanadmin', ['title' => 'Halaman Admin', 'name' => $this->_userdata['nama_petugas'], 'kode' => $dataAdmin[0]['kode_petugas']]);
+			$this->render('halamanadmin', ['title' => 'Halaman Admin', 'name' => $this->_userdata['nama_petugas'], 'kode' => $dataAdmin['kode_petugas']]);
 
 		} catch (Exception $e){
 			$e->getMessage();
@@ -304,30 +304,8 @@ class Pages extends User {
 
 	public function dataAdmin()
 	{
-		$this->setData(
-			array(
-				'base_url' => base_url('pages/datadmin/'),
-				'total_rows' => $this->db->from('admin')->count_all_results(),
-				'per_page' => 20,
-				
-			)
-		);
-
-		$start = $this->uri->segment(3);
-		$this->pagination->initialize($this->getData());
-
-		if(($this->input->post('keyword'))){
-			$keyword = array('nama_petugas' => $this->input->post('keyword'));
-			$this->db->like($keyword);
-			$this->session->set_userdata('keyword', $keyword['nama_petugas']);
-		} else {
-			$keyword = $this->session->unset_userdata('keyword');
-		}
-
-		$dataAdmin = $this->model->getDataModel('admin', ['kode_petugas', 'nama_petugas'], ['status' => 1], $this->getData()['per_page'], $start);
 		try {
-			$this->render('dataadmin', ['title' => 'Data Admin', 'name' => $this->_userdata['nama_petugas'], 'data' => $dataAdmin, 'start' => $start]);
-
+			$this->render('dataadmin', ['title' => 'Data Admin', 'name' => $this->_userdata['nama_petugas']]);
 		} catch (Exception $e){
 			$e->getMessage();
 		}
@@ -358,32 +336,8 @@ class Pages extends User {
 
 	public function datanonaktifAdmin()
 	{
-		$this->setData(
-			array(
-				'base_url' => base_url('pages/datanonaktifadmin/'),
-				'total_rows' => $this->db->from('admin')->where(['status' => 0])->count_all_results(),
-				'per_page' => 20,
-				
-			)
-		);
-
-		$start = $this->uri->segment(3);
-		$this->pagination->initialize($this->getData());
-
-		if(($this->input->post('keyword'))){
-			$keyword = array('nama_petugas' => $this->input->post('keyword'));
-			$this->db->like($keyword);
-			$this->session->set_userdata('keyword', $keyword['nama_petugas']);
-		} else {
-			$keyword = $this->session->unset_userdata('keyword');
-		}
-
-		$dataAdmin = $this->model->getDataModel('admin', ['kode_petugas', 'nama_petugas'], ['status' => 0], 
-		$this->getData()['per_page'], $start);
 		try {
-			$this->render('datanonaktifadmin', ['title' => 'Data Non Aktif Admin', 'name' => $this->_userdata['nama_petugas'], 
-			'data' => $dataAdmin, 'start' => $start]);
-
+			$this->render('datanonaktifadmin', ['title' => 'Data Non Aktif Admin', 'name' => $this->_userdata['nama_petugas']]);
 		} catch (Exception $e){
 			$e->getMessage();
 		}
@@ -400,7 +354,8 @@ class Pages extends User {
 		}
 	}
 
-	public function dataTransaksiData(){
+	public function dataTransaksiData()
+	{
 		$nipd = $this->input->get('query');
 		$tahunAkademik = $this->input->get('thn_akademik');
 		$dataSiswa = $this->model->getDataJoinModel(['siswa', 'kelas'] ,['nama_siswa', 'siswa.kelas', 'potongan', 'instansi', 'nipd', 'thn_akademik', 'siswa.status'], 
@@ -435,11 +390,9 @@ class Pages extends User {
 				$response['biaya'] = 0;
 			} else {
 				foreach ($dataBiaya as $biaya) {
-					# code...
 					$total += $biaya['biaya'];
 				}
 				$response['biaya'] = $total;
-
 			}
 			$response['dataBiaya'] = $dataBiaya;
 			
@@ -532,7 +485,8 @@ class Pages extends User {
 		exit();
 	}
 
-	public function dataTahunAkademik() {
+	public function dataTahunAkademik() 
+	{
 		$this->setData(
 			array(
 				'base_url' => base_url('pages/datatahunakademik/'),
@@ -561,60 +515,17 @@ class Pages extends User {
 		}
 	}
 
-	public function dataPengeluaran() {
-		$this->setData(
-			array(
-				'base_url' => base_url('pages/datapengeluaran/'),
-				'total_rows' => $this->db->from('pengeluaran')->count_all_results(),
-				'per_page' => 10,
-			)
-		);
-
-		$start = $this->uri->segment(3);
-		$this->pagination->initialize($this->getData());
-
-		if(($this->input->post('keyword'))){
-			$keyword = array('keterangan' => $this->input->post('keyword'));
-			$this->db->like($keyword);
-			$this->session->set_userdata('keyword', $keyword['keterangan']);
+	public function dataTahunAkademikData()
+	{
+		$keyword = $this->input->get('keyword');
+		$data = [];
+		if(!(empty($keyword))) {
+			$dataTahunAkademik = $this->model->getDataModel(table: 'tahun_akademik', data: ['*'], keyword: ['thn_akademik' => $keyword]);
 		} else {
-			$keyword = $this->session->unset_userdata('keyword');
+			$dataTahunAkademik = $this->model->getDataModel(table: 'tahun_akademik', data: ['*']);
 		}
-
-		$dataPengeluaran = $this->model->getDataModel('pengeluaran', ['id_pengeluaran', 'nominal', 'arus_kas' ,'keterangan'], ['arus_kas' => 0, 'status' => 1], $this->getData()['per_page'], $start);
-		try {
-			$this->render('datapengeluaran', ['title' => 'Data Pengeluaran', 'name' => $this->_userdata['nama_petugas'], 'data' => $dataPengeluaran, 'start' => $start]);
-
-		} catch (Exception $e){
-			$e->getMessage();
-		}
-	}
-	public function datanonaktifPengeluaran() {
-		$this->setData(
-			array(
-				'base_url' => base_url('pages/datanonaktifpengeluaran/'),
-				'total_rows' => $this->db->from('pengeluaran')->where(['status' => 0])->count_all_results(),
-				'per_page' => 20,
-			)
-		);
-
-		$start = $this->uri->segment(3);
-		$this->pagination->initialize($this->getData());
-
-		if(($this->input->post('keyword'))){
-			$keyword = array('keterangan' => $this->input->post('keyword'));
-			$this->db->like($keyword);
-			$this->session->set_userdata('keyword', $keyword['keterangan']);
-		} else {
-			$keyword = $this->session->unset_userdata('keyword');
-		}
-
-		$dataPengeluaran = $this->model->getDataModel('pengeluaran', ['id_pengeluaran', 'nominal', 'arus_kas' ,'keterangan'], ['arus_kas' => 0, 'status' => 1], $this->getData()['per_page'], $start);
-		try {
-			$this->render('datanonaktifpengeluaran', ['title' => 'Data Nonaktif Pengeluaran', 'name' => $this->_userdata['nama_petugas'], 'data' => $dataPengeluaran, 'start' => $start]);
-
-		} catch (Exception $e){
-			$e->getMessage();
-		}
+		$data['dataTahunAkademik'] = $dataTahunAkademik;
+		header('Content-Type: application/json');
+        echo json_encode($data);
 	}
 }

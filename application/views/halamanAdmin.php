@@ -33,7 +33,12 @@
                                 </div>
                                 <div class="modal-body">
                                 <form method="post" action="<?= base_url('Admin/ubahDataAdmin');?>">
-                                    <input hidden type="text" class="form-control" name="kode_petugas" value="<?= $kode; ?>" id="exampleInputUsername1" aria-describedby="emailHelp" >
+                                    <input hidden type="text" class="form-control" name="kode_petugas_old" value="<?= $kode; ?>" id="exampleInputUsername1" aria-describedby="emailHelp" >
+                                    <div class="form-group">
+                                        <label for="nama">ID</label>
+                                        <input type="text" class="form-control" name="kode_petugas" value="<?= $kode; ?>" id="exampleInputUsername1" aria-describedby="emailHelp" >
+                                        <small class="text-danger" id="kode_petugas-errorUpdate"></small>
+                                    </div>
                                     <div class="form-group">
                                         <label for="nama">Nama Administrator</label>
                                         <input type="text" value="<?= $name; ?>" class="form-control" name="nama" id="nama" aria-describedby="nama">
@@ -82,6 +87,7 @@
                     event.preventDefault();
     
                     var form = $(this);
+                    var kode_petugas_old = form.find('input[name="kode_petugas_old"]').val();
                     var kode_petugas = form.find('input[name="kode_petugas"]').val();
                     var nama = form.find('input[name="nama"]').val();
                     var password = form.find('input[name="password"]').val();
@@ -93,7 +99,6 @@
                         data: form.serialize(),
                         dataType: 'json' ,
                         success: function (response) {
-                            console.log(response);
                             if(response.success) {
                                 window.location.href = response.redirect;
                                 $('#updateDataAdmin').modal('hide');
@@ -101,7 +106,6 @@
                                 var errors = response.errors;
                                 $.each(errors, function (field, message) {
                                 let errorElement = $('#' + field + '-errorUpdate');
-                                console.log(message);
                                 errorElement.html(message);
                             })
                         }

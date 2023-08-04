@@ -95,11 +95,11 @@
                                     <div class="row">
                                         <div class="col-sm-12 d-flex justify-content-between">
                                             <div id="dataTable_filter" class="dataTables_filter input-group col-sm-4 ">
-                                                <form action="<?= base_url('pages/datatahunakademik');?>" method="post" class="form-inline thn-akademik-cari">
+                                                <form class="thn-akademik-cari">
                                                     <div class="form-group mb-2 ">
+                                                        <label for="cari">Tahun Akademik</label>
                                                         <input type="text" size="20" class="form-control mr-2" id="cari" name="keyword" placeholder="Cari Tahun Akademik" aria-controls="dataTable">
                                                     </div>
-                                                    <button type="submit" class="btn btn-primary mb-2">Cari</button>
                                                 </form>
                                             </div>
                                             <div class="media">
@@ -113,7 +113,7 @@
                                     <div class="row">
                                         <div class="col-sm-12">
 
-                                            <table class="table hidden-overflow" id="dataTables-example">
+                                            <table class="table hidden-overflow" id="table">
                                                 <thead>
                                                     <tr>
                                                         <th><center>No</center></th>
@@ -123,39 +123,6 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    <?php
-                                                    if(count($data) === 0) {
-                                                        ?>
-                                                        <tr>
-                                                            <th colspan="4"><center><h5>Data belum tersedia</h5></center></th>
-                                                        </tr>
-                                                        <?php
-                                                    } else {
-                                                        $no = 1; 
-                                                        foreach ($data as $value) {
-                                                        ?>
-                                                        <tr class="odd">
-                                                            <td><center><?= $no++; ?></center></td>
-                                                            <td><center><?= $value['thn_akademik']; ?></center></td>
-                                                            <td><center><?= $value['status'] == 1 ? "Aktif" : "Tidak Aktif"; ?></center></td>
-                                                            <td>
-                                                                <center>
-                                                                <a href="javascript:;" 
-                                                                    data-thn_akademikold="<?= $value['thn_akademik']; ?>"
-                                                                    data-thn_akademik="<?= $value['thn_akademik']; ?>"                                                            
-                                                                    data-status="<?= $value['status']; ?>"
-                                                                    class="btn btn-warning btn-sm updateData" data-bs-toggle="modal"
-                                                                    data-bs-target="#updateTahun">Ubah
-                                                                </a>
-                                                                <a href="javascript:;">
-
-                                                                </a>
-                                                                </center>
-                                                            </td>
-                                                       </tr>
-                                                        <?php
-                                                    }
-                                                }  ?>
                                                 </tbody>
                                             </table>
                                         </div>
@@ -163,8 +130,9 @@
                                 </div>
                             </div>
                             <!-- /.table-responsive -->
-                            <div class="thn-akademik-pagination mt-3">
-                                <?= $this->pagination->create_links();?>
+                            <div id="pagination-container ">
+                                <ul class="pagination mt-3">
+                                </ul>
                             </div>
                         </div>
                     </div>
@@ -172,8 +140,12 @@
             </div>
         </div>
         <!-- content page ends -->
-      <script src="<?= base_url();?>/assets/js/jquery-3.2.1.min.js"></script>
+        <script src="<?= base_url();?>/assets/js/jquery-3.2.1.min.js"></script>
         <script>
+            let itemsPerPage = 10;
+            let currentPage = 1;
+            var totalPages;
+            let data = [];
             function getYear(value) {
                 let yearsend = parseInt(value) + 1;
                 $("#tahun_genap").val(yearsend);
@@ -181,6 +153,109 @@
 	        }
 
             $(document).ready(function() {
+                getData();
+
+                $('#cari').keyup(function(){
+                    getData();
+                });
+
+                function getData(){
+                    let keyword = $('#cari').val();
+                    $.ajax({
+                        url: '<?= base_url('pages/dataTahunAkademikData')?>',
+                        method: 'GET',
+                        data: {keyword: keyword, status: 1},
+                        success: function(response){
+                            $('#table tbody').empty();
+                            if((response.dataTahunAkademik).length !== 0) {
+                                data = response.dataTahunAkademik;
+                                startIndex = (currentPage - 1) * itemsPerPage + 1;
+                                endIndex = startIndex + itemsPerPage - 1;
+                                totalPages = Math.ceil(data.length / itemsPerPage);
+                                pageData = data.slice(startIndex - 1, endIndex);
+                                $.each(pageData, function(index, item){
+                                    let no = startIndex + index;
+                                    let row = 
+                                    `<tr>
+                                        <td><center>${no++}</center></td>
+                                        <td><center>${item.thn_akademik}</center></td>
+                                        <td><center>${item.status == 1 ? 'Aktif' : 'Tidak Aktif'}</center></td>
+                                        <td><center>
+                                        <a href="javascript:;" 
+                                            data-thn_akademikold="${item.thn_akademik}"
+                                            data-thn_akademik="${item.thn_akademik}"                                                            
+                                            data-status="${item.status}"
+                                            class="btn btn-warning btn-sm updateData" data-bs-toggle="modal"
+                                            data-bs-target="#updateTahun">Ubah
+                                        </a>
+                                    </center></td>
+                                    '</tr>`;
+                                    $('#table tbody').append(row);
+                                });
+                                if ((currentPage === 1 && pageData.length >= 10)) {
+                                    renderPagination(totalPages, 4);
+                                } else if(currentPage !== 1){
+                                    renderPagination(totalPages, 4);
+                                } else {
+                                    $('.pagination').empty();
+                                }
+                            } else {
+                                let emptyRow = `<tr><td colspan="4"><center><h5>Data belum tersedia!</h5></center></td></tr>`;
+                                $('#table tbody').append(emptyRow);
+                                $('.pagination').empty();
+                            }
+                        }
+    
+                    });
+                }
+
+                function renderPagination(totalPages, visiblePages) {
+                    // Clear the pagination container
+                    $('.pagination').empty();
+                    
+                    // Calculate the range of pages to be displayed
+                    var startPage = Math.max(1, currentPage - Math.floor(visiblePages / 2));
+                    var endPage = Math.min(totalPages, startPage + visiblePages - 1);
+                    startPage = Math.max(1, endPage - visiblePages + 1);
+
+                    var pageLinks = '<li class="page-item"><a class="page-link" href="#" data-page="first">First</a></li>';
+                    if (currentPage > 1) {
+                        pageLinks += '<li class="page-item"><a class="page-link" href="#" data-page="prev">&laquo;</a></li>';
+                    }
+                    for (var i = startPage; i <= endPage; i++) {
+                        var activeClass = i === currentPage ? 'active' : '';
+                        var pageLink = '<li class="page-item ' + activeClass + '">' +
+                            '<a class="page-link" href="#" data-page="' + i + '">' + i + '</a>' +
+                            '</li>';
+                        pageLinks += pageLink;
+                    }
+                    if (currentPage < totalPages) {
+                        pageLinks += '<li class="page-item"><a class="page-link" href="#" data-page="next">&raquo;</a></li>';
+                    }
+                    pageLinks += '<li class="page-item"><a class="page-link" href="#" data-page="last">Last</a></li>';
+                    $('.pagination').append(pageLinks);
+                }
+
+                $('.pagination').on('click', 'a.page-link', function(e) {
+                    e.preventDefault();
+
+                    let targetPage = $(this).data('page');
+
+                    if (targetPage === 'first') {
+                        currentPage = 1;
+                    } else if (targetPage === 'prev') {
+                        currentPage = Math.max(1, currentPage - 1);
+                    } else if (targetPage === 'next') {
+                        currentPage = Math.min(totalPages, currentPage + 1);
+                    } else if (targetPage === 'last') {
+                        currentPage = totalPages;
+                    } else {
+                        currentPage = parseInt(targetPage);
+                    }
+                   getData();
+                   renderPagination(totalPages, 4);
+                });
+
                 //Modal Config Input Data Kelas
                 $('#exampleModal').on('hide.bs.modal', function(event) {
                     $(this).find('.text-danger');
@@ -198,7 +273,6 @@
                     } else {
                         status = 0;
                     }
-                    console.log(status);
                     if(form.find('input[name="thn_akademik"]').val() === "" 
                     || form.find('input[name="tahun_genap"]').val() === ""){
                         $('#thn_akademik-error').html("Tahun Akademik tidak boleh kosong!");
@@ -280,7 +354,6 @@
                             data: {thn_akademik: thn_akademik, status: status, thn_akademikold: thn_akademikold},
                             dataType: 'json',
                             success: function (response) {
-                                console.log(response)
                                 if(response.success) {
                                     window.location.href = response.redirect;
                                     $('#exampleModal').modal('hide');

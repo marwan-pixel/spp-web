@@ -61,10 +61,10 @@ class Admin extends User {
                                         </div>');
                 $this->load->view('login');
             } else {
-                if(password_verify($this->input->post('password'), $process[0]['password'])){
-                    $this->session->set_userdata('kode_petugas', $process[0]['kode_petugas']);
+                if(password_verify($this->input->post('password'), $process['password'])){
+                    $this->session->set_userdata('kode_petugas', $process['kode_petugas']);
                     redirect('/');
-                } else if($process[0]['status'] == 0){
+                } else if($process['status'] == 0){
                     $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">
                     Akun ini sudah tidak aktif!
                     </div>');
@@ -1207,13 +1207,23 @@ class Admin extends User {
         $this->setData(
             array(
                 'table' => 'admin',
-                'where' =>  array('kode_petugas' => $this->input->post('kode_petugas')),
+                'where' =>  array('kode_petugas' => $this->input->post('kode_petugas_old')),
                 'value' => 
                 array(
+                    'kode_petugas' => htmlspecialchars($this->input->post('kode_petugas')),
                     'nama_petugas' => htmlspecialchars($this->input->post('nama')),
                     ),
                 'config' =>
                 array(
+                        array(
+                            'field' => 'kode_petugas',
+                            'label' => 'Kode Petugas',
+                            'rules' => 'required|trim',
+                            'errors' =>
+                            [
+                                'required' => 'Kode petugas wajib diisi!'
+                            ]
+                        ),
                         array(
                             'field' => 'nama',
                             'label' => 'Nama',
@@ -1228,7 +1238,7 @@ class Admin extends User {
             );
             $response = $this->response;
             $data = $this->getData();
-            $existingData = $this->model->getDataModel($data['table'], ['nama_petugas'], $data['value']);
+            $existingData = $this->model->getDataModel($data['table'], ['kode_petugas', 'nama_petugas'], $data['value'], array: 0);
 
             if(!empty($this->input->post('password'))){
                 $data['value']['password'] = password_hash($this->input->post('password'), PASSWORD_BCRYPT);
@@ -1249,6 +1259,7 @@ class Admin extends User {
                         $this->session->set_flashdata("message", "<div class='alert alert-success' role='alert'>
                                                 {$process['message']}
                                                 </div>");
+                        $this->session->set_userdata('kode_petugas', $data['value']['kode_petugas']);
                     } else {
                         $this->session->set_flashdata("message", "<div class='alert alert-danger' role='alert'>
                                                 {$process['message']}
@@ -1258,7 +1269,7 @@ class Admin extends User {
                     $response['redirect'] = site_url('halamanadmin');
                 }
             } else {
-                $response['errors'] = array('nama' => form_error('nama'), 'password' => form_error('password'), 'confPassword' => form_error('confPassword'));
+                $response['errors'] = array('nama' => form_error('nama'), 'kode_petugas' => form_error('kode_petugas'), 'password' => form_error('password'), 'confPassword' => form_error('confPassword'));
             }
         header('Content-Type: application/json');
         echo json_encode($response);
