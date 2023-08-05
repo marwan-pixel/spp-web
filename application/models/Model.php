@@ -1,7 +1,7 @@
 <?php 
 class Model extends CI_Model {
 
-    public function getDataModel($table, $data, $param = null, $limit = null, $start = null, $keyword = null, $array = 1) {
+    public function getDataModel($table, $data, $param = null, $limit = null, $start = null, $keyword = null, $array = 1, $groupBy = null) {
         $process = $this->db->select(implode(",",$data));
         if($keyword) {
             $process = $this->db->like($keyword);
@@ -9,7 +9,9 @@ class Model extends CI_Model {
         if($param !== null) {
             $process = $this->db->where($param);
         } 
-
+        if(!is_null($groupBy)){
+           $process = $this->db->order_by($groupBy, 'ASC');
+        }
         if($array != 1) {
             $process = $this->db->get($table, $limit, $start)->row_array();
         } else {
@@ -50,8 +52,11 @@ class Model extends CI_Model {
             $this->db->or_like($keyword);
             $this->db->group_end();
         }
+        if(!is_null($groupBy)){
+            $process = $this->db->order_by($groupBy, 'ASC');
+         }
         if($array == 1) {
-            $this->db->group_by("$groupBy");
+           
             $process = $this->db->get()->result_array();
         } else {
             $process = $this->db->get()->row_array();

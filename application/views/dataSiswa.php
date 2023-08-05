@@ -449,8 +449,9 @@
                     var endPage = Math.min(totalPages, startPage + visiblePages - 1);
                     startPage = Math.max(1, endPage - visiblePages + 1);
 
-                    var pageLinks = '<li class="page-item"><a class="page-link" href="#" data-page="first">First</a></li>';
+                    var pageLinks = '';
                     if (currentPage > 1) {
+                        pageLinks += '<li class="page-item"><a class="page-link" href="#" data-page="first">First</a></li>';
                         pageLinks += '<li class="page-item"><a class="page-link" href="#" data-page="prev">&laquo;</a></li>';
                     }
                     for (var i = startPage; i <= endPage; i++) {
@@ -462,8 +463,9 @@
                     }
                     if (currentPage < totalPages) {
                         pageLinks += '<li class="page-item"><a class="page-link" href="#" data-page="next">&raquo;</a></li>';
+                        pageLinks += '<li class="page-item"><a class="page-link" href="#" data-page="last">Last</a></li>';
                     }
-                    pageLinks += '<li class="page-item"><a class="page-link" href="#" data-page="last">Last</a></li>';
+                    
                     $('.pagination').append(pageLinks);
                 }
 

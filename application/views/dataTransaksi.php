@@ -102,12 +102,40 @@
                               </div>
                               <div class="form-group">
                                  <label for="bulanAwalPembayaran">Rentang Awal Tanggal</label>
-                                 <input type="month" name="bulanAwalPembayaran" class="form-control" id="bulanAwalPembayaran" aria-describedby="bulanAwalPembayaran">
+                                 <!-- <input type="month" name="bulanAwalPembayaran" class="form-control" id="bulanAwalPembayaran" aria-describedby="bulanAwalPembayaran"> -->
+                                 <select class="form-select" name="bulanAwalPembayaran" id="bulanAwalPembayaran" aria-describedby="bulanAwalPembayaran">
+                                    <option value="07">Juli</option>
+                                    <option value="08">Agustus</option>
+                                    <option value="09">September</option>
+                                    <option value="10">Oktober</option>
+                                    <option value="11">November</option>
+                                    <option value="12">Desember</option>
+                                    <option value="01">Januari</option>
+                                    <option value="02">Februari</option>
+                                    <option value="03">Maret</option>
+                                    <option value="04">April</option>
+                                    <option value="05">Mei</option>
+                                    <option value="06">Juni</option>
+                                 </select>
                                  <small class="text-danger" id="bulanAwalPembayaran-error"></small>
                               </div>
                               <div class="form-group">
                                  <label for="bulanAkhirPembayaran">Rentang Akhir Tanggal</label>
-                                 <input type="month" name="bulanAkhirPembayaran" class="form-control" id="bulanAkhirPembayaran" aria-describedby="bulanAkhirPembayaran">
+                                 <!-- <input type="month" name="bulanAkhirPembayaran" class="form-control" id="bulanAkhirPembayaran" aria-describedby="bulanAkhirPembayaran"> -->
+                                 <select class="form-select" name="bulanAkhirPembayaran" id="bulanAkhirPembayaran" aria-describedby="bulanAkhirPembayaran">
+                                    <option value="07">Juli</option>
+                                    <option value="08">Agustus</option>
+                                    <option value="09">September</option>
+                                    <option value="10">Oktober</option>
+                                    <option value="11">November</option>
+                                    <option value="12">Desember</option>
+                                    <option value="01">Januari</option>
+                                    <option value="02">Februari</option>
+                                    <option value="03">Maret</option>
+                                    <option value="04">April</option>
+                                    <option value="05">Mei</option>
+                                    <option value="06">Juni</option>
+                                 </select>
                                  <small class="text-danger" id="bulanAkhirPembayaran-error"></small>
                               </div>
                               <div class="form-group">
@@ -394,7 +422,9 @@
                               $('.detailBiaya').prop('disabled', true);
                               $('.nominal-container').find('#totalnominal').html(IDR.format(0));
                               $('.nominal-container').find('#nominalmasuk').html(IDR.format(0));
+                              $('#insertDataTransaksi').prop('disabled', true);
                            } else {
+                              $('#insertDataTransaksi').prop('disabled', false);
                               $('.detailBiaya').prop('disabled', false);
                               // Total Biaya
                               $('.nominal-container').find('#totalnominal').html(IDR.format((response.biaya - 
@@ -427,20 +457,20 @@
                            $('.detailBiayaContent').append(`
                               <li class="list-group-item">
                                  <div class=" d-flex align-items-center justify-content-between">
-                                 <p class="fw-semibold fs-6">Total Biaya</p>
-                                 <p class="fw-semibold fs-6">${IDR.format(response.biaya)}</p>
-                                 </div>
-                              </li>
-                              <li class="list-group-item">
-                                 <div class=" d-flex align-items-center justify-content-between">
                                  <p class="fw-semibold fs-6">Potongan Biaya</p>
                                  <p class="fw-semibold fs-6">${IDR.format(response.dataSiswa.potongan)}</p>
                                  </div>
                               </li>
                               <li class="list-group-item">
                                  <div class=" d-flex align-items-center justify-content-between">
+                                 <p class="fw-semibold fs-6">Total Biaya</p>
+                                 <p class="fw-semibold fs-6">${IDR.format(response.biaya - response.dataSiswa.potongan)}</p>
+                                 </div>
+                              </li>
+                              <li class="list-group-item">
+                                 <div class=" d-flex align-items-center justify-content-between">
                                  <p class="fw-semibold fs-6">Total Seluruh Biaya</p>
-                                 <p class="fw-semibold fs-6 w-50">(Total Biaya - Potongan Biaya) x 12 bulan =
+                                 <p class="fw-semibold fs-6 w-50 text-end">Total Biaya x 12 bulan =
                                  ${IDR.format((response.biaya - response.dataSiswa.potongan) * 12)}</p>
                                  </div>
                               </li>
@@ -572,8 +602,8 @@
                      thn_akademikInsert: form.find('input[name="thn_akademikInsert"]').val(),
                      nominalInsert: form.find('input[name="nominalInsert"]').val(),
                      keteranganInsert: form.find('input[name="keteranganInsert"]').val(),
-                     bulanAwalPembayaran: form.find('input[name="bulanAwalPembayaran"]').val(),
-                     bulanAkhirPembayaran: form.find('input[name="bulanAkhirPembayaran"]').val(),
+                     bulanAwalPembayaran: form.find('#bulanAwalPembayaran').val(),
+                     bulanAkhirPembayaran: form.find('#bulanAkhirPembayaran').val(),
                      status: 2,
                   };
                   if(data.nominalInsert > biayaSisa) {

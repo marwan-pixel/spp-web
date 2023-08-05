@@ -112,19 +112,19 @@ class Pages extends User {
 		$data = [];
 		if(!(empty($kelas)) && !(empty($keyword))) {
 			$dataSiswa = $this->model->getDataJoinModel(table: ['siswa', 'tahun_akademik'], data: ['nipd', 'nama_siswa', 'kelas', 'potongan' ,'siswa.thn_akademik as thn_akademik', 'siswa.status as status'],
-			column: ['thn_akademik'], params: ['siswa.status' => $status, 'siswa.kelas' => $kelas], keyword: ['nama_siswa' => $keyword], array: 1);
+			column: ['thn_akademik'], params: ['siswa.status' => $status, 'siswa.kelas' => $kelas], keyword: ['nama_siswa' => $keyword], array: 1, groupBy: 'nama_siswa');
 			$dataSiswaTotal = $this->model->getDataModel(table: 'siswa', data: ['count(nipd) as total'], param: ['status' => $status, 'kelas' => $kelas], keyword: ['nama_siswa' => $keyword]);
 		} elseif(!(empty($keyword))) {
 			$dataSiswa = $this->model->getDataJoinModel(table: ['siswa', 'tahun_akademik'], data: ['nipd', 'nama_siswa', 'kelas', 'potongan' ,'siswa.thn_akademik as thn_akademik', 'siswa.status as status'],
-			column: ['thn_akademik'], params: ['siswa.status' => $status], keyword: ['nama_siswa' => $keyword], array: 1);
+			column: ['thn_akademik'], params: ['siswa.status' => $status], keyword: ['nama_siswa' => $keyword], array: 1, groupBy: 'nama_siswa');
 			$dataSiswaTotal = $this->model->getDataModel(table: 'siswa', data: ['count(nipd) as total'], param: ['status' => $status], keyword: ['nama_siswa' => $keyword]);
 		} elseif(!(empty($kelas))) {
 			$dataSiswa = $this->model->getDataJoinModel(table: ['siswa', 'tahun_akademik'], data: ['nipd', 'nama_siswa', 'kelas', 'potongan' ,'siswa.thn_akademik as thn_akademik', 'siswa.status as status'],
-			column: ['thn_akademik'], params: ['siswa.status' => $status, 'kelas' => $kelas], array: 1);
+			column: ['thn_akademik'], params: ['siswa.status' => $status, 'kelas' => $kelas], array: 1, groupBy: 'nama_siswa');
 			$dataSiswaTotal = $this->model->getDataModel(table: 'siswa', data: ['count(nipd) as total'], param: ['status' => $status, 'kelas' => $kelas]);
 		} else {
 			$dataSiswa = $this->model->getDataJoinModel(table: ['siswa', 'tahun_akademik'], data: ['nipd', 'nama_siswa', 'kelas', 'potongan' ,'siswa.thn_akademik as thn_akademik', 'siswa.status'],
-			column: ['thn_akademik'], params: ['siswa.status' => $status], array: 1);
+			column: ['thn_akademik'], params: ['siswa.status' => $status], array: 1, groupBy: 'nama_siswa');
 			$dataSiswaTotal = $this->model->getDataModel(table: 'siswa', data: ['count(nipd) as total'], param: ['status' => $status]);
 		}
 		if(empty($dataSiswaTotal)){
@@ -167,16 +167,16 @@ class Pages extends User {
 		$status = $this->input->get('status');
 		$data = [];
 		if(!(empty($instansi)) && !(empty($keyword))) {
-			$dataKelas = $this->model->getDataModel(table: 'kelas', data: ['kelas', 'instansi'], param: ['instansi' => $instansi, 'status' => $status], keyword: ['kelas' => $keyword]);
+			$dataKelas = $this->model->getDataModel(table: 'kelas', data: ['kelas', 'instansi'], param: ['instansi' => $instansi, 'status' => $status], keyword: ['kelas' => $keyword], groupBy: 'kelas');
 			$dataKelasTotal = $this->model->getDataModel(table: 'kelas', data: ['count(kelas) as total'], param: ['instansi' => $instansi, 'status' => $status], keyword: ['kelas' => $keyword]);
 		} elseif(!(empty($keyword))) {
-			$dataKelas = $this->model->getDataModel(table: 'kelas', data: ['kelas', 'instansi'], param: ['status' => $status], keyword: ['kelas' => $keyword]);
+			$dataKelas = $this->model->getDataModel(table: 'kelas', data: ['kelas', 'instansi'], param: ['status' => $status], keyword: ['kelas' => $keyword], groupBy: 'kelas');
 			$dataKelasTotal = $this->model->getDataModel(table: 'kelas', data: ['count(kelas) as total'], param: ['status' => $status], keyword: ['kelas' => $keyword]);
 		} elseif(!(empty($instansi))) {
-			$dataKelas = $this->model->getDataModel(table: 'kelas', data: ['kelas', 'instansi'], param: ['instansi' => $instansi, 'status' => $status]);
+			$dataKelas = $this->model->getDataModel(table: 'kelas', data: ['kelas', 'instansi'], param: ['instansi' => $instansi, 'status' => $status], groupBy: 'kelas');
 			$dataKelasTotal = $this->model->getDataModel(table: 'kelas', data: ['count(kelas) as total'], param: ['instansi' => $instansi, 'status' => $status]);
 		} else {
-			$dataKelas = $this->model->getDataModel(table: 'kelas', data: ['kelas', 'instansi'], param: ['status' => $status]);
+			$dataKelas = $this->model->getDataModel(table: 'kelas', data: ['kelas', 'instansi'], param: ['status' => $status], groupBy: 'kelas');
 			$dataKelasTotal = $this->model->getDataModel(table: 'kelas', data: ['count(kelas) as total'], param: ['status' => $status]);
 		}
 		if(empty($dataKelasTotal)){
@@ -217,16 +217,16 @@ class Pages extends User {
 		$status = $this->input->get('status');
 		$data = [];
 		if(!(empty($instansi)) && !(empty($keyword))) {
-			$dataBiaya = $this->model->getDataModel(table: 'jenis_pembayaran', data: ['id_jenis_pembayaran', 'jenis_pembayaran', 'biaya' ,'instansi'], param: ['instansi' => $instansi, 'status' => $status], keyword: ['jenis_pembayaran' => $keyword]);
+			$dataBiaya = $this->model->getDataModel(table: 'jenis_pembayaran', data: ['id_jenis_pembayaran', 'jenis_pembayaran', 'biaya' ,'instansi'], param: ['instansi' => $instansi, 'status' => $status], keyword: ['jenis_pembayaran' => $keyword], groupBy: 'instansi');
 			$dataBiayaTotal = $this->model->getDataModel(table: 'jenis_pembayaran', data: ['count(jenis_pembayaran) as total'], param: ['instansi' => $instansi, 'status' => $status], keyword: ['jenis_pembayaran' => $keyword]);
 		} elseif(!(empty($keyword))) {
-			$dataBiaya = $this->model->getDataModel(table: 'jenis_pembayaran', data: ['id_jenis_pembayaran','jenis_pembayaran', 'biaya' , 'instansi'], param: ['status' => $status], keyword: ['jenis_pembayaran' => $keyword]);
+			$dataBiaya = $this->model->getDataModel(table: 'jenis_pembayaran', data: ['id_jenis_pembayaran','jenis_pembayaran', 'biaya' , 'instansi'], param: ['status' => $status], keyword: ['jenis_pembayaran' => $keyword], groupBy: 'instansi');
 			$dataBiayaTotal = $this->model->getDataModel(table: 'jenis_pembayaran', data: ['count(jenis_pembayaran) as total'], param: ['status' => $status], keyword: ['jenis_pembayaran' => $keyword]);
 		} elseif(!(empty($instansi))) {
-			$dataBiaya = $this->model->getDataModel(table: 'jenis_pembayaran', data: ['id_jenis_pembayaran', 'jenis_pembayaran', 'biaya', 'instansi'], param: ['instansi' => $instansi, 'status' => $status]);
+			$dataBiaya = $this->model->getDataModel(table: 'jenis_pembayaran', data: ['id_jenis_pembayaran', 'jenis_pembayaran', 'biaya', 'instansi'], param: ['instansi' => $instansi, 'status' => $status], groupBy: 'instansi');
 			$dataBiayaTotal = $this->model->getDataModel(table: 'jenis_pembayaran', data: ['count(jenis_pembayaran) as total'], param: ['instansi' => $instansi, 'status' => $status]);
 		} else {
-			$dataBiaya = $this->model->getDataModel(table: 'jenis_pembayaran', data: ['id_jenis_pembayaran', 'jenis_pembayaran', 'biaya', 'instansi'], param: ['status' => $status]);
+			$dataBiaya = $this->model->getDataModel(table: 'jenis_pembayaran', data: ['id_jenis_pembayaran', 'jenis_pembayaran', 'biaya', 'instansi'], param: ['status' => $status], groupBy: 'instansi');
 			$dataBiayaTotal = $this->model->getDataModel(table: 'jenis_pembayaran', data: ['count(jenis_pembayaran) as total'], param: ['status' => $status]);
 		}
 		if(empty($dataBiayaTotal)){
@@ -265,10 +265,10 @@ class Pages extends User {
 		$status = $this->input->get('status');
 		$data = [];
 		if(!(empty($keyword))) {
-			$dataInstansi = $this->model->getDataModel(table: 'instansi', data: ['*'], param: ['status' => $status], keyword: ['jenis_instansi' => $keyword]);
+			$dataInstansi = $this->model->getDataModel(table: 'instansi', data: ['*'], param: ['status' => $status], keyword: ['jenis_instansi' => $keyword], groupBy: 'jenis_instansi');
 			$dataInstansiTotal = $this->model->getDataModel(table: 'instansi', data: ['count(jenis_instansi) as total'], keyword: ['jenis_instansi' => $keyword]);
 		} else {
-			$dataInstansi = $this->model->getDataModel(table: 'instansi', data: ['*'], param: ['status' => $status]);
+			$dataInstansi = $this->model->getDataModel(table: 'instansi', data: ['*'], param: ['status' => $status], groupBy: 'jenis_instansi');
 			$dataInstansiTotal = $this->model->getDataModel(table: 'instansi', data: ['count(jenis_instansi) as total'], param: ['status' => $status]);
 		}
 		if(empty($dataInstansiTotal)){
@@ -317,10 +317,10 @@ class Pages extends User {
 		$status = $this->input->get('status');
 		$data = [];
 		if(!(empty($keyword))) {
-			$dataAdmin = $this->model->getDataModel(table: 'admin', data: ['kode_petugas, nama_petugas'], param: ['status' => $status], keyword: ['nama_petugas' => $keyword]);
+			$dataAdmin = $this->model->getDataModel(table: 'admin', data: ['kode_petugas, nama_petugas'], param: ['status' => $status], keyword: ['nama_petugas' => $keyword], groupBy: 'nama_petugas');
 			$dataAdminTotal = $this->model->getDataModel(table: 'admin', data: ['count(nama_petugas) as total'], param: ['status' => $status], keyword: ['nama_petugas' => $keyword]);
 		} else {
-			$dataAdmin = $this->model->getDataModel(table: 'admin', data: ['kode_petugas, nama_petugas'], param: ['status' => $status]);
+			$dataAdmin = $this->model->getDataModel(table: 'admin', data: ['kode_petugas, nama_petugas'], param: ['status' => $status], groupBy: 'nama_petugas');
 			$dataAdminTotal = $this->model->getDataModel(table: 'admin', data: ['count(nama_petugas) as total'], param: ['status' => $status]);
 		}
 		if(empty($dataAdminTotal)){
@@ -437,7 +437,6 @@ class Pages extends User {
 		$status = $this->input->get('status');
 		$keyword = $this->input->get('keyword');
 
-		$data = [];
 		if(!(empty($kelas)) && !(empty($status)) && !(empty($keyword))) {
 			if($status == 'aktif') {
 				$status = 1;
@@ -445,35 +444,35 @@ class Pages extends User {
 				$status = 0;
 			}
 			$dataSiswa = $this->model->getDataModel(table: 'siswa', data: ['nipd, nama_siswa, kelas, status, potongan'], param: ['status' => $status, 'kelas' => $kelas], 
-			keyword: ['nama_siswa' => $keyword]);
+			keyword: ['nama_siswa' => $keyword], groupBy: 'nama_petugas');
 		} elseif(!(empty($kelas)) && !(empty($status))){
 			if($status == 'aktif') {
 				$status = 1;
 			} else {
 				$status = 0;
 			}
-			$dataSiswa = $this->model->getDataModel(table: 'siswa', data: ['nipd, nama_siswa, kelas, status, potongan'], param: ['status' => $status, 'kelas' => $kelas]);
+			$dataSiswa = $this->model->getDataModel(table: 'siswa', data: ['nipd, nama_siswa, kelas, status, potongan'], param: ['status' => $status, 'kelas' => $kelas], groupBy: 'nama_siswa');
 		} elseif(!(empty($keyword))) {
-			$dataSiswa = $this->model->getDataModel(table: 'siswa', data: ['nipd, nama_siswa, kelas, status, potongan'], keyword: ['nama_siswa' => $keyword]);
+			$dataSiswa = $this->model->getDataModel(table: 'siswa', data: ['nipd, nama_siswa, kelas, status, potongan'], keyword: ['nama_siswa' => $keyword], groupBy: 'nama_siswa');
 		} elseif(!(empty($kelas))) {
-			$dataSiswa = $this->model->getDataModel(table: 'siswa', data: ['nipd, nama_siswa, kelas, status, potongan'], param: ['kelas' => $kelas]);
+			$dataSiswa = $this->model->getDataModel(table: 'siswa', data: ['nipd, nama_siswa, kelas, status, potongan'], param: ['kelas' => $kelas], groupBy: 'nama_siswa');
 		} elseif(!(empty($status))){
 			if($status == 'aktif') {
 				$status = 1;
 			} else {
 				$status = 0;
 			}
-			$dataSiswa = $this->model->getDataModel(table: 'siswa', data: ['nipd, nama_siswa, kelas, status, potongan'], param: ['status' => $status]);
+			$dataSiswa = $this->model->getDataModel(table: 'siswa', data: ['nipd, nama_siswa, kelas, status, potongan'], param: ['status' => $status], groupBy: 'nama_siswa');
 		} else {
-			$dataSiswa = $this->model->getDataModel(table: 'siswa', data: ['nipd, nama_siswa, kelas, status, potongan']);
+			$dataSiswa = $this->model->getDataModel(table: 'siswa', data: ['nipd, nama_siswa, kelas, status, potongan'], groupBy: 'nama_siswa');
 		}
 		for ($i=0; $i < count($dataSiswa); $i++) { 
 			# code...
 			$dataTransaksi = $this->model->getDataModel(table: 'transactions', data: ['sum(nominal) as nominal_masuk'], param: ['nipd' => $dataSiswa[$i]['nipd'], "bulan" => date('Y-m-01')]);
 			$dataSiswa[$i]['nominal_masuk'] = $dataTransaksi[0]['nominal_masuk'];
-			$dataInstansi = $this->model->getDataModel(table: 'kelas', data: ['instansi'], param: ['kelas' => $dataSiswa[$i]['kelas']]);
-			$dataBiaya = $this->model->getDataModel(table: 'jenis_pembayaran', data: ['sum(biaya) as biaya'], param: ['instansi' => $dataInstansi[0]['instansi']]);
-			if($dataSiswa[$i]['nominal_masuk'] == ($dataBiaya[0]['biaya'] - $dataSiswa[$i]['potongan'])){
+			$dataInstansi = $this->model->getDataModel(table: 'kelas', data: ['instansi'], param: ['kelas' => $dataSiswa[$i]['kelas']], array: 0);
+			$dataBiaya = $this->model->getDataModel(table: 'jenis_pembayaran', data: ['sum(biaya) as biaya'], param: ['instansi' => $dataInstansi['instansi']], array: 0);
+			if(($dataSiswa[$i]['nominal_masuk'] == ($dataBiaya['biaya'] - $dataSiswa[$i]['potongan'])) && !is_null($dataBiaya['biaya'])){
 				$dataSiswa[$i]['status'] = 'Lunas'; 
 			} else {
 				$dataSiswa[$i]['status'] = 'Belum Lunas'; 
@@ -481,7 +480,6 @@ class Pages extends User {
 			}
 		}
 		echo json_encode($dataSiswa);
-		$data['dataSiswa'] = $dataSiswa;
 		exit();
 	}
 

@@ -180,6 +180,7 @@
 
                     var pageLinks = '';
                     if (currentPage > 1) {
+                        pageLinks += '<li class="page-item"><a class="page-link" href="#" data-page="first">First</a></li>';
                         pageLinks += '<li class="page-item"><a class="page-link" href="#" data-page="prev">&laquo;</a></li>';
                     }
                     for (var i = startPage; i <= endPage; i++) {
@@ -191,16 +192,23 @@
                     }
                     if (currentPage < totalPages) {
                         pageLinks += '<li class="page-item"><a class="page-link" href="#" data-page="next">&raquo;</a></li>';
+                        pageLinks += '<li class="page-item"><a class="page-link" href="#" data-page="last">Last</a></li>';
                     }
+                    
                     $('.pagination').append(pageLinks);
                 }
 
                 $('.pagination').on('click', 'a.page-link', function(e) {
                     e.preventDefault();
-                   
+
                     let targetPage = $(this).data('page');
+
                     if (targetPage === 'first') {
                         currentPage = 1;
+                    } else if (targetPage === 'prev') {
+                        currentPage = Math.max(1, currentPage - 1);
+                    } else if (targetPage === 'next') {
+                        currentPage = Math.min(totalPages, currentPage + 1);
                     } else if (targetPage === 'last') {
                         currentPage = totalPages;
                     } else {
@@ -209,6 +217,7 @@
                    getData();
                    renderPagination(totalPages, 4);
                 });
+
                 $('#table').on('click', '.restoreData' ,function(event) {  
                     instansi = $(this).data('instansi');
                     id_jenis_pembayaran = $(this).data('id_jenis_pembayaran');

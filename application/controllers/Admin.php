@@ -1283,6 +1283,8 @@ class Admin extends User {
         $nipd = $this->input->post('nipdInsert');
         $keterangan = $this->input->post('keteranganInsert');
         $nominalMasuk = (int)$this->input->post('nominalInsert');
+        $thn_akademik = $this->input->post('thn_akademikInsert');
+
         $errors = [];
         if(empty($bulanRentangAwal) || empty($bulanRentangAkhir) || $nominalMasuk < 1 || empty($keterangan)){
             $response['errors'] = array(
@@ -1291,8 +1293,9 @@ class Admin extends User {
                 'nominalInsert' => 'Nominal tidak boleh kosong atau kurang dari 1!',
                 'keteranganInsert' => 'Keterangan tidak boleh kosong!');
         } else {
-            $dateStart = new DateTime($bulanRentangAwal);
-            $dateEnd = new DateTime($bulanRentangAkhir);
+            list($tahunAwal, $tahunAkhir) = explode("/", $thn_akademik);
+            $dateStart = new DateTime($tahunAwal . '-' .$bulanRentangAwal . '-01');
+            $dateEnd = new DateTime($tahunAkhir . '-' . $bulanRentangAkhir . '-01');
             $monthDiff = date_diff($dateStart, $dateEnd)->format('%m')+1;
             
             $dataInstansi = $this->model->getDataJoinModel(table: ['siswa', 'kelas'], data: ['kelas.instansi', 'siswa.potongan'], 
@@ -1313,20 +1316,26 @@ class Admin extends User {
                         'table' => 'transactions',
                         'value' => array(
                             'nipd' => $nipd,
-                            'thn_akademik' => $this->input->post('thn_akademikInsert'),
+                            'thn_akademik' => $thn_akademik,
                             'nominal' => null,
                             'bulan'=> '',
                             'status' => 2,
-                            'image' => 'Bayar Langsung',
+                            'image' => '',
                             'keterangan' => $keterangan,
                             'created_at' => date('Y-m-d H:i:s')
                         )
                     )
                 );
                 $data = $this->getData();
+                if ($dateStart->format('m') >= '01' && $dateStart->format('m') <= '06') {
+                    $tahunAwal++;
+                    $dateStart->setDate($tahunAwal, $dateStart->format('m'), $dateStart->format('d'));
+                }
                 while($dateStart <= $dateEnd) {
+
                     $bulanRentangAwalStr = $dateStart->format('Y-m-d');
                     $data['value']['nominal'] = min($nominalMasuk, $dataBiaya);
+                    $data['value']['image'] = 'Bayar Langsung';
                     $data['value']['bulan'] = $bulanRentangAwalStr;
                     if ($nominalMasuk <= 0) {
                         break;
@@ -1383,6 +1392,7 @@ class Admin extends User {
                             $sisaBiayaBulanIni = $dataBiaya - $data['value']['nominal'];
                             $nominalTambah = min($nominalMasuk, $sisaBiayaBulanIni);
                             $data['value']['nominal'] = $nominalTambah;
+                            $data['value']['image'] = 'Bayar Langsung';
                             $data['value']['created_at'] = date('Y-m-d H:i:s');
                             $process = $this->model->insertDataModel($data['table'], $data['value']);
                             if($process['status'] == true){
@@ -1399,6 +1409,10 @@ class Admin extends User {
                     }
                    
                     $dateStart->modify('+1 month');
+                    if ($dateStart->format('m') === '01') {
+                        $tahunAwal++;
+                        $dateStart->setDate($tahunAwal, $dateStart->format('m'), $dateStart->format('d'));
+                    }
                 }
                 if(!empty($errors)){
                     $response['errors'] = $errors;
@@ -1670,82 +1684,6 @@ class Admin extends User {
         }
         $pdf->Output();
     }
-
-    // function cariDataTransaksi() {
-    //     if($this->session->userdata('kode_petugas')) {
-            
-    //         $response = [];
-    //         $keyword = $this->input->get('query');
-    //         $tahunAkademik = $this->input->get('thn_akademik');
-    //         //Ambil Data Siswa
-    //         $dataSiswa = $this->model->getSearchDataJoinModel(['siswa', 'kelas'] ,['nama_siswa', 'siswa.kelas', 'potongan', 'instansi', 'nipd', 'thn_akademik', 'siswa.status'], 
-    //         ["kelas", "nipd"], ['siswa.nama_siswa' => $keyword, 'nipd' => $keyword]);
-            
-    //         if(is_null($dataSiswa)) {
-    //             $response['errors'] = "Data tidak ditemukan!";
-    //         } else {
-
-    //             //Ambil Riwayat Data Transaksi Berdasarkan NIPD
-
-    //             $dataTransaksi = $this->model->getDataModel('transactions', 
-    //             ['nipd', 'nominal', 'status', 'image', 'keterangan', 'bulan' ,'created_at'], ['nipd' => $dataSiswa['nipd'], 'thn_akademik' => $tahunAkademik]);
-
-    //             //Ambil Jumlah Nominal dari tabel jenis_pembayaran Berdasarkan instansi
-    //             $dataBiaya = $this->model->getDataModel('jenis_pembayaran', ['biaya', 'jenis_pembayaran'], ['instansi' => $dataSiswa['instansi'], 'status' => 1]);
-
-    //             //Ambil Jumlah Uang Masuk Berdasarkan NIPD
-    //             $dataNominalMasuk = $this->db->select(['nominal', 'bulan'])
-    //                 ->from('transactions')->join('siswa', "transactions.nipd = siswa.nipd")->join('tahun_akademik', "tahun_akademik.thn_akademik = siswa.thn_akademik")
-    //                 ->where(['transactions.status' => 2, 'siswa.nipd' => $dataSiswa['nipd'], 'siswa.status' => 1, 'transactions.thn_akademik' => $tahunAkademik,])
-    //                 ->get()
-    //                 ->result_array();
-                
-    //             $dataSumNominalMasuk = $this->db->select(['sum(nominal)'])
-    //                 ->from('transactions')->join('siswa', "transactions.nipd = siswa.nipd")->join('tahun_akademik', "tahun_akademik.thn_akademik = siswa.thn_akademik")
-    //                 ->where(['transactions.status' => 2, 'siswa.nipd' => $dataSiswa['nipd'], 'siswa.status' => 1, 'transactions.thn_akademik' => $tahunAkademik,])
-    //                 ->get()
-    //                 ->result_array();
-                
-    //             $total = 0;
-    //             if(empty($dataBiaya)){
-    //                 $response['biaya'] = 0;
-    //             } else {
-    //                 foreach ($dataBiaya as $biaya) {
-    //                     # code...
-    //                     $total += $biaya['biaya'];
-    //                 }
-    //                 $response['biaya'] = $total;
-    
-    //             }
-    //             $response['dataBiaya'] = $dataBiaya;
-                
-    //             $response['nominalMasuk'] = $dataSumNominalMasuk[0]['sum(nominal)'];
-
-    //             $response['dataNominalMasuk'] = $dataNominalMasuk;
-
-    //             if(is_null($dataTransaksi) || empty($dataTransaksi)){
-    //                 $response['errors'] = "Data Transaksi Belum Tersedia!";
-    //             } else {
-    //                 $response['dataTransaksi'] = $dataTransaksi;
-    //             }
-
-    //             if($dataSiswa['status'] == 1){
-    //                 $dataSiswa['status'] = "Aktif";
-    //             } else {
-    //                 $dataSiswa['status'] = "Tidak Aktif";
-    //             }
-
-    //             $response['dataSiswa'] = array('nipd' => $dataSiswa['nipd'], 'nama_siswa' => $dataSiswa['nama_siswa'], 'kelas' => $dataSiswa['kelas'], 
-    //             'instansi' => $dataSiswa['instansi'], 'potongan' => $dataSiswa['potongan'], 'thn_akademik' => $dataSiswa['thn_akademik'], 'status' => $dataSiswa['status']);
-    //         }
-    //         header('Content-Type: application/json');
-    //         echo json_encode($response);
-            
-    //     } else {
-    //         exit();
-    //     }
-		
-    // }
 
     function validasiPembayaran() {
         $response = [];
