@@ -272,7 +272,6 @@
                                  <div>
                                     <h5 align="left">Nominal Masuk</h5>
                                     <h4 align="left" id="nominalmasuk" class="text-primary"></h4>
-                                    <button class="btn btn-small btn-primary detailNominalMasuk">Detail Nominal Masuk</button>
                                  </div>
                                  <div class="d-flex flex-sm-column justify-content-end mb-3">
                                     <h5 align="right">Total Biaya</h5>
@@ -475,19 +474,6 @@
                                  </div>
                               </li>
                            `);
-   
-                           $.each(response.dataNominalMasuk, function(index, item){
-                              let bulan = new Date(item.bulan);
-                              let month = bulan.toLocaleString('id-ID', {month: 'long'});
-                              let detailNominalMasuk = `
-                                 <li class="list-group-item">
-                                    <div class=" d-flex align-items-center justify-content-between">
-                                    <p class="fw-semibold fs-6">${month}</p> <p class="fw-semibold fs-6">${IDR.format(item.nominal)}</p>
-                                    </div>
-                                 </li>
-                              `;
-                              $('.detailNominalMasukContent').append(detailNominalMasuk);
-                           });
    
                            if(response.dataTransaksi !== undefined) {
                               

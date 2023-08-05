@@ -56,34 +56,34 @@ class Pages extends User {
 			array(
 				'totalPemasukan' => array(
 					'curdate' => $this->model->getDataModel(table: 'transactions', data: ['sum(nominal) as nominal'], param: ["status" => 2, "MONTH(created_at)" => date("m"), "thn_akademik" => $thn_akademik], array: 0),
-					'januari' => $this->model->getDataModel(table: 'transactions', data: ['sum(nominal) as nominal'], param: ["status" => 2, "MONTHNAME(bulan)" => "January", "thn_akademik" => $thn_akademik], array: 0),
-					'februari' => $this->model->getDataModel(table: 'transactions', data: ['sum(nominal) as nominal'], param: ["status" => 2, "MONTHNAME(bulan)" => "February", "thn_akademik" => $thn_akademik], array: 0),
-					'maret' => $this->model->getDataModel(table: 'transactions', data: ['sum(nominal) as nominal'], param: ["status" => 2, "MONTHNAME(bulan)" => "March", "thn_akademik" => $thn_akademik], array: 0),
-					'april' => $this->model->getDataModel(table: 'transactions', data: ['sum(nominal) as nominal'], param: ["status" => 2, "MONTHNAME(bulan)" => "April", "thn_akademik" => $thn_akademik], array: 0),
-					'mei' => $this->model->getDataModel(table: 'transactions', data: ['sum(nominal) as nominal'], param: ["status" => 2, "MONTHNAME(bulan)" => "May", "thn_akademik" => $thn_akademik], array: 0),
-					'juni' => $this->model->getDataModel(table: 'transactions', data: ['sum(nominal) as nominal'], param: ["status" => 2, "MONTHNAME(bulan)" => "June", "thn_akademik" => $thn_akademik], array: 0),
-					'juli' => $this->model->getDataModel(table: 'transactions', data: ['sum(nominal) as nominal'], param: ["status" => 2, "MONTHNAME(bulan)" => "July", "thn_akademik" => $thn_akademik], array: 0),
-					'agustus' => $this->model->getDataModel(table: 'transactions', data: ['sum(nominal) as nominal'], param: ["status" => 2, "MONTHNAME(bulan)" => "August", "thn_akademik" => $thn_akademik], array: 0),
-					'september' => $this->model->getDataModel(table: 'transactions', data: ['sum(nominal) as nominal'], param: ["status" => 2, "MONTHNAME(bulan)" => "September", "thn_akademik" => $thn_akademik], array: 0),
-					'oktober' => $this->model->getDataModel(table: 'transactions', data: ['sum(nominal) as nominal'], param: ["status" => 2, "MONTHNAME(bulan)" => "October", "thn_akademik" => $thn_akademik], array: 0),
-					'november' => $this->model->getDataModel(table: 'transactions', data: ['sum(nominal) as nominal'], param: ["status" => 2, "MONTHNAME(bulan)" => "November", "thn_akademik" => $thn_akademik], array: 0),
-					'desember' => $this->model->getDataModel(table: 'transactions', data: ['sum(nominal) as nominal'], param: ["status" => 2, "MONTHNAME(bulan)" => "December", "thn_akademik" => $thn_akademik], array: 0),
+					'januari' => $this->model->getDataModel(table: 'transactions', data: ['sum(nominal) as nominal'], param: ["status" => 2, "MONTHNAME(created_at)" => "January", "thn_akademik" => $thn_akademik], array: 0),
+					'februari' => $this->model->getDataModel(table: 'transactions', data: ['sum(nominal) as nominal'], param: ["status" => 2, "MONTHNAME(created_at)" => "February", "thn_akademik" => $thn_akademik], array: 0),
+					'maret' => $this->model->getDataModel(table: 'transactions', data: ['sum(nominal) as nominal'], param: ["status" => 2, "MONTHNAME(created_at)" => "March", "thn_akademik" => $thn_akademik], array: 0),
+					'april' => $this->model->getDataModel(table: 'transactions', data: ['sum(nominal) as nominal'], param: ["status" => 2, "MONTHNAME(created_at)" => "April", "thn_akademik" => $thn_akademik], array: 0),
+					'mei' => $this->model->getDataModel(table: 'transactions', data: ['sum(nominal) as nominal'], param: ["status" => 2, "MONTHNAME(created_at)" => "May", "thn_akademik" => $thn_akademik], array: 0),
+					'juni' => $this->model->getDataModel(table: 'transactions', data: ['sum(nominal) as nominal'], param: ["status" => 2, "MONTHNAME(created_at)" => "June", "thn_akademik" => $thn_akademik], array: 0),
+					'juli' => $this->model->getDataModel(table: 'transactions', data: ['sum(nominal) as nominal'], param: ["status" => 2, "MONTHNAME(created_at)" => "July", "thn_akademik" => $thn_akademik], array: 0),
+					'agustus' => $this->model->getDataModel(table: 'transactions', data: ['sum(nominal) as nominal'], param: ["status" => 2, "MONTHNAME(created_at)" => "August", "thn_akademik" => $thn_akademik], array: 0),
+					'september' => $this->model->getDataModel(table: 'transactions', data: ['sum(nominal) as nominal'], param: ["status" => 2, "MONTHNAME(created_at)" => "September", "thn_akademik" => $thn_akademik], array: 0),
+					'oktober' => $this->model->getDataModel(table: 'transactions', data: ['sum(nominal) as nominal'], param: ["status" => 2, "MONTHNAME(created_at)" => "October", "thn_akademik" => $thn_akademik], array: 0),
+					'november' => $this->model->getDataModel(table: 'transactions', data: ['sum(nominal) as nominal'], param: ["status" => 2, "MONTHNAME(created_at)" => "November", "thn_akademik" => $thn_akademik], array: 0),
+					'desember' => $this->model->getDataModel(table: 'transactions', data: ['sum(nominal) as nominal'], param: ["status" => 2, "MONTHNAME(created_at)" => "December", "thn_akademik" => $thn_akademik], array: 0),
 					'tahun' => $this->model->getDataModel(table: 'transactions', data: ['sum(nominal) as nominal'], param: ["status" => 2, "thn_akademik" => $thn_akademik], array: 0)
 				),
 				'dataTransaksi' => array(
 					'curdate' => $this->db->select('nipd')->from('transactions')->where('status', 2)->where('MONTH(created_at) = MONTH(CURDATE())')->where("thn_akademik", $thn_akademik)->get()->num_rows(),
-					'januari' => $this->model->countAllData('transactions', ['status', 'MONTHNAME(bulan)', "thn_akademik" ], [2, 'January', $thn_akademik]),
-					'februari' => $this->model->countAllData('transactions', ['status', 'MONTHNAME(bulan)', "thn_akademik" ], [2, 'February', $thn_akademik]),
-					'maret' => $this->model->countAllData('transactions', ['status', 'MONTHNAME(bulan)', "thn_akademik" ], [2, 'March', $thn_akademik]),
-					'april' => $this->model->countAllData('transactions', ['status', 'MONTHNAME(bulan)', "thn_akademik" ], [2, 'April', $thn_akademik]),
-					'mei' => $this->model->countAllData('transactions', ['status', 'MONTHNAME(bulan)', "thn_akademik" ], [2, 'May', $thn_akademik]),
-					'juni' => $this->model->countAllData('transactions', ['status', 'MONTHNAME(bulan)', "thn_akademik" ], [2, 'June', $thn_akademik]),
-					'juli' => $this->model->countAllData('transactions', ['status', 'MONTHNAME(bulan)', "thn_akademik" ], [2, 'July', $thn_akademik]),
-					'agustus' => $this->model->countAllData('transactions', ['status', 'MONTHNAME(bulan)', "thn_akademik" ], [2, 'August', $thn_akademik]),
-					'september' => $this->model->countAllData('transactions', ['status', 'MONTHNAME(bulan)', "thn_akademik" ], [2, 'September', $thn_akademik]),
-					'oktober' => $this->model->countAllData('transactions', ['status', 'MONTHNAME(bulan)', "thn_akademik" ], [2, 'October', $thn_akademik]),
-					'november' => $this->model->countAllData('transactions', ['status', 'MONTHNAME(bulan)', "thn_akademik" ], [2, 'November', $thn_akademik]),
-					'desember' => $this->model->countAllData('transactions', ['status', 'MONTHNAME(bulan)', "thn_akademik" ], [2, 'December', $thn_akademik]),
+					'januari' => $this->model->countAllData('transactions', ['status', 'MONTHNAME(created_at)', "thn_akademik" ], [2, 'January', $thn_akademik]),
+					'februari' => $this->model->countAllData('transactions', ['status', 'MONTHNAME(created_at)', "thn_akademik" ], [2, 'February', $thn_akademik]),
+					'maret' => $this->model->countAllData('transactions', ['status', 'MONTHNAME(created_at)', "thn_akademik" ], [2, 'March', $thn_akademik]),
+					'april' => $this->model->countAllData('transactions', ['status', 'MONTHNAME(created_at)', "thn_akademik" ], [2, 'April', $thn_akademik]),
+					'mei' => $this->model->countAllData('transactions', ['status', 'MONTHNAME(created_at)', "thn_akademik" ], [2, 'May', $thn_akademik]),
+					'juni' => $this->model->countAllData('transactions', ['status', 'MONTHNAME(created_at)', "thn_akademik" ], [2, 'June', $thn_akademik]),
+					'juli' => $this->model->countAllData('transactions', ['status', 'MONTHNAME(created_at)', "thn_akademik" ], [2, 'July', $thn_akademik]),
+					'agustus' => $this->model->countAllData('transactions', ['status', 'MONTHNAME(created_at)', "thn_akademik" ], [2, 'August', $thn_akademik]),
+					'september' => $this->model->countAllData('transactions', ['status', 'MONTHNAME(created_at)', "thn_akademik" ], [2, 'September', $thn_akademik]),
+					'oktober' => $this->model->countAllData('transactions', ['status', 'MONTHNAME(created_at)', "thn_akademik" ], [2, 'October', $thn_akademik]),
+					'november' => $this->model->countAllData('transactions', ['status', 'MONTHNAME(created_at)', "thn_akademik" ], [2, 'November', $thn_akademik]),
+					'desember' => $this->model->countAllData('transactions', ['status', 'MONTHNAME(created_at)', "thn_akademik" ], [2, 'December', $thn_akademik]),
 					'tahun' => $this->model->countAllData('transactions', ['status', "thn_akademik" ], [2, $thn_akademik]),
 				),				
 			);
@@ -373,11 +373,6 @@ class Pages extends User {
 			$dataBiaya = $this->model->getDataModel('jenis_pembayaran', ['biaya', 'jenis_pembayaran'], ['instansi' => $dataSiswa['instansi'], 'status' => 1]);
 
 			//Ambil Jumlah Uang Masuk Berdasarkan NIPD
-			$dataNominalMasuk = $this->db->select(['nominal', 'bulan'])
-				->from('transactions')->join('siswa', "transactions.nipd = siswa.nipd")->join('tahun_akademik', "tahun_akademik.thn_akademik = siswa.thn_akademik")
-				->where(['transactions.status' => 2, 'siswa.nipd' => $dataSiswa['nipd'], 'siswa.status' => 1, 'transactions.thn_akademik' => $tahunAkademik,])
-				->get()
-				->result_array();
 			
 			$dataSumNominalMasuk = $this->db->select(['sum(nominal)'])
 				->from('transactions')->join('siswa', "transactions.nipd = siswa.nipd")->join('tahun_akademik', "tahun_akademik.thn_akademik = siswa.thn_akademik")
@@ -397,8 +392,6 @@ class Pages extends User {
 			$response['dataBiaya'] = $dataBiaya;
 			
 			$response['nominalMasuk'] = $dataSumNominalMasuk[0]['sum(nominal)'];
-
-			$response['dataNominalMasuk'] = $dataNominalMasuk;
 
 			if(is_null($dataTransaksi) || empty($dataTransaksi)){
 				$response['errors'] = "Data Transaksi Belum Tersedia!";
