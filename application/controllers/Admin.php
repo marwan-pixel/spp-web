@@ -110,11 +110,11 @@ class Admin extends User {
                                     array(
                                         'field' => 'password',
                                         'label' => 'Password',
-                                        'rules' => 'required|trim|min_length[5]',
+                                        'rules' => 'required|trim|min_length[8]',
                                         'errors' =>
                                         [
                                             'required' => 'Password wajib diisi!',
-                                            'min_length' => 'Password minimal terdiri dari lima karakter'
+                                            'min_length' => 'Password minimal terdiri dari delapan karakter'
                                         ]
                                     ),
                                     array(
