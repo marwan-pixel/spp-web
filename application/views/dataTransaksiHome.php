@@ -2,9 +2,9 @@
 <div class="container-fluid mt-4 main-container content">
     <div class="row">
         <div class="col-sm-12">
-            <button class="btn btn-secondary mb-3 ">
+            <!-- <button class="btn btn-secondary mb-3 ">
                 <i class="material-icons icon siswa-btn">help_outline</i>
-            </button>
+            </button> -->
         </div>
     
         <!-- Tabel Data Siswa -->
@@ -87,6 +87,43 @@
         </div>
     </div>
 </div>
+<div class="col-sm-12">
+    <div class="card shadow mb-3 mt-3 fullscreen cetak-transaksi">
+        <div class="card-header py-3">
+            <h5>Cetak Rekap Seluruh Data Pembayaran Semua Siswa</h5>
+            <div role="alert" id="errormessage"></div>
+            <?= $this->session->flashdata('message'); ?>
+        </div>
+        <div class="card-body" id="form">
+            <form action="<?= base_url('admin/cetakDataTransaksi'); ?>" method="post">
+                <div class="form-group row tanggal-transaksi">
+                    <input hidden id="kelas" name="kelas" value="cetak" type="text">
+                    <input hidden id="status" name="status" value="cetak" type="text">
+                    <input hidden name="function" value="cetak" type="text">
+                    <div class="col-sm-2">
+                        <p class="text-primary" for="InputKelas">Cetak Berdasarkan Tanggal (Opsional)</p>
+                    </div>                     
+                    <div class="col-sm-2 mb-2">
+                        <div class="input-group">
+                        <input class="form-control" type="date" name="since" id="since">
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="input-group">
+                        <input class="form-control" type="date" name="till" id="till">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <button type="submit" name="excel" value="excel" class="btn btn-success">Cetak (Excel)</button>
+                        <button type="submit" name="pdf" value="pdf" class="btn btn-danger">Cetak (PDF)</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>      
+</div>
 <script src="<?= base_url();?>/assets/js/jquery-3.2.1.min.js"></script>
 <script>
     let itemsPerPage = 10;
@@ -94,6 +131,7 @@
     let totalPages;
     let data = [];
     $(document).ready(function(){
+        
         $('#keyword').keyup(function(){
             getData();
         });
@@ -110,6 +148,8 @@
             let keyword = $('#keyword').val();
             let kelas = $('#kelasList').val();
             let status = $('#statusList').val();
+            $('#form .form-group').find('#kelas').attr("value", $('#kelasList').val());
+        $('#form .form-group').find('#status').attr("value", $('#statusList').val());
             $.ajax({
                 url: '<?= base_url('pages/dataTransaksiHomeData');?>',
                 method: 'GET',
@@ -160,52 +200,52 @@
          });
 
          function renderPagination(totalPages, visiblePages) {
-                    // Clear the pagination container
-                    $('.pagination').empty();
-                    
-                    // Calculate the range of pages to be displayed
-                    var startPage = Math.max(1, currentPage - Math.floor(visiblePages / 2));
-                    var endPage = Math.min(totalPages, startPage + visiblePages - 1);
-                    startPage = Math.max(1, endPage - visiblePages + 1);
+            // Clear the pagination container
+            $('.pagination').empty();
+             
+            // Calculate the range of pages to be displayed
+            var startPage = Math.max(1, currentPage - Math.floor(visiblePages / 2));
+            var endPage = Math.min(totalPages, startPage + visiblePages - 1);
+            startPage = Math.max(1, endPage - visiblePages + 1);
+    
+            var pageLinks = '';
+            if (currentPage > 1) {
+                pageLinks += '<li class="page-item"><a class="page-link" href="#" data-page="first">First</a></li>';
+                pageLinks += '<li class="page-item"><a class="page-link" href="#" data-page="prev">&laquo;</a></li>';
+            }
+            for (var i = startPage; i <= endPage; i++) {
+                var activeClass = i === currentPage ? 'active' : '';
+                var pageLink = '<li class="page-item ' + activeClass + '">' +
+                    '<a class="page-link" href="#" data-page="' + i + '">' + i + '</a>' +
+                    '</li>';
+                pageLinks += pageLink;
+            }
+            if (currentPage < totalPages) {
+                pageLinks += '<li class="page-item"><a class="page-link" href="#" data-page="next">&raquo;</a></li>';
+                pageLinks += '<li class="page-item"><a class="page-link" href="#" data-page="last">Last</a></li>';
+            }
+             
+            $('.pagination').append(pageLinks);
+        }
+        
+        $('.pagination').on('click', 'a.page-link', function(e) {
+            e.preventDefault();
 
-                    var pageLinks = '';
-                    if (currentPage > 1) {
-                        pageLinks += '<li class="page-item"><a class="page-link" href="#" data-page="first">First</a></li>';
-                        pageLinks += '<li class="page-item"><a class="page-link" href="#" data-page="prev">&laquo;</a></li>';
-                    }
-                    for (var i = startPage; i <= endPage; i++) {
-                        var activeClass = i === currentPage ? 'active' : '';
-                        var pageLink = '<li class="page-item ' + activeClass + '">' +
-                            '<a class="page-link" href="#" data-page="' + i + '">' + i + '</a>' +
-                            '</li>';
-                        pageLinks += pageLink;
-                    }
-                    if (currentPage < totalPages) {
-                        pageLinks += '<li class="page-item"><a class="page-link" href="#" data-page="next">&raquo;</a></li>';
-                        pageLinks += '<li class="page-item"><a class="page-link" href="#" data-page="last">Last</a></li>';
-                    }
-                    
-                    $('.pagination').append(pageLinks);
-                }
+            let targetPage = $(this).data('page');
 
-                $('.pagination').on('click', 'a.page-link', function(e) {
-                    e.preventDefault();
-
-                    let targetPage = $(this).data('page');
-
-                    if (targetPage === 'first') {
-                        currentPage = 1;
-                    } else if (targetPage === 'prev') {
-                        currentPage = Math.max(1, currentPage - 1);
-                    } else if (targetPage === 'next') {
-                        currentPage = Math.min(totalPages, currentPage + 1);
-                    } else if (targetPage === 'last') {
-                        currentPage = totalPages;
-                    } else {
-                        currentPage = parseInt(targetPage);
-                    }
-                   getData();
-                   renderPagination(totalPages, 4);
-                });
+            if (targetPage === 'first') {
+                currentPage = 1;
+            } else if (targetPage === 'prev') {
+                currentPage = Math.max(1, currentPage - 1);
+            } else if (targetPage === 'next') {
+                currentPage = Math.min(totalPages, currentPage + 1);
+            } else if (targetPage === 'last') {
+                currentPage = totalPages;
+            } else {
+                currentPage = parseInt(targetPage);
+            }
+           getData();
+           renderPagination(totalPages, 4);
+        });
     });
 </script>

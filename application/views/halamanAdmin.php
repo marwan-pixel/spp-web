@@ -82,17 +82,17 @@
                 $('#updateDataAdmin').on('hide.bs.modal', function(event) {
                     $(this).find('.text-danger');
                 });
-    
+
                 $('#updateDataAdmin').on('submit', 'form' , function (event) {
                     event.preventDefault();
-    
+                    
                     var form = $(this);
                     var kode_petugas_old = form.find('input[name="kode_petugas_old"]').val();
                     var kode_petugas = form.find('input[name="kode_petugas"]').val();
                     var nama = form.find('input[name="nama"]').val();
                     var password = form.find('input[name="password"]').val();
                     var confPassword = form.find('input[name="confPassword"]').val();
-    
+
                     $.ajax({
                         url: form.attr('action'),
                         method: form.attr('method'),

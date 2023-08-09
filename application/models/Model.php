@@ -27,6 +27,15 @@ class Model extends CI_Model {
         if(!empty($param['nipd'])){
             $this->db->where('transactions.nipd', $param['nipd']);
         }
+        if(!empty($param['transactions.status'])){
+            $this->db->where('transactions.status', $param['transactions.status']);
+        }
+        if(!empty($param['siswa.kelas'])){
+            $this->db->where('siswa.kelas', $param['siswa.kelas']);
+        }
+        if(!empty($param['siswa.status'])){
+            $this->db->where('siswa.status', $param['siswa.status']);
+        }
         if(empty($param['since']) && empty($param['to'])) {
             $process = $this->db->get()->result_array();
         } else {

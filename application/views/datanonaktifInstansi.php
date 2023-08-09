@@ -3,9 +3,9 @@
             <?= $this->session->flashdata('message'); ?>
             <div class="row">
                 <div class="col-sm-12">
-                    <button class="btn btn-secondary mb-3">
+                    <!-- <button class="btn btn-secondary mb-3">
                         <i class="material-icons icon nonaktifInstansi-btn">help_outline</i>
-                    </button>
+                    </button> -->
                 </div>
 
                 <div class="modal fade" id="RestoreConfirmInstansi" tabindex="-1" aria-labelledby="RestoreConfirmInstansiLabel" aria-hidden="true">

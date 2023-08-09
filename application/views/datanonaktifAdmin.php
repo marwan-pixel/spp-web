@@ -2,9 +2,9 @@
             <?= $this->session->flashdata('message'); ?>
             <div class="row">
                 <div class="col-sm-12">
-                    <button class="btn btn-secondary mb-3">
+                    <!-- <button class="btn btn-secondary mb-3">
                         <i class="material-icons icon nonaktifAdmin-btn">help_outline</i>
-                    </button>
+                    </button> -->
                 </div>
 
                 <div class="modal fade" id="RestoreConfirmAdmin" tabindex="-1" aria-labelledby="RestoreConfirmAdminLabel" aria-hidden="true">

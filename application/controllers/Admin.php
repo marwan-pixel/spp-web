@@ -1242,8 +1242,8 @@ class Admin extends User {
 
             if(!empty($this->input->post('password'))){
                 $data['value']['password'] = password_hash($this->input->post('password'), PASSWORD_BCRYPT);
-                $this->form_validation->set_rules('password','Password','required|trim|min_length[8]', array('required' => 'Password wajib diisi!',
-                'min_length' => 'Password minimal terdiri dari 8 karakter!'));
+                $this->form_validation->set_rules('password','Password','required|trim|min_length[5]', array('required' => 'Password wajib diisi!',
+                'min_length' => 'Password minimal terdiri dari 5 karakter!'));
                 $this->form_validation->set_rules('confPassword','ConfPassword','required|trim|matches[password]', array( 'required' => 'Konfirmasi Password wajib diisi!',
                 'matches' => 'Password tidak sama!'));
                 $this->model->getDataModel($data['table'], ['nama_petugas', 'password'], $data['value']);
@@ -1437,7 +1437,9 @@ class Admin extends User {
                     'nipd' => $this->input->post('nipd'),
                     'since' => $this->input->post('since'),
                     'to' => $this->input->post('till'),
-                    'status' => 2
+                    'transactions.status' => 2,
+                    'siswa.kelas' => $this->input->post('kelas'),
+                    'siswa.status' => $this->input->post('status')
                 ),
             )
         );
@@ -1449,7 +1451,11 @@ class Admin extends User {
             '<div class="alert alert-danger" role="alert">
                 Data Transaksi Kosong!
             </div>');
-            redirect('datatransaksi');
+            if(!empty($data['param']['nipd'])){
+                redirect('datatransaksi?nipd=' . $data['param']['nipd']);
+            } else {
+                redirect('datatransaksihome');
+            }
         } else {
             if($this->input->post('function') == 'cetak'){
                 if($this->input->post('excel') == 'excel'){
@@ -1547,14 +1553,6 @@ class Admin extends User {
         $no = 1;
         $sn = 2;
         foreach ($data as $value) {
-            if($value['status'] == 1) {
-                $value['status'] = "Ditunggu";
-            } else if($value['status'] == 0) {
-                $value['status'] = "Ditolak";
-            } else {
-                $value['status'] = "Diterima";
-            }
-            # code...
             $activeWorksheet->setCellValue('A'.$sn, $no++);
             $activeWorksheet->setCellValue('B'.$sn, $value['nama_siswa']);
             $activeWorksheet->setCellValue('C'.$sn, $value['kelas']);
@@ -1583,6 +1581,7 @@ class Admin extends User {
     }
 
     public function cetakPDF($data) {
+        header('Content-Type: text/html;charset=utf-8');
         $pdf = new FPDF('L','mm','A4');
         $pdf->AddPage();
         $pdf->Image('assets/img/Yayasan Ar-Rahmah.jpeg', 12, 6, 30);
@@ -1653,16 +1652,16 @@ class Admin extends User {
             }
 
             $pdf->Ln();
-            $pdf->SetFont('Arial', '', 11);
+            // $pdf->SetFont('Arial', '', 11);
             $pdf->Cell(12, $line * $cellHeight, $no++, 1);
             
             if($pdf->GetStringWidth($row['nama_siswa']) < $cellWidth){
-                $pdf->Cell(53,  $line * $cellHeight, $row['nama_siswa'], 1);
+                $pdf->Cell(53,  $line * $cellHeight, utf8_decode($row['nama_siswa']), 1);
             } else {
                 $xPos = $pdf->GetX();
                 $yPos = $pdf->GetY();
                 
-                $pdf->MultiCell($cellWidth, $cellHeight, $row['nama_siswa'], 1);
+                $pdf->MultiCell($cellWidth, $cellHeight, utf8_decode($row['nama_siswa']), 1);
                 $pdf->SetXY($xPos + $cellWidth, $yPos);
             }
 

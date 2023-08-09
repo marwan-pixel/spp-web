@@ -1,9 +1,9 @@
 <div class="container-fluid main-conteiner content">
    <div class="row">
          <div class="col-sm-12">
-            <button class="btn btn-secondary mt-3">
+            <!-- <button class="btn btn-secondary mt-3">
                <i class="material-icons icon transaksi-btn">help_outline</i>
-            </button>
+            </button> -->
             <div class="card mt-3 fullscreen cari-siswa">
                <div class="card-body d-flex justify-content-between">
                   <form class="form-inline">
@@ -170,23 +170,8 @@
             </div>
 
             <!-- Transaction Confirm Modal -->
-            <div class="modal fade" id="RestoreConfirmModal" tabindex="-1" aria-labelledby="RestoreConfirmModalLabel" aria-hidden="true">
-               <div class="modal-dialog">
-                  <div class="modal-content">
-                     <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="RestoreConfirmModalLabel">Konfirmasi</h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                     </div>
-                     <div class="modal-body">
-                        Apakah Anda yakin ingin menerima atau menolak data ini? Data yang sudah diterima atau ditolak akan
-                        tersimpan permanen dan tidak dapat diubah kembali ke semula.
-                     </div>
-                     <div class="modal-footer">
-                       <button type="button" data-status="2" class="btn confirmModal btn-primary">Terima</button>
-                       <button type="button" data-status="0" class="btn confirmModal btn-danger text-white">Tolak</button>
-                     </div>
-                  </div>
-               </div>
+            <div class="modal fade" id="ConfirmModal" tabindex="-1" aria-labelledby="ConfirmModalLabel" aria-hidden="true">
+               
             </div>
 
          </div>
@@ -326,7 +311,7 @@
       <div class="col-sm-12">
          <div class="card shadow mb-3 mt-3 fullscreen cetak-transaksi">
             <div class="card-header py-3">
-               <h5>Cetak Rekap Seluruh Data Pembayaran</h5>
+               <h5>Cetak Rekap Data Pembayaran </h5>
                <div role="alert" id="errormessage"></div>
                <?= $this->session->flashdata('message'); ?>
             </div>
@@ -408,7 +393,9 @@
                            $('.transactions').show();
                            $('.add-transaction').find('#nominaltransaction').attr("value", response.dataBiaya);
                            $('#nipdInsert').attr('value', response.dataSiswa.nipd);
+                           $('#nipdInsert').attr('value', response.dataSiswa.nipd);
                            $('#thn_akademikInsert').attr('value', response.dataSiswa.thn_akademik);
+                           $('#form .form-group').find('#nipd-print').attr("value", response.dataSiswa.nipd);
                            $.each(response.dataSiswa, function(index, item) {
                               $('#dataTables-example').show();
                               $('#message').empty();
@@ -431,7 +418,7 @@
    
                               // Biaya Masuk
                               $('.nominal-container').find('#nominalmasuk').html(IDR.format(response.nominalMasuk));
-                              if(response.nominalMasuk == ((response.biaya - response.dataSiswa.potongan) * 12)){
+                              if(response.nominalMasuk == ((response.biaya - response.dataSiswa.potongan) * 12) || (response.dataSiswa.status == "Tidak Aktif")){
                                  $('#insertDataTransaksi').prop('disabled', true);
                               } else {
                                  $('#insertDataTransaksi').prop('disabled', false);
@@ -501,7 +488,7 @@
                                           <td><center>${item.created_at}</center></td>
                                           <td><center><button class="update-link btn text-white" 
                                           data-created-at="${item.created_at}"
-                                          data-nipd="${item.nipd}">${item.status}
+                                          data-nipd="${item.nipd}" data-status="${item.status}">${item.status}
                                           </button></center></td>
                                           '</tr>`;
                                  $('#table tbody').append(row);
@@ -510,14 +497,13 @@
                                     $('.image').attr('src', `<?= base_url();?>/uploads/${imageSrc}`);
                                  });
                                  if(item.status == "2"){
-                                    $(`.update-link[data-created-at="${item.created_at}"]`).prop('disabled', true).addClass('btn-secondary').text('Diterima');
+                                    $(`.update-link[data-created-at="${item.created_at}"]`).addClass('btn-secondary').text('Diterima');
                                  } else if(item.status == "1"){
                                     $(`.update-link[data-created-at="${item.created_at}"]`).addClass('btn-warning').text('Ditunggu');
                                  } else if(item.status == "0") {
-                                    $(`.update-link[data-created-at="${item.created_at}"]`).prop('disabled', true).addClass('btn-danger').text('Ditolak');
+                                    $(`.update-link[data-created-at="${item.created_at}"]`).addClass('btn-danger').text('Ditolak');
                                  }
-                                 // $('.add-transaction').find('#nipdtransaction').attr("value", item.nipd);
-                                 $('#form .form-group').find('#nipd-print').attr("value", item.nipd);
+                                 
                               });
                               if ((currentPage === 1 && pageData.length >= 10)) {
                                  renderPagination(totalPages);
@@ -539,6 +525,7 @@
                            }
                            $('#dataTables-example').hide();
                            $('.transactions').hide();
+                           window.location.href = '<?= base_url();?>pages/datatransaksihome';
                         }
                      },
                      error: function(xhr, status, error) {
@@ -624,46 +611,95 @@
                   $('#detailBiayaModal').modal('show');
                });
                
-               $('.detailNominalMasuk').click(function(){
-                  $('#detailNominalMasukModal').modal('show');
-               });
-
-               
-
                $('#table').on('click', '.update-link' ,function(event) {  
                   event.preventDefault();        
                   created_at = $(this).data('created-at');
                   nipd = $(this).data('nipd');
-                  $('#RestoreConfirmModal').modal('show');
+                  let status = $(this).data('status');
+                  $('#ConfirmModal').empty();
+                  if(status == 1) {
+                     $('#ConfirmModal').html(`
+                     <div class="modal-dialog">
+                        <div class="modal-content">
+                           <div class="modal-header">
+                              <h1 class="modal-title fs-5" id="ConfirmModalLabel">Konfirmasi</h1>
+                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                           </div>
+                           <div class="modal-body">
+                              Apakah Anda yakin ingin menerima atau menolak data ini?
+                           </div>
+                           <div class="modal-footer">
+                           <button type="button" data-status="2" class="btn confirmModal btn-primary">Terima</button>
+                           <button type="button" data-status="0" class="btn confirmModal btn-danger text-white">Tolak</button>
+                           </div>
+                        </div>
+                     </div>
+                     `);
+                  } else if(status == 2) {
+                     $('#ConfirmModal').html(`
+                     <div class="modal-dialog">
+                        <div class="modal-content">
+                           <div class="modal-header">
+                              <h1 class="modal-title fs-5" id="ConfirmModalLabel">Konfirmasi</h1>
+                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                           </div>
+                           <div class="modal-body">
+                              Apakah Anda yakin ingin mengubah status data pembayaran ini?
+                           </div>
+                           <div class="modal-footer">
+                           <button type="button" data-status="0" class="btn confirmModal btn-danger text-white">Tolak</button>
+                           </div>
+                        </div>
+                     </div>
+                     `);
+                  } else {
+                     $('#ConfirmModal').html(`
+                     <div class="modal-dialog">
+                        <div class="modal-content">
+                           <div class="modal-header">
+                              <h1 class="modal-title fs-5" id="ConfirmModalLabel">Konfirmasi</h1>
+                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                           </div>
+                           <div class="modal-body">
+                              Apakah Anda yakin ingin mengubah status data pembayaran ini?
+                           </div>
+                           <div class="modal-footer">
+                           <button type="button" data-status="2" class="btn confirmModal btn-primary">Terima</button>
+                           </div>
+                        </div>
+                     </div>
+                     `);
+                  }
+                  $('#ConfirmModal').modal('show');
                });
 
-               $('.confirmModal').click(function(){
+               $('#ConfirmModal').on('click', '.confirmModal', function(){
                   let thn_akademik = $('#thn_akademikList').val();
                   let status = $(this).data('status');
                   const data = {status: status, created_at: created_at, nipd: nipd, thn_akademik: thn_akademik }
-                  $('#RestoreConfirmModal').modal('hide');
+                  $('#ConfirmModal').modal('hide');
                   $.ajax({
                      url: '<?= base_url('admin/validasiPembayaran')?>',
                      method: 'POST',
                      data: data,
                      success: function(response) {
-                        $('#RestoreConfirmModal').modal('hide');
+                        $('#ConfirmModal').modal('hide');
                         // Update the status element with the new value
                         if(response.value[0] == 2){
                            $(`.update-link[data-created-at="${response.value[1]}"]`).data('status', response.value[0]).text("Diterima");
-                           $(`.update-link[data-created-at="${response.value[1]}"]`).prop('disabled', true).removeClass('btn-warning').addClass('btn-secondary');
+                           $(`.update-link[data-created-at="${response.value[1]}"]`).removeClass('btn-warning btn-danger').addClass('btn-secondary');
                         } else if(response.value[0] == 0){
                            $(`.update-link[data-created-at="${response.value[1]}"]`).data('status', response.value[0]).text("Ditolak");
-                           $(`.update-link[data-created-at="${response.value[1]}"]`).prop('disabled', true).removeClass('btn-warning').addClass('btn-danger');
+                           $(`.update-link[data-created-at="${response.value[1]}"]`).removeClass('btn-warning btn-secondary').addClass('btn-danger');
                         }
                         $('.nominal-container').find('#nominalmasuk').html(IDR.format(response.value[2]));
                         
                      },
                      error: function(xhr, status, error) {
-                     // Handle the error if necessary
                         console.error(error);
                      }
                   });
+
                });
 
             });

@@ -2,9 +2,9 @@
             <?= $this->session->flashdata('message'); ?>
             <div class="row">
                 <div class="col-sm-12">
-                    <button class="btn btn-secondary mb-3">
+                    <!-- <button class="btn btn-secondary mb-3">
                         <i class="material-icons icon nonaktifSiswa-btn">help_outline</i>
-                    </button>
+                    </button> -->
                 </div>
                 <div class="col-12 col-lg-3 mb-3 jumlah-siswa" style="border-radius: 20px">
                     <div class="card shadow-sm d-flex flex-fill">

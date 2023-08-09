@@ -7,9 +7,9 @@
                     <button type="button" class="btn btn-success mb-3 instansi-add" data-bs-toggle="modal" data-bs-target="#exampleModal">
                     Tambah Data
                     </button>
-                    <button class="btn btn-secondary mb-3 instansi-btn">
+                    <!-- <button class="btn btn-secondary mb-3 instansi-btn">
                         <i class="material-icons icon">help_outline</i>
-                    </button>
+                    </button> -->
                 </div>
 
                 <!-- Modal Insert-->
