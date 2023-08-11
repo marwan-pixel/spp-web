@@ -465,7 +465,7 @@ class Pages extends User {
 			$dataSiswa[$i]['nominal_masuk'] = $dataTransaksi[0]['nominal_masuk'];
 			$dataInstansi = $this->model->getDataModel(table: 'kelas', data: ['instansi'], param: ['kelas' => $dataSiswa[$i]['kelas']], array: 0);
 			$dataBiaya = $this->model->getDataModel(table: 'jenis_pembayaran', data: ['sum(biaya) as biaya'], param: ['instansi' => $dataInstansi['instansi']], array: 0);
-			if(($dataSiswa[$i]['nominal_masuk'] == ($dataBiaya['biaya'] - $dataSiswa[$i]['potongan'])) && !is_null($dataBiaya['biaya'])){
+			if(($dataSiswa[$i]['nominal_masuk'] == ($dataBiaya['biaya'] - $dataSiswa[$i]['potongan'])) && !is_null($dataBiaya['biaya']) && $dataSiswa[$i]['status'] == 2){
 				$dataSiswa[$i]['status'] = 'Lunas'; 
 			} else {
 				$dataSiswa[$i]['status'] = 'Belum Lunas'; 
