@@ -461,11 +461,11 @@ class Pages extends User {
 		}
 		for ($i=0; $i < count($dataSiswa); $i++) { 
 			# code...
-			$dataTransaksi = $this->model->getDataModel(table: 'transactions', data: ['sum(nominal) as nominal_masuk'], param: ['nipd' => $dataSiswa[$i]['nipd'], "bulan" => date('Y-m-01')]);
+			$dataTransaksi = $this->model->getDataModel(table: 'transactions', data: ['sum(nominal) as nominal_masuk'], param: ['nipd' => $dataSiswa[$i]['nipd'], "bulan" => date('Y-m-01'), 'status' => 2]);
 			$dataSiswa[$i]['nominal_masuk'] = $dataTransaksi[0]['nominal_masuk'];
 			$dataInstansi = $this->model->getDataModel(table: 'kelas', data: ['instansi'], param: ['kelas' => $dataSiswa[$i]['kelas']], array: 0);
 			$dataBiaya = $this->model->getDataModel(table: 'jenis_pembayaran', data: ['sum(biaya) as biaya'], param: ['instansi' => $dataInstansi['instansi']], array: 0);
-			if(($dataSiswa[$i]['nominal_masuk'] == ($dataBiaya['biaya'] - $dataSiswa[$i]['potongan'])) && !is_null($dataBiaya['biaya']) && $dataSiswa[$i]['status'] == 2){
+			if(($dataSiswa[$i]['nominal_masuk'] == ($dataBiaya['biaya'] - $dataSiswa[$i]['potongan'])) && !is_null($dataBiaya['biaya'])){
 				$dataSiswa[$i]['status'] = 'Lunas'; 
 			} else {
 				$dataSiswa[$i]['status'] = 'Belum Lunas'; 
