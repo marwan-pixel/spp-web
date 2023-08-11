@@ -266,7 +266,7 @@ class Pages extends User {
 		$data = [];
 		if(!(empty($keyword))) {
 			$dataInstansi = $this->model->getDataModel(table: 'instansi', data: ['*'], param: ['status' => $status], keyword: ['jenis_instansi' => $keyword], groupBy: 'jenis_instansi');
-			$dataInstansiTotal = $this->model->getDataModel(table: 'instansi', data: ['count(jenis_instansi) as total'], keyword: ['jenis_instansi' => $keyword]);
+			$dataInstansiTotal = $this->model->getDataModel(table: 'instansi', data: ['count(jenis_instansi) as total'], param: ['status' => $status], keyword: ['jenis_instansi' => $keyword]);
 		} else {
 			$dataInstansi = $this->model->getDataModel(table: 'instansi', data: ['*'], param: ['status' => $status], groupBy: 'jenis_instansi');
 			$dataInstansiTotal = $this->model->getDataModel(table: 'instansi', data: ['count(jenis_instansi) as total'], param: ['status' => $status]);
