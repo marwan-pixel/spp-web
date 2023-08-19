@@ -96,7 +96,7 @@ class Pages extends User {
 		$dataKelas = $this->model->getDataModel('kelas', ['kelas'], ['status' => 1]);
 		$dataTahunAkademik = $this->model->getDataModel('tahun_akademik', ['thn_akademik']);
 		try {
-			$this->render('datasiswa', ['title' => 'Data Siswa', 'name' => $this->_userdata['nama_petugas'], 
+			$this->render('dataSiswa', ['title' => 'Data Siswa', 'name' => $this->_userdata['nama_petugas'], 
 			'data' => array( 'dataKelas' => $dataKelas, 'dataTahunAkademik' => $dataTahunAkademik)]);
 			
 		} catch (Exception $e) {
@@ -142,7 +142,7 @@ class Pages extends User {
 	{
 		$dataKelas = $this->model->getDataModel(table: 'kelas', data: ['kelas']);
 		try {
-			$this->render('datanonaktifsiswa', ['title' => 'Data Nonaktif Siswa', 'name' => $this->_userdata['nama_petugas'], 
+			$this->render('datanonaktifSiswa', ['title' => 'Data Nonaktif Siswa', 'name' => $this->_userdata['nama_petugas'], 
 			'data' => array('dataKelas' => $dataKelas)]);
 		} catch (Exception $e) {
 			$e->getMessage();
@@ -153,7 +153,7 @@ class Pages extends User {
 	{
 		$dataInstansi = $this->model->getDataModel('instansi', ['jenis_instansi'],['status' => 1]);
 		try {
-			$this->render('datakelas', ['title' => 'Data Kelas', 'name' => $this->_userdata['nama_petugas'], 
+			$this->render('dataKelas', ['title' => 'Data Kelas', 'name' => $this->_userdata['nama_petugas'], 
 			'data' => array('dataInstansi' => $dataInstansi)]);		
 		} catch (Exception $e){
 			$e->getMessage();
@@ -193,7 +193,7 @@ class Pages extends User {
 	public function datanonaktifKelas(){
 		$dataInstansi = $this->model->getDataModel('instansi', ['jenis_instansi'],['status' => 1]);
 		try {
-			$this->render('datanonaktifkelas', ['title' => 'Data Non Aktif Kelas', 'name' => $this->_userdata['nama_petugas'], 
+			$this->render('datanonaktifKelas', ['title' => 'Data Non Aktif Kelas', 'name' => $this->_userdata['nama_petugas'], 
 			'data' => array('dataInstansi' => $dataInstansi)]);		
 		} catch (Exception $e){
 			$e->getMessage();
@@ -204,7 +204,7 @@ class Pages extends User {
 	{
 		$dataInstansi = $this->model->getDataModel('instansi', ['jenis_instansi'], ['status' => 1]);
 		try {
-			$this->render('databiaya', ['title' => 'Data Biaya', 'name' => $this->_userdata['nama_petugas'], 'data' => array('dataInstansi' => $dataInstansi)]);
+			$this->render('dataBiaya', ['title' => 'Data Biaya', 'name' => $this->_userdata['nama_petugas'], 'data' => array('dataInstansi' => $dataInstansi)]);
 		} catch (Exception $e){
 			$e->getMessage();
 		}
@@ -244,7 +244,7 @@ class Pages extends User {
 	{
 		$dataInstansi = $this->model->getDataModel('instansi', ['jenis_instansi'], ['status' => 1]);
 		try {
-			$this->render('datanonaktifbiaya', ['title' => 'Data Non Aktif Biaya', 'name' => $this->_userdata['nama_petugas'], 'data' => array('dataInstansi' => $dataInstansi)]);
+			$this->render('datanonaktifBiaya', ['title' => 'Data Non Aktif Biaya', 'name' => $this->_userdata['nama_petugas'], 'data' => array('dataInstansi' => $dataInstansi)]);
 		} catch (Exception $e){
 			$e->getMessage();
 		}
@@ -253,7 +253,7 @@ class Pages extends User {
 	public function dataInstansi()
 	{
 		try {
-			$this->render('datainstansi', ['title' => 'Data Instansi', 'name' => $this->_userdata['nama_petugas']]);
+			$this->render('dataInstansi', ['title' => 'Data Instansi', 'name' => $this->_userdata['nama_petugas']]);
 			
 		} catch (Exception $e){
 			$e->getMessage();
@@ -285,7 +285,7 @@ class Pages extends User {
 	public function datanonaktifInstansi()
 	{
 		try {
-			$this->render('datanonaktifinstansi', ['title' => 'Data Non Aktif Instansi', 'name' => $this->_userdata['nama_petugas']]);
+			$this->render('datanonaktifInstansi', ['title' => 'Data Non Aktif Instansi', 'name' => $this->_userdata['nama_petugas']]);
 		} catch (Exception $e){
 			$e->getMessage();
 		}
@@ -295,7 +295,7 @@ class Pages extends User {
 	{
 		$dataAdmin = $this->model->getDataModel('admin', ['kode_petugas', 'nama_petugas'], ['kode_petugas' => $this->session->userdata('kode_petugas')], array: 0);
 		try {
-			$this->render('halamanadmin', ['title' => 'Halaman Admin', 'name' => $this->_userdata['nama_petugas'], 'kode' => $dataAdmin['kode_petugas']]);
+			$this->render('halamanAdmin', ['title' => 'Halaman Admin', 'name' => $this->_userdata['nama_petugas'], 'kode' => $dataAdmin['kode_petugas']]);
 
 		} catch (Exception $e){
 			$e->getMessage();
@@ -305,7 +305,7 @@ class Pages extends User {
 	public function dataAdmin()
 	{
 		try {
-			$this->render('dataadmin', ['title' => 'Data Admin', 'name' => $this->_userdata['nama_petugas']]);
+			$this->render('dataAdmin', ['title' => 'Data Admin', 'name' => $this->_userdata['nama_petugas']]);
 		} catch (Exception $e){
 			$e->getMessage();
 		}
@@ -337,7 +337,7 @@ class Pages extends User {
 	public function datanonaktifAdmin()
 	{
 		try {
-			$this->render('datanonaktifadmin', ['title' => 'Data Non Aktif Admin', 'name' => $this->_userdata['nama_petugas']]);
+			$this->render('datanonaktifAdmin', ['title' => 'Data Non Aktif Admin', 'name' => $this->_userdata['nama_petugas']]);
 		} catch (Exception $e){
 			$e->getMessage();
 		}
@@ -348,7 +348,7 @@ class Pages extends User {
 		$dataTahunAkademik = $this->model->getDataModel('tahun_akademik', ['thn_akademik']);
 		$dataTahunAkademikSelected = $this->model->getDataModel('tahun_akademik', ['thn_akademik', 'status'], ['status' => 1]);
 		try {
-			$this->render('datatransaksi', ['title' => 'Data Transaksi', 'name' => $this->_userdata['nama_petugas'], 'data' => [$dataTahunAkademik, $dataTahunAkademikSelected]]);
+			$this->render('dataTransaksi', ['title' => 'Data Transaksi', 'name' => $this->_userdata['nama_petugas'], 'data' => [$dataTahunAkademik, $dataTahunAkademikSelected]]);
 		} catch (Exception $e){
 			$e->getMessage();
 		}
@@ -417,7 +417,7 @@ class Pages extends User {
 
 		$dataKelas = $this->model->getDataModel('kelas', ['kelas']);
 		try {
-			$this->render('datatransaksiHome', ['title' => 'Data Transaksi', 'name' => $this->_userdata['nama_petugas'], 'data' => [$dataKelas]]);
+			$this->render('dataTransaksiHome', ['title' => 'Data Transaksi', 'name' => $this->_userdata['nama_petugas'], 'data' => [$dataKelas]]);
 		} catch (Exception $e){
 			$e->getMessage();
 		}
@@ -461,7 +461,7 @@ class Pages extends User {
 		}
 		for ($i=0; $i < count($dataSiswa); $i++) { 
 			# code...
-			$dataTransaksi = $this->model->getDataModel(table: 'transactions', data: ['sum(nominal) as nominal_masuk'], param: ['nipd' => $dataSiswa[$i]['nipd'], "bulan" => date('Y-m-01')]);
+			$dataTransaksi = $this->model->getDataModel(table: 'transactions', data: ['sum(nominal) as nominal_masuk'], param: ['nipd' => $dataSiswa[$i]['nipd'], "bulan" => date('Y-m-d'), 'status' => 2]);
 			$dataSiswa[$i]['nominal_masuk'] = $dataTransaksi[0]['nominal_masuk'];
 			$dataInstansi = $this->model->getDataModel(table: 'kelas', data: ['instansi'], param: ['kelas' => $dataSiswa[$i]['kelas']], array: 0);
 			$dataBiaya = $this->model->getDataModel(table: 'jenis_pembayaran', data: ['sum(biaya) as biaya'], param: ['instansi' => $dataInstansi['instansi']], array: 0);
@@ -473,6 +473,7 @@ class Pages extends User {
 			}
 		}
 		echo json_encode($dataSiswa);
+		die();
 		exit();
 	}
 
@@ -499,7 +500,7 @@ class Pages extends User {
 
 		$dataTahunAkademik = $this->model->getDataModel('tahun_akademik', ['thn_akademik', 'status'], null, $this->getData()['per_page'], $start);
 		try {
-			$this->render('datatahunakademik', ['title' => 'Data Tahun Akademik', 'name' => $this->_userdata['nama_petugas'], 'data' => $dataTahunAkademik, 'start' => $start]);
+			$this->render('dataTahunAkademik', ['title' => 'Data Tahun Akademik', 'name' => $this->_userdata['nama_petugas'], 'data' => $dataTahunAkademik, 'start' => $start]);
 
 		} catch (Exception $e){
 			$e->getMessage();

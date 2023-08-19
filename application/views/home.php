@@ -1,5 +1,5 @@
   <!-- content page -->
-    <div class="container-lg mt-4">
+  <div class="container-lg mt-4">
         <div class="row">
             <div class="col-12">
                 <div class="card shadow-sm">

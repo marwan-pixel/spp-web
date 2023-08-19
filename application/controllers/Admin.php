@@ -1280,6 +1280,7 @@ class Admin extends User {
         $response = $this->response;
         $bulanRentangAwal = $this->input->post('bulanAwalPembayaran');
         $bulanRentangAkhir = $this->input->post('bulanAkhirPembayaran');
+        $instansi = $this->input->post('instansiInsert');
         $nipd = $this->input->post('nipdInsert');
         $keterangan = $this->input->post('keteranganInsert');
         $nominalMasuk = (int)$this->input->post('nominalInsert');
@@ -1294,8 +1295,8 @@ class Admin extends User {
                 'keteranganInsert' => 'Keterangan tidak boleh kosong!');
         } else {
             list($tahunAwal, $tahunAkhir) = explode("/", $thn_akademik);
-            $dateStart = new DateTime($tahunAwal . '-' .$bulanRentangAwal . '-01');
-            $dateEnd = new DateTime($tahunAkhir . '-' . $bulanRentangAkhir . '-01');
+            $dateStart = new DateTime($tahunAwal . '-' .$bulanRentangAwal . '-' .date('d'));
+            $dateEnd = new DateTime($tahunAkhir . '-' . $bulanRentangAkhir . '-' . date('d'));
             $monthDiff = date_diff($dateStart, $dateEnd)->format('%m')+1;
             
             $dataInstansi = $this->model->getDataJoinModel(table: ['siswa', 'kelas'], data: ['kelas.instansi', 'siswa.potongan'], 
@@ -1317,6 +1318,7 @@ class Admin extends User {
                         'value' => array(
                             'nipd' => $nipd,
                             'thn_akademik' => $thn_akademik,
+                            'instansi' => $instansi,
                             'nominal' => null,
                             'bulan'=> '',
                             'status' => 2,
