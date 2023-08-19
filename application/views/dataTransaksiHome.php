@@ -90,7 +90,9 @@
 <div class="col-sm-12">
     <div class="card shadow mb-3 mt-3 fullscreen cetak-transaksi">
         <div class="card-header py-3">
-            <h5>Cetak Rekap Seluruh Data Pembayaran Semua Siswa</h5>
+            <div class="d-flex justify-content-start">
+                <h5>Cetak Rekap Seluruh Data Pembayaran Semua Siswa</h5> 
+            </div>
             <div role="alert" id="errormessage"></div>
             <?= $this->session->flashdata('message'); ?>
         </div>
