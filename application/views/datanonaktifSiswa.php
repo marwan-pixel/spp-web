@@ -158,11 +158,14 @@
                                         <td><center>${item.kelas}</center></td>
                                         <td><center>${item.thn_akademik}</center></td>
                                         <td><center>${item.status == 0 ? 'Tidak Aktif' : 'Aktif'}</center></td>
-                                        <td><center>
-                                        <a class="btn btn-primary restoreData text-white" data-nipd="${item.nipd}"
-                                            data-kelas="${item.kelas}">
-                                            <i class="material-icons icon">restore</i>
-                                        </a>
+                                        <td>
+                                            <div class="d-flex justify-content-center align-items-center">
+                                                <a class="btn btn-primary restoreData text-white" data-nipd="${item.nipd}"
+                                                    data-kelas="${item.kelas}">
+                                                    <i class="material-icons icon">restore</i>
+                                                </a>
+                                            </div>
+                                        </td>
                                     '</tr>`;
                                     $('#table tbody').append(row);
                                 });

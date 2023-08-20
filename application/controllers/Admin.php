@@ -1282,9 +1282,10 @@ class Admin extends User {
         $bulanRentangAkhir = $this->input->post('bulanAkhirPembayaran');
         $nipd = $this->input->post('nipdInsert');
         $keterangan = $this->input->post('keteranganInsert');
-        $nominalMasuk = (int)$this->input->post('nominalInsert');
+        $nominal_masuk = $this->input->post('nominalInsert');
         $thn_akademik = $this->input->post('thn_akademikInsert');
 
+        $nominalMasuk = (int) str_replace(array(',', '.'), '', $nominal_masuk);
         $errors = [];
         if(empty($bulanRentangAwal) || empty($bulanRentangAkhir) || $nominalMasuk < 1 || empty($keterangan)){
             $response['errors'] = array(

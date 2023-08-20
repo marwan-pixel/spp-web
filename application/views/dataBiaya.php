@@ -237,21 +237,23 @@
                                         <td><center>${item.jenis_pembayaran}</center></td>
                                         <td><center>${IDR.format(item.biaya)}</center></td>
                                         <td><center>${item.instansi}</center></td>
-                                        <td><center>
-                                        <a href="javascript:;" 
-                                            data-id_jenis_pembayaran="${item.id_jenis_pembayaran}"                                                            
-                                            data-jenis_pembayaran="${item.jenis_pembayaran}"
-                                            data-biaya="${item.biaya}"
-                                            data-instansi="${item.instansi}"                                                                
-                                            class="btn btn-warning btn-sm updateData" data-bs-toggle="modal"
-                                            data-bs-target="#updateBiaya">Ubah
-                                        </a>
-                                        <a href="javascript:;"
-                                            data-id_jenis_pembayaran="${item.id_jenis_pembayaran}"
-                                            class="btn btn-danger btn-sm deleteData">
-                                            <i class="material-icons icon">delete</i>
-                                        </a>
-                                        </center></td>
+                                        <td>
+                                            <div class="d-flex justify-content-center align-items-center">
+                                                <a href="javascript:;" 
+                                                    data-id_jenis_pembayaran="${item.id_jenis_pembayaran}"                                                            
+                                                    data-jenis_pembayaran="${item.jenis_pembayaran}"
+                                                    data-biaya="${item.biaya}"
+                                                    data-instansi="${item.instansi}"                                                                
+                                                    class="btn btn-warning btn-sm updateData mr-2" data-bs-toggle="modal"
+                                                    data-bs-target="#updateBiaya">Ubah
+                                                </a>
+                                                <a href="javascript:;"
+                                                    data-id_jenis_pembayaran="${item.id_jenis_pembayaran}"
+                                                    class="btn btn-danger btn-sm deleteData">
+                                                    <i class="material-icons icon">delete</i>
+                                                </a>
+                                            </div>
+                                        </td>
                                     '</tr>`;
                                     $('#table tbody').append(row);
                                 });

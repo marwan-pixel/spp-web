@@ -128,11 +128,13 @@
                                         <td><center>${no++}</center></td>
                                         <td><center>${item.kode_petugas}</center></td>
                                         <td><center>${item.nama_petugas}</center></td>
-                                        <td><center>
-                                        <a class="btn btn-primary text-white restoreData" 
-                                        data-kode-petugas="${item.kode_petugas}">
-                                        <i class="material-icons icon">restore</i></a></center>
-                                        </center></td>
+                                        <td>
+                                            <div class="d-flex justify-content-center align-items-center">
+                                                <a class="btn btn-primary text-white restoreData" 
+                                                data-kode-petugas="${item.kode_petugas}">
+                                                <i class="material-icons icon">restore</i></a>
+                                            </div>
+                                        </td>
                                     '</tr>`;
                                     $('#table tbody').append(row);
                                 });

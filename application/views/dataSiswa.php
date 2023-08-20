@@ -404,21 +404,24 @@
                                         <td><center>${item.kelas}</center></td>
                                         <td><center>${item.thn_akademik}</center></td>
                                         <td><center>${item.status == 1? 'Aktif' : 'Tidak Aktif'}</center></td>
-                                        <td><center>
-                                        <a href="javascript:;" 
-                                            data-nipd = "${item.nipd}"
-                                            data-nipdnew = "${item.nipd}"
-                                            data-nama = "${item.nama_siswa}"
-                                            data-kelas = "${item.kelas}"
-                                            data-thn_akademik = "${item.thn_akademik}"
-                                            data-potongan = "${item.potongan}"
-                                            class="btn btn-warning btn-sm"  data-bs-toggle="modal" data-bs-target="#UpdateData"
-                                        >Ubah</a>
-                                        <a href="javascript:;"
-                                        data-nipd = "${item.nipd}"
-                                        class="btn btn-danger btn-sm deleteData">
-                                            <i class="material-icons icon">delete</i>
-                                        </a></center></td>
+                                        <td>
+                                            <div class="d-flex justify-content-center align-items-center">
+                                                <a href="javascript:;" 
+                                                    data-nipd = "${item.nipd}"
+                                                    data-nipdnew = "${item.nipd}"
+                                                    data-nama = "${item.nama_siswa}"
+                                                    data-kelas = "${item.kelas}"
+                                                    data-thn_akademik = "${item.thn_akademik}"
+                                                    data-potongan = "${item.potongan}"
+                                                    class="btn btn-warning btn-sm mr-2"  data-bs-toggle="modal" data-bs-target="#UpdateData"
+                                                >Ubah</a>
+                                                <a href="javascript:;"
+                                                data-nipd = "${item.nipd}"
+                                                class="btn btn-danger btn-sm deleteData">
+                                                    <i class="material-icons icon">delete</i>
+                                                </a>
+                                            </div>
+                                        </td>
                                     '</tr>`;
                                     $('#table tbody').append(row);
                                 });

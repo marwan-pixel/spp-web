@@ -180,15 +180,17 @@
                                         <td><center>${no++}</center></td>
                                         <td><center>${item.thn_akademik}</center></td>
                                         <td><center>${item.status == 1 ? 'Aktif' : 'Tidak Aktif'}</center></td>
-                                        <td><center>
-                                        <a href="javascript:;" 
-                                            data-thn_akademikold="${item.thn_akademik}"
-                                            data-thn_akademik="${item.thn_akademik}"                                                            
-                                            data-status="${item.status}"
-                                            class="btn btn-warning btn-sm updateData" data-bs-toggle="modal"
-                                            data-bs-target="#updateTahun">Ubah
-                                        </a>
-                                    </center></td>
+                                        <td>
+                                            <div class="d-flex justify-content-center align-items-center">
+                                                <a href="javascript:;" 
+                                                    data-thn_akademikold="${item.thn_akademik}"
+                                                    data-thn_akademik="${item.thn_akademik}"                                                            
+                                                    data-status="${item.status}"
+                                                    class="btn btn-warning btn-sm updateData" data-bs-toggle="modal"
+                                                    data-bs-target="#updateTahun">Ubah
+                                                </a>
+                                            </div>
+                                        </td>
                                     '</tr>`;
                                     $('#table tbody').append(row);
                                 });
