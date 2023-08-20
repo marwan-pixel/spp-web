@@ -90,6 +90,10 @@
                                  <label for="thn_akademikInsert">Tahun Akademik</label>
                                  <input type="text" readonly name="thn_akademikInsert"  class="form-control" id="thn_akademikInsert" aria-describedby="thn_akademikInsert">
                               </div>
+                              <div class="form-group" hidden>
+                                 <label for="instansiInsert">Instansi</label>
+                                 <input type="text" readonly name="instansiInsert"  class="form-control" id="instansiInsert" aria-describedby="instansiInsert">
+                              </div>
                               <div class="form-group">
                                  <label for="nominalInsert">Nominal Bayar</label>
                                  <input type="number" name="nominalInsert" class="form-control" id="nominalInsert" aria-describedby="nominalInsert">
@@ -392,7 +396,7 @@
                            $('.transactions').show();
                            $('.add-transaction').find('#nominaltransaction').attr("value", response.dataBiaya);
                            $('#nipdInsert').attr('value', response.dataSiswa.nipd);
-                           $('#nipdInsert').attr('value', response.dataSiswa.nipd);
+                           $('#instansiInsert').attr('value', response.dataSiswa.instansi);
                            $('#thn_akademikInsert').attr('value', response.dataSiswa.thn_akademik);
                            $('#form .form-group').find('#nipd-print').attr("value", response.dataSiswa.nipd);
                            $.each(response.dataSiswa, function(index, item) {
@@ -572,6 +576,7 @@
                   let data = {
                      nipdInsert: form.find('input[name="nipdInsert"]').val(),
                      thn_akademikInsert: form.find('input[name="thn_akademikInsert"]').val(),
+                     instansiInsert: form.find('input[name="instansiInsert"]').val(),
                      nominalInsert: form.find('input[name="nominalInsert"]').val(),
                      keteranganInsert: form.find('input[name="keteranganInsert"]').val(),
                      bulanAwalPembayaran: form.find('#bulanAwalPembayaran').val(),
