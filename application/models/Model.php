@@ -106,6 +106,23 @@ class Model extends CI_Model {
         return $this->db->get($table)->num_rows();
     }
 
+	public function getHighestStaffCodeNumber() {
+        $this->db->select_max('kode_petugas');
+        $this->db->from('admin');
+        $this->db->where('status', 1);
+        
+        $query = $this->db->get();
+        $result = $query->row();
+
+        if ($result) {
+            // Extract the numeric part from the code
+            $highestNumber = intval(substr($result->kode_petugas, 3));
+            return $highestNumber;
+        }
+
+        return 0; // If no record found, start from 0
+    }
+	
     public function insertDataModel($table, $dataInput){
         try {
              $this->db->insert($table, $dataInput);

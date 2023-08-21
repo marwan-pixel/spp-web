@@ -20,6 +20,15 @@ class Admin extends User {
             'redirect' => null,
         );
     }
+    
+ 
+public function getLastGeneratedNumber() {
+    $this->load->model('Model');
+    $highestNumber = $this->Model->getHighestStaffCodeNumber();
+    header('Content-Type: application/json');
+    echo json_encode(['highestNumber' => $highestNumber]);
+}
+
     //Overriding parent method
     public function login($data = null) {
         $this->setData(
@@ -1276,16 +1285,17 @@ class Admin extends User {
         exit();
     }
 
-    public function tambahDataTransaksi() {
+     public function tambahDataTransaksi() {
         $response = $this->response;
         $bulanRentangAwal = $this->input->post('bulanAwalPembayaran');
         $bulanRentangAkhir = $this->input->post('bulanAkhirPembayaran');
         $instansi = $this->input->post('instansiInsert');
         $nipd = $this->input->post('nipdInsert');
         $keterangan = $this->input->post('keteranganInsert');
-        $nominalMasuk = (int)$this->input->post('nominalInsert');
+        $nominal_masuk = $this->input->post('nominalInsert');
         $thn_akademik = $this->input->post('thn_akademikInsert');
 
+        $nominalMasuk = (int) str_replace(array(',', '.'), '', $nominal_masuk);
         $errors = [];
         if(empty($bulanRentangAwal) || empty($bulanRentangAkhir) || $nominalMasuk < 1 || empty($keterangan)){
             $response['errors'] = array(
@@ -1338,11 +1348,12 @@ class Admin extends User {
                     $bulanRentangAwalStr = $dateStart->format('Y-m-d');
                     $data['value']['nominal'] = min($nominalMasuk, $dataBiaya);
                     $data['value']['image'] = 'Bayar Langsung';
+                    $data['value']['instansi'] = $instansi;
                     $data['value']['bulan'] = $bulanRentangAwalStr;
                     if ($nominalMasuk <= 0) {
                         break;
                     }
-                    $transaksiBulanIni = $this->model->getDataModel('transactions', ['nipd', 'thn_akademik', 'nominal', 'bulan', 'status', 'keterangan', 'created_at'], 
+                    $transaksiBulanIni = $this->model->getDataModel('transactions', ['nipd', 'thn_akademik', 'instansi', 'nominal', 'bulan', 'status', 'keterangan', 'created_at'], 
                     ['bulan' => $bulanRentangAwalStr, 'nipd' => $nipd, 'status' => 2, 'thn_akademik' => $data['value']['thn_akademik']]);
                     $nominalTransaksiBulanIni = $this->model->getDataModel('transactions', ['sum(nominal)'], 
                     ['bulan' => $bulanRentangAwalStr, 'nipd' => $nipd, 'status' => 2, 'thn_akademik' => $data['value']['thn_akademik']]);
