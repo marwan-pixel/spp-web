@@ -29,6 +29,8 @@ public function getLastGeneratedNumber() {
     echo json_encode(['highestNumber' => $highestNumber]);
 }
 
+
+    
     //Overriding parent method
     public function login($data = null) {
         $this->setData(

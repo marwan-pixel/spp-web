@@ -11,23 +11,23 @@
                     </button> -->
                 </div>
 
-                <!-- Modal Insert -->
-                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h4 class="modal-title" id="exampleModalLabel">Data Kelas</h4>
-                                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+               <!-- Modal Insert -->
+            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title" id="exampleModalLabel">Data Admin</h4>
+                            <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div class="modal-body">
+                            </button>
+                        </div>
+                        <div class="modal-body">
                             <form method="post" action="<?=  base_url('admin/tambahDataAdmin'); ?>">
                                 <div class="form-group">
-                                    <label for="InputKode">Kode Petugas</label>
-                                    <input type="text" name="kode_petugas" class="form-control" id="kode_petugas" aria-describedby="InputKode">
-                                    <small id="kode_petugas-error" class="text-danger"></small>
-                                </div>
+                                <label for="InputKode">Kode Petugas</label>
+                                <input type="text" name="kode_petugas" class="form-control" id="kode_petugas" aria-describedby="InputKode" readonly>
+                                <small id="kode_petugas-error" class="text-danger"></small>
+                            </div>
                                 <div class="form-group">
                                     <label for="InputNama">Nama Petugas</label>
                                     <input type="text" name="nama_petugas" class="form-control" id="nama_petugas" aria-describedby="InputNama">
@@ -43,16 +43,20 @@
                                     <input type="password" name="confPassword" class="form-control" id="confPassword" aria-describedby="InputConfPassword">
                                     <small id="confPassword-error" class="text-danger"></small>
                                 </div>
-
+            
+                                <!-- Hidden input for last generated number -->
+                                <input type="hidden" id="lastGeneratedNumber" value="0">
+            
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                                     <button type="submit" class="btn btn-primary">Tambah Data</button>
                                 </div>
                             </form>
-                            </div>
                         </div>
                     </div>
                 </div>
+            </div>
+            
 
                 <div class="col-12 col-lg-3 mb-3 jumlah-admin" style="border-radius: 20px">
                     <div class="card shadow-sm d-flex flex-fill">
@@ -153,6 +157,79 @@
                 $('#cari').keyup(function(){
                     getData();
                 });
+                
+                function generateNewStaffCode(lastGeneratedNumber) {
+                if (isNaN(lastGeneratedNumber)) {
+                    lastGeneratedNumber = 0; // Default to 0 if not a valid number
+                }
+            
+                var newGeneratedNumber = lastGeneratedNumber + 1;
+                var formattedNumber = ("00000" + newGeneratedNumber).slice(-6);
+            
+                var newKodePetugas = 'TU-' + formattedNumber;
+            
+                $('#kode_petugas').val(newKodePetugas);
+              
+                $('#lastGeneratedNumber').val(newGeneratedNumber);
+                console.log("lastGeneratedNumber:", lastGeneratedNumber);
+                console.log("newGeneratedNumber:", newGeneratedNumber);
+                console.log("newKodePetugas:", newKodePetugas);
+            }
+
+            $(document).ready(function() {
+                getData();
+            
+                $('#cari').keyup(function() {
+                    getData();
+                });
+            
+                $('#exampleModal').on('show.bs.modal', function(event) {
+                    $.ajax({
+                        url: '<?= base_url('admin/getLastGeneratedNumber'); ?>',
+                        method: 'GET',
+                        success: function(response) {
+                            var lastGeneratedNumber = parseInt(response.highestNumber);
+                            generateNewStaffCode(lastGeneratedNumber);
+                        },
+                        error: function() {
+                            console.error('Error retrieving last generated number.');
+                        }
+                    });
+                });
+            });
+
+    $('#exampleModal').on('submit', 'form', function(event) {
+        event.preventDefault();
+
+        var form = $(this);
+        var kode_petugas = form.find('input[name="kode_petugas"]').val();
+        var nama_petugas = form.find('input[name="nama_petugas"]').val();
+        var password = form.find('input[name="password"]').val();
+        var confPassword = form.find('input[name="confPassword"]').val();
+
+        $.ajax({
+            url: form.attr('action'),
+            method: form.attr('method'),
+            data: form.serialize(),
+            dataType: 'json',
+            success: function(response) {
+                if (response.success) {
+                    window.location.href = response.redirect;
+                    $('#exampleModal').modal('hide');
+                } else {
+                    var errors = response.errors;
+                    $.each(errors, function(field, message) {
+                        let errorElement = $('#' + field + '-error');
+                        errorElement.html(message);
+                    });
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error(error);
+                console.error(status);
+            }
+        });
+    });
 
                 function getData(){
                     let keyword = $('#cari').val();
@@ -176,14 +253,12 @@
                                         <td><center>${no++}</center></td>
                                         <td><center>${item.kode_petugas}</center></td>
                                         <td><center>${item.nama_petugas}</center></td>
-                                        <td>
-                                        <div class="d-flex justify-content-center align-items-center">
-                                            <a class="btn btn-danger deleteData text-white btn-sm"
-                                            data-kode-petugas="${item.kode_petugas}">
-                                                <i class="material-icons icon">delete</i>
-                                            </a>
-                                        </div>
-                                        </td>
+                                        <td><center>
+                                        <a class="btn btn-danger deleteData text-white btn-sm"
+                                        data-kode-petugas="${item.kode_petugas}">
+                                            <i class="material-icons icon">delete</i>
+                                        </a>
+                                        </center></td>
                                     '</tr>`;
                                     $('#table tbody').append(row);
                                 });
