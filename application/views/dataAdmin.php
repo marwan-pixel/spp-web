@@ -176,12 +176,14 @@
                                         <td><center>${no++}</center></td>
                                         <td><center>${item.kode_petugas}</center></td>
                                         <td><center>${item.nama_petugas}</center></td>
-                                        <td><center>
-                                        <a class="btn btn-danger deleteData text-white btn-sm"
-                                        data-kode-petugas="${item.kode_petugas}">
-                                            <i class="material-icons icon">delete</i>
-                                        </a>
-                                        </center></td>
+                                        <td>
+                                        <div class="d-flex justify-content-center align-items-center">
+                                            <a class="btn btn-danger deleteData text-white btn-sm"
+                                            data-kode-petugas="${item.kode_petugas}">
+                                                <i class="material-icons icon">delete</i>
+                                            </a>
+                                        </div>
+                                        </td>
                                     '</tr>`;
                                     $('#table tbody').append(row);
                                 });

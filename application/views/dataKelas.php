@@ -238,19 +238,22 @@
                                         <td><center>${no++}</center></td>
                                         <td><center>${item.kelas}</center></td>
                                         <td><center>${item.instansi}</center></td>
-                                        <td><center>
-                                        <a href="javascript:;" 
-                                            data-kelas="${item.kelas}"
-                                            data-kelasnew="${item.kelas}"
-                                            data-instansi="${item.instansi}"
-                                            class="btn btn-warning btn-sm " data-bs-toggle="modal"
-                                            data-bs-target="#exampleModalUpdate">Ubah
-                                        </a>
-                                        <a href="javascript:;"
-                                            data-kelas="${item.kelas}"
-                                            class="btn btn-danger btn-sm deleteData">
-                                            <i class="material-icons icon">delete</i>
-                                        </a></center></td>
+                                        <td>
+                                            <div class="d-flex justify-content-center align-items-center">
+                                                <a href="javascript:;" 
+                                                    data-kelas="${item.kelas}"
+                                                    data-kelasnew="${item.kelas}"
+                                                    data-instansi="${item.instansi}"
+                                                    class="btn btn-warning btn-sm mr-2" data-bs-toggle="modal"
+                                                    data-bs-target="#exampleModalUpdate">Ubah
+                                                </a>
+                                                <a href="javascript:;"
+                                                    data-kelas="${item.kelas}"
+                                                    class="btn btn-danger btn-sm deleteData">
+                                                    <i class="material-icons icon">delete</i>
+                                                </a>
+                                            </div>
+                                        </td>
                                     '</tr>`;
                                     $('#table tbody').append(row);
                                 });

@@ -143,11 +143,13 @@
                                         <td><center>${item.jenis_pembayaran}</center></td>
                                         <td><center>${IDR.format(item.biaya)}</center></td>
                                         <td><center>${item.instansi}</center></td>
-                                        <td><center>
-                                        <a class="btn btn-primary text-white restoreData" data-id_jenis_pembayaran=
-                                        "${item.id_jenis_pembayaran}" data-instansi="${item.instansi}"
-                                        ><i class="material-icons icon">restore</i></a>
-                                        </center></td>
+                                        <td>
+                                            <div class="d-flex justify-content-center align-items-center">
+                                                <a class="btn btn-primary text-white restoreData" data-id_jenis_pembayaran=
+                                                "${item.id_jenis_pembayaran}" data-instansi="${item.instansi}"
+                                                ><i class="material-icons icon">restore</i></a>
+                                            </div>
+                                        </td>
                                     '</tr>`;
                                     $('#table tbody').append(row);
                                 });

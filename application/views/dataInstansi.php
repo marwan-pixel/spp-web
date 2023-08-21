@@ -191,18 +191,21 @@
                                     `<tr>
                                         <td><center>${no++}</center></td>
                                         <td><center>${item.jenis_instansi}</center></td>
-                                        <td><center>
-                                        <a href="javascript:;" 
-                                            data-instansi="${item.jenis_instansi}"
-                                            data-instansinew="${item.jenis_instansi}"
-                                            class="btn btn-warning btn-sm updateData" data-bs-toggle="modal"
-                                            data-bs-target="#updateInstansi"
-                                        >Ubah</a>
-                                        <a href="javascript:;"
-                                            data-instansi="${item.jenis_instansi}"
-                                            class="btn btn-danger btn-sm deleteData">
-                                            <i class="material-icons icon">delete</i>
-                                        </a></center></td>
+                                        <td>
+                                            <div class="d-flex justify-content-center align-items-center">
+                                                <a href="javascript:;" 
+                                                    data-instansi="${item.jenis_instansi}"
+                                                    data-instansinew="${item.jenis_instansi}"
+                                                    class="btn btn-warning btn-sm updateData mr-2" data-bs-toggle="modal"
+                                                    data-bs-target="#updateInstansi"
+                                                >Ubah</a>
+                                                <a href="javascript:;"
+                                                    data-instansi="${item.jenis_instansi}"
+                                                    class="btn btn-danger btn-sm deleteData">
+                                                    <i class="material-icons icon">delete</i>
+                                                </a>
+                                            </div>
+                                        </td>
                                     '</tr>`;
                                     $('#table tbody').append(row);
                                 });

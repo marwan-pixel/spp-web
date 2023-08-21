@@ -253,16 +253,15 @@
                         </div>
                         <div class="row">
                            <div class="col-sm-12 hidden-overflow">
-                              
-                              <button type="button" class="btn btn-success mb-3 mt-3 " id="insertDataTransaksi" data-bs-toggle="modal" data-bs-target="#insertTransaksi">
+                              <button type="button" class="btn btn-success mb-3 mt-3 hidden-overflow" id="insertDataTransaksi" data-bs-toggle="modal" data-bs-target="#insertTransaksi">
                                  Tambah Data (Jika Membayar dengan Cash)
                               </button>
-                              <div class="nominal-container d-flex justify-content-between">
+                              <div class="nominal-container d-flex justify-content-between hidden-overflow">
                                  <div>
                                     <h5 align="left">Nominal Masuk</h5>
                                     <h4 align="left" id="nominalmasuk" class="text-primary"></h4>
                                  </div>
-                                 <div class="d-flex flex-sm-column justify-content-end mb-3">
+                                 <div class="d-flex flex-column justify-content-end mb-3">
                                     <h5 align="right">Total Biaya</h5>
                                     <h4 align="right" id="totalnominal" class="text-primary"></h4>
                                     <button class="btn btn-small btn-primary detailBiaya">Detail Biaya</button>

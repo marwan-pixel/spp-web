@@ -150,12 +150,15 @@
                                         <td><center>${no++}</center></td>
                                         <td><center>${item.kelas}</center></td>
                                         <td><center>${item.instansi}</center></td>
-                                        <td><center>
-                                        <a class="btn btn-primary restoreData text-white"
-                                        data-instansi="${item.instansi}" data-kelas=
-                                        "${item.kelas}">
-                                        <i class="material-icons icon">restore</i>
-                                        </a>
+                                        <td>
+                                        <div class="d-flex justify-content-center align-items-center">
+                                            <a class="btn btn-primary restoreData text-white"
+                                            data-instansi="${item.instansi}" data-kelas=
+                                            "${item.kelas}">
+                                            <i class="material-icons icon">restore</i>
+                                            </a>
+                                        </div>
+                                        </td>
                                     '</tr>`;
                                     $('#table tbody').append(row);
                                 });

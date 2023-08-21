@@ -127,11 +127,14 @@
                                     `<tr>
                                         <td><center>${no++}</center></td>
                                         <td><center>${item.jenis_instansi}</center></td>
-                                        <td><center>
-                                        <a class="btn btn-primary text-white restoreData" 
-                                        data-jenis_instansi="${item.jenis_instansi}">
-                                        <i class="material-icons icon">restore</i>
-                                        </a></center></td>
+                                        <td>
+                                            <div class="d-flex justify-content-center align-items-center">
+                                                <a class="btn btn-primary text-white restoreData" 
+                                                data-jenis_instansi="${item.jenis_instansi}">
+                                                <i class="material-icons icon">restore</i>
+                                                </a>
+                                            </div>
+                                        </td>
                                     '</tr>`;
                                     $('#table tbody').append(row);
                                 });
