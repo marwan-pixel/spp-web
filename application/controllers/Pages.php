@@ -461,11 +461,8 @@ class Pages extends User {
 		}
 		for ($i=0; $i < count($dataSiswa); $i++) { 
 			# code...
-<<<<<<< HEAD
 			$dataTransaksi = $this->model->getDataModel(table: 'transactions', data: ['sum(nominal) as nominal_masuk'], param: ['nipd' => $dataSiswa[$i]['nipd'], "bulan" => date('Y-m-d'), 'status' => 2]);
-=======
 			$dataTransaksi = $this->model->getDataModel(table: 'transactions', data: ['sum(nominal) as nominal_masuk'], param: ['nipd' => $dataSiswa[$i]['nipd'], "bulan" => date('Y-m-01'), 'status' => 2]);
->>>>>>> 4d570653206782e8fa01facdc6fe4b36d279b22d
 			$dataSiswa[$i]['nominal_masuk'] = $dataTransaksi[0]['nominal_masuk'];
 			$dataInstansi = $this->model->getDataModel(table: 'kelas', data: ['instansi'], param: ['kelas' => $dataSiswa[$i]['kelas']], array: 0);
 			$dataBiaya = $this->model->getDataModel(table: 'jenis_pembayaran', data: ['sum(biaya) as biaya'], param: ['instansi' => $dataInstansi['instansi']], array: 0);

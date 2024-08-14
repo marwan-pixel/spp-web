@@ -152,7 +152,6 @@
                     data: {thn_akademik: thn_akademik},
                     dataType: 'json',
                     success: function(response){
-                        console.log(response);
                         $('.pemasukan').text(IDR.format(response.totalPemasukan.curdate.nominal));
                         $('.transaksiAktif').text(response.dataTransaksi.curdate);
                         $('.pemasukanTahun').text(IDR.format(response.totalPemasukan.tahun.nominal));

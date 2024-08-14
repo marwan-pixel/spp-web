@@ -406,7 +406,6 @@
                               data.html(item);
                            });
    
-                           
                            if((response.dataBiaya).length === 0) {
                               $('.detailBiaya').prop('disabled', true);
                               $('.nominal-container').find('#totalnominal').html(IDR.format(0));
