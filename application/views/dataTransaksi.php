@@ -1,387 +1,179 @@
-<div class="container-fluid main-conteiner content">
-   <div class="row">
-         <div class="col-sm-12">
-            <!-- <button class="btn btn-secondary mt-3">
-               <i class="material-icons icon transaksi-btn">help_outline</i>
-            </button> -->
-            <div class="card mt-3 fullscreen cari-siswa">
-               <div class="card-body d-flex justify-content-between">
-                  <form class="form-inline">
-                     <div class=" inputtahun">
-                        <label for="thn_akademikList">Tahun Akademik</label>
-                        <select id="thn_akademikList" class="form-select" name="thn_akademik">
-                           <?php
-                           ?>
-                           <option selected value="<?= $data[1][0]['thn_akademik'];?>"><?= $data[1][0]['thn_akademik'];?></option>
-                           <?php
-                           foreach ($data[0] as $value) {
-                              if($value['thn_akademik'] === $data[1][0]['thn_akademik']){
-                                 continue;
-                             }
-                           ?>
-                           <option value="<?= $value['thn_akademik'];?>"><?= $value['thn_akademik'];?></option>
-                           <?php
-                           }
-                           ?>
-                        </select>
-                     </div>
-                  </form>
-               </div>
-            </div>
+<?php 
+defined('BASEPATH') OR exit('No direct script access allowed');
+require APPPATH . 'controllers/User.php';
+require FCPATH . 'vendor/autoload.php';
+require FCPATH . 'vendor/fpdf185/fpdf.php';
+
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+
+class Admin extends User {
+    private $response;
+
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->response = array(
+            'success' => false,
+            'errors' => null,
+            'redirect' => null,
+        );
+    }
+    
  
-               <!-- Detail Biaya Modal -->
-            <div class="modal fade" id="detailBiayaModal" tabindex="-1" aria-labelledby="detailBiayaModalLabel" aria-hidden="true">
-               <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-                  <div class="modal-content">
-                     <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="detailBiayaModalLabel">Detail Biaya</h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                     </div>
-                     <div class="modal-body ">
-                        <ul class="detailBiayaContent list-group list-group-flush">
-                        </ul>
-                        <div class="totalBiaya">
+public function getLastGeneratedNumber() {
+    $this->load->model('Model');
+    $highestNumber = $this->Model->getHighestStaffCodeNumber();
+    header('Content-Type: application/json');
+    echo json_encode(['highestNumber' => $highestNumber]);
+}
 
-                        </div>
-                     </div>
-                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                     </div>
-                  </div>
-               </div>
-            </div>
 
-               <!-- Detail Nominal Masuk -->
-            <div class="modal fade" id="detailNominalMasukModal" tabindex="-1" aria-labelledby="detailNominalMasukModalLabel" aria-hidden="true">
-               <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-                  <div class="modal-content">
-                     <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="detailNominalMasukModalLabel">Detail Nominal Masuk</h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                     </div>
-                     <div class="modal-body ">
-                        <ul class="detailNominalMasukContent list-group list-group-flush">
-                        </ul>
-                     </div>
-                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                     </div>
-                  </div>
-               </div>
-            </div>
-            
-            <!-- Modal Insert-->
-            <div class="modal fade" id="insertTransaksi" tabindex="-1" aria-labelledby="insertTransaksiLabel" aria-hidden="true">
-               <div class="modal-dialog">
-                  <div class="modal-content">
-                     <div class="modal-header">
-                           <h4 class="modal-title" id="insertTransaksiLabel">Data Transaksi</h4>
-                           <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                           <span aria-hidden="true">&times;</span>
-                           </button>
-                     </div>
-                     <div class="modal-body">
-                           <form method="post" action="<?= base_url('admin/tambahDataTransaksi');?>"> 
-                              <div class="form-group">
-                                 <label for="nipdInsert">NIPD</label>
-                                 <input type="text" readonly name="nipdInsert"  class="form-control" id="nipdInsert" aria-describedby="nipdInsert">
-                              </div>
-                              <div class="form-group">
-                                 <label for="thn_akademikInsert">Tahun Akademik</label>
-                                 <input type="text" readonly name="thn_akademikInsert"  class="form-control" id="thn_akademikInsert" aria-describedby="thn_akademikInsert">
-                              </div>
-                              <div class="form-group" hidden>
-                                 <label for="instansiInsert">Instansi</label>
-                                 <input type="text" readonly name="instansiInsert"  class="form-control" id="instansiInsert" aria-describedby="instansiInsert">
-                              </div>
-                              <div class="form-group">
-                                 <label for="nominalInsert">Nominal Bayar</label>
-                                 <input type="number" name="nominalInsert" class="form-control" id="nominalInsert" aria-describedby="nominalInsert">
-                                 <small class="text-danger" id="nominalInsert-error"></small>
-                              </div>
-                              <div class="form-group">
-                                 <label for="keteranganInsert">Keterangan</label>
-                                 <input type="text" name="keteranganInsert" class="form-control" id="keteranganInsert" aria-describedby="keteranganInsert">
-                                 <small class="text-danger" id="keteranganInsert-error"></small>
-                              </div>
-                              <div class="form-group">
-                                 <label for="bulanAwalPembayaran">Rentang Awal Tanggal</label>
-                                 <!-- <input type="month" name="bulanAwalPembayaran" class="form-control" id="bulanAwalPembayaran" aria-describedby="bulanAwalPembayaran"> -->
-                                 <select class="form-select" name="bulanAwalPembayaran" id="bulanAwalPembayaran" aria-describedby="bulanAwalPembayaran">
-                                    <option value="07">Juli</option>
-                                    <option value="08">Agustus</option>
-                                    <option value="09">September</option>
-                                    <option value="10">Oktober</option>
-                                    <option value="11">November</option>
-                                    <option value="12">Desember</option>
-                                    <option value="01">Januari</option>
-                                    <option value="02">Februari</option>
-                                    <option value="03">Maret</option>
-                                    <option value="04">April</option>
-                                    <option value="05">Mei</option>
-                                    <option value="06">Juni</option>
-                                 </select>
-                                 <small class="text-danger" id="bulanAwalPembayaran-error"></small>
-                              </div>
-                              <div class="form-group">
-                                 <label for="bulanAkhirPembayaran">Rentang Akhir Tanggal</label>
-                                 <!-- <input type="month" name="bulanAkhirPembayaran" class="form-control" id="bulanAkhirPembayaran" aria-describedby="bulanAkhirPembayaran"> -->
-                                 <select class="form-select" name="bulanAkhirPembayaran" id="bulanAkhirPembayaran" aria-describedby="bulanAkhirPembayaran">
-                                    <option value="07">Juli</option>
-                                    <option value="08">Agustus</option>
-                                    <option value="09">September</option>
-                                    <option value="10">Oktober</option>
-                                    <option value="11">November</option>
-                                    <option value="12">Desember</option>
-                                    <option value="01">Januari</option>
-                                    <option value="02">Februari</option>
-                                    <option value="03">Maret</option>
-                                    <option value="04">April</option>
-                                    <option value="05">Mei</option>
-                                    <option value="06">Juni</option>
-                                 </select>
-                                 <small class="text-danger" id="bulanAkhirPembayaran-error"></small>
-                              </div>
-                              <div class="form-group">
-                                 <label for="statusInsert">Status</label>
-                                 <input type="text" readonly value="Diterima" name="statusInsert" class="form-control" id="statusInsert" aria-describedby="statusInsert">
-                              </div>
-                              <div class="modal-footer">
-                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" >Keluar</button>
-                                 <button type="submit" class="btn btn-primary">Simpan</button>
-                              </div>
-                           </form>
-                     </div>
-                  </div>
-               </div>
-            </div>
-
-            <!-- Show Image Modal -->
-            <div class="modal fade" id="showImageModal" tabindex="-1" aria-labelledby="showImageModalLabel" aria-hidden="true">
-               <div class="modal-dialog modal-dialog-centered">
-                  <div class="modal-content">
-                     <div class="modal-header">
-                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                     </div>
-                     <div class="modal-body">
-                     <img class="img-fluid image" src="" alt="">
-                     </div>
-                     <div class="modal-footer">
-                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                     </div>
-                  </div>
-               </div>
-            </div>
-
-            <!-- Transaction Confirm Modal -->
-            <div class="modal fade" id="ConfirmModal" tabindex="-1" aria-labelledby="ConfirmModalLabel" aria-hidden="true">
-               
-            </div>
-
-         </div>
-         <div hidden id="biodata" class="col-sm-12">
-            
-            <div class="card mt-4 shadow fullscreen">
-               <div class="card-header border-bottom">
-                  <div class="card-title">
-                     <h5>Biodata Siswa</h5>
-                  </div>
-               </div>
-
-               <div class="card-body">
-                  <h5 class="text-danger" id="message"></h5>
-                  <div class="table-responsive ">
-                     <div id="dataTable_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
-                        <div class="row mt-3">
-                           <div class="col-sm-12 ">
-                              <table class="table hidden-overflow table-striped" id="dataTables-example">
-                                 <tbody class="table-bordered">
-                                    <tr>
-                                       <td>NIPD</td>
-                                       <td align="left" id="nipd"></td>
-                                    </tr>
-                                    <tr >
-                                       <td>Nama</td>
-                                       <td align="left" id="nama_siswa"></td>
-                                    </tr>
-                                    <tr>
-                                       <td>Kelas</td>
-                                       <td align="left" id="kelas"></td>
-                                    </tr>
-                                    <tr>
-                                       <td>Instansi</td>
-                                       <td align="left"id="instansi"></td>
-                                    </tr>
-                                    <tr>
-                                       <td>Tahun Akademik</td>
-                                       <td align="left"id="thn_akademik"></td>
-                                    </tr>
-                                   <tr>
-                                       <td>Potongan</td>
-                                       <td align="left" id="potongan"></td>
-                                    </tr>
-                                    <tr>
-                                       <td>Status</td>
-                                       <td align="left" id="status"></td>
-                                    </tr>
-                                 </tbody>
-                              </table>
-                           </div>
-                        </div>
-                     </div>
-                  </div>
-               </div>
-            </div>
-       
-            <div class="card transactions mt-4 mb-2 fullscreen">
-               <div class="card-body">
-                  <div class="table-responsive">
-                     <div id="dataTable_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
-                        <div class="row">
-                           <div class="col-sm-12 mb-2 d-flex justify-content-between align-items-center">
-                              <div id="dataTable_filter">
-                                    <h5>Data Pembayaran</h5>
-                              </div>
-                              <div class="media">
-                                    <a href="javascript:void(0);" class="icon-circle icon-30 content-color-secondary fullscreenbtn form-control-sm">
-                                    <i class="material-icons ">crop_free</i>
-                                    </a>
-                              </div>
-                              
-                           </div>
-                           
-                        </div>
-                        <div class="row">
-                           <div class="col-sm-12 hidden-overflow">
-                              <button type="button" class="btn btn-success mb-3 mt-3 hidden-overflow" id="insertDataTransaksi" data-bs-toggle="modal" data-bs-target="#insertTransaksi">
-                                 Tambah Data (Jika Membayar dengan Cash)
-                              </button>
-                              <div class="nominal-container d-flex justify-content-between hidden-overflow">
-                                 <div>
-                                    <h5 align="left">Nominal Masuk</h5>
-                                    <h4 align="left" id="nominalmasuk" class="text-primary"></h4>
-                                 </div>
-                                 <div class="d-flex flex-column justify-content-end mb-3">
-                                    <h5 align="right">Total Biaya</h5>
-                                    <h4 align="right" id="totalnominal" class="text-primary"></h4>
-                                    <button class="btn btn-small btn-primary detailBiaya">Detail Biaya</button>
-                                 </div>
-                              </div>
-                                 
-                              <table class="table hidden-overflow " id="table">
-                                 <thead>
-                                    <tr>
-                                       <th>
-                                          <center>No</center>
-                                       </th>
-                                       <th>
-                                          <center>NIPD</center>
-                                       </th>
-                                       <th>
-                                          <center>Nominal</center>
-                                       </th>
-                                       <th>
-                                          <center>Bulan Pembayaran</center>
-                                       </th>
-                                       <th>
-                                          <center>Bukti</center>
-                                       </th>
-                                       <th>
-                                          <center>keterangan</center>
-                                       </th>
-                                       <th>
-                                          <center>Tanggal bayar</center>
-                                       </th>
-                                       <th>
-                                          <center>Status</center>
-                                       </th>
-                                    </tr>
-                                 </thead>
-                                 <tbody>
-                                 </tbody>
-                              </table>
-                           </div>
-                        </div>
-                     </div>
-                     <div id="pagination-container">
-                        <ul class="pagination">
-                        </ul>
-                     </div>
-                  </div>
-               </div>
-            </div>
-            </div>
-      <div class="col-sm-12">
-         <div class="card shadow mb-3 mt-3 fullscreen cetak-transaksi">
-            <div class="card-header py-3">
-               <h5>Cetak Rekap Data Pembayaran </h5>
-               <div role="alert" id="errormessage"></div>
-               <?= $this->session->flashdata('message'); ?>
-            </div>
-            <div class="card-body" id="form">
-               <form action="<?= base_url('admin/cetakDataTransaksi'); ?>" method="post">
-                  <div class="form-group row tanggal-transaksi">
-                     <input hidden name="function" value="cetak" type="text">
-                     <input hidden id="nipd-print" name="nipd" type="text">
-                     <div class="col-sm-2">
-                        <p class="text-primary" for="InputKelas">Cetak Berdasarkan Tanggal (Opsional)</p>
-                     </div>                     
-                     <div class="col-sm-2 mb-2">
-                        <div class="input-group">
-                           <input class="form-control" type="date" name="since" id="since">
-                        </div>
-                     </div>
-                     <div class="col-sm-2">
-                        <div class="input-group">
-                           <input class="form-control" type="date" name="till" id="till">
-                        </div>
-                     </div>
-                  </div>
-                  <div class="row">
-                     <div class="col-sm-12">
-                        <button type="submit" name="excel" value="excel" class="btn btn-success">Cetak (Excel)</button>
-                        <button type="submit" name="pdf" value="pdf" class="btn btn-danger">Cetak (PDF)</button>
-                     </div>
-
-                  </div>
-               </form>
-            </div>
-         </div>      
-      </div>
-   </div>
-         <script src="<?= base_url();?>/assets/js/jquery-3.2.1.min.js"></script>
-         <script>
-            // pagination
-            let data = [];
-            let itemsPerPage = 10;
-            let currentPage = 1;
-            let totalPages;
-
-            var biayaSisa;
-            var potongan;
-            var created_at;
-            var nipd;
-            const urlParams = new URLSearchParams(window.location.search);
-            // Retrieve the values of specific parameters
-            const query = urlParams.get('nipd');
-            if(query == null || query == ''){
-               window.location.href = '<?= base_url();?>pages/datatransaksihome';
+    
+    //Overriding parent method
+    public function login($data = null) {
+        $this->setData(
+            array(
+                'table' => 'admin',
+                'selectedData' => array('kode_petugas', 'nama_petugas', 'password', 'status'),
+                'value' =>  array(
+                            'kode_petugas' => htmlspecialchars($this->input->post('id')),
+                            ),
+                'config' => array(
+                                array(
+                                    'field' => 'id',
+                                    'label' => 'ID',
+                                    'rules' => 'required|trim',
+                                    'errors' =>
+                                    [
+                                        'required' => 'ID wajib diisi!'
+                                    ]
+                                    ),
+                                array(
+                                    'field' => 'password',
+                                    'label' => 'Password',
+                                    'rules' => 'required|trim',
+                                    'errors' =>
+                                    [
+                                        'required' => 'Password wajib diisi!'
+                                    ]
+                                ),
+                            )
+        ));
+        $data = $this->getData();
+        $this->form_validation->set_rules($data['config']);
+		if($this->form_validation->run() == true) {
+            //parent method
+            $process = parent::login($data);
+            if(is_null($process)){
+                $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">
+                                        Akun ini tidak terdaftar
+                                        </div>');
+                $this->load->view('login');
+            } else {
+                if(password_verify($this->input->post('password'), $process['password'])){
+                    $this->session->set_userdata('kode_petugas', $process['kode_petugas']);
+                    redirect('/');
+                } else if($process['status'] == 0){
+                    $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">
+                    Akun ini sudah tidak aktif!
+                    </div>');
+                    $this->load->view('login');
+                }
+                else {
+                    $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">
+                                        Password tidak sesuai
+                                        </div>');
+                    $this->load->view('login');
+                }
             }
-            let IDR = new Intl.NumberFormat('id-ID', {
-               style: 'currency',
-               currency: 'IDR',
-            });
-            $(document).ready(function() {
+        } else {
+            $this->load->view('login');
+        }
+    }
 
-               $('#thn_akademikList').change(function(){
-                  fetchSearchResults();
-               });
-               
-               $('#thn_akademikList').ready(function(){
-                  fetchSearchResults();
-               });
-               function fetchSearchResults(){
+    public function tambahDataAdmin(){
+        if($this->session->userdata('kode_petugas')) {
+            $this->setData(
+                array(
+                    'table' => 'admin',
+                    'config' => array(
+                                    array(
+                                        'field' => 'kode_petugas',
+                                        'label' => 'Kode Petugas',
+                                        'rules' => 'required|trim|min_length[5]|is_unique[admin.kode_petugas]',
+                                        'errors' => 
+                                        [
+                                            'required' => 'Kode petugas wajib diisi!',
+                                            'is_unique' => 'Kode petugas sudah tersedia!'
+                                        ]
+                                    ),
+                                    array(
+                                        'field' => 'nama_petugas',
+                                        'label' => 'Nama Petugas',
+                                        'rules' => 'required|trim',
+                                        'errors' => 
+                                        [
+                                            'required' => 'Nama wajib diisi!'
+                                        ]
+                                    ),
+                                    array(
+                                        'field' => 'password',
+                                        'label' => 'Password',
+                                        'rules' => 'required|trim|min_length[8]',
+                                        'errors' =>
+                                        [
+                                            'required' => 'Password wajib diisi!',
+                                            'min_length' => 'Password minimal terdiri dari delapan karakter'
+                                        ]
+                                    ),
+                                    array(
+                                        'field' => 'confPassword',
+                                        'label' => 'Confirm Password',
+                                        'rules' => 'required|trim|matches[password]',
+                                        'errors' =>
+                                        [
+                                            'required' => 'Konfirmasi password wajib diisi',
+                                            'matches' => 'Password tidak sama!'
+                                        ]
+                                    )
+                                ),
+                    'value' => array(
+                                'kode_petugas' => htmlspecialchars($this->input->post('kode_petugas')),
+                                'nama_petugas' => htmlspecialchars($this->input->post('nama_petugas')),
+                                'password' => password_hash($this->input->post('password'), PASSWORD_BCRYPT),
+                                'status' => 1
+                                )
+                    )
+            );
+            $data = $this->getData();
+            $response = $this->response;
+            $this->form_validation->set_rules($data['config']);
+            if($this->form_validation->run() == true) {
+                $process = $this->model->insertDataModel($data['table'], $data['value']);
+                if($process['status'] == true){
+                    $this->session->set_flashdata("message", "<div class='alert alert-success' role='alert'>
+                                            {$process['message']}
+                                            </div>");
+                } else {
+                    $this->session->set_flashdata("message", "<div class='alert alert-danger' role='alert'>
+                                            {$process['message']}
+                                            </div>");
+                }
+                $response['redirect'] = site_url('dataadmin');
+                $response['success'] = true;
+            } else {
+                $response['errors'] =  array('kode_petugas' => form_error('kode_petugas'), 'nama_petugas' => form_error('nama_petugas'), 
+                'password' => form_error('password'), 'confPassword' => form_error('confPassword'));
+            }
+            header('Content-Type: application/json');
+            echo json_encode($response);
+            exit();
+        }
+    }
 
+<<<<<<< HEAD
                   let thn_akademik = $('#thn_akademikList').val();
                   $.ajax({
                      url: '<?= base_url('pages/dataTransaksiData')?>',
@@ -521,191 +313,1554 @@
                               $('#table tbody').append(emptyRow);
                               $('.pagination').empty();
                            }
+=======
+    public function tambahDataBiaya(){
+        $this->setData(
+            array(
+                'table' => 'jenis_pembayaran',
+                'value' => 
+                array(
+                    'jenis_pembayaran' => htmlspecialchars($this->input->post('jenis_pembayaran')),
+                    'biaya' => htmlspecialchars($this->input->post('biaya')),
+                    'instansi' => htmlspecialchars($this->input->post('instansi')),
+                    'status' => 1                  
+                ),
+                'config' =>
+                array(
+                     array(
+                            'field' => 'jenis_pembayaran',
+                            'label' => 'Jenis Pembayaran',
+                            'rules' => 'required|trim',
+                            'errors' =>
+                            [
+                                'required' => 'Jenis pembayaran wajib diisi!',
+                            ]
+                        ),
+                    array(
+                            'field' => 'biaya',
+                            'label' => 'Biaya',
+                            'rules' => 'required|trim',
+                            'errors' =>
+                            [
+                                'required' => 'Biaya wajib diisi!'
+                            ]
+                        ),
+                )
+            )
+        );
+        $response = $this->response;
+        $data = $this->getData();
+        $this->form_validation->set_rules($data['config']);
+        if($this->form_validation->run() == true) {
+            $process = $this->model->insertDataModel($data['table'], $data['value']);
+            if($process['status'] == true){
+                $this->session->set_flashdata("message", "<div class='alert alert-success' role='alert'>
+                                        {$process['message']}
+                                        </div>");
+            } else {
+                $this->session->set_flashdata("message", "<div class='alert alert-danger' role='alert'>
+                                        {$process['message']}
+                                        </div>");
+            }
+            $response['redirect'] = site_url('databiaya');
+            $response['success'] = true;
+        } else {
+            $response['errors'] =  array('jenis_pembayaran' => form_error('jenis_pembayaran'), 'biaya' => form_error('biaya'));
+        }
+        header('Content-Type: application/json');
+        echo json_encode($response);
+        exit();
+    }
+
+    public function ubahDataBiaya(){
+         $this->setData(
+            array(
+                'table' => 'jenis_pembayaran',
+                'where' =>  array('id_jenis_pembayaran' => $this->input->post('id_jenis_pembayaran')),
+                'value' => 
+                array(
+                    'jenis_pembayaran' => htmlspecialchars($this->input->post('jenis_pembayaran')),
+                    'biaya' => htmlspecialchars($this->input->post('biaya')),
+                    'instansi' => htmlspecialchars($this->input->post('instansi'))
+
+                ),
+                'config' =>
+                array(
+                    array(
+                            'field' => 'jenis_pembayaran',
+                            'label' => 'Biaya',
+                            'rules' => 'required|trim',
+                            'errors' =>
+                            [
+                                'required' => 'Jenis Pembayaran wajib diisi!',
+                            ]
+                        ),
+                    array(
+                            'field' => 'biaya',
+                            'label' => 'Biaya',
+                            'rules' => 'required|trim',
+                            'errors' =>
+                            [
+                                'required' => 'Biaya wajib diisi!'
+                            ]
+                        ),
+                    array(
+                            'field' => 'instansi',
+                            'label' => 'Instansi',
+                            'rules' => 'required|trim',
+                            'errors' =>
+                            [
+                                'required' => 'Instansi wajib diisi!'
+                            ]
+                        ),
+                )
+            )
+        );
+
+        $data = $this->getData();
+        $response = $this->response;
+        $this->form_validation->set_rules($data['config']);
+        if($this->form_validation->run() == true) {
+            $existingData = $this->model->getDataModel($data['table'], ['jenis_pembayaran', 'biaya', 'instansi'], $data['value']);
+            if($existingData == $data['value']) {
+                $response['errors'] = array( 'instansi' => "Data harus berbeda saat ingin diubah!"); 
+            } else {
+                $process = $this->model->updateDataModel($data['table'],$data['value'], $data['where']);
+                if($process['status'] == true){
+                    $this->session->set_flashdata("message", "<div class='alert alert-success' role='alert'>
+                                            {$process['message']}
+                                            </div>");
+                } else {
+                    $this->session->set_flashdata("message", "<div class='alert alert-danger' role='alert'>
+                                            {$process['message']}
+                                            </div>");
+                }
+                $response['success'] = true;
+                $response['redirect'] = site_url('databiaya');
+            }  
+        } else {
+            $response['errors'] = array('jenis_pembayaran' => form_error('jenis_pembayaran'), 'biaya' => form_error('biaya'), 'instansi' => form_error('instansi'));             
+        }
+        header('Content-Type: application/json');
+        echo json_encode($response);
+        exit();
+    }
+
+    public function hapusDataBiaya(){
+        $this->setData(
+            array(
+                'table' => 'jenis_pembayaran',
+                'where' =>  array('id_jenis_pembayaran' => $this->input->post('id_jenis_pembayaran')),
+                'value' => 
+                array(
+                    'status' => 0
+                 ),
+            )
+        );
+ 
+        $data = $this->getData();
+        $response = $this->response;
+        $process = $this->model->updateDataModel($data['table'],$data['value'], $data['where']);
+        if($process['status'] == true){
+            $this->session->set_flashdata("message", "<div class='alert alert-success' role='alert'>
+                                    Data berhasil dihapus
+                                    </div>");
+        } else {
+            $this->session->set_flashdata("message", "<div class='alert alert-danger' role='alert'>
+                                    Data gagal dihapus
+                                    </div>");
+        }
+        
+        $response['success'] = true;
+        $response['redirect'] = base_url('pages/databiaya');
+        header('Content-Type: application/json');
+        echo json_encode($response);
+        exit();
+    }
+
+    public function restoreDataBiaya(){
+        $this->setData(
+            array(
+                'table' => 'jenis_pembayaran',
+                'where' =>  array('id_jenis_pembayaran' => $this->input->post('id_jenis_pembayaran')),
+                'value' => 
+                array(
+                    'status' => 1,
+                ),
+            )
+         );
+        $response = $this->response;
+        $data = $this->getData();
+        $checkingKelasStatus = $this->model->getDataModel('instansi', ['status'], ['jenis_instansi' => $this->input->post('instansi')]);
+        if($checkingKelasStatus[0]['status'] == 0) {
+            $this->session->set_flashdata("message", "<div class='alert alert-danger' role='alert'>
+            Data gagal dipulihkan karena instansi yang bersangkutan belum dipulihkan. Pulihkan instansi tersebut
+            di Data Nonaktif Instansi.
+            </div>");
+        } else {
+            $process = $this->model->updateDataModel($data['table'],$data['value'], $data['where']);
+            if($process['status'] == true){
+                $this->session->set_flashdata("message", "<div class='alert alert-success' role='alert'>
+                Data berhasil dipulihkan
+                </div>");
+            } else {
+                $this->session->set_flashdata("message", "<div class='alert alert-danger' role='alert'>
+                Data Gagal dipulihkan
+                </div>");
+            }
+        }
+        $response['success'] = true;
+        $response['redirect'] = site_url('pages/datanonaktifbiaya');
+        header('Content-Type: application/json');
+        echo json_encode($response);
+        exit();
+    }
+
+    public function tambahDataKelas(){
+         $this->setData(
+            array(
+                'table' => 'kelas',
+                'value' => 
+                array(
+                    'kelas' => htmlspecialchars($this->input->post('kelas')),
+                    'instansi' => htmlspecialchars($this->input->post('instansi')),
+                    'status' => 1
+                ),
+                'config' =>
+                array(
+                     array(
+                            'field' => 'kelas',
+                            'label' => 'Kelas',
+                            'rules' => 'required|trim|is_unique[kelas.kelas]',
+                            'errors' =>
+                            [
+                                'required' => 'Kelas wajib diisi!',
+                                'is_unique' => 'Kelas sudah tersedia!'
+                            ]
+                        ),
+                    array(
+                            'field' => 'instansi',
+                            'label' => 'Instansi',
+                            'rules' => 'required|trim',
+                            'errors' =>
+                            [
+                                'required' => 'Instansi wajib diisi!'
+                            ]
+                        ),
+                    ),
+            )
+        );
+
+        $response = $this->response;        
+        $data = $this->getData();
+        $this->form_validation->set_rules($data['config']);
+        if($this->form_validation->run() == true) {
+            $process = $this->model->insertDataModel($data['table'], $data['value']);
+            if($process['status'] == true){
+                $this->session->set_flashdata("message", "<div class='alert alert-success' role='alert'>
+                                        {$process['message']}
+                                        </div>");
+            } else {
+                $this->session->set_flashdata("message", "<div class='alert alert-danger' role='alert'>
+                                        {$process['message']}
+                                        </div>");
+            }
+            $response['success'] = true;
+            $response['redirect'] = base_url('pages/datakelas');
+        } else {
+            $response['error'] = array('kelas' => form_error('kelas'), 'instansi' => form_error('instansi'));
+        }
+        header('Content-Type: application/json');
+        echo json_encode($response);
+        exit();
+    }
+
+    public function ubahDataKelas(){
+         $this->setData(
+            array(
+                'table' => 'kelas',
+                'where' =>  array('kelas' => $this->input->post('kelas')),
+                'value' => 
+                array(
+                    'kelas' => htmlspecialchars($this->input->post('kelasnew')),
+                    'instansi' => htmlspecialchars($this->input->post('instansi'))
+                ),
+                'config' =>
+                array(
+                    array(
+                            'field' => 'kelasnew',
+                            'label' => 'Kelas',
+                            'rules' => 'required|trim',
+                            'errors' =>
+                            [
+                                'required' => 'Kelas wajib diisi!'
+                            ]
+                        ),
+                    array(
+                            'field' => 'instansi',
+                            'label' => 'Instansi',
+                            'rules' => 'required|trim',
+                            'errors' =>
+                            [
+                                'required' => 'Instansi wajib diisi!'
+                            ]
+                        ),
+                )
+            )
+        );
+
+        $data = $this->getData();
+        $response = $this->response;
+        $this->form_validation->set_rules($data['config']);
+
+        if($this->form_validation->run() == true) {
+            $existingData = $this->model->getDataModel($data['table'], ['kelas','instansi'], $data['where']);
+            $CheckingSameData = $this->model->getDataModel($data['table'], ['kelas, instansi'], $data['value']);
+            if($existingData == $data['value']) {
+                $response['errors'] = array( 'instansi' => "Data harus berbeda saat ingin diubah!");                
+            } elseif(!empty($CheckingSameData)){
+                $response['errors'] = array( 'instansi' => "Ada Data yang sama di Database!");
+            } 
+            else {
+                $process = $this->model->updateDataModel($data['table'],$data['value'], $data['where']);
+                if($process['status'] == true){
+                    $this->session->set_flashdata("message", "<div class='alert alert-success' role='alert'>
+                                            {$process['message']}
+                                            </div>");
+                } else {
+                    $this->session->set_flashdata("message", "<div class='alert alert-danger' role='alert'>
+                                            {$process['message']}
+                                            </div>");
+                }
+                $response['success'] = true;
+                $response['redirect'] = base_url('pages/datakelas');
+            }
+        } else {
+            $response['errors'] = array('kelasnew' => form_error('kelasnew'), 'instansi' => form_error('instansi'));
+        }
+        header('Content-Type: application/json');
+        echo json_encode($response);
+        exit();
+    }
+
+    public function hapusDataKelas(){
+        $this->setData(
+           array(
+               'table' => 'kelas',
+               'where' =>  array('kelas' => $this->input->post('kelas')),
+               'value' => 
+               array(
+                   'status' => 0
+                ),
+           )
+       );
+
+       $data = $this->getData();
+       $response = $this->response;
+       $process = $this->model->updateDataModel($data['table'],$data['value'], $data['where']);
+       if($process['status'] == true){
+           $this->session->set_flashdata("message", "<div class='alert alert-success' role='alert'>
+                                   Data berhasil dihapus
+                                   </div>");
+       } else {
+           $this->session->set_flashdata("message", "<div class='alert alert-danger' role='alert'>
+                                   Data gagal dihapus
+                                   </div>");
+       }
+       
+       $response['success'] = true;
+       $response['redirect'] = base_url('pages/datakelas');
+       header('Content-Type: application/json');
+       echo json_encode($response);
+       exit();
+    }
+
+    public function restoreDataKelas(){
+        $this->setData(
+            array(
+                'table' => 'kelas',
+                'where' =>  array('kelas' => $this->input->post('kelas')),
+                'value' => 
+                array(
+                    'status' => 1,
+                ),
+            )
+         );
+        $response = $this->response;
+        $data = $this->getData();
+        $checkingKelasStatus = $this->model->getDataModel('instansi', ['status'], ['jenis_instansi' => $this->input->post('jenis_instansi')]);
+        if($checkingKelasStatus[0]['status'] == 0) {
+            $this->session->set_flashdata("message", "<div class='alert alert-danger' role='alert'>
+            Data gagal dipulihkan karena instansi yang bersangkutan belum dipulihkan. Pulihkan instansi tersebut
+            di Data Nonaktif Instansi.
+            </div>");
+        } else {
+            $process = $this->model->updateDataModel($data['table'],$data['value'], $data['where']);
+            if($process['status'] == true){
+                $this->session->set_flashdata("message", "<div class='alert alert-success' role='alert'>
+                Data berhasil dipulihkan
+                </div>");
+            } else {
+                $this->session->set_flashdata("message", "<div class='alert alert-danger' role='alert'>
+                Data Gagal dipulihkan
+                </div>");
+            }
+        }
+        $response['success'] = true;
+        $response['redirect'] = site_url('pages/datanonaktifkelas');
+        header('Content-Type: application/json');
+        echo json_encode($response);
+        exit();
+    }
+
+    public function tambahDataInstansi(){
+         $this->setData(
+            array(
+                'table' => 'instansi',
+                'value' => 
+                array(
+                    'jenis_instansi' => htmlspecialchars($this->input->post('instansi')),
+                    'status' => 1
+                ),
+                'config' =>
+                array(
+                     array(
+                            'field' => 'instansi',
+                            'label' => 'Instansi',
+                            'rules' => 'required|trim|is_unique[kelas.kelas]',
+                            'errors' =>
+                            [
+                                'required' => 'Instansi wajib diisi!',
+                                'is_unique' => 'Instansi sudah tersedia!'
+                            ]
+                        ),
+                    ),
+            )
+        );
+        $response = $this->response;
+        $data = $this->getData();
+        $this->form_validation->set_rules($data['config']);
+        if($this->form_validation->run() == true) {
+            $process = $this->model->insertDataModel($data['table'], $data['value']);
+            if($process['status'] == true){
+                $this->session->set_flashdata("message", "<div class='alert alert-success' role='alert'>
+                                        {$process['message']}
+                                        </div>");
+            } else {
+                $this->session->set_flashdata("message", "<div class='alert alert-danger' role='alert'>
+                                        {$process['message']}
+                                        </div>");
+            }
+            $response['success'] = true;
+            $response['redirect'] = base_url('pages/datainstansi');
+        } else {
+            $response['errors'] = array( 'instansi' => form_error('instansi'));
+        }
+        header('Content-Type: application/json');
+        echo json_encode($response);
+        exit();
+    }
+
+    public function ubahDataInstansi(){
+        $this->setData(
+            array(
+                'table' => 'instansi',
+                'where' =>  array('jenis_instansi' => $this->input->post('instansi')),
+                'value' => 
+                array(
+                    'jenis_instansi' => htmlspecialchars($this->input->post('instansinew'))
+                ),
+                'config' =>
+                array(
+                     array(
+                            'field' => 'instansinew',
+                            'label' => 'Instansi',
+                            'rules' => 'required|trim|is_unique[instansi.jenis_instansi]',
+                            'errors' =>
+                            [
+                                'required' => 'Instansi wajib diisi!',
+                                'is_unique' => 'Data sudah ada tersimpan database!'
+                            ]
+                        ),
+                    ),
+            )
+        );
+        $data = $this->getData();
+        $response = $this->response;
+        $this->form_validation->set_rules($data['config']);
+        if($this->form_validation->run() == true) {
+            $process = $this->model->updateDataModel($data['table'], $data['value'], $data['where']);
+            if($process['status'] == true){
+                $this->session->set_flashdata("message", "<div class='alert alert-success' role='alert'>
+                                        {$process['message']}
+                                        </div>");
+            } else {
+                $this->session->set_flashdata("message", "<div class='alert alert-danger' role='alert'>
+                                        {$process['message']}
+                                        </div>");
+            }
+            $response['success'] = true;
+            $response['redirect'] = base_url('pages/datainstansi');
+        } else {
+            $response['errors'] = array( 'instansinew' => form_error('instansinew'));
+        }
+
+        header('Content-Type: application/json');
+        echo json_encode($response);
+        exit();
+    }
+
+    public function hapusDataInstansi(){
+        $this->setData(
+            array(
+                'table' => 'instansi',
+                'where' => array('jenis_instansi' => $this->input->post('instansi')),
+                'value' => array('status' => 0)
+            )
+        );
+        $data = $this->getData();
+        $response = $this->response;
+        $process = $this->model->updateDataModel($data['table'], $data['value'], $data['where']);
+        
+        if($process['status'] == true){
+            $this->session->set_flashdata("message", "<div class='alert alert-success' role='alert'>
+                                    Data berhasil dihapus
+                                    </div>");
+        } else {
+            $this->session->set_flashdata("message", "<div class='alert alert-danger' role='alert'>
+                                    Data gagal dihapus
+                                    </div>");
+        }
+        $response['success'] = true;
+        $response['redirect'] = base_url('pages/datainstansi');
+
+        header('Content-Type: application/json');
+        echo json_encode($response);
+        exit();
+    }
+
+    public function restoreDataInstansi(){
+        $this->setData(
+            array(
+                'table' => 'instansi',
+                'where' => array('jenis_instansi' => $this->input->post('jenis_instansi')),
+                'value' => array('status' => 1)
+            )
+        );
+        $data = $this->getData();
+        $response = $this->response;
+        $process = $this->model->updateDataModel($data['table'], $data['value'], $data['where']);
+        
+        if($process['status'] == true){
+            $this->session->set_flashdata("message", "<div class='alert alert-success' role='alert'>
+                                    Data berhasil dipulihkan
+                                    </div>");
+        } else {
+            $this->session->set_flashdata("message", "<div class='alert alert-danger' role='alert'>
+                                    Data gagal dipulihkan
+                                    </div>");
+        }
+        $response['success'] = true;
+        $response['redirect'] = base_url('pages/datanonaktifinstansi');
+
+        header('Content-Type: application/json');
+        echo json_encode($response);
+        exit();
+    }
+
+    public function tambahDataSiswa(){
+        $response = $this->response;
+        $this->setData(
+            array(
+                'table' => 'siswa',
+                'value' => 
+                array(
+                    'nipd' => htmlspecialchars($this->input->post('nipd')),
+                    'nama_siswa' => htmlspecialchars($this->input->post('nama')),
+                    'kelas' => htmlspecialchars($this->input->post('kelas')),
+                    'thn_akademik' => htmlspecialchars($this->input->post('thn_akademik')),
+                    'password' => password_hash($this->input->post('password'), PASSWORD_BCRYPT),
+                    'potongan' => htmlspecialchars($this->input->post('potongan')),
+                    'status' => 1
+                ),
+                'config' =>
+                array(
+                    array(
+                        'field' => 'nipd',
+                        'label' => 'nipd',
+                        'rules' => 'required|trim|is_unique[siswa.nipd]',
+                        'errors' =>
+                        [
+                            'required' => 'nipd wajib diisi!',
+                            'is_unique' => 'ID sudah tersedia!'
+                        ]
+                    ),
+                    array(
+                        'field' => 'kelas',
+                        'label' => 'Kelas',
+                        'rules' => 'required|trim',
+                        'errors' =>
+                        [
+                            'required' => 'Kelas wajib diisi!'
+                        ]
+                    ),
+                    array(
+                        'field' => 'thn_akademik',
+                        'label' => 'Tahun Akademik',
+                        'rules' => 'required|trim',
+                        'errors' =>
+                        [
+                            'required' => 'Tahun Akademik wajib diisi!'
+                        ]
+                    ),
+                    array(
+                        'field' => 'nama',
+                        'label' => 'Nama',
+                        'rules' => 'required|trim',
+                        'errors' =>
+                        [
+                            'required' => 'Nama wajib diisi!'
+                        ]
+                    ),
+                    array(
+                        'field' => 'password',
+                        'label' => 'Password',
+                        'rules' => 'required|trim',
+                        'errors' =>
+                        [
+                            'required' => 'Password wajib diisi!'
+                        ]
+                    ),
+                ),
+            )
+        );
+        $data = $this->getData();
+        if(is_null($data['value']['potongan'])){
+            $data['value']['potongan'] = 0;
+        }
+
+        $this->form_validation->set_rules($data['config']);
+        if($this->form_validation->run() == true) {
+            $process = $this->model->insertDataModel($data['table'], $data['value']);
+            if($process['status'] == true){
+                $this->session->set_flashdata("message", "<div class='alert alert-success' role='alert'>
+                                        {$process['message']}
+                                        </div>");
+            } else {
+                $this->session->set_flashdata("message", "<div class='alert alert-danger' role='alert'>
+                                        {$process['message']}
+                                        </div>");                                
+            }
+            $response['success'] = true;
+            $response['redirect'] = base_url('pages/datasiswa');
+
+        } else {
+            $response['errors'] = array('nipd' => form_error('nipd'), 'nama' => form_error('nama'), 'thn_akademik' => form_error('thn_akademik'), 
+            'kelas' => form_error('kelas'), 'password' => form_error('password'), 'status' => form_error('status')
+            );
+        }
+        header('Content-Type: application/json');
+        echo json_encode($response);
+        exit();
+    }
+
+    public function tambahDataSiswaExcel(){
+        $data = array();
+        header('Content-Type: application/json');
+        $response = $this->response;
+        if(isset($_FILES['fileExcel']['name'])){
+            $file_extension = pathinfo($_FILES['fileExcel']['name'], PATHINFO_EXTENSION);
+            if($file_extension == 'csv' || $file_extension == 'xls' || $file_extension == 'xlsx') {
+                $path = $_FILES['fileExcel']['tmp_name'];
+                
+                $spreadsheet = IOFactory::load($path);
+                $errors = [];
+                // $sheetCount = $spreadsheet->getSheetCount();
+                foreach ($spreadsheet->getWorksheetIterator() as $worksheet) {
+                    $uniqueValues = [];
+                    $highestRow = $worksheet->getHighestRow();
+                    if($highestRow > 250){
+                        $response['errors'] = array('fileExcel' => "Data yang dikirim haruslah maksimal sebanyak 250 baris!");
+                    } else {
+                        for ($row = 2; $row <= $highestRow; $row++) {
+                            
+                            $nipd = $worksheet->getCell('A' . $row)->getValue();
+                            $nama_siswa = $worksheet->getCell('B' . $row)->getValue();
+                            $kelas = $worksheet->getCell('C' . $row)->getValue();
+                            $thn_akademik = $worksheet->getCell('D' . $row)->getValue();
+                            $password = $worksheet->getCell('E' . $row)->getValue();
+                            $potongan = $worksheet->getCell('F' . $row)->getValue();
+
+                            
+                            if($nipd === null && $nama_siswa === null && $kelas === null && $thn_akademik === null && $password === null) {
+                                if ($row === $highestRow) {
+                                    // Last row, stop processing
+                                    break;
+                                } else {
+                                    // Not the last row, bypass to the next row
+                                    continue;
+                                }
+                            }
+                            if(in_array($nipd, $uniqueValues)){
+                                $errors = array('fileExcel' => "Terdapat duplikasi pada NIPD $nipd di Excel!");
+                                break;
+                            } else {
+                                $uniqueValues[] = $nipd;
+                            }
+                            if($nipd === null || $nama_siswa === null || $kelas === null || $thn_akademik === null || $password === null) {
+                                $errors = array('fileExcel' => "Data NIPD, nama siswa, kelas, tahun akademik, dan password tidak boleh kosong!");
+                            } 
+                            else {
+                                $existingData = array(
+                                    'siswa' => $this->model->getDataModel('siswa', ['nipd'], ['nipd' => $nipd]),
+                                    'kelas' => $this->model->getDataModel('kelas', ['kelas'], ['kelas' => $kelas]),
+                                    'tahun_akademik' => $this->model->getDataModel('tahun_akademik', ['thn_akademik'], ['thn_akademik' => $thn_akademik]),
+                                );
+                                if(empty($existingData['kelas'])){
+                                    $errors = array('fileExcel' => "Kelas ". $kelas . " tidak tersedia di tabel Kelas! Tambahkan terlebih dahulu di Data Kelas!");
+                                } else if(empty($existingData['tahun_akademik'])){
+                                    $errors = array('fileExcel' => "Tahun Akademik " . $thn_akademik . " tidak tersedia di tabel Tahun Akademik! Tambahkan terlebih dahulu di Data Tahun Akademik!");
+                                } else if(!empty($existingData['siswa'])){
+                                    $errors = array('fileExcel' => "NIPD " . $nipd . " sudah tersedia di Database!");
+                                }                 
+                            }
+                        }
+                    }
+                }
+                if(!empty($errors)){
+                    $response['errors'] = $errors;
+                } else {
+                    foreach ($spreadsheet->getWorksheetIterator() as $worksheet) {
+                        for ($row = 2; $row <= $highestRow; $row++) {
+                            
+                            $nipd = $worksheet->getCell('A' . $row)->getValue();
+                            $nama_siswa = $worksheet->getCell('B' . $row)->getValue();
+                            $kelas = $worksheet->getCell('C' . $row)->getValue();
+                            $thn_akademik = $worksheet->getCell('D' . $row)->getValue();
+                            $password = $worksheet->getCell('E' . $row)->getValue();
+                            $potongan = $worksheet->getCell('F' . $row)->getValue();
+                            
+                            if($nipd === null && $nama_siswa === null && $kelas === null && $thn_akademik === null && $password === null) {
+                                if ($row === $highestRow) {
+                                    // Last row, stop processing
+                                    break;
+                                } else {
+                                    // Not the last row, bypass to the next row
+                                    continue;
+                                }
+                            }
+
+                            $potongan == null ? 0 : $potongan;
+                            $data['value'] = array(
+                               'nipd' => strval($nipd),
+                                'nama_siswa' => $nama_siswa,
+                                'kelas' => $kelas,
+                                'thn_akademik' => $thn_akademik,
+                                'password' => password_hash($password, PASSWORD_BCRYPT),
+                                'potongan' => strval($potongan),
+                                'status' => 1
+                            );
+                            $process = $this->model->insertDataModel('siswa', $data['value']);
+                            if($process['status'] == true){
+                                $this->session->set_flashdata("message", "<div class='alert alert-success' role='alert'>
+                                        {$process['message']}
+                                </div>");
+                            } else {
+                                $this->session->set_flashdata("message", "<div class='alert alert-danger' role='alert'>
+                                        {$process['message']}
+                                </div>");
+                            }
+                        }
+                    }
+                    $response['success'] = true;
+                    $response['redirect'] = base_url('pages/datasiswa');
+                }
+            } else {
+                $response['errors'] = array('fileExcel' => "Hanya menerima file dengan format .csv, .xls, dan .xlsx!");
+            }
+        } 
+        echo json_encode($response);
+        // exit();
+    }
+
+    public function ubahDataSiswa(){
+        $this->setData(
+           array(
+               'table' => 'siswa',
+               'where' =>  array('nipd' => $this->input->post('nipd')),
+               'value' => 
+               array(
+                    'nipd' => htmlspecialchars($this->input->post('nipdnew')),
+                    'nama_siswa' => htmlspecialchars($this->input->post('nama')),
+                    'kelas' => htmlspecialchars($this->input->post('kelas')),
+                    'potongan' => htmlspecialchars($this->input->post('potongan')),
+                    'thn_akademik' => htmlspecialchars($this->input->post('thn_akademik')),
+               ),
+               'config' =>
+               array(
+                    array(
+                        'field' => 'nipdnew',
+                        'label' => 'NIPD',
+                        'rules' => 'required|trim',
+                        'errors' =>
+                        [
+                            'required' => 'NIPD wajib diisi!'
+                        ]
+                    ),
+                    array(
+                           'field' => 'nama',
+                           'label' => 'Nama',
+                           'rules' => 'required|trim',
+                           'errors' =>
+                           [
+                               'required' => 'Nama wajib diisi!'
+                           ]
+                    ),
+                    array(
+                            'field' => 'kelas',
+                            'label' => 'Kelas',
+                            'rules' => 'required|trim',
+                            'errors' =>
+                            [
+                                'required' => 'kelas wajib diisi!'
+                            ]
+                    ),
+                    array(
+                            'field' => 'thn_akademik',
+                            'label' => 'Tahun Akademik',
+                            'rules' => 'required|trim',
+                            'errors' =>
+                            [
+                                'required' => 'Tahun akademik wajib diisi!'
+                            ]
+                    ),
+               )
+           )
+        );
+        $response = $this->response;
+        $data = $this->getData();
+        if(is_null($data['value']['potongan'])){
+            $data['value']['potongan'] = 0;
+        }
+        $this->form_validation->set_rules($data['config']);
+        if($this->form_validation->run() == true) {
+            $existingData = $this->model->getDataModel($data['table'], ['nipd', 'nama_siswa', 'kelas', 'thn_akademik' ,'potongan'], $data['where']);
+            $CheckingSameData = $this->model->getDataModel($data['table'], ['nipd', 'nama_siswa', 'kelas', 'thn_akademik' ,'potongan'], $data['value']);
+            if($existingData == $data['value']){
+                $response['errors'] = array('potongan' => "Data harus berbeda saat ingin diubah!");       
+            } else if(!empty($CheckingSameData)){
+                $response['errors'] = array('nipd' => "NIPD sudah tersimpan di database!");       
+            } else {
+                $process = $this->model->updateDataModel($data['table'],$data['value'], $data['where']);
+                if($process['status'] == true){
+                    $this->session->set_flashdata("message", "<div class='alert alert-success' role='alert'>
+                                            {$process['message']}
+                                            </div>");
+                } else {
+                    $this->session->set_flashdata("message", "<div class='alert alert-danger' role='alert'>
+                                            {$process['message']}
+                                            </div>");
+                }
+                $response['success'] = true;
+                $response['redirect'] = site_url('datasiswa');
+            }
+        } else {
+            $response['errors'] = array('nama' => form_error('nama'), 'kelas' => form_error('kelas'), 'instansi' => form_error('instansi'));
+        }
+        header('Content-Type: application/json');
+        echo json_encode($response);
+        exit();
+    }
+
+    public function hapusDataSiswa(){
+        $this->setData(
+            array(
+                'table' => 'siswa',
+                'where' =>  array('nipd' => $this->input->post('nipd')),
+                'value' => 
+                array(
+                    'status' => 0,
+                ),
+            )
+         );
+        $response = $this->response;
+        $data = $this->getData();
+        $process = $this->model->updateDataModel($data['table'],$data['value'], $data['where']);
+        if($process['status'] == true){
+            $this->session->set_flashdata("message", "<div class='alert alert-success' role='alert'>
+            Data berhasil dihapus!
+            </div>");
+        } else {
+            $this->session->set_flashdata("message", "<div class='alert alert-danger' role='alert'>
+            Data Gagal dihapus!
+            </div>");
+        }
+        $response['success'] = true;
+        $response['redirect'] = site_url('pages/datasiswa');
+        header('Content-Type: application/json');
+        echo json_encode($response);
+        exit();
+    }
+
+    public function restoreDataSiswa(){
+        $this->setData(
+            array(
+                'table' => 'siswa',
+                'where' =>  array('nipd' => $this->input->post('nipd')),
+                'value' => 
+                array(
+                    'status' => 1,
+                ),
+            )
+         );
+        $response = $this->response;
+        $data = $this->getData();
+        $checkingKelasStatus = $this->model->getDataModel('kelas', [ 'status'], ['kelas' => $this->input->post('kelas')]);
+        if($checkingKelasStatus[0]['status'] == 0) {
+            $this->session->set_flashdata("message", "<div class='alert alert-danger' role='alert'>
+            Data gagal dipulihkan karena kelas yang bersangkutan belum dipulihkan. Pulihkan kelas tersebut
+            di Data Kelas.
+            </div>");
+        } else {
+            $process = $this->model->updateDataModel($data['table'],$data['value'], $data['where']);
+            if($process['status'] == true){
+                $this->session->set_flashdata("message", "<div class='alert alert-success' role='alert'>
+                Data berhasil dipulihkan
+                </div>");
+            } else {
+                $this->session->set_flashdata("message", "<div class='alert alert-danger' role='alert'>
+                Data Gagal dipulihkan
+                </div>");
+            }
+        }
+        $response['success'] = true;
+        $response['redirect'] = site_url('pages/datanonaktifsiswa');
+        header('Content-Type: application/json');
+        echo json_encode($response);
+        exit();
+    }
+
+    public function tambahDataTahunAkademik(){
+        $response = $this->response;
+        $this->setData(
+            array(
+                'table' => 'tahun_akademik',
+                'value' => 
+                array(
+                    'thn_akademik' => htmlspecialchars($this->input->post('thn_akademik')),
+                    'status' => htmlspecialchars($this->input->post('status')),
+                ),
+                'config' =>
+                array(
+                    array(
+                        'field' => 'thn_akademik',
+                        'label' => 'Tahun Akademik',
+                        'rules' => 'is_unique[tahun_akademik.thn_akademik]',
+                        'errors' =>
+                        [
+                            'is_unique' => 'Tahun Akademik sudah tersedia!'
+                        ]
+                    ),
+                ),
+            )
+        );
+        $data = $this->getData();
+
+        $this->form_validation->set_rules($data['config']);
+        if($this->form_validation->run() == true) {
+            $process = $this->model->insertDataModel($data['table'], $data['value']);
+
+            if($process['status'] == true){
+                $this->session->set_flashdata("message", "<div class='alert alert-success' role='alert'>
+                                        {$process['message']}
+                                        </div>");
+            } else {
+                $this->session->set_flashdata("message", "<div class='alert alert-danger' role='alert'>
+                                        {$process['message']}
+                                        </div>");                                
+            }
+            $response['success'] = true;
+            $response['redirect'] = base_url('pages/datatahunakademik');
+
+        } else {
+            $response['errors'] = array('thn_akademik' => form_error('thn_akademik'), 'status' => form_error('status')
+            );
+        }
+        header('Content-Type: application/json');
+        echo json_encode($response);
+        exit();
+    }
+
+    public function ubahDataTahunAkademik(){
+        $response = $this->response;
+        $this->setData(
+            array(
+                'table' => 'tahun_akademik',
+                'where' => array('thn_akademik' => htmlspecialchars($this->input->post('thn_akademikold')),),
+                'value' => 
+                array(
+                    'thn_akademik' => htmlspecialchars($this->input->post('thn_akademik')),
+                   
+                ),
+                'config' =>
+                array(
+                    array(
+                        'field' => 'thn_akademik',
+                        'label' => 'Tahun Akademik',
+                        'rules' => 'required',
+                        'errors' =>
+                        [
+                            'required' => 'Tahun Akademik wajib diisi!'
+                        ]
+                    ),
+                ),
+            )
+        );
+        $data = $this->getData();
+        if(!empty($this->input->post('status'))){
+            $data['value']['status'] = (int)htmlspecialchars($this->input->post('status'));
+            $this->form_validation->set_rules('status','Status','required|trim', array('required' => 'Status wajib diisi!'));
+        } else {
+            $data['value']['status'] = 0;
+        }
+        $this->form_validation->set_rules($data['config']);
+        if($this->form_validation->run() == true) {
+            $existingData = $this->model->getDataModel($data['table'], ['thn_akademik' ,'status'], $data['where']);
+            $CheckingSameData = $this->model->getDataModel($data['table'], ['thn_akademik'], $data['value']);
+            if($existingData == $data['value']){
+                $response['errors'] = array('status' => "Data harus berbeda saat ingin diubah!");       
+            } else if(!(empty($CheckingSameData))){
+                $response['errors'] = array('thn_akademik' => "Tahun akademik ini sudah tersedia di database!");       
+            } else {
+                $process = $this->model->updateDataModel($data['table'], $data['value'], $data['where']);
+                if($process['status'] == true){
+                    $this->session->set_flashdata("message", "<div class='alert alert-success' role='alert'>
+                                            {$process['message']}
+                                            </div>");
+                } else {
+                    $this->session->set_flashdata("message", "<div class='alert alert-danger' role='alert'>
+                                            {$process['message']}
+                                            </div>");
+                }
+                $response['success'] = true;
+                $response['redirect'] = base_url('pages/datatahunakademik');
+            }
+
+        } else {
+            $response['errors'] = array('thn_akademik' => form_error('thn_akademik'), 'status' => form_error('status')
+            );
+        }
+        header('Content-Type: application/json');
+        echo json_encode($response);
+        exit();
+    }
+
+    public function ubahDataAdmin(){
+        $this->setData(
+            array(
+                'table' => 'admin',
+                'where' =>  array('kode_petugas' => $this->input->post('kode_petugas_old')),
+                'value' => 
+                array(
+                    'kode_petugas' => htmlspecialchars($this->input->post('kode_petugas')),
+                    'nama_petugas' => htmlspecialchars($this->input->post('nama')),
+                    ),
+                'config' =>
+                array(
+                        array(
+                            'field' => 'kode_petugas',
+                            'label' => 'Kode Petugas',
+                            'rules' => 'required|trim',
+                            'errors' =>
+                            [
+                                'required' => 'Kode petugas wajib diisi!'
+                            ]
+                        ),
+                        array(
+                            'field' => 'nama',
+                            'label' => 'Nama',
+                            'rules' => 'required|trim',
+                            'errors' =>
+                            [
+                                'required' => 'Nama wajib diisi!'
+                            ]
+                        ),
+                    )
+                )
+            );
+            $response = $this->response;
+            $data = $this->getData();
+            $existingData = $this->model->getDataModel($data['table'], ['kode_petugas', 'nama_petugas'], $data['value'], array: 0);
+
+            if(!empty($this->input->post('password'))){
+                $data['value']['password'] = password_hash($this->input->post('password'), PASSWORD_BCRYPT);
+                $this->form_validation->set_rules('password','Password','required|trim|min_length[5]', array('required' => 'Password wajib diisi!',
+                'min_length' => 'Password minimal terdiri dari 5 karakter!'));
+                $this->form_validation->set_rules('confPassword','ConfPassword','required|trim|matches[password]', array( 'required' => 'Konfirmasi Password wajib diisi!',
+                'matches' => 'Password tidak sama!'));
+                $this->model->getDataModel($data['table'], ['nama_petugas', 'password'], $data['value']);
+            }
+            
+            $this->form_validation->set_rules($data['config']);
+            if($this->form_validation->run() == true) {
+                if($existingData == $data['value']) {
+                    $response['errors'] = array('update' => "Data harus berbeda saat ingin diubah!");                    
+                } else {
+                    $process = $this->model->updateDataModel($data['table'],$data['value'], $data['where']);
+                    if($process['status'] == true){
+                        $this->session->set_flashdata("message", "<div class='alert alert-success' role='alert'>
+                                                {$process['message']}
+                                                </div>");
+                        $this->session->set_userdata('kode_petugas', $data['value']['kode_petugas']);
+                    } else {
+                        $this->session->set_flashdata("message", "<div class='alert alert-danger' role='alert'>
+                                                {$process['message']}
+                                                </div>");
+                    }
+                    $response['success'] = true;
+                    $response['redirect'] = site_url('halamanadmin');
+                }
+            } else {
+                $response['errors'] = array('nama' => form_error('nama'), 'kode_petugas' => form_error('kode_petugas'), 'password' => form_error('password'), 'confPassword' => form_error('confPassword'));
+            }
+        header('Content-Type: application/json');
+        echo json_encode($response);
+        exit();
+    }
+
+     public function tambahDataTransaksi() {
+        $response = $this->response;
+        $bulanRentangAwal = $this->input->post('bulanAwalPembayaran');
+        $bulanRentangAkhir = $this->input->post('bulanAkhirPembayaran');
+        $instansi = $this->input->post('instansiInsert');
+        $nipd = $this->input->post('nipdInsert');
+        $keterangan = $this->input->post('keteranganInsert');
+        $nominal_masuk = $this->input->post('nominalInsert');
+        $thn_akademik = $this->input->post('thn_akademikInsert');
+
+        $nominalMasuk = (int) str_replace(array(',', '.'), '', $nominal_masuk);
+        $errors = [];
+        if(empty($bulanRentangAwal) || empty($bulanRentangAkhir) || $nominalMasuk < 1 || empty($keterangan)){
+            $response['errors'] = array(
+                'bulanAwalPembayaran' => 'Rentang awal tanggal wajib diisi!', 
+                'bulanAkhirPembayaran' => 'Rentang akhir tanggal wajib diisi!', 
+                'nominalInsert' => 'Nominal tidak boleh kosong atau kurang dari 1!',
+                'keteranganInsert' => 'Keterangan tidak boleh kosong!');
+        } else {
+            list($tahunAwal, $tahunAkhir) = explode("/", $thn_akademik);
+            $dateStart = new DateTime($tahunAwal . '-' .$bulanRentangAwal . '-' .date('d'));
+            $dateEnd = new DateTime($tahunAkhir . '-' . $bulanRentangAkhir . '-' . date('d'));
+            $monthDiff = date_diff($dateStart, $dateEnd)->format('%m')+1;
+            
+            $dataInstansi = $this->model->getDataJoinModel(table: ['siswa', 'kelas'], data: ['kelas.instansi', 'siswa.potongan'], 
+            column: ["kelas"], keyword: ["nipd" => $nipd]);
+            $dataBiaya = $this->model->getDataModel('jenis_pembayaran', ['sum(biaya)'], ['instansi' => $dataInstansi['instansi']]);
+            
+            $dataBiaya = $dataBiaya[0]['sum(biaya)'] - $dataInstansi['potongan'];
+
+            if($dateEnd < $dateStart) {
+                $response['errors'] = array('bulanAkhirPembayaran' => 'Rentang akhir tanggal tidak bisa lebih dulu dari rentang awal!');
+            } elseif($nominalMasuk > ($dataBiaya * 12)){
+                $response['errors'] = array('nominalInsert' => 'Nominal ini terlalu besar dari total biaya yang ada!');
+            } elseif($nominalMasuk > ($dataBiaya * $monthDiff)){
+                $response['errors'] = array('nominalInsert' => "Nominal $nominalMasuk terlalu besar jika hanya untuk $monthDiff bulan saja!");
+            } else {
+                $this->setData(
+                    array(
+                        'table' => 'transactions',
+                        'value' => array(
+                            'nipd' => $nipd,
+                            'thn_akademik' => $thn_akademik,
+                            'instansi' => $instansi,
+                            'nominal' => null,
+                            'bulan'=> '',
+                            'status' => 2,
+                            'image' => '',
+                            'keterangan' => $keterangan,
+                            'created_at' => date('Y-m-d H:i:s')
+                        )
+                    )
+                );
+                $data = $this->getData();
+                if ($dateStart->format('m') >= '01' && $dateStart->format('m') <= '06') {
+                    $tahunAwal++;
+                    $dateStart->setDate($tahunAwal, $dateStart->format('m'), $dateStart->format('d'));
+                }
+                while($dateStart <= $dateEnd) {
+
+                    $bulanRentangAwalStr = $dateStart->format('Y-m-d');
+                    $data['value']['nominal'] = min($nominalMasuk, $dataBiaya);
+                    $data['value']['image'] = 'Bayar Langsung';
+                    $data['value']['instansi'] = $instansi;
+                    $data['value']['bulan'] = $bulanRentangAwalStr;
+                    if ($nominalMasuk <= 0) {
+                        break;
+                    }
+                    $transaksiBulanIni = $this->model->getDataModel('transactions', ['nipd', 'thn_akademik', 'instansi', 'nominal', 'bulan', 'status', 'keterangan', 'created_at'], 
+                    ['bulan' => $bulanRentangAwalStr, 'nipd' => $nipd, 'status' => 2, 'thn_akademik' => $data['value']['thn_akademik']]);
+                    $nominalTransaksiBulanIni = $this->model->getDataModel('transactions', ['sum(nominal)'], 
+                    ['bulan' => $bulanRentangAwalStr, 'nipd' => $nipd, 'status' => 2, 'thn_akademik' => $data['value']['thn_akademik']]);
+                    
+                    if(empty($transaksiBulanIni)) {
+                        $process = $this->model->insertDataModel($data['table'], $data['value']);
+                        if($process['status'] == true){
+                            $this->session->set_flashdata("message", "<div class='alert alert-success' role='alert'>
+                            Pembayaran Berhasil!
+                            </div>");
+>>>>>>> aa47f42c8479b41d6a4e6528eb7e221e123be683
                         } else {
-                           if (!$('#message').text().includes(response.errors)) {
-                              $('#message').append(response.errors);
-                           }
-                           $('#dataTables-example').hide();
-                           $('.transactions').hide();
-                           window.location.href = '<?= base_url();?>pages/datatransaksihome';
+                            $this->session->set_flashdata("message", "<div class='alert alert-danger' role='alert'>
+                            Pembayaran Gagal!
+                            </div>");
                         }
-                     },
-                     error: function(xhr, status, error) {
-                        console.error(error);
-                        $('#result').append(`<li>${error}</li>`); // Handle the error if necessary
-                     }
-                  });
-               }
-
-               function renderPagination(totalPages) {
-                  // Clear the pagination container
-                  $('.pagination').empty();
-                  
-                  // Generate the pagination links
-                  for (var i = 1; i <= totalPages; i++) {
-                     var activeClass = i === currentPage ? 'active' : '';
-                     var pageLink = '<li class="page-item ' + activeClass + '">' +
-                                    '<a class="page-link" href="#" data-page="' + i + '">' + i + '</a>' +
-                                    '</li>';
-                     $('.pagination').append(pageLink);
-                  }
-               }
-
-               $('.pagination').on('click', 'a.page-link', function(e) {
-                  e.preventDefault();
-                  
-                  let targetPage = parseInt($(this).data('page'));
-                  if(targetPage === currentPage + 1 && currentPage === totalPages){
-                     currentPage = 1;
-                  } else {
-                     currentPage = targetPage;
-                  }
-                  fetchSearchResults();
-                  renderPagination();
-               });
-
-               $('#insertTransaksi').on('hide.bs.modal', function(event) {
-                  $(this).find('.text-danger');
-               });
-
-               $('#insertTransaksi').on('submit', 'form' , function (event) {
-                  event.preventDefault();
-                  let form = $(this);
-
-                  let data = {
-                     nipdInsert: form.find('input[name="nipdInsert"]').val(),
-                     thn_akademikInsert: form.find('input[name="thn_akademikInsert"]').val(),
-                     instansiInsert: form.find('input[name="instansiInsert"]').val(),
-                     nominalInsert: form.find('input[name="nominalInsert"]').val(),
-                     keteranganInsert: form.find('input[name="keteranganInsert"]').val(),
-                     bulanAwalPembayaran: form.find('#bulanAwalPembayaran').val(),
-                     bulanAkhirPembayaran: form.find('#bulanAkhirPembayaran').val(),
-                     status: 2,
-                  };
-                  if(data.nominalInsert > biayaSisa) {
-                     let errorElement = $('#nominalInsert-error');
-                     errorElement.html("Biaya yang dibayar lebih dari nominal yang ditentukan!");
-                  } else {
-                     $.ajax({
-                         url: form.attr('action'),
-                         method: form.attr('method'),
-                         data: data,
-                         dataType: 'json' ,
-                         success: function (response) {
-                             if(response.success) {
-                                 window.location.href = response.redirect;
-                                 $('#exampleModal').modal('hide');
-                             } else {             
-                                 var errors = response.errors;
-                                 $.each(errors, function (field, message) {
-                                    let errorElement = $('#' + field + '-error');
-                                    errorElement.html(message);
-                                 });
-                             }
-                         },
-                         error: function (xhr, status, error) {
-                             console.error(xhr, status,error);
-                         }
-                     }); 
-                  }
-               });
-
-               $('.detailBiaya').click(function(){
-                  $('#detailBiayaModal').modal('show');
-               });
-               
-               $('#table').on('click', '.update-link' ,function(event) {  
-                  event.preventDefault();        
-                  created_at = $(this).data('created-at');
-                  nipd = $(this).data('nipd');
-                  let status = $(this).data('status');
-                  $('#ConfirmModal').empty();
-                  if(status == 1) {
-                     $('#ConfirmModal').html(`
-                     <div class="modal-dialog">
-                        <div class="modal-content">
-                           <div class="modal-header">
-                              <h1 class="modal-title fs-5" id="ConfirmModalLabel">Konfirmasi</h1>
-                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                           </div>
-                           <div class="modal-body">
-                              Apakah Anda yakin ingin menerima atau menolak data ini?
-                           </div>
-                           <div class="modal-footer">
-                           <button type="button" data-status="2" class="btn confirmModal btn-primary">Terima</button>
-                           <button type="button" data-status="0" class="btn confirmModal btn-danger text-white">Tolak</button>
-                           </div>
-                        </div>
-                     </div>
-                     `);
-                  } else if(status == 2) {
-                     $('#ConfirmModal').html(`
-                     <div class="modal-dialog">
-                        <div class="modal-content">
-                           <div class="modal-header">
-                              <h1 class="modal-title fs-5" id="ConfirmModalLabel">Konfirmasi</h1>
-                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                           </div>
-                           <div class="modal-body">
-                              Apakah Anda yakin ingin mengubah status data pembayaran ini?
-                           </div>
-                           <div class="modal-footer">
-                           <button type="button" data-status="0" class="btn confirmModal btn-danger text-white">Tolak</button>
-                           </div>
-                        </div>
-                     </div>
-                     `);
-                  } else {
-                     $('#ConfirmModal').html(`
-                     <div class="modal-dialog">
-                        <div class="modal-content">
-                           <div class="modal-header">
-                              <h1 class="modal-title fs-5" id="ConfirmModalLabel">Konfirmasi</h1>
-                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                           </div>
-                           <div class="modal-body">
-                              Apakah Anda yakin ingin mengubah status data pembayaran ini?
-                           </div>
-                           <div class="modal-footer">
-                           <button type="button" data-status="2" class="btn confirmModal btn-primary">Terima</button>
-                           </div>
-                        </div>
-                     </div>
-                     `);
-                  }
-                  $('#ConfirmModal').modal('show');
-               });
-
-               $('#ConfirmModal').on('click', '.confirmModal', function(){
-                  let thn_akademik = $('#thn_akademikList').val();
-                  let status = $(this).data('status');
-                  const data = {status: status, created_at: created_at, nipd: nipd, thn_akademik: thn_akademik }
-                  $('#ConfirmModal').modal('hide');
-                  $.ajax({
-                     url: '<?= base_url('admin/validasiPembayaran')?>',
-                     method: 'POST',
-                     data: data,
-                     success: function(response) {
-                        $('#ConfirmModal').modal('hide');
-                        // Update the status element with the new value
-                        if(response.value[0] == 2){
-                           $(`.update-link[data-created-at="${response.value[1]}"]`).data('status', response.value[0]).text("Diterima");
-                           $(`.update-link[data-created-at="${response.value[1]}"]`).removeClass('btn-warning btn-danger').addClass('btn-secondary');
-                        } else if(response.value[0] == 0){
-                           $(`.update-link[data-created-at="${response.value[1]}"]`).data('status', response.value[0]).text("Ditolak");
-                           $(`.update-link[data-created-at="${response.value[1]}"]`).removeClass('btn-warning btn-secondary').addClass('btn-danger');
+                        $nominalMasuk -= $dataBiaya;
+                    } else {
+                        if ($nominalMasuk <= 0) {
+                            break;
                         }
-                        $('.nominal-container').find('#nominalmasuk').html(IDR.format(response.value[2]));
-                        
-                     },
-                     error: function(xhr, status, error) {
-                        console.error(error);
-                     }
-                  });
+                        $totalNominalTransaksi = $this->model->getDataModel('transactions', ['sum(nominal)'], 
+                        ['nipd' => $nipd, 'status' => 2, 'thn_akademik' => $data['value']['thn_akademik']]);
+                        $nominalTransaksiBulanTerakhir = $this->model->getDataModel('transactions', ['sum(nominal)'], 
+                        ['bulan' => (new DateTime())->setDate((new DateTime())->format('Y'), 6, 1)->format('Y-m-d'), 'nipd' => $nipd, 'status' => 2, 'thn_akademik' => $data['value']['thn_akademik']]);
+                        $totalNominal = $totalNominalTransaksi[0]['sum(nominal)'];
+                        $nominalBulanIni = $nominalTransaksiBulanIni[0]['sum(nominal)'];
+                        if(!empty($totalNominalTransaksi) && ($totalNominal + $nominalMasuk) > ($dataBiaya * 12)){
+                            $errors = array('nominalInsert' => "Total nominal sekarang ($totalNominal) dan nominal masuk
+                            ($nominalMasuk) melebihi total biaya!");
+                            break;
+                        } else if(($nominalTransaksiBulanIni[0]['sum(nominal)'] < $dataBiaya) && (($nominalTransaksiBulanIni[0]['sum(nominal)'] + $nominalMasuk) > $dataBiaya)) {
+                            $errors = array('nominalInsert' => "Nominal masuk bulan ini ($nominalBulanIni) dan nominal masuk
+                            ($nominalMasuk) melebihi total biaya $dataBiaya!");
+                            break;
+                        }
+                        if($nominalTransaksiBulanIni[0]['sum(nominal)'] >= $dataBiaya){
+                            $errors = array('nominalInsert' => 'Nominal pada bulan yang dituju ada yang sudah lunas!');
+                            break;
+                        } 
+                        else {
+                            if(!empty($nominalTransaksiBulanTerakhir)) {
+                                $sisaPembayaranBulanTerakhir = $dataBiaya - $nominalTransaksiBulanTerakhir[0]['sum(nominal)'];
+                                if($nominalMasuk > $sisaPembayaranBulanTerakhir) {
+                                    $errors = array('nominalInsert' => 'Nominal melebihi sisa pembayaran di bulan terakhir!');
+                                    break;
+                                }
+                            } 
+                            $data['value'] = $transaksiBulanIni[0];
+                            $sisaBiayaBulanIni = $dataBiaya - $data['value']['nominal'];
+                            $nominalTambah = min($nominalMasuk, $sisaBiayaBulanIni);
+                            $data['value']['nominal'] = $nominalTambah;
+                            $data['value']['image'] = 'Bayar Langsung';
+                            $data['value']['created_at'] = date('Y-m-d H:i:s');
+                            $process = $this->model->insertDataModel($data['table'], $data['value']);
+                            if($process['status'] == true){
+                                $this->session->set_flashdata("message", "<div class='alert alert-success' role='alert'>
+                                Pembayaran Berhasil!
+                                </div>");
+                            } else {
+                                $this->session->set_flashdata("message", "<div class='alert alert-danger' role='alert'>
+                                Pembayaran Gagal!
+                                </div>");                                
+                            }
+                            $nominalMasuk -= $sisaBiayaBulanIni;
+                        }
+                    }
+                   
+                    $dateStart->modify('+1 month');
+                    if ($dateStart->format('m') === '01') {
+                        $tahunAwal++;
+                        $dateStart->setDate($tahunAwal, $dateStart->format('m'), $dateStart->format('d'));
+                    }
+                }
+                if(!empty($errors)){
+                    $response['errors'] = $errors;
+                } else {
+                    $response['success'] = true;
+                    $response['redirect'] = base_url("pages/datatransaksi?nipd=$nipd");
+            
+                }
+            }
+        }
+        echo json_encode($response);
+        header('Content-Type: application/json');
+        exit();
+    
+    }
 
-               });
+    public function cetakDataTransaksi(){
+        $this->setData(
+            array(
+                'table' => 'transactions',
+                'param' => array(
+                    'nipd' => $this->input->post('nipd'),
+                    'since' => $this->input->post('since'),
+                    'to' => $this->input->post('till'),
+                    'transactions.status' => 2,
+                    'siswa.kelas' => $this->input->post('kelas'),
+                    'siswa.status' => $this->input->post('status')
+                ),
+            )
+        );
+        $data = $this->getData();
+        $process = $this->model->printDataModel($data['table'],['siswa.nama_siswa', 'kelas.kelas', 
+        'kelas.instansi' ,'nominal', 'keterangan', 'created_at'], $data['param']);
+        if(count($process) == 0){
+            $this->session->set_flashdata('message', 
+            '<div class="alert alert-danger" role="alert">
+                Data Transaksi Kosong!
+            </div>');
+            if(!empty($data['param']['nipd'])){
+                redirect('datatransaksi?nipd=' . $data['param']['nipd']);
+            } else {
+                redirect('datatransaksihome');
+            }
+        } else {
+            if($this->input->post('function') == 'cetak'){
+                if($this->input->post('excel') == 'excel'){
+                    $this->cetakExcel($process);
+                } elseif($this->input->post('pdf') == 'pdf') {
+                    $this->cetakPDF($process);
+                }
+            }
+        }
+    }
 
-            });
-             
-        </script>
-</div>
+    public function hapusDataAdmin(){
+        $this->setData(
+            array(
+                'table' => 'admin',
+                'where' =>  array('kode_petugas' => $this->input->post('kode_petugas')),
+                'value' => 
+                array(
+                    'status' => 0
+                 ),
+            )
+        );
+ 
+        $data = $this->getData();
+        $response = $this->response;
+        $process = $this->model->updateDataModel($data['table'],$data['value'], $data['where']);
+        if($process['status'] == true){
+            $this->session->set_flashdata("message", "<div class='alert alert-success' role='alert'>
+                                    Data berhasil dihapus
+                                    </div>");
+        } else {
+            $this->session->set_flashdata("message", "<div class='alert alert-danger' role='alert'>
+                                    Data gagal dihapus
+                                    </div>");
+        }
+        
+        $response['success'] = true;
+        $response['redirect'] = base_url('pages/dataadmin');
+        header('Content-Type: application/json');
+        echo json_encode($response);
+        exit();
+    }
+
+    public function restoreDataAdmin(){
+        $this->setData(
+            array(
+                'table' => 'admin',
+                'where' =>  array('kode_petugas' => $this->input->post('kode_petugas')),
+                'value' => 
+                array(
+                    'status' => 1
+                 ),
+            )
+        );
+ 
+        $data = $this->getData();
+        $response = $this->response;
+        $process = $this->model->updateDataModel($data['table'],$data['value'], $data['where']);
+        if($process['status'] == true){
+            $this->session->set_flashdata("message", "<div class='alert alert-success' role='alert'>
+                                    Data berhasil dipulihkan
+                                    </div>");
+        } else {
+            $this->session->set_flashdata("message", "<div class='alert alert-danger' role='alert'>
+                                    Data gagal dipulihkan
+                                    </div>");
+        }
+        
+        $response['success'] = true;
+        $response['redirect'] = base_url('pages/datanonaktifadmin');
+        header('Content-Type: application/json');
+        echo json_encode($response);
+        exit();
+    }
+
+    public function cetakExcel($data){
+        $spreadsheet = new Spreadsheet();
+        $activeWorksheet = $spreadsheet->getActiveSheet();
+
+        $activeWorksheet->setCellValue('A1', 'No');
+        $activeWorksheet->setCellValue('B1', 'Nama');
+        $activeWorksheet->setCellValue('C1', 'Kelas');
+        $activeWorksheet->setCellValue('D1', 'Instansi');
+        $activeWorksheet->setCellValue('E1', 'Nominal');
+        $activeWorksheet->setCellValue('F1', 'Keterangan');
+        $activeWorksheet->setCellValue('G1', 'Tanggal Bayar');
+        $activeWorksheet->getColumnDimension('A')->setWidth(5);
+        $activeWorksheet->getColumnDimension('B')->setWidth(14);
+        $activeWorksheet->getColumnDimension('C')->setWidth(8);
+        $activeWorksheet->getColumnDimension('D')->setWidth(15);
+        $activeWorksheet->getColumnDimension('E')->setWidth(10);
+        $activeWorksheet->getColumnDimension('F')->setWidth(25);
+        $activeWorksheet->getColumnDimension('G')->setWidth(20);
+        $activeWorksheet->getColumnDimension('H')->setWidth(5);
+        $no = 1;
+        $sn = 2;
+        foreach ($data as $value) {
+            $activeWorksheet->setCellValue('A'.$sn, $no++);
+            $activeWorksheet->setCellValue('B'.$sn, $value['nama_siswa']);
+            $activeWorksheet->setCellValue('C'.$sn, $value['kelas']);
+            $activeWorksheet->setCellValue('D'.$sn, $value['instansi']);
+            $activeWorksheet->setCellValue('E'.$sn, $value['nominal']);
+            $activeWorksheet->setCellValue('F'.$sn, $value['keterangan']);
+            $activeWorksheet->setCellValue('G'.$sn, $value['created_at']);
+            $activeWorksheet->getStyle('C'.$sn)->getAlignment()->
+            setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
+            $activeWorksheet->getStyle('E'.$sn)->getAlignment()->
+            setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
+            $sn++;
+        }
+        $writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
+        $writer->save(FCPATH . "excel/laporan-transaksi-spp.xlsx");
+        // Set the headers
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment; filename=laporan-transaksi-spp.xlsx');
+        header("Content-Transfer-Encoding:binary");
+        header('Content-Length: ' . filesize("excel/laporan-transaksi-spp.xlsx")); // Set the file size
+
+        ob_clean();
+        flush();
+        // Output the file content
+        readfile("excel/laporan-transaksi-spp.xlsx");
+    }
+
+    public function cetakPDF($data) {
+        header('Content-Type: text/html;charset=utf-8');
+        $pdf = new FPDF('L','mm','A4');
+        $pdf->AddPage();
+        $pdf->Image('assets/img/Yayasan Ar-Rahmah.jpeg', 12, 6, 30);
+        $pdf->SetFont('Arial', 'B', 16);
+        $pdf->Cell(120);
+        $pdf->Cell(190, 7, 'Data Transaksi SPP', 0, 1);
+        $pdf->Ln(15); // Berpindah baris
+        
+        $pdf->SetFont('Arial', '', '11');
+        $pdf->Cell(12, 10, "No", 1);
+        $pdf->Cell(53, 10, "Nama Siswa", 1);
+        $pdf->Cell(18, 10, "Kelas", 1);
+        $pdf->Cell(45, 10, "Instansi", 1);
+        $pdf->Cell(40, 10, "Nominal", 1);
+        $pdf->Cell(53, 10, "Keterangan", 1);
+        $pdf->Cell(42, 10, "Tanggal Bayar", 1);
+
+        $no = 1;
+        
+        foreach ($data as $row) {
+
+            $cellWidth = 53;
+            $cellHeight = 10;
+            if($pdf->GetStringWidth($row['nama_siswa']) < $cellWidth ){
+                $line = 1;
+            } else {
+                $textArray = array();
+                $textLength = strlen($row['nama_siswa']);
+                $errMargin = 10;
+                $startChar = 0;
+                $maxChar = 0;
+                
+                $tmpString = "";
+                while($startChar < $textLength) {
+                    while(($pdf->GetStringWidth($tmpString) < ($cellWidth - $errMargin)
+                    && ($startChar + $maxChar) < $textLength) ){
+                        $maxChar++;
+                        $tmpString = substr($row['nama_siswa'], $startChar, $maxChar);
+                    }
+                    $startChar = $startChar + $maxChar;
+                    array_push($textArray, $tmpString);
+                    $maxChar = 0;
+                    $tmpString = '';
+                }
+                $line = count($textArray);
+            }
+
+            if($pdf->GetStringWidth($row['keterangan']) > $cellWidth) {
+                $textArray = array();
+                $textLength = strlen($row['keterangan']);
+                $errMargin = 10;
+                $startChar = 0;
+                $maxChar = 0;
+                
+                $tmpString = "";
+                while($startChar < $textLength) {
+                    while(($pdf->GetStringWidth($tmpString) < ($cellWidth - $errMargin)
+                    && ($startChar + $maxChar) < $textLength) ){
+                        $maxChar++;
+                        $tmpString = substr($row['keterangan'], $startChar, $maxChar);
+                    }
+                    $startChar = $startChar + $maxChar;
+                    array_push($textArray, $tmpString);
+                    $maxChar = 0;
+                    $tmpString = '';
+                }
+                $line = count($textArray);
+            }
+
+            $pdf->Ln();
+            // $pdf->SetFont('Arial', '', 11);
+            $pdf->Cell(12, $line * $cellHeight, $no++, 1);
+            
+            if($pdf->GetStringWidth($row['nama_siswa']) < $cellWidth){
+                $pdf->Cell(53,  $line * $cellHeight, utf8_decode($row['nama_siswa']), 1);
+            } else {
+                $xPos = $pdf->GetX();
+                $yPos = $pdf->GetY();
+                
+                $pdf->MultiCell($cellWidth, $cellHeight, utf8_decode($row['nama_siswa']), 1);
+                $pdf->SetXY($xPos + $cellWidth, $yPos);
+            }
+
+            $pdf->Cell(18,  $line * $cellHeight, $row['kelas'], 1);
+            $pdf->Cell(45,  $line * $cellHeight, $row['instansi'], 1);
+            $pdf->Cell(40,  $line * $cellHeight, "Rp " . number_format($row['nominal'],2,',','.'), 1);
+
+            if($pdf->GetStringWidth($row['keterangan']) < $cellWidth){
+                $pdf->Cell(53,  $line * $cellHeight, $row['keterangan'], 1);
+            } else {
+                $xPos = $pdf->GetX();
+                $yPos = $pdf->GetY();
+                
+                $pdf->MultiCell($cellWidth, $cellHeight, $row['keterangan'], 1);
+                $pdf->SetXY($xPos + $cellWidth, $yPos);
+            }
+
+            $pdf->Cell(42, $line * $cellHeight, $row['created_at'], 1);
+        }
+        $pdf->Output();
+    }
+
+    function validasiPembayaran() {
+        $response = [];
+        $this->setData(
+            array(
+                'table' => 'transactions',
+                'where' => array('created_at' => $this->input->post('created_at')),
+                'value' => array('status' => $this->input->post('status'),
+                                'updated_at' => date('Y-m-d H:i:s'))
+            )
+        );
+        $data = $this->getData();
+        $process = $this->model->updateDataModel($data['table'], $data['value'] ,$data['where']);
+        if($process['status'] == true) {
+            $jumlahNominal = $this->model->getDataModel($data['table'], ['sum(nominal)'], ['status' => 2,
+            'nipd' => $this->input->post('nipd'), 'thn_akademik' => $this->input->post('thn_akademik')]);
+            $response['success'] = true;
+            $response['value'] = array($data['value']['status'], $data['where']['created_at'], $jumlahNominal[0]['sum(nominal)']);
+        }
+        header('Content-Type: application/json');
+        echo json_encode($response);
+    }
+}
+?>
